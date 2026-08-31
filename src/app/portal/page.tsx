@@ -184,28 +184,20 @@ export default function PortalPage() {
       {/* Top Portal Navigation */}
       <header className="relative z-40 border-b border-white/10 bg-[#040407]/90 backdrop-blur-2xl py-3.5 px-6 sm:px-12">
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
-          {/* Clean Modern Innocentia Logo */}
+          {/* Official Innocentia Logo */}
           <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-[1.5px] shadow-[0_0_20px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform flex-shrink-0">
-              <div className="w-full h-full bg-[#07070D] rounded-[10px] flex items-center justify-center">
-                <span className="bg-gradient-to-r from-[#FF3858] to-[#00D1FF] bg-clip-text text-transparent font-black text-base">
-                  ∞
-                </span>
-              </div>
+            <div className="relative h-9 sm:h-11 w-44 sm:w-52 flex items-center">
+              <Image
+                src="/images/logo_official_header.png"
+                alt="INNOCENTIA"
+                fill
+                className="object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.35)] group-hover:scale-105 transition-transform duration-300"
+                priority
+              />
             </div>
-            <div className="flex flex-col text-left">
-              <div className="flex items-center gap-2">
-                <span className="text-base font-black tracking-[0.18em] text-white group-hover:text-gray-100 transition-colors uppercase leading-none">
-                  INNOCENTIA
-                </span>
-                <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-[#00D1FF] border border-[#00D1FF]/30 font-bold uppercase">
-                  PORTAL PRIVADO
-                </span>
-              </div>
-              <span className="text-[8px] font-mono text-gray-400 tracking-widest uppercase pt-0.5">
-                LABORATORIO TECH
-              </span>
-            </div>
+            <span className="hidden sm:inline-block text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-[#00D1FF] border border-[#00D1FF]/30 font-bold uppercase">
+              PORTAL PRIVADO
+            </span>
           </Link>
 
           {/* Right Area: Authenticated User Badge & Logout OR Return Link */}

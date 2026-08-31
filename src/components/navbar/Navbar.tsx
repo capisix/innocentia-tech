@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { Globe, Menu, X, ArrowRight } from "../../lib/icons";
 
 interface NavbarProps {
@@ -34,32 +35,26 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#040407]/90 backdrop-blur-2xl border-b border-white/10 py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
-          : "bg-transparent py-5"
+          ? "bg-[#040407]/90 backdrop-blur-2xl border-b border-white/10 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+          : "bg-transparent py-4 sm:py-5"
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-8 flex items-center justify-between">
-        {/* Clean Modern Innocentia Logo */}
-        <a href="#hero" className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-[1.5px] shadow-[0_0_20px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform flex-shrink-0">
-            <div className="w-full h-full bg-[#07070D] rounded-[10px] flex items-center justify-center">
-              <span className="bg-gradient-to-r from-[#FF3858] to-[#00D1FF] bg-clip-text text-transparent font-black text-base">
-                ∞
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-base sm:text-lg font-black tracking-[0.18em] text-white group-hover:text-gray-100 transition-colors uppercase leading-none">
-              INNOCENTIA
-            </span>
-            <span className="text-[8px] font-mono text-gray-400 tracking-widest uppercase pt-0.5">
-              LABORATORIO TECH
-            </span>
+        {/* Official Innocentia Logo */}
+        <a href="#hero" className="flex items-center group cursor-pointer">
+          <div className="relative h-10 sm:h-12 w-48 sm:w-60 flex items-center">
+            <Image
+              src="/images/logo_official_header.png"
+              alt="INNOCENTIA"
+              fill
+              className="object-contain filter drop-shadow-[0_0_15px_rgba(255,56,88,0.35)] group-hover:scale-105 transition-transform duration-300"
+              priority
+            />
           </div>
         </a>
 
         {/* Clean Navigation Menu (Single Line, No Awkward Wrap) */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
           {navLinks.map((link) => {
             const isActive = activeLink === link.name;
             return (
