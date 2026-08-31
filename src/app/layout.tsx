@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Innocentia Tech",
     images: [
       {
-        url: "https://innocentia.tech/images/og_preview.png?v=3",
+        url: "https://innocentia.tech/images/og_preview.png?v=5",
         width: 1200,
         height: 630,
         alt: "Innocentia Tech - Laboratorio de Software & IA",
@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Innocentia Tech • Laboratorio de Software & IA",
     description: "Donde la imaginación se convierte en tecnología. Apps móviles, plataformas web y agentes inteligentes.",
-    images: ["https://innocentia.tech/images/og_preview.png?v=3"],
+    images: ["https://innocentia.tech/images/og_preview.png?v=5"],
   },
   icons: {
-    icon: "/images/logo_official_header.png?v=2",
-    shortcut: "/images/logo_official_header.png?v=2",
-    apple: "/images/logo_official_header.png?v=2",
+    icon: "/images/og_square.png?v=5",
+    shortcut: "/images/og_square.png?v=5",
+    apple: "/images/og_square.png?v=5",
   },
 };
 
@@ -62,13 +62,13 @@ export default function RootLayout({
         {/* OpenGraph & Social Preview Fallbacks */}
         <meta property="og:title" content="Innocentia Tech • Laboratorio de Software & IA" />
         <meta property="og:description" content="Donde la imaginación se convierte en tecnología. Apps móviles, plataformas web y agentes de Inteligencia Artificial." />
-        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=3" />
+        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=5" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:url" content="https://innocentia.tech" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://innocentia.tech/images/og_preview.png?v=3" />
+        <meta name="twitter:image" content="https://innocentia.tech/images/og_preview.png?v=5" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
