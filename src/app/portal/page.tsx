@@ -5,6 +5,7 @@ import Link from "next/link";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import VendorContractModal from "../../components/portal/VendorContractModal";
 import ProjectTeamFeedAndChat from "../../components/portal/ProjectTeamFeedAndChat";
+import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
 import {
   Sparkles,
   ArrowRight,
@@ -53,7 +54,7 @@ export default function PortalPage() {
 
   const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat" | "bitacora">("proyectos");
   const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat" | "bitacora">("tickets");
-  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "pipeline" | "contrato" | "clientes" | "chat" | "bitacora">("tabulador");
+  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "crear_proyecto" | "pipeline" | "contrato" | "clientes" | "chat" | "bitacora">("tabulador");
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria" | "bitacora">("finanzas");
 
   // Vendor Registration & Contract Modal
@@ -496,6 +497,14 @@ export default function PortalPage() {
               <Users className="w-3.5 h-3.5 text-purple-400" />
               <span>📑 Bitácora &amp; Chat por Proyecto</span>
             </button>
+
+            <Link
+              href="/crear-proyecto"
+              className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 to-[#00D1FF]/20 border border-emerald-400/40 text-xs font-bold text-emerald-300 hover:text-white hover:border-emerald-400 transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer shadow-md"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <span>⚡ Crear Proyecto</span>
+            </Link>
 
             <button
               type="button"
@@ -1305,6 +1314,7 @@ export default function PortalPage() {
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
                 { id: "tabulador", label: "📊 Simulador de Comisiones (Anexo C)" },
+                { id: "crear_proyecto", label: "⚡ Crear Nuevo Proyecto Vinculado" },
                 { id: "bitacora", label: "📑 Bitácora & Chat por Proyecto" },
                 { id: "pipeline", label: "📈 Pipeline de Prospectos & Ventas" },
                 { id: "chat", label: "💬 Chat Sofía & Iván (Status de Proyectos)" },
@@ -1479,6 +1489,19 @@ export default function PortalPage() {
                     );
                   })()}
                 </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* SUB-TAB 2: CREACIÓN DE PROYECTO VINCULADO AL ASESOR */}
+            {/* ======================================================== */}
+            {advisorTab === "crear_proyecto" && (
+              <div className="space-y-6 text-left">
+                <ProjectCreationForm
+                  initialVendorCode="VEN-CARLOS-202"
+                  initialVendorName={currentUser.name}
+                  isEmbeddedInPortal={true}
+                />
               </div>
             )}
 
