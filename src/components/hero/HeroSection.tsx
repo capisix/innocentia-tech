@@ -140,21 +140,21 @@ export default function HeroSection({
                   </span>
                 </div>
 
-                {/* Bottom HUD Banner */}
-                <div className="relative z-10 p-1.5 sm:p-2">
-                  <div className="w-full bg-black/90 border border-white/20 rounded-xl p-2.5 sm:p-3 flex items-center justify-between backdrop-blur-xl shadow-2xl">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#FF3858] animate-ping flex-shrink-0" />
+                {/* Bottom HUD Banner (Super Slim on Mobile) */}
+                <div className="relative z-10 p-1 sm:p-2">
+                  <div className="w-full bg-black/85 border border-white/15 rounded-lg sm:rounded-xl px-2 py-1 sm:p-3 flex items-center justify-between backdrop-blur-xl shadow-xl">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5">
+                      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#FF3858] animate-ping flex-shrink-0" />
                       <div className="text-left">
-                        <span className="text-[11px] sm:text-xs md:text-sm font-bold text-white block leading-tight">
+                        <span className="text-[9px] sm:text-xs md:text-sm font-bold text-white block leading-tight">
                           SOFÍA IMAGINA • IVÁN CONSTRUYE
                         </span>
-                        <span className="text-[8px] sm:text-[10px] text-gray-400 font-mono">
+                        <span className="text-[7px] sm:text-[9px] text-gray-400 font-mono hidden sm:inline block">
                           INNOCENTIA TRANSFORMA
                         </span>
                       </div>
                     </div>
-                    <span className="text-[10px] sm:text-xs font-mono font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 flex-shrink-0">
+                    <span className="text-[8px] sm:text-xs font-mono font-bold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 flex-shrink-0">
                       CORE v3.6
                     </span>
                   </div>

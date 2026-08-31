@@ -426,9 +426,9 @@ export default function FloatingChatWidget({
       {/* FLOATING WIDGET (BOTTOM RIGHT) */}
       {/* ========================================================== */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end select-none">
-        {/* PROACTIVE EXPANDED BALLOONS (INTERVALO DE 3 MINUTOS CON FRASES ALEATORIAS) */}
+        {/* PROACTIVE EXPANDED BALLOONS (SOLO ESCRITORIO - NO EN MÓVILES) */}
         {!isOpen && idleStep > 0 && (
-          <div className="flex mb-3 flex-col items-end space-y-2.5 max-w-[calc(100vw-36px)] sm:max-w-[340px] animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
+          <div className="hidden sm:flex mb-3 flex-col items-end space-y-2.5 max-w-[340px] animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
             {/* Quick Dismiss Button */}
             <button
               onClick={(e) => {
