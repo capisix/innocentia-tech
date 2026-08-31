@@ -221,7 +221,7 @@ ${techFeatures.map((t) => `  • ${t}`).join("\n")}
 
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-3.5 relative z-10">
-          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+          <div className="flex items-center gap-3">
             <img
               src="/images/logo_official_header.png?v=2"
               alt="INNOCENTIA TECH"
@@ -230,17 +230,18 @@ ${techFeatures.map((t) => `  • ${t}`).join("\n")}
             <div className="h-4 w-px bg-white/20 hidden sm:block" />
             <div>
               <span className="text-xs sm:text-sm font-bold text-white block uppercase tracking-wider">
-                Creador de Proyecto • Studio
+                CREADOR DE PROYECTO
               </span>
-              <span className="text-[10px] text-gray-400 font-mono">
-                🔴 Sofía (Diseño) • 🔵 Iván (Código)
-              </span>
+              <div className="flex items-center gap-2 text-[10px] font-mono text-gray-400">
+                <span className="text-[#FF3858] font-semibold">● Sofía (Diseño)</span>
+                <span className="text-[#00D1FF] font-semibold">● Iván (Código)</span>
+              </div>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
+            className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer flex-shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -261,29 +262,27 @@ ${techFeatures.map((t) => `  • ${t}`).join("\n")}
           </div>
         ) : (
           <div className="space-y-5 relative z-10">
-            {/* Step Pills */}
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none py-1">
-              {[1, 2, 3, 4, 5].map((s) => (
+            {/* Step Indicator (Full responsive width on mobile) */}
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pb-2 border-b border-white/10">
+              {[
+                { s: 1, label: "Tipo" },
+                { s: 2, label: "Diseño" },
+                { s: 3, label: "Stack" },
+                { s: 4, label: "Tiempos" },
+                { s: 5, label: "Blueprint" },
+              ].map(({ s, label }) => (
                 <div
                   key={s}
-                  className={`px-2.5 sm:px-3 py-1 rounded-full text-[10px] font-mono font-bold transition-all whitespace-nowrap ${
+                  className={`flex flex-col sm:flex-row items-center justify-center py-2 px-1 rounded-xl text-[10px] sm:text-xs font-mono font-bold transition-all text-center ${
                     step === s
-                      ? "bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white shadow-[0_0_12px_#00D1FF]"
+                      ? "bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white shadow-[0_0_15px_rgba(0,209,255,0.4)]"
                       : step > s
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                      : "bg-white/5 text-gray-500 border border-white/10"
+                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                      : "bg-white/[0.04] text-gray-500 border border-white/5"
                   }`}
                 >
-                  0{s}{" "}
-                  {s === 1
-                    ? "Tipo"
-                    : s === 2
-                    ? "Diseño"
-                    : s === 3
-                    ? "Stack"
-                    : s === 4
-                    ? "Tiempos"
-                    : "Contacto"}
+                  <span className="sm:mr-1 opacity-80">0{s}</span>
+                  <span className="truncate">{label}</span>
                 </div>
               ))}
             </div>

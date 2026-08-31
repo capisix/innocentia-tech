@@ -179,30 +179,32 @@ export default function ProcessTimeline() {
 
           {/* Right Column: Graphic Telemetry Dashboard Card */}
           <div className="lg:col-span-5 bg-black/80 border border-white/15 rounded-[28px] p-6 space-y-5 text-left font-mono text-xs flex flex-col justify-between shadow-2xl">
-            <div className="flex justify-between items-center border-b border-white/10 pb-3">
-              <span className="text-gray-400 font-bold uppercase">ESTADO DE FASE 0{activeStep + 1}</span>
-              <span className="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40">
+            <div className="flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 border-b border-white/10 pb-3">
+              <span className="text-gray-400 font-bold uppercase tracking-wider text-[11px] sm:text-xs">
+                ESTADO DE FASE 0{activeStep + 1}
+              </span>
+              <span className="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40 text-[10px] sm:text-xs whitespace-nowrap">
                 100% COMPLETADO
               </span>
             </div>
 
             {/* Telemetry Stats */}
-            <div className="space-y-3">
-              <div className="flex justify-between text-gray-300">
-                <span>Supervisión Asignada:</span>
-                <span className="text-white font-bold">{current.assigned}</span>
+            <div className="space-y-3.5">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-2 text-gray-300">
+                <span className="text-gray-400 text-[11px] sm:text-xs">Supervisión Asignada:</span>
+                <span className="text-white font-bold text-xs sm:text-right">{current.assigned}</span>
               </div>
-              <div className="flex justify-between text-gray-300">
-                <span>Tiempo de Ejecución:</span>
-                <span className="text-white">Optimizado en Sprint</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-2 text-gray-300">
+                <span className="text-gray-400 text-[11px] sm:text-xs">Tiempo de Ejecución:</span>
+                <span className="text-white text-xs sm:text-right">Optimizado en Sprint</span>
               </div>
-              <div className="flex justify-between text-gray-300">
-                <span>Revisiones de Calidad:</span>
-                <span className="text-[#00E5FF] font-bold">Aprobado 100%</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-2 text-gray-300">
+                <span className="text-gray-400 text-[11px] sm:text-xs">Revisiones de Calidad:</span>
+                <span className="text-[#00E5FF] font-bold text-xs sm:text-right">Aprobado 100%</span>
               </div>
-              <div className="flex justify-between text-gray-300">
-                <span>Motor Tecnológico:</span>
-                <span className="text-[#FF3B5C] font-bold">Innocentia Engine v3.6</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-2 text-gray-300">
+                <span className="text-gray-400 text-[11px] sm:text-xs">Motor Tecnológico:</span>
+                <span className="text-[#FF3B5C] font-bold text-xs sm:text-right">Innocentia Engine v3.6</span>
               </div>
             </div>
 

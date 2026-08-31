@@ -51,20 +51,20 @@ export default function PromptCTASection({ onOpenProjectModal }: PromptCTASectio
             {/* Right Input Box & Characters */}
             <div className="lg:col-span-6 space-y-4">
               {!submitted ? (
-                <form onSubmit={handleSubmit} className="relative w-full flex items-center">
+                <form onSubmit={handleSubmit} className="w-full flex flex-col sm:flex-row items-stretch sm:items-center relative gap-3 sm:gap-0">
                   <input
                     type="text"
                     value={userPrompt}
                     onChange={(e) => setUserPrompt(e.target.value)}
-                    placeholder="Escribe tu idea aquí... Ej: App de delivery médico con IA"
-                    className="w-full pl-6 pr-60 py-5 rounded-full bg-black/90 border border-white/25 text-white placeholder-gray-400 text-sm focus:outline-none focus:border-[#FF3B5C] transition-all shadow-2xl"
+                    placeholder="Escribe tu idea aquí... Ej: App de delivery con IA"
+                    className="w-full px-5 py-4 sm:py-5 sm:pl-6 sm:pr-64 rounded-2xl sm:rounded-full bg-black/90 border border-white/25 text-white placeholder-gray-400 text-sm focus:outline-none focus:border-[#FF3B5C] transition-all shadow-2xl text-left"
                   />
                   <button
                     type="submit"
-                    className="absolute right-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#FF3B5C] to-[#FF8800] hover:from-[#FF4D6D] hover:to-[#FFA000] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 transition-all shadow-[0_0_25px_#FF3B5C] cursor-pointer hover:scale-105"
+                    className="w-full sm:w-auto sm:absolute sm:right-2 px-7 py-4 sm:py-3.5 rounded-2xl sm:rounded-full bg-gradient-to-r from-[#FF3B5C] to-[#FF8800] hover:from-[#FF4D6D] hover:to-[#FFA000] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_25px_rgba(255,59,92,0.5)] cursor-pointer hover:scale-[1.02]"
                   >
-                    <span className="drop-shadow-md">Crear mi proyecto</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <span className="drop-shadow-md whitespace-nowrap">Crear mi proyecto</span>
+                    <ArrowRight className="w-4 h-4 flex-shrink-0" />
                   </button>
                 </form>
               ) : (
