@@ -468,6 +468,21 @@ export const User = createIcon(
   </g>
 );
 
+export const Search = createIcon(
+  <g>
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.3-4.3" />
+  </g>
+);
+
+export const ArrowLeft = createIcon(
+  <g>
+    <path d="m12 19-7-7 7-7" />
+    <path d="M19 12H5" />
+  </g>
+);
+
+
 
 
 
