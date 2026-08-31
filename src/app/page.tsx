@@ -14,7 +14,6 @@ import InteractivePlayground from "../components/playground/InteractivePlaygroun
 import AIPersonasSection from "../components/ai-personas/AIPersonasSection";
 import ProcessTimeline from "../components/process/ProcessTimeline";
 import CaseStudiesSection from "../components/cases/CaseStudiesSection";
-import FAQSection from "../components/faq/FAQSection";
 import TechStackSection from "../components/tech/TechStackSection";
 import CommunitySection from "../components/community/CommunitySection";
 import PromptCTASection from "../components/cta/PromptCTASection";
@@ -90,10 +89,7 @@ export default function Home() {
         }}
       />
 
-      {/* 10 Preguntas Frecuentes (FAQ Sofía & Iván) */}
-      <FAQSection />
-
-      {/* 11 Tecnología & Stack */}
+      {/* 10 Tecnología & Stack */}
       <TechStackSection />
 
       {/* 12 Comunidad & Ecosistema */}
