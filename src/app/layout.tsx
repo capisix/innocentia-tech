@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "INNOCENTIA.TECH | Laboratorio de Software e Inteligencia Artificial",
-  description: "Donde la imaginación se convierte en tecnología. Creamos aplicaciones móviles, SaaS escalable y arquitecturas con agentes de Inteligencia Artificial.",
+  title: "Innocentia Tech • Laboratorio de Software & IA",
+  description: "Donde la imaginación se convierte en tecnología. Creamos aplicaciones móviles, plataformas SaaS y agentes de Inteligencia Artificial.",
   metadataBase: new URL("https://innocentia.tech"),
   alternates: {
     canonical: "https://innocentia.tech",
@@ -20,16 +20,16 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Innocentia Tech", url: "https://innocentia.tech" }],
   openGraph: {
-    title: "INNOCENTIA.TECH | Donde la Imaginación se Convierte en Tecnología",
-    description: "Laboratorio de software, aplicaciones móviles, desarrollo web de alta escala e integración de agentes de Inteligencia Artificial.",
+    title: "Innocentia Tech • Laboratorio de Software & IA",
+    description: "Donde la imaginación se convierte en tecnología. Apps móviles, desarrollo web de alta escala y soluciones con IA.",
     url: "https://innocentia.tech",
     siteName: "Innocentia Tech",
     images: [
       {
-        url: "https://innocentia.tech/images/og_preview.png",
+        url: "https://innocentia.tech/images/og_preview.png?v=3",
         width: 1200,
         height: 630,
-        alt: "Innocentia Tech - Laboratorio de Software e Inteligencia Artificial",
+        alt: "Innocentia Tech - Laboratorio de Software & IA",
       },
     ],
     locale: "es_MX",
@@ -37,14 +37,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "INNOCENTIA.TECH | Software & Inteligencia Artificial",
-    description: "Donde la imaginación se convierte en tecnología. Apps móviles, SaaS y agentes inteligentes.",
-    images: ["https://innocentia.tech/images/og_preview.png"],
+    title: "Innocentia Tech • Laboratorio de Software & IA",
+    description: "Donde la imaginación se convierte en tecnología. Apps móviles, plataformas web y agentes inteligentes.",
+    images: ["https://innocentia.tech/images/og_preview.png?v=3"],
   },
   icons: {
-    icon: "/images/logo_official_header.png",
-    shortcut: "/images/logo_official_header.png",
-    apple: "/images/logo_official_header.png",
+    icon: "/images/logo_official_header.png?v=2",
+    shortcut: "/images/logo_official_header.png?v=2",
+    apple: "/images/logo_official_header.png?v=2",
   },
 };
 
@@ -60,15 +60,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* OpenGraph & Social Preview Fallbacks */}
-        <meta property="og:title" content="INNOCENTIA.TECH | Donde la Imaginación se Convierte en Tecnología" />
-        <meta property="og:description" content="Laboratorio de software, aplicaciones móviles y agentes de Inteligencia Artificial." />
-        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png" />
+        <meta property="og:title" content="Innocentia Tech • Laboratorio de Software & IA" />
+        <meta property="og:description" content="Donde la imaginación se convierte en tecnología. Apps móviles, plataformas web y agentes de Inteligencia Artificial." />
+        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=3" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:url" content="https://innocentia.tech" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://innocentia.tech/images/og_preview.png" />
+        <meta name="twitter:image" content="https://innocentia.tech/images/og_preview.png?v=3" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
