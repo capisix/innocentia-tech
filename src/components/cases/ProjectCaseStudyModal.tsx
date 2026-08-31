@@ -72,32 +72,34 @@ export default function ProjectCaseStudyModal({
         />
 
         {/* Modal Top Header with Official Logo */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
-          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+        <div className="flex items-start sm:items-center justify-between border-b border-white/10 pb-4 relative z-10 gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
             <img
               src="/images/logo_official_header.png?v=2"
               alt="INNOCENTIA TECH"
-              className="h-6 sm:h-7 w-auto object-contain"
+              className="h-5 sm:h-7 w-auto object-contain"
             />
             <div className="h-4 w-px bg-white/20 hidden sm:block" />
-            <span
-              className="text-[10px] font-mono font-bold px-3 py-1 rounded-full uppercase border backdrop-blur-md"
-              style={{
-                backgroundColor: `${project.primaryColor}20`,
-                borderColor: `${project.primaryColor}40`,
-                color: project.primaryColor,
-              }}
-            >
-              {project.tag}
-            </span>
-            <span className="text-[11px] sm:text-xs text-gray-400 font-mono hidden md:inline">CASO DE ESTUDIO OFICIAL</span>
+            <div className="flex items-center gap-2">
+              <span
+                className="text-[10px] font-mono font-bold px-3 py-1 rounded-full uppercase border backdrop-blur-md"
+                style={{
+                  backgroundColor: `${project.primaryColor}20`,
+                  borderColor: `${project.primaryColor}40`,
+                  color: project.primaryColor,
+                }}
+              >
+                {project.tag}
+              </span>
+              <span className="text-[11px] sm:text-xs text-gray-400 font-mono hidden md:inline">CASO DE ESTUDIO OFICIAL</span>
+            </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer flex-shrink-0"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 

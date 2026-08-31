@@ -220,19 +220,19 @@ ${techFeatures.map((t) => `  • ${t}`).join("\n")}
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-3.5 relative z-10">
-          <div className="flex items-center gap-3">
+        <div className="flex items-start sm:items-center justify-between border-b border-white/10 pb-3.5 relative z-10 gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
             <img
               src="/images/logo_official_header.png?v=2"
               alt="INNOCENTIA TECH"
-              className="h-6 sm:h-7 w-auto object-contain"
+              className="h-5 sm:h-7 w-auto object-contain"
             />
             <div className="h-4 w-px bg-white/20 hidden sm:block" />
             <div>
-              <span className="text-xs sm:text-sm font-bold text-white block uppercase tracking-wider">
+              <span className="text-xs sm:text-sm font-bold text-white block uppercase tracking-wider leading-tight">
                 CREADOR DE PROYECTO
               </span>
-              <div className="flex items-center gap-2 text-[10px] font-mono text-gray-400">
+              <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono text-gray-400 mt-0.5">
                 <span className="text-[#FF3858] font-semibold">● Sofía (Diseño)</span>
                 <span className="text-[#00D1FF] font-semibold">● Iván (Código)</span>
               </div>
@@ -241,9 +241,9 @@ ${techFeatures.map((t) => `  • ${t}`).join("\n")}
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer flex-shrink-0"
+            className="p-1.5 sm:p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer flex-shrink-0"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 
