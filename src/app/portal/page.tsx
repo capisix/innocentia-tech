@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import VendorContractModal from "../../components/portal/VendorContractModal";
+import ProjectTeamFeedAndChat from "../../components/portal/ProjectTeamFeedAndChat";
 import {
   Sparkles,
   ArrowRight,
@@ -50,10 +51,10 @@ export default function PortalPage() {
     contractSignedDate: "15 de Agosto de 2026",
   });
 
-  const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat">("proyectos");
-  const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat">("tickets");
-  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "pipeline" | "contrato" | "clientes" | "chat">("tabulador");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria">("finanzas");
+  const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat" | "bitacora">("proyectos");
+  const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat" | "bitacora">("tickets");
+  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "pipeline" | "contrato" | "clientes" | "chat" | "bitacora">("tabulador");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria" | "bitacora">("finanzas");
 
   // Vendor Registration & Contract Modal
   const [isVendorModalOpen, setIsVendorModalOpen] = useState(false);
@@ -481,14 +482,30 @@ export default function PortalPage() {
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsVendorModalOpen(true)}
-            className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#00D1FF]/20 to-[#FF3858]/20 border border-[#00D1FF]/40 text-xs font-bold text-white hover:border-[#00D1FF] transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer shadow-md"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#00D1FF]" />
-            <span>📋 Ver / Firmar Contrato</span>
-          </button>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                if (currentUser?.role === "asesor") setAdvisorTab("bitacora");
+                else if (currentUser?.role === "usuario") setClientTab("bitacora");
+                else if (currentUser?.role === "dev") setDevTab("bitacora");
+                else if (currentUser?.role === "socio") setPartnerTab("bitacora");
+              }}
+              className="px-3.5 py-1.5 rounded-full bg-purple-950/50 hover:bg-purple-900/50 border border-purple-500/50 text-xs font-bold text-purple-200 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+            >
+              <Users className="w-3.5 h-3.5 text-purple-400" />
+              <span>📑 Bitácora &amp; Chat por Proyecto</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsVendorModalOpen(true)}
+              className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#00D1FF]/20 to-[#FF3858]/20 border border-[#00D1FF]/40 text-xs font-bold text-white hover:border-[#00D1FF] transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer shadow-md"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-[#00D1FF]" />
+              <span>📋 Ver / Firmar Contrato</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -651,6 +668,7 @@ export default function PortalPage() {
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
                 { id: "proyectos", label: "📊 Estado de Proyecto & Sprints" },
+                { id: "bitacora", label: "📑 Bitácora & Chat de Equipo por Proyecto" },
                 { id: "cotizaciones", label: "📄 Cotizaciones & Documentos" },
                 { id: "pagos", label: "💳 Centro de Pagos" },
                 { id: "chat", label: "💬 Chat Directo Sofía & Iván" },
@@ -942,6 +960,14 @@ export default function PortalPage() {
                 </form>
               </div>
             )}
+
+            {/* TAB 5: Bitácora & Chat de Equipo por Proyecto */}
+            {clientTab === "bitacora" && (
+              <ProjectTeamFeedAndChat
+                currentRole="usuario"
+                currentUserName={currentUser?.name || "Alejandro Morales"}
+              />
+            )}
           </div>
         )}
 
@@ -991,6 +1017,7 @@ export default function PortalPage() {
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
                 { id: "tickets", label: "💻 Sprints & Tareas (Linear Style)" },
+                { id: "bitacora", label: "📑 Bitácora & Chat por Proyecto" },
                 { id: "tokens", label: "🎨 UI Components & Tokens" },
                 { id: "cicd", label: "⚡ CI/CD & Deployments" },
                 { id: "chat", label: "💬 Canal Directo con Cliente" },
@@ -1139,6 +1166,14 @@ export default function PortalPage() {
                 </div>
               </div>
             )}
+
+            {/* TAB 5: Bitácora & Chat de Equipo por Proyecto */}
+            {devTab === "bitacora" && (
+              <ProjectTeamFeedAndChat
+                currentRole="dev"
+                currentUserName={devData.name}
+              />
+            )}
           </div>
         )}
 
@@ -1270,6 +1305,7 @@ export default function PortalPage() {
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
                 { id: "tabulador", label: "📊 Simulador de Comisiones (Anexo C)" },
+                { id: "bitacora", label: "📑 Bitácora & Chat por Proyecto" },
                 { id: "pipeline", label: "📈 Pipeline de Prospectos & Ventas" },
                 { id: "chat", label: "💬 Chat Sofía & Iván (Status de Proyectos)" },
                 { id: "contrato", label: "📜 Contrato Legal & Ficha de Atribución" },
@@ -1832,6 +1868,14 @@ export default function PortalPage() {
                 </form>
               </div>
             )}
+
+            {/* SUB-TAB 6: BITÁCORA & CHAT DE EQUIPO POR PROYECTO */}
+            {advisorTab === "bitacora" && (
+              <ProjectTeamFeedAndChat
+                currentRole="asesor"
+                currentUserName={currentUser?.name || "Carlos Mendoza"}
+              />
+            )}
           </div>
         )}
 
@@ -1881,6 +1925,7 @@ export default function PortalPage() {
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
                 { id: "metricas_lugar", label: "📍 Métricas del Lugar & Tráfico Geográfico" },
+                { id: "bitacora", label: "📑 Bitácora & Chat de Proyecto (Diseño, Dev, Ventas)" },
                 { id: "estadisticas", label: "📊 Estadísticas de Plataforma & Conversiones" },
                 { id: "finanzas", label: "💰 Finanzas & Rentabilidad Global" },
                 { id: "gastos", label: "📑 Desglose de Gastos & Operación" },
@@ -2123,6 +2168,14 @@ export default function PortalPage() {
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* TAB 5: BITÁCORA & CHAT DE PROYECTO (DISEÑO, DEV, VENTAS) */}
+            {partnerTab === "bitacora" && (
+              <ProjectTeamFeedAndChat
+                currentRole="socio"
+                currentUserName={partnerData.name}
+              />
             )}
           </div>
         )}
