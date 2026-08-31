@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import AmbientLivingCanvas from "../components/common/AmbientLivingCanvas";
 import FloatingChatWidget from "../components/common/FloatingChatWidget";
 import ProjectCreationModal from "../components/common/ProjectCreationModal";
@@ -19,7 +19,7 @@ import CommunitySection from "../components/community/CommunitySection";
 import PromptCTASection from "../components/cta/PromptCTASection";
 import Footer from "../components/footer/Footer";
 
-export default function Home() {
+function HomeContent() {
   const [introFinished, setIntroFinished] = useState(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -122,5 +122,13 @@ export default function Home() {
         onClose={closeProjectModal}
       />
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#040407]" />}>
+      <HomeContent />
+    </Suspense>
   );
 }

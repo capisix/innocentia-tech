@@ -68,12 +68,16 @@ export default function ProjectCreationForm({
 
   // Read URL query params if client arrives via referral link (e.g. ?ref=VEN-CARLOS-202&vendedor=Carlos+Mendoza)
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const ref = urlParams.get("ref") || urlParams.get("vendedor_id");
-      const vend = urlParams.get("vendedor") || urlParams.get("asesor");
-      if (ref) setVendorCode(ref);
-      if (vend) setVendorName(decodeURIComponent(vend));
+    try {
+      if (typeof window !== "undefined" && window.location && window.location.search) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ref = urlParams.get("ref") || urlParams.get("vendedor_id");
+        const vend = urlParams.get("vendedor") || urlParams.get("asesor");
+        if (ref) setVendorCode(ref);
+        if (vend) setVendorName(decodeURIComponent(vend));
+      }
+    } catch (err) {
+      // Safe SSR fallback
     }
   }, []);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import VendorContractModal from "../../components/portal/VendorContractModal";
@@ -41,7 +41,7 @@ interface UserProfile {
   contractSignedDate?: string;
 }
 
-export default function PortalPage() {
+function PortalContent() {
   // Default to Vendedor / Asesor Comercial para ver inmediatamente la tabla de comisiones
   const [currentUser, setCurrentUser] = useState<UserProfile | null>({
     id: "usr_202",
@@ -2253,5 +2253,13 @@ export default function PortalPage() {
         }}
       />
     </main>
+  );
+}
+
+export default function PortalPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#040407]" />}>
+      <PortalContent />
+    </Suspense>
   );
 }
