@@ -77,7 +77,18 @@ export default function Home() {
       <ProcessTimeline />
 
       {/* 09 Casos de Éxito */}
-      <CaseStudiesSection onOpenProjectModal={openProjectModal} />
+      <CaseStudiesSection
+        onOpenProjectModal={openProjectModal}
+        onOpenChatModal={openChat}
+        onAskSofia={() => {
+          setIsChatOpen(true);
+          setIsChatMaximized(false);
+        }}
+        onAskIvan={() => {
+          setIsChatOpen(true);
+          setIsChatMaximized(false);
+        }}
+      />
 
       {/* 10 Preguntas Frecuentes (FAQ Sofía & Iván) */}
       <FAQSection />
