@@ -301,7 +301,7 @@ export default function VendorContractModal({
                 <p><strong>VIGÉSIMA. PAGOS PARCIALES:</strong> Las comisiones se generan proporcionalmente sobre cada anticipo o parcialidad liquidada.</p>
                 <p><strong>TRIGÉSIMA PRIMERA. CONFIDENCIALIDAD:</strong> Protección absoluta de información de clientes, precios, código fuente y arquitecturas.</p>
                 <p><strong>CUADRAGÉSIMA NOVENA. JURISDICCIÓN:</strong> Leyes de los Estados Unidos Mexicanos y tribunales competentes de Mérida, Yucatán, México.</p>
-                <p><strong>ANEXOS A, B Y C:</strong> Tabulador General de Comisiones, Ficha de Atribución y Ejemplo de Cálculo ($200k MXN + IVA, $40k externos = $160k Base -> $32,000 MXN en comisiones a 15 días).</p>
+                <p><strong>ANEXOS A, B Y C:</strong> Tabulador General de Comisiones, Ficha de Atribución y Ejemplo de Cálculo ($200k MXN + IVA, $40k externos = $160k Base &rarr; $32,000 MXN en comisiones a 15 días).</p>
               </div>
             </div>
           )}
