@@ -231,77 +231,75 @@ export default function AIPersonasSection() {
         {/* BANNER MASTER: SIEMPRE PRESENTES, SIEMPRE LISTOS PARA CREAR */}
         {/* ========================================================== */}
         <div className="relative rounded-[32px] sm:rounded-[36px] bg-[#07070D] border border-white/20 p-6 sm:p-10 md:p-12 shadow-[0_25px_80px_rgba(0,0,0,0.95)] overflow-hidden text-left group">
-          {/* Glowing Border & Gradient Background */}
-          <div className="absolute inset-0 rounded-[32px] sm:rounded-[36px] border border-white/20 pointer-events-none z-20 shadow-[inset_0_0_20px_rgba(255,56,88,0.15)]" />
-          <div className="absolute top-0 left-0 bottom-0 w-1/2 bg-gradient-to-r from-[#FF3858]/15 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute top-0 right-0 bottom-0 w-1/2 bg-gradient-to-l from-[#00D1FF]/15 via-transparent to-transparent pointer-events-none" />
+          {/* Ambient Lighting Behind Border */}
+          <div className="absolute top-0 left-0 bottom-0 w-1/3 bg-[#FF3858]/10 blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 bottom-0 w-1/3 bg-[#00D1FF]/10 blur-[100px] pointer-events-none" />
 
-          {/* Clean High-Def Background Art on Right */}
+          {/* Background Clean Art (Borderless, fills seamlessly) */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/dual_floor_banner_clean.jpg"
+              src="/images/dual_floor_banner_cropped.jpg"
               alt="Sofía e Iván listos para crear"
               fill
-              className="object-cover object-right sm:object-right opacity-80 sm:opacity-100 filter drop-shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]"
+              className="object-cover object-right opacity-90 sm:opacity-95 transition-transform duration-700 group-hover:scale-[1.02]"
               priority
             />
-            {/* Dark Vignette Gradient so text is 100% crystal clear on the left on all devices */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#040407] via-[#040407]/90 sm:via-[#040407]/75 to-transparent z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#040407] via-transparent to-transparent z-10 sm:hidden" />
+            {/* Vignette Gradients for 100% Text Readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#07070D] via-[#07070D]/90 sm:via-[#07070D]/75 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07070D] via-transparent to-transparent z-10 sm:hidden" />
           </div>
 
-          {/* Foreground Content */}
-          <div className="relative z-20 max-w-xl space-y-5">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-md shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
-              <span>LEYES DE USO DE LOS PERSONAJES</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-20">
+            {/* Left Side: Typography & Chips */}
+            <div className="lg:col-span-7 space-y-4 sm:space-y-5">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-md shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+                <span>LEYES DE USO DE LOS PERSONAJES</span>
+              </div>
+
+              <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1]">
+                SIEMPRE PRESENTES, <br />
+                SIEMPRE LISTOS <br />
+                <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent">
+                  PARA CREAR. ✦
+                </span>
+              </h3>
+
+              <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-lg">
+                Sofía e Iván no son decoraciones estáticas. Son los guías vivos que te acompañan desde la primera idea hasta la entrega del código en producción.
+              </p>
+
+              {/* 5 Chips with dark backdrop */}
+              <div className="flex flex-wrap gap-2 sm:gap-2.5 pt-1">
+                <div className="px-3.5 py-1.5 rounded-full bg-black/75 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#FF3858]/60 transition-colors shadow-lg">
+                  <span>😃</span>
+                  <span>Dan la bienvenida</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-full bg-black/75 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-purple-500/60 transition-colors shadow-lg">
+                  <span>🚀</span>
+                  <span>Guían al usuario</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-full bg-black/75 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#00D1FF]/60 transition-colors shadow-lg">
+                  <span>💬</span>
+                  <span>Responden preguntas</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-full bg-black/75 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#FFD166]/60 transition-colors shadow-lg">
+                  <span>💡</span>
+                  <span>Visualizan ideas</span>
+                </div>
+                <div className="px-3.5 py-1.5 rounded-full bg-black/75 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-emerald-400/60 transition-colors shadow-lg">
+                  <span className="font-mono text-[10px] text-[#00D1FF] font-bold">&lt; &gt;</span>
+                  <span>Construyen soluciones</span>
+                </div>
+              </div>
             </div>
 
-            {/* Main Headline */}
-            <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1]">
-              SIEMPRE PRESENTES, <br />
-              SIEMPRE LISTOS <br />
-              <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent">
-                PARA CREAR. ✦
-              </span>
-            </h3>
-
-            {/* Subtitle */}
-            <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-lg">
-              Sofía e Iván no son decoraciones estáticas. Son los guías vivos que te acompañan desde la primera idea hasta la entrega del código en producción.
-            </p>
-
-            {/* 5 Feature Chips */}
-            <div className="flex flex-wrap gap-2 sm:gap-2.5 pt-1">
-              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#FF3858]/50 transition-colors shadow-sm">
-                <span>😃</span>
-                <span>Dan la bienvenida</span>
-              </div>
-              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-purple-500/50 transition-colors shadow-sm">
-                <span>🚀</span>
-                <span>Guían al usuario</span>
-              </div>
-              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#00D1FF]/50 transition-colors shadow-sm">
-                <span>💬</span>
-                <span>Responden preguntas</span>
-              </div>
-              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#FFD166]/50 transition-colors shadow-sm">
-                <span>💡</span>
-                <span>Visualizan ideas</span>
-              </div>
-              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-emerald-400/50 transition-colors shadow-sm">
-                <span className="font-mono text-[10px] text-[#00D1FF] font-bold">&lt; &gt;</span>
-                <span>Construyen soluciones</span>
-              </div>
-            </div>
+            {/* Right Side: Spacer so characters on right background are displayed unobstructed */}
+            <div className="hidden lg:block lg:col-span-5 h-48 pointer-events-none" />
           </div>
 
-          {/* Spacer so the character illustration on the right has space */}
-          <div className="h-44 sm:h-20 lg:h-14 pointer-events-none" />
-
-          {/* Bottom Triple Pillars Bar */}
-          <div className="mt-8 pt-5 border-t border-white/15 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-medium relative z-20">
+          {/* Bottom Triple Pillars Bar (Cleanly separated) */}
+          <div className="mt-8 sm:mt-12 pt-5 border-t border-white/15 grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 text-xs font-medium relative z-20">
             <div className="flex items-center justify-center sm:justify-start gap-2.5 text-gray-300">
               <span className="w-6 h-6 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 flex items-center justify-center text-xs flex-shrink-0">
                 💖
