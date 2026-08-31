@@ -47,6 +47,38 @@ export default function FloatingChatWidget({
     setIsMaximized((prev) => !prev);
   };
 
+  // Desktop-Only Proactive Spontaneous Idle Balloons (Every 5 minutes)
+  const [idleStep, setIdleStep] = useState<number>(0);
+
+  useEffect(() => {
+    // Primera aparición a los 5 minutos (300,000 ms)
+    const timer1 = setTimeout(() => {
+      setIdleStep(1);
+    }, 300000);
+
+    const timer2 = setTimeout(() => {
+      setIdleStep(2);
+    }, 308000);
+
+    const timer3 = setTimeout(() => {
+      setIdleStep(0);
+    }, 326000);
+
+    // Ciclo recurrente cada 5 minutos
+    const interval = setInterval(() => {
+      setIdleStep(1);
+      setTimeout(() => setIdleStep(2), 8000);
+      setTimeout(() => setIdleStep(0), 26000);
+    }, 300000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearInterval(interval);
+    };
+  }, []);
+
   const [messages, setMessages] = useState<
     Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }>
   >([
@@ -348,15 +380,86 @@ export default function FloatingChatWidget({
       )}
 
       {/* ========================================================== */}
-      {/* CLEAN FLOATING WIDGET (BOTTOM RIGHT - ZERO INVASIVE OVERLAY) */}
+      {/* FLOATING WIDGET (BOTTOM RIGHT) */}
       {/* ========================================================== */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end select-none">
-        {/* Clean Trigger Pill Button (Peaceful, Elegant, No Spontaneous Overlays) */}
+        {/* DESKTOP ONLY: PROACTIVE EXPANDED BALLOONS (INTERVALO DE 5 MINUTOS) */}
+        {!isOpen && idleStep > 0 && (
+          <div className="hidden sm:flex mb-3 flex-col items-end space-y-3 max-w-[320px] animate-in fade-in slide-in-from-bottom-3 duration-500">
+            {/* Sofía Speaks */}
+            {idleStep >= 1 && (
+              <div
+                onClick={() => {
+                  setIsOpen(true);
+                  setIsMaximized(false);
+                  setIdleStep(0);
+                }}
+                className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
+              >
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src="/images/sofia_pink_beanbag.png"
+                    alt="Sofía"
+                    width={48}
+                    height={48}
+                    className="object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.8)] animate-bounce"
+                  />
+                  <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#FFD166] animate-ping" />
+                </div>
+                <div className="bg-black/95 border border-[#FF3858]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(255,56,88,0.35)] text-left">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="w-2 h-2 rounded-full bg-[#FF3858] animate-pulse" />
+                    <span className="text-[10px] font-mono text-[#FF3858] font-bold">SOFÍA</span>
+                  </div>
+                  <p className="text-xs text-white font-medium leading-snug">
+                    💬 Hola... <br />
+                    <strong className="text-[#FF7A00]">¿Qué estás imaginando hoy?</strong>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Iván Speaks */}
+            {idleStep >= 2 && (
+              <div
+                onClick={() => {
+                  setIsOpen(true);
+                  setIsMaximized(false);
+                  setIdleStep(0);
+                }}
+                className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
+              >
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src="/images/ivan_idea_laptop.png"
+                    alt="Iván"
+                    width={48}
+                    height={48}
+                    className="object-contain filter drop-shadow-[0_0_12px_rgba(0,209,255,0.8)] animate-bounce"
+                  />
+                  <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
+                </div>
+                <div className="bg-black/95 border border-[#00D1FF]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,209,255,0.35)] text-left">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-pulse" />
+                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold">IVÁN</span>
+                  </div>
+                  <p className="text-xs text-white font-medium leading-snug">
+                    ⚡ Si ya tienes una idea, yo puedo ayudarte a construirla.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Clean Trigger Pill Button (Available everywhere) */}
         {!isOpen && (
           <button
             onClick={() => {
               setIsOpen(true);
               setIsMaximized(false);
+              setIdleStep(0);
             }}
             className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_25px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
           >
