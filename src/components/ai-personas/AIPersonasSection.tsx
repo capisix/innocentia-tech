@@ -228,46 +228,106 @@ export default function AIPersonasSection() {
         </div>
 
         {/* ========================================================== */}
-        {/* BANNER INFERIOR: LEYES DE LOS PERSONAJES (100% TRANSPARENTE) */}
+        {/* BANNER MASTER: SIEMPRE PRESENTES, SIEMPRE LISTOS PARA CREAR */}
         {/* ========================================================== */}
-        <div className="group relative rounded-[36px] bg-gradient-to-r from-black/95 via-purple-950/20 to-black/95 border border-white/20 hover:border-purple-500/50 p-8 sm:p-10 backdrop-blur-2xl shadow-[0_25px_70px_rgba(0,0,0,0.95)] hover:shadow-[0_30px_90px_rgba(138,43,226,0.3)] transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8 text-left">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#FF3858]/10 via-purple-900/20 to-[#00D1FF]/10 rounded-[36px] blur-3xl pointer-events-none" />
+        <div className="relative rounded-[32px] sm:rounded-[36px] bg-[#07070D] border border-white/20 p-6 sm:p-10 md:p-12 shadow-[0_25px_80px_rgba(0,0,0,0.95)] overflow-hidden text-left group">
+          {/* Glowing Border & Gradient Background */}
+          <div className="absolute inset-0 rounded-[32px] sm:rounded-[36px] border border-white/20 pointer-events-none z-20 shadow-[inset_0_0_20px_rgba(255,56,88,0.15)]" />
+          <div className="absolute top-0 left-0 bottom-0 w-1/2 bg-gradient-to-r from-[#FF3858]/15 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute top-0 right-0 bottom-0 w-1/2 bg-gradient-to-l from-[#00D1FF]/15 via-transparent to-transparent pointer-events-none" />
 
-          {/* Left Column Text & Buttons */}
-          <div className="space-y-4 max-w-xl relative z-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-mono font-bold text-white uppercase shadow-sm">
+          {/* Clean High-Def Background Art on Right */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/dual_floor_banner_clean.jpg"
+              alt="Sofía e Iván listos para crear"
+              fill
+              className="object-cover object-right sm:object-right opacity-80 sm:opacity-100 filter drop-shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]"
+              priority
+            />
+            {/* Dark Vignette Gradient so text is 100% crystal clear on the left on all devices */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#040407] via-[#040407]/90 sm:via-[#040407]/75 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#040407] via-transparent to-transparent z-10 sm:hidden" />
+          </div>
+
+          {/* Foreground Content */}
+          <div className="relative z-20 max-w-xl space-y-5">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-md shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
               <span>LEYES DE USO DE LOS PERSONAJES</span>
             </div>
-            <h4 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-              Siempre presentes, siempre listos para crear.
-            </h4>
-            <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+
+            {/* Main Headline */}
+            <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1]">
+              SIEMPRE PRESENTES, <br />
+              SIEMPRE LISTOS <br />
+              <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent">
+                PARA CREAR. ✦
+              </span>
+            </h3>
+
+            {/* Subtitle */}
+            <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-lg">
               Sofía e Iván no son decoraciones estáticas. Son los guías vivos que te acompañan desde la primera idea hasta la entrega del código en producción.
             </p>
 
-            <div className="flex flex-wrap gap-2.5 pt-2">
-              {characterLaws.map((law, i) => (
-                <span
-                  key={i}
-                  className="px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15 text-xs font-semibold text-gray-200 flex items-center gap-1.5 hover:bg-white/10 transition-colors shadow-sm"
-                >
-                  <span>{law.icon}</span>
-                  <span>{law.label}</span>
-                </span>
-              ))}
+            {/* 5 Feature Chips */}
+            <div className="flex flex-wrap gap-2 sm:gap-2.5 pt-1">
+              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#FF3858]/50 transition-colors shadow-sm">
+                <span>😃</span>
+                <span>Dan la bienvenida</span>
+              </div>
+              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-purple-500/50 transition-colors shadow-sm">
+                <span>🚀</span>
+                <span>Guían al usuario</span>
+              </div>
+              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#00D1FF]/50 transition-colors shadow-sm">
+                <span>💬</span>
+                <span>Responden preguntas</span>
+              </div>
+              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-[#FFD166]/50 transition-colors shadow-sm">
+                <span>💡</span>
+                <span>Visualizan ideas</span>
+              </div>
+              <div className="px-3 py-1.5 rounded-full bg-black/70 border border-white/20 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-1.5 backdrop-blur-md hover:border-emerald-400/50 transition-colors shadow-sm">
+                <span className="font-mono text-[10px] text-[#00D1FF] font-bold">&lt; &gt;</span>
+                <span>Construyen soluciones</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Column: 100% Pure Transparent Collaboration Scene */}
-          <div className="relative w-80 h-52 sm:w-[420px] sm:h-64 flex-shrink-0 flex items-center justify-center z-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FF3858]/20 to-[#00D1FF]/20 rounded-full blur-2xl pointer-events-none" />
-            <Image
-              src="/images/dual_floor_coding.png"
-              alt="Sofía e Iván colaborando juntos en el piso con hologramas y código"
-              fill
-              className="object-contain filter drop-shadow-[0_0_35px_rgba(255,56,88,0.6)] group-hover:scale-105 transition-transform duration-500"
-            />
+          {/* Spacer so the character illustration on the right has space */}
+          <div className="h-44 sm:h-20 lg:h-14 pointer-events-none" />
+
+          {/* Bottom Triple Pillars Bar */}
+          <div className="mt-8 pt-5 border-t border-white/15 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-medium relative z-20">
+            <div className="flex items-center justify-center sm:justify-start gap-2.5 text-gray-300">
+              <span className="w-6 h-6 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 flex items-center justify-center text-xs flex-shrink-0">
+                💖
+              </span>
+              <span>
+                Creatividad que <strong className="text-[#FF3858]">imagina.</strong>
+              </span>
+            </div>
+
+            <div className="flex items-center justify-center gap-2.5 text-gray-300 sm:border-l sm:border-white/15 sm:pl-4">
+              <span className="w-6 h-6 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-xs flex-shrink-0">
+                ⚡
+              </span>
+              <span>
+                Tecnología que <strong className="text-[#00D1FF]">construye.</strong>
+              </span>
+            </div>
+
+            <div className="flex items-center justify-center sm:justify-end gap-2.5 text-gray-300 sm:border-l sm:border-white/15 sm:pl-4">
+              <span className="w-6 h-6 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/40 flex items-center justify-center text-xs flex-shrink-0">
+                ✨
+              </span>
+              <span>
+                Juntos lo hacemos <strong className="text-[#FFD166]">real.</strong>
+              </span>
+            </div>
           </div>
         </div>
       </div>
