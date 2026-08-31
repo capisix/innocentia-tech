@@ -71,9 +71,15 @@ export default function ProjectCaseStudyModal({
           style={{ backgroundColor: project.primaryColor }}
         />
 
-        {/* Modal Top Header */}
+        {/* Modal Top Header with Official Logo */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+            <img
+              src="/images/logo_official_header.png?v=2"
+              alt="INNOCENTIA TECH"
+              className="h-6 sm:h-7 w-auto object-contain"
+            />
+            <div className="h-4 w-px bg-white/20 hidden sm:block" />
             <span
               className="text-[10px] font-mono font-bold px-3 py-1 rounded-full uppercase border backdrop-blur-md"
               style={{
@@ -84,7 +90,7 @@ export default function ProjectCaseStudyModal({
             >
               {project.tag}
             </span>
-            <span className="text-xs text-gray-400 font-mono">CASO DE ESTUDIO OFICIAL</span>
+            <span className="text-[11px] sm:text-xs text-gray-400 font-mono hidden md:inline">CASO DE ESTUDIO OFICIAL</span>
           </div>
 
           <button

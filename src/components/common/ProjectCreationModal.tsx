@@ -221,19 +221,16 @@ ${techFeatures.map((t) => `  • ${t}`).join("\n")}
 
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-3.5 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="relative w-10 h-8">
-              <Image
-                src="/images/sofia_ivan_chars.png"
-                alt="Sofía & Iván"
-                width={44}
-                height={34}
-                className="object-contain filter drop-shadow-[0_0_10px_rgba(255,56,88,0.5)]"
-              />
-            </div>
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+            <img
+              src="/images/logo_official_header.png?v=2"
+              alt="INNOCENTIA TECH"
+              className="h-6 sm:h-7 w-auto object-contain"
+            />
+            <div className="h-4 w-px bg-white/20 hidden sm:block" />
             <div>
               <span className="text-xs sm:text-sm font-bold text-white block uppercase tracking-wider">
-                Creador de Proyecto • Innocentia Studio
+                Creador de Proyecto • Studio
               </span>
               <span className="text-[10px] text-gray-400 font-mono">
                 🔴 Sofía (Diseño) • 🔵 Iván (Código)

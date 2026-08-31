@@ -246,16 +246,24 @@ export default function FloatingChatWidget({
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="text-base sm:text-lg font-black tracking-wide text-white uppercase flex items-center gap-2">
-                    <span>INNOCENTIA AI DUAL CORE</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                      MODO EXTENDIDO
-                    </span>
-                  </h3>
-                  <p className="text-xs text-gray-400 font-mono">
-                    Sofía (UX & Creatividad) • Iván (Arquitectura & Código)
-                  </p>
+                <div className="flex items-center gap-3">
+                  <img
+                    src="/images/logo_official_header.png?v=2"
+                    alt="INNOCENTIA"
+                    className="h-7 w-auto object-contain hidden sm:block"
+                  />
+                  <div className="h-6 w-px bg-white/20 hidden sm:block" />
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black tracking-wide text-white uppercase flex items-center gap-2">
+                      <span>DUAL CORE STUDIO</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                        MODO EXTENDIDO
+                      </span>
+                    </h3>
+                    <p className="text-xs text-gray-400 font-mono">
+                      Sofía (UX & Creatividad) • Iván (Arquitectura & Código)
+                    </p>
+                  </div>
                 </div>
               </div>
 
