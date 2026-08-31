@@ -52,10 +52,10 @@ function PortalContent() {
     contractSignedDate: "15 de Agosto de 2026",
   });
 
-  const [clientTab, setClientTab] = useState<"proyectos" | "crear_proyecto" | "cotizaciones" | "pagos" | "chat" | "bitacora">("proyectos");
-  const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat" | "bitacora">("tickets");
-  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "crear_proyecto" | "pipeline" | "contrato" | "clientes" | "chat" | "bitacora">("tabulador");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria" | "bitacora">("finanzas");
+  const [clientTab, setClientTab] = useState<"proyectos" | "crear_proyecto" | "bitacora" | "cotizaciones" | "pagos" | "chat">("proyectos");
+  const [devTab, setDevTab] = useState<"tickets" | "bitacora" | "tokens" | "cicd" | "chat">("tickets");
+  const [advisorTab, setAdvisorTab] = useState<"status_proyectos" | "bitacora" | "tabulador" | "crear_proyecto" | "pipeline" | "contrato" | "clientes" | "chat">("status_proyectos");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "bitacora" | "gastos" | "comisiones" | "auditoria">("finanzas");
 
   // Vendor Registration & Contract Modal
   const [isVendorModalOpen, setIsVendorModalOpen] = useState(false);
@@ -1186,29 +1186,8 @@ function PortalContent() {
               </div>
             )}
 
-            {/* TAB 4: Chat */}
-            {devTab === "chat" && (
-              <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
-                <h3 className="text-xl font-bold text-white uppercase font-mono">Canal Técnico de Soporte</h3>
-                <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 space-y-4">
-                  <div className="p-3.5 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 max-w-lg">
-                    <span className="text-[10px] font-bold text-emerald-400 font-mono block mb-1">RODRIGO (DEV):</span>
-                    <p className="text-xs text-gray-200">
-                      Hola Alejandro, subimos el commit con la integración de pagos y el mapa interactivo de GPS. ¿Pudiste probarlo en staging?
-                    </p>
-                  </div>
-                  <div className="p-3.5 rounded-2xl bg-[#FF3858]/10 border border-[#FF3858]/30 max-w-lg">
-                    <span className="text-[10px] font-bold text-[#FF3858] font-mono block mb-1">CLIENTE (ALEJANDRO):</span>
-                    <p className="text-xs text-gray-200">
-                      ¡Sí, la fluidez está increíble! Solo queremos ajustar el color del botón de checkout.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* TAB 5: Bitácora & Chat de Equipo por Proyecto */}
-            {devTab === "bitacora" && (
+            {/* TAB 4: Chat & Bitácora de Equipo por Proyecto */}
+            {(devTab === "chat" || devTab === "bitacora") && (
               <ProjectTeamFeedAndChat
                 currentRole="dev"
                 currentUserName={devData.name}
@@ -1344,11 +1323,11 @@ function PortalContent() {
             {/* Sub-Navigation Tabs */}
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
-                { id: "tabulador", label: "📊 Simulador de Comisiones (Anexo C)" },
+                { id: "status_proyectos", label: "📊 Status de Proyectos & Avances en Vivo" },
+                { id: "bitacora", label: "💬 Bitácora & Chat de Equipo por Proyecto" },
+                { id: "tabulador", label: "💰 Simulador de Comisiones (Anexo C)" },
                 { id: "crear_proyecto", label: "⚡ Crear Nuevo Proyecto Vinculado" },
-                { id: "bitacora", label: "📑 Bitácora & Chat por Proyecto" },
                 { id: "pipeline", label: "📈 Pipeline de Prospectos & Ventas" },
-                { id: "chat", label: "💬 Chat Sofía & Iván (Status de Proyectos)" },
                 { id: "contrato", label: "📜 Contrato Legal & Ficha de Atribución" },
                 { id: "clientes", label: "👥 Registro de Clientes (Principio 1er Registro)" },
               ].map((tab) => (
@@ -1365,6 +1344,202 @@ function PortalContent() {
                 </button>
               ))}
             </div>
+
+            {/* ======================================================== */}
+            {/* SUB-TAB 0: STATUS DE PROYECTOS VENDIDOS & AVANCES EN VIVO */}
+            {/* ======================================================== */}
+            {advisorTab === "status_proyectos" && (
+              <div className="space-y-6 text-left">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/80 border border-white/20 rounded-[32px] p-6 backdrop-blur-2xl shadow-xl">
+                  <div>
+                    <h3 className="text-xl font-bold text-white uppercase font-mono">
+                      Status de Proyectos Activos en Producción
+                    </h3>
+                    <p className="text-xs text-gray-400 font-mono">
+                      Monitorea el desarrollo técnico, sprint activo y comunícate directamente con el equipo de diseño e ingeniería asignado.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setAdvisorTab("bitacora")}
+                    className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 text-white font-mono font-bold text-xs uppercase flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-105"
+                  >
+                    <MessageSquare className="w-4 h-4" />
+                    <span>Abrir Chat de Equipo</span>
+                  </button>
+                </div>
+
+                {/* Project Status Cards */}
+                <div className="grid grid-cols-1 gap-6">
+                  {[
+                    {
+                      id: "proj-1",
+                      title: "App Móvil de Delivery & Reservas en Tiempo Real",
+                      client: "Gourmet Express S.A. (Alejandro Morales)",
+                      progress: 75,
+                      sprint: "Sprint 4: Pasarela de Pagos Stripe & WebSockets GPS",
+                      delivery: "05 de Septiembre de 2026",
+                      designer: "Sofía (Lead UX/UI)",
+                      dev: "Rodrigo Silva & Iván Core",
+                      comm: "$420 USD (Ganada)",
+                      tag: "En Desarrollo Activo",
+                      color: "emerald",
+                      sprints: [
+                        { name: "Fase 01: Identidad & Colorimetría (Sofía)", status: "done", date: "12 Ago" },
+                        { name: "Fase 02: Arquitectura & Base de Datos PostgreSQL (Iván)", status: "done", date: "19 Ago" },
+                        { name: "Fase 03: Interfaces UI/UX 60fps (Sofía)", status: "done", date: "24 Ago" },
+                        { name: "Fase 04: Pasarela de Pagos & WebSockets GPS (Rodrigo/Iván)", status: "in_progress", date: "En curso" },
+                        { name: "Fase 05: Pruebas QA & Despliegue App Store / Play Store", status: "pending", date: "05 Sep" },
+                      ],
+                    },
+                    {
+                      id: "proj-2",
+                      title: "Plataforma Clínica Médica con Diagnóstico AI",
+                      client: "Medicloud (Dr. Roberto Garza)",
+                      progress: 30,
+                      sprint: "Sprint 1: Modelado de Diagnóstico Neuronal",
+                      delivery: "20 de Septiembre de 2026",
+                      designer: "Sofía (UX/UI Lead)",
+                      dev: "Iván (Neural Engine)",
+                      comm: "$420 USD (Anticipo Cobrado)",
+                      tag: "En Desarrollo",
+                      color: "cyan",
+                      sprints: [
+                        { name: "Fase 01: Onboarding Clínico & Wireframes (Sofía)", status: "done", date: "22 Ago" },
+                        { name: "Fase 02: Entrenamiento de Modelos LLM & API (Iván)", status: "in_progress", date: "En curso" },
+                        { name: "Fase 03: Expediente Clínico Electrónico Cifrado", status: "pending", date: "10 Sep" },
+                        { name: "Fase 04: Pruebas Médicas & Despliegue Cloud", status: "pending", date: "20 Sep" },
+                      ],
+                    },
+                    {
+                      id: "proj-3",
+                      title: "ERP de Inventarios & WebSockets Logística",
+                      client: "Grupo Logístico Norte (Ing. Laura Paredes)",
+                      progress: 15,
+                      sprint: "Sprint 0: Arquitectura de Base de Datos Relacional",
+                      delivery: "30 de Septiembre de 2026",
+                      designer: "Sofía (Prototipado)",
+                      dev: "Rodrigo Silva & Iván Core",
+                      comm: "$650 USD (Cotización Aprobada)",
+                      tag: "Arranque de Ingeniería",
+                      color: "purple",
+                      sprints: [
+                        { name: "Fase 01: Levantamiento Técnico & Schema DB (Iván)", status: "done", date: "28 Ago" },
+                        { name: "Fase 02: Diseño del Dashboard Administrativo (Sofía)", status: "in_progress", date: "En curso" },
+                        { name: "Fase 03: Módulo de Facturación CFDI 4.0 & Inventario", status: "pending", date: "18 Sep" },
+                      ],
+                    },
+                  ].map((proj) => (
+                    <div
+                      key={proj.id}
+                      className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-mono text-[#00D1FF] font-bold">{proj.id.toUpperCase()}</span>
+                            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold">
+                              {proj.tag}
+                            </span>
+                          </div>
+                          <h4 className="text-xl font-bold text-white uppercase font-mono">{proj.title}</h4>
+                          <span className="text-xs text-gray-400 font-mono block mt-0.5">Cliente: {proj.client}</span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <span className="text-[10px] text-gray-400 font-mono block uppercase">Avance</span>
+                            <span className="text-2xl font-black text-emerald-400 font-mono">{proj.progress}%</span>
+                          </div>
+                          <button
+                            onClick={() => setAdvisorTab("bitacora")}
+                            className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 hover:border-[#00D1FF] text-xs font-mono text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5 text-[#00D1FF]" />
+                            <span>Chat del Proyecto</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between text-xs font-mono text-gray-400">
+                          <span>Sprint Activo: <strong className="text-white">{proj.sprint}</strong></span>
+                          <span>Entrega: <strong className="text-[#00D1FF]">{proj.delivery}</strong></span>
+                        </div>
+                        <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-[#FF3858] via-purple-500 to-[#00D1FF] rounded-full transition-all duration-500"
+                            style={{ width: `${proj.progress}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Pipeline Sprints List */}
+                      <div className="space-y-2">
+                        <span className="text-[11px] font-mono text-gray-400 uppercase font-bold block">
+                          Hitos & Entregables de Ingeniería:
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs font-mono">
+                          {proj.sprints.map((s, sIdx) => (
+                            <div
+                              key={sIdx}
+                              className={`p-3 rounded-xl border flex items-center justify-between gap-2 ${
+                                s.status === "done"
+                                  ? "bg-emerald-950/30 border-emerald-500/30 text-emerald-300"
+                                  : s.status === "in_progress"
+                                  ? "bg-[#00D1FF]/10 border-[#00D1FF]/40 text-white"
+                                  : "bg-white/[0.02] border-white/10 text-gray-500"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 truncate">
+                                {s.status === "done" ? (
+                                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                                ) : s.status === "in_progress" ? (
+                                  <div className="w-2.5 h-2.5 rounded-full bg-[#00D1FF] animate-ping flex-shrink-0" />
+                                ) : (
+                                  <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                                )}
+                                <span className="truncate">{s.name}</span>
+                              </div>
+                              <span className="text-[10px] text-gray-400 flex-shrink-0">{s.date}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Assigned Leads & Commission */}
+                      <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+                        <div className="flex items-center gap-4">
+                          <div>
+                            <span className="text-gray-400 text-[10px] uppercase block">Diseño UI/UX:</span>
+                            <strong className="text-[#FF3858]">{proj.designer}</strong>
+                          </div>
+                          <div>
+                            <span className="text-gray-400 text-[10px] uppercase block">Ingeniería & Dev:</span>
+                            <strong className="text-[#00D1FF]">{proj.dev}</strong>
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="text-gray-400 text-[10px] uppercase block">Comisión Comercial Vendedor:</span>
+                          <strong className="text-emerald-400 text-sm">{proj.comm}</strong>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* SUB-TAB: BITÁCORA & CHAT DE EQUIPO POR PROYECTO */}
+            {/* ======================================================== */}
+            {advisorTab === "bitacora" && (
+              <ProjectTeamFeedAndChat
+                currentRole="sales"
+                currentUserName={currentUser.name}
+              />
+            )}
 
             {/* ======================================================== */}
             {/* SUB-TAB 1: SIMULADOR DE COMISIONES (ANEXO C) */}
