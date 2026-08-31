@@ -47,24 +47,24 @@ export default function FloatingChatWidget({
     setIsMaximized((prev) => !prev);
   };
 
-  // Proactive Spontaneous Idle Balloons (Interacción Viral)
+  // Proactive Spontaneous Idle Balloons
   const [idleStep, setIdleStep] = useState<number>(0);
 
   useEffect(() => {
-    // Balloon 1: Sofía habla a los 4.5 segundos
+    // Balloon 1: Sofía habla a los 5 segundos
     const timer1 = setTimeout(() => {
       setIdleStep(1);
-    }, 4500);
+    }, 5000);
 
-    // Balloon 2: Iván complementa a los 9.5 segundos
+    // Balloon 2: Iván complementa a los 10 segundos
     const timer2 = setTimeout(() => {
       setIdleStep(2);
-    }, 9500);
+    }, 10000);
 
-    // Auto-dismiss balloons después de 25 segundos
+    // Auto-dismiss balloons después de 24 segundos
     const timer3 = setTimeout(() => {
       setIdleStep(0);
-    }, 25000);
+    }, 24000);
 
     return () => {
       clearTimeout(timer1);
@@ -89,126 +89,103 @@ export default function FloatingChatWidget({
   ]);
 
   const quickQuestions = [
-    { label: "🎨 Diseñar una marca", query: "Quiero diseñar la identidad visual y branding de mi marca" },
-    { label: "📱 Crear una App Móvil", query: "Quiero crear una aplicación móvil para iOS y Android" },
-    { label: "🤖 Automatizar con IA", query: "¿Cómo podemos integrar agentes de inteligencia artificial a mi negocio?" },
-    { label: "🌐 Plataforma Web SaaS", query: "Necesito una plataforma web escalable y segura" },
-    { label: "📊 CRM Empresarial", query: "Queremos implementar un CRM con cotizaciones y control comercial" },
+    {
+      label: "🎨 Diseñar una marca",
+      query: "Quiero diseñar la identidad visual y marca de mi proyecto.",
+      sender: "sofia" as const,
+    },
+    {
+      label: "📱 Crear una App Móvil",
+      query: "Quiero desarrollar una aplicación móvil para iOS y Android.",
+      sender: "ivan" as const,
+    },
+    {
+      label: "🤖 Automatizar con IA",
+      query: "¿Cómo puedo integrar agentes de Inteligencia Artificial en mi negocio?",
+      sender: "both" as const,
+    },
+    {
+      label: "🌐 Plataforma SaaS Web",
+      query: "Necesito una plataforma web escalable en Next.js con pagos y roles.",
+      sender: "ivan" as const,
+    },
   ];
 
   const handleSendMessage = (textToSend?: string) => {
-    const query = textToSend || inputValue;
-    if (!query.trim()) return;
+    const text = textToSend || inputValue;
+    if (!text.trim()) return;
 
+    // Add user message
+    const userMsg = {
+      id: Date.now().toString(),
+      sender: "user" as const,
+      text: text.trim(),
+    };
+    setMessages((prev) => [...prev, userMsg]);
     setInputValue("");
-    setMessages((prev) => [...prev, { id: Date.now().toString(), sender: "user", text: query }]);
 
-    const textLower = query.toLowerCase();
-
-    const isDesign =
-      textLower.includes("diseño") ||
-      textLower.includes("ux") ||
-      textLower.includes("ui") ||
-      textLower.includes("logo") ||
-      textLower.includes("color") ||
-      textLower.includes("branding") ||
-      textLower.includes("marca") ||
-      textLower.includes("arte") ||
-      textLower.includes("visual") ||
-      textLower.includes("estilo");
-
-    const isTech =
-      textLower.includes("software") ||
-      textLower.includes("codigo") ||
-      textLower.includes("backend") ||
-      textLower.includes("database") ||
-      textLower.includes("base de datos") ||
-      textLower.includes("postgres") ||
-      textLower.includes("api") ||
-      textLower.includes("cloud") ||
-      textLower.includes("servidor") ||
-      textLower.includes("seguridad") ||
-      textLower.includes("app");
-
-    if (isDesign && !isTech) {
-      setIsTyping("sofia");
-      setTimeout(() => {
-        setIsTyping(null);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            sender: "sofia",
-            text: "¡Me fascina esa dirección visual! Vamos a crear una paleta emocional y una experiencia que conecte inmediatamente con tus clientes.",
-          },
-        ]);
-      }, 700);
-    } else if (isTech && !isDesign) {
-      setIsTyping("ivan");
-      setTimeout(() => {
-        setIsTyping(null);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            sender: "ivan",
-            text: "Perfecto. Diseñaremos una arquitectura cloud multi-tenant con microservicios, seguridad criptográfica y base de datos de alta disponibilidad.",
-          },
-        ]);
-      }, 700);
-    } else {
-      // Dual response
-      setIsTyping("sofia");
-      setTimeout(() => {
-        setIsTyping(null);
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            sender: "sofia",
-            text: "¡Genial! Primero definimos el viaje del usuario y una interfaz tan fluida que dé gusto usarla.",
-          },
-        ]);
-
-        setIsTyping("ivan");
-        setTimeout(() => {
-          setIsTyping(null);
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: (Date.now() + 1).toString(),
-              sender: "ivan",
-              text: "Y de inmediato levantamos la infraestructura cloud, APIs y pipelines de automatización con monitoreo 24/7.",
-            },
-          ]);
-        }, 800);
-      }, 700);
+    // Simulate AI dual intelligence response
+    const lower = text.toLowerCase();
+    let respondingPersona: "sofia" | "ivan" | "both" = "both";
+    if (lower.includes("diseñ") || lower.includes("marca") || lower.includes("ux") || lower.includes("arte")) {
+      respondingPersona = "sofia";
+    } else if (lower.includes("app") || lower.includes("código") || lower.includes("api") || lower.includes("base de datos") || lower.includes("backend")) {
+      respondingPersona = "ivan";
     }
+
+    setIsTyping(respondingPersona);
+
+    setTimeout(() => {
+      setIsTyping(null);
+      if (respondingPersona === "sofia") {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            sender: "sofia",
+            text: "¡Me encanta esa visión visual! Diseñaremos un sistema de diseño con micro-interacciones, tipografía memorable y una paleta cromática con identidad única.",
+          },
+        ]);
+      } else if (respondingPersona === "ivan") {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            sender: "ivan",
+            text: "Esa arquitectura es sólida. Propongo construirla con Next.js 15, PostgreSQL, endpoints en Server Actions y un pipeline CI/CD de alto rendimiento.",
+          },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            sender: "sofia",
+            text: "Primero definiremos el flujo del usuario y el prototipo interactivo para validar la experiencia con tu audiencia.",
+          },
+          {
+            id: (Date.now() + 2).toString(),
+            sender: "ivan",
+            text: "Y de inmediato yo comenzaré con la infraestructura en la nube, seguridad y bases de datos para entregar en sprints rápidos.",
+          },
+        ]);
+      }
+    }, 1200);
   };
 
   return (
     <>
       {/* ========================================================== */}
-      {/* MAXIMIZED MODAL OVERLAY BACKDROP (Z-INDEX 9999) */}
+      {/* FULL-SCREEN MAXIMIZED CHAT MODAL (Z-[9999]) */}
       {/* ========================================================== */}
       {isOpen && isMaximized && (
-        <div
-          className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300 select-none"
-          onClick={handleClose}
-        >
-          <div
-            className="w-full max-w-4xl h-[88vh] max-h-[850px] rounded-[36px] bg-[#07070D]/95 border border-white/20 shadow-[0_25px_90px_rgba(0,0,0,0.95)] backdrop-blur-2xl flex flex-col justify-between overflow-hidden text-left relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Ambient Lighting */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[140px] pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[140px] pointer-events-none" />
-
-            {/* Top Bar (Maximized) */}
-            <div className="p-5 bg-white/[0.04] border-b border-white/10 flex items-center justify-between relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center -space-x-3">
-                  <div className="relative w-10 h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 p-1 flex items-center justify-center">
+        <div className="fixed inset-0 z-[9999] bg-[#020204]/95 backdrop-blur-3xl flex items-center justify-center p-3 sm:p-6 md:p-10 animate-in fade-in duration-300">
+          <div className="w-full max-w-5xl h-full max-h-[850px] rounded-[32px] bg-[#07070D] border border-white/20 shadow-[0_0_80px_rgba(255,56,88,0.25)] flex flex-col overflow-hidden text-left relative">
+            {/* Top Modal Header */}
+            <div className="px-6 py-4 bg-white/[0.03] border-b border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center -space-x-2">
+                  <div className="w-10 h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)]">
                     <Image
                       src="/images/sofia_pink_beanbag.png"
                       alt="Sofía"
@@ -217,7 +194,7 @@ export default function FloatingChatWidget({
                       className="object-contain"
                     />
                   </div>
-                  <div className="relative w-10 h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 p-1 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)]">
                     <Image
                       src="/images/ivan_standing_stylus.png"
                       alt="Iván"
@@ -229,79 +206,105 @@ export default function FloatingChatWidget({
                 </div>
 
                 <div>
-                  <h4 className="text-base font-black text-white tracking-wide uppercase flex items-center gap-2">
-                    <span>CHATBOT DUAL CORE</span>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40">
-                      EN VIVO
+                  <h3 className="text-base sm:text-lg font-black tracking-wide text-white uppercase flex items-center gap-2">
+                    <span>INNOCENTIA AI DUAL CORE</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                      MODO EXTENDIDO
                     </span>
-                  </h4>
+                  </h3>
                   <p className="text-xs text-gray-400 font-mono">
-                    Sofía (Creatividad & UX) + Iván (Ingeniería & Software)
+                    Sofía (UX & Creatividad) • Iván (Arquitectura & Código)
                   </p>
                 </div>
               </div>
 
-              {/* Actions: Minimize & Close */}
+              {/* Action Buttons (Minimize / Close) */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={toggleMaximize}
-                  title="Minimizar a ventana flotante"
-                  className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
+                  title="Modo Flotante"
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
                 >
                   <Minimize2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleClose}
-                  title="Cerrar"
-                  className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
+                  title="Cerrar Chat"
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            {/* Quick Suggested Questions Chips */}
-            <div className="px-6 py-2.5 bg-black/40 border-b border-white/5 flex items-center gap-2 overflow-x-auto scrollbar-none relative z-10">
-              <span className="text-[10px] font-mono text-gray-400 uppercase font-bold flex-shrink-0 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-[#FFD166]" />
+            {/* Quick Chips in Maximized View */}
+            <div className="px-6 py-2.5 bg-white/[0.01] border-b border-white/5 flex items-center gap-2 overflow-x-auto scrollbar-none">
+              <span className="text-[11px] font-mono text-gray-500 uppercase flex-shrink-0">
                 Sugerencias:
               </span>
               {quickQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSendMessage(q.query)}
-                  className="px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF]/50 text-xs text-gray-200 hover:text-white whitespace-nowrap transition-all flex-shrink-0 cursor-pointer"
+                  className="px-3.5 py-1 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/10 text-xs text-gray-300 hover:text-white whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  {q.label}
+                  <span>{q.label}</span>
                 </button>
               ))}
             </div>
 
-            {/* Message Stream (Maximized) */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4 relative z-10">
+            {/* Maximized Messages Stream */}
+            <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-gradient-to-b from-transparent to-black/40">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} animate-in fade-in duration-200`}
+                  className={`flex items-start gap-3 ${
+                    msg.sender === "user" ? "justify-end" : "justify-start"
+                  }`}
                 >
+                  {msg.sender !== "user" && (
+                    <div
+                      className={`w-9 h-9 rounded-full p-0.5 flex-shrink-0 flex items-center justify-center border ${
+                        msg.sender === "sofia"
+                          ? "bg-[#FF3858]/20 border-[#FF3858]/60 shadow-[0_0_12px_rgba(255,56,88,0.4)]"
+                          : "bg-[#00D1FF]/20 border-[#00D1FF]/60 shadow-[0_0_12px_rgba(0,209,255,0.4)]"
+                      }`}
+                    >
+                      <Image
+                        src={
+                          msg.sender === "sofia"
+                            ? "/images/sofia_pink_beanbag.png"
+                            : "/images/ivan_idea_laptop.png"
+                        }
+                        alt={msg.sender}
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                    </div>
+                  )}
+
                   <div
-                    className={`max-w-[75%] p-4 rounded-2xl text-sm leading-relaxed ${
+                    className={`max-w-[75%] sm:max-w-[65%] p-4 rounded-2xl text-sm leading-relaxed ${
                       msg.sender === "user"
-                        ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white rounded-br-none shadow-lg shadow-[#FF3858]/20"
+                        ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white rounded-br-none shadow-[0_5px_20px_rgba(255,56,88,0.3)]"
                         : msg.sender === "sofia"
-                        ? "bg-[#FF3858]/10 border border-[#FF3858]/35 text-gray-100 rounded-bl-none shadow-md"
-                        : "bg-[#00D1FF]/10 border border-[#00D1FF]/35 text-gray-100 rounded-bl-none shadow-md font-mono"
+                        ? "bg-[#FF3858]/10 border border-[#FF3858]/30 text-gray-100 rounded-tl-none shadow-[0_5px_20px_rgba(255,56,88,0.15)]"
+                        : "bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-gray-100 rounded-tl-none font-mono shadow-[0_5px_20px_rgba(0,209,255,0.15)]"
                     }`}
                   >
                     {msg.sender !== "user" && (
-                      <div className="flex items-center gap-1.5 mb-1.5 font-bold font-mono text-xs">
+                      <div className="flex items-center gap-2 mb-1.5">
                         <span
-                          className={`w-2 h-2 rounded-full ${
-                            msg.sender === "sofia" ? "bg-[#FF3858]" : "bg-[#00D1FF]"
+                          className={`text-[10px] font-bold uppercase font-mono px-2 py-0.5 rounded-full ${
+                            msg.sender === "sofia"
+                              ? "bg-[#FF3858]/20 text-[#FF3858]"
+                              : "bg-[#00D1FF]/20 text-[#00D1FF]"
                           }`}
-                        />
-                        <span className={msg.sender === "sofia" ? "text-[#FF3858]" : "text-[#00D1FF]"}>
-                          {msg.sender === "sofia" ? "SOFÍA (DISEÑO & UX)" : "IVÁN (SOFTWARE & TECH)"}
+                        >
+                          {msg.sender === "sofia"
+                            ? "Sofía • Creatividad & UX"
+                            : "Iván • Arquitectura & Dev"}
                         </span>
                       </div>
                     )}
@@ -310,23 +313,22 @@ export default function FloatingChatWidget({
                 </div>
               ))}
 
-              {/* Typing indicator */}
               {isTyping && (
                 <div className="flex items-center gap-2 text-xs font-mono text-gray-400 p-2">
                   <div className="w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
                   <span>
                     {isTyping === "sofia"
-                      ? "Sofía está pintando una respuesta..."
+                      ? "Sofía está visualizando la solución..."
                       : isTyping === "ivan"
-                      ? "Iván está compilando la arquitectura..."
-                      : "Sofía e Iván están respondiendo..."}
+                      ? "Iván está estructurando el código..."
+                      : "Sofía & Iván están sincronizando..."}
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Input Bar (Maximized) */}
-            <div className="p-5 bg-white/[0.03] border-t border-white/10 relative z-10 space-y-3">
+            {/* Bottom Input Area */}
+            <div className="p-4 sm:p-6 bg-black/80 border-t border-white/10 space-y-3">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -338,20 +340,21 @@ export default function FloatingChatWidget({
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Pregúntale a Sofía e Iván sobre tu proyecto..."
-                  className="flex-1 bg-black/60 border border-white/20 rounded-2xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-[#00D1FF]/60 placeholder-gray-500 shadow-inner"
+                  placeholder="Describe tu idea, requerimientos o preguntas técnicas..."
+                  className="flex-1 bg-white/[0.05] border border-white/15 focus:border-[#00D1FF] rounded-full px-5 py-3.5 text-sm text-white placeholder-gray-500 focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"
-                  className="p-3.5 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white hover:scale-105 transition-all shadow-lg shadow-[#00D1FF]/25 cursor-pointer"
+                  className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(0,209,255,0.4)] cursor-pointer"
                 >
-                  <Send className="w-5 h-5" />
+                  <span>Enviar</span>
+                  <Send className="w-4 h-4" />
                 </button>
               </form>
 
               {/* Blueprint Action Banner */}
-              <div className="flex items-center justify-between text-xs pt-1">
-                <span className="text-gray-400 font-mono">
+              <div className="flex flex-col sm:flex-row items-center justify-between text-xs pt-1 gap-2">
+                <span className="text-gray-400 font-mono text-center sm:text-left">
                   ¿Listo para formalizar tu idea con un alcance técnico oficial?
                 </span>
                 <button
@@ -371,13 +374,55 @@ export default function FloatingChatWidget({
       )}
 
       {/* ========================================================== */}
-      {/* STANDARD FLOATING WIDGET (BOTTOM RIGHT) */}
+      {/* FLOATING WIDGET (BOTTOM RIGHT) */}
       {/* ========================================================== */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end select-none">
-        {/* Proactive Idle Dialogue Balloons with Animated Character Appearances */}
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end select-none">
+        {/* MOBILE COMPACT DYNAMIC PILL (No ocupa la pantalla ni tapa botones) */}
         {!isOpen && idleStep > 0 && (
-          <div className="mb-3 flex flex-col items-end space-y-3 max-w-[320px] animate-in fade-in slide-in-from-bottom-3 duration-500">
-            {/* Sofía Speaks -> Sofía Character Pops Up on Her Bubble */}
+          <div className="sm:hidden mb-2 max-w-[290px] bg-[#07070D]/95 border border-[#FF3858]/40 rounded-full py-1.5 px-3 backdrop-blur-xl shadow-[0_10px_25px_rgba(0,0,0,0.9)] flex items-center justify-between gap-2 animate-in slide-in-from-bottom-2 duration-300">
+            <div
+              onClick={() => {
+                setIsOpen(true);
+                setIsMaximized(false);
+                setIdleStep(0);
+              }}
+              className="flex items-center gap-2 cursor-pointer flex-1 min-w-0"
+            >
+              <div className="relative w-6 h-6 flex-shrink-0">
+                <Image
+                  src={
+                    idleStep === 1
+                      ? "/images/sofia_pink_beanbag.png"
+                      : "/images/ivan_idea_laptop.png"
+                  }
+                  alt="Avatar"
+                  width={24}
+                  height={24}
+                  className="object-contain"
+                />
+              </div>
+              <span className="text-[11px] font-medium text-white truncate">
+                {idleStep === 1
+                  ? "💬 Hola, ¿qué imaginas hoy?"
+                  : "⚡ Te ayudo a construir tu idea"}
+              </span>
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIdleStep(0);
+              }}
+              className="text-gray-400 hover:text-white p-1"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* DESKTOP PROACTIVE EXPANDED BALLOONS */}
+        {!isOpen && idleStep > 0 && (
+          <div className="hidden sm:flex mb-3 flex-col items-end space-y-3 max-w-[320px] animate-in fade-in slide-in-from-bottom-3 duration-500">
+            {/* Sofía Speaks */}
             {idleStep >= 1 && (
               <div
                 onClick={() => {
@@ -387,7 +432,6 @@ export default function FloatingChatWidget({
                 }}
                 className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
               >
-                {/* Sofía Avatar Popup */}
                 <div className="relative w-12 h-12 flex-shrink-0">
                   <Image
                     src="/images/sofia_pink_beanbag.png"
@@ -398,8 +442,6 @@ export default function FloatingChatWidget({
                   />
                   <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#FFD166] animate-ping" />
                 </div>
-
-                {/* Sofía Bubble */}
                 <div className="bg-black/95 border border-[#FF3858]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(255,56,88,0.35)] text-left">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="w-2 h-2 rounded-full bg-[#FF3858] animate-pulse" />
@@ -413,7 +455,7 @@ export default function FloatingChatWidget({
               </div>
             )}
 
-            {/* Iván Speaks -> Iván Character Pops Up on His Bubble */}
+            {/* Iván Speaks */}
             {idleStep >= 2 && (
               <div
                 onClick={() => {
@@ -423,7 +465,6 @@ export default function FloatingChatWidget({
                 }}
                 className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
               >
-                {/* Iván Avatar Popup */}
                 <div className="relative w-12 h-12 flex-shrink-0">
                   <Image
                     src="/images/ivan_idea_laptop.png"
@@ -434,8 +475,6 @@ export default function FloatingChatWidget({
                   />
                   <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
                 </div>
-
-                {/* Iván Bubble */}
                 <div className="bg-black/95 border border-[#00D1FF]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,209,255,0.35)] text-left">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-pulse" />
@@ -450,7 +489,7 @@ export default function FloatingChatWidget({
           </div>
         )}
 
-        {/* Clean Trigger Pill Button (Without static character atop) */}
+        {/* Clean Trigger Pill Button */}
         {!isOpen && (
           <button
             onClick={() => {
@@ -458,21 +497,29 @@ export default function FloatingChatWidget({
               setIsMaximized(false);
               setIdleStep(0);
             }}
-            className="group flex items-center gap-3 px-6 py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_30px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
+            className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_30px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
           >
-            <div className="text-left whitespace-nowrap">
-              <span className="text-xs font-bold text-white block">¿Necesitas ayuda?</span>
-              <span className="text-[10px] text-gray-400 font-mono">Sofía & Iván</span>
+            <div className="flex items-center -space-x-1.5">
+              <div className="w-5 h-5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center overflow-hidden">
+                <Image src="/images/sofia_pink_beanbag.png" alt="S" width={16} height={16} className="object-contain" />
+              </div>
+              <div className="w-5 h-5 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 flex items-center justify-center overflow-hidden">
+                <Image src="/images/ivan_standing_stylus.png" alt="I" width={16} height={16} className="object-contain" />
+              </div>
             </div>
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
+            <div className="text-left whitespace-nowrap">
+              <span className="text-xs font-bold text-white block leading-tight">¿Necesitas ayuda?</span>
+              <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono">Sofía & Iván</span>
+            </div>
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
           </button>
         )}
 
-        {/* Standard Floating Chat Window (When open but not maximized) */}
+        {/* Standard Floating Chat Window (Mobile responsive) */}
         {isOpen && !isMaximized && (
-          <div className="w-[360px] sm:w-[400px] h-[540px] rounded-[32px] bg-black/95 border border-white/25 shadow-[0_25px_70px_rgba(0,0,0,0.95)] backdrop-blur-2xl flex flex-col justify-between overflow-hidden text-left animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-[calc(100vw-32px)] sm:w-[400px] h-[520px] max-h-[80vh] rounded-[28px] sm:rounded-[32px] bg-[#07070D]/98 border border-white/25 shadow-[0_25px_70px_rgba(0,0,0,0.95)] backdrop-blur-2xl flex flex-col justify-between overflow-hidden text-left animate-in fade-in zoom-in-95 duration-200">
             {/* Top Bar */}
-            <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
+            <div className="p-3.5 sm:p-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="flex items-center -space-x-2">
                   <div className="w-7 h-7 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 p-0.5 flex items-center justify-center">
@@ -539,14 +586,14 @@ export default function FloatingChatWidget({
             </div>
 
             {/* Message Stream */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
                   className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[82%] p-3 rounded-2xl text-xs leading-relaxed ${
+                    className={`max-w-[85%] sm:max-w-[82%] p-3 rounded-2xl text-xs leading-relaxed ${
                       msg.sender === "user"
                         ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white rounded-br-none"
                         : msg.sender === "sofia"
