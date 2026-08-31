@@ -47,34 +47,69 @@ export default function FloatingChatWidget({
     setIsMaximized((prev) => !prev);
   };
 
-  // Desktop-Only Proactive Spontaneous Idle Balloons (Every 5 minutes)
+  // Random quotes requested by user
+  const SOFIA_COMMENTS = [
+    "💭 ¿Ya tienes una idea o empezamos desde cero?",
+    "🎨 A veces un buen proyecto comienza con una conversación.",
+    "✨ ¿Quieres que imaginemos algo juntos?",
+    "💡 Tengo algunas ideas que podrían sorprenderte.",
+    "🎨 Podemos empezar por el diseño si aún no sabes por dónde ir.",
+    "🌈 Hasta una idea pequeña puede convertirse en algo increíble.",
+    "🖌️ Si puedes imaginarlo, podemos comenzar a darle forma.",
+    "😊 No tengas miedo de hacer preguntas, para eso estamos.",
+    "🎯 Podemos crear algo que realmente represente tu marca.",
+    "🌟 Me encantan los proyectos que todavía no existen.",
+  ];
+
+  const IVAN_COMMENTS = [
+    "⚡ Cuando quieras, empezamos a construir.",
+    "💻 Toda gran idea necesita una buena arquitectura.",
+    "🔧 También puedo ayudarte a definir la parte técnica.",
+    "🧠 Hay muchas formas de resolver un mismo problema.",
+    "🚀 Podemos convertir esa idea en un producto real.",
+    "📦 APIs, bases de datos, IA… tú imagina, yo construyo.",
+    "🔍 Si tienes dudas técnicas, pregúntame sin problema.",
+    "⚙️ Lo importante no es solo que funcione, sino que escale.",
+    "🌐 Podemos diseñar pensando en el crecimiento desde el inicio.",
+    "💙 Estoy listo cuando quieras empezar.",
+  ];
+
+  // Proactive Spontaneous Idle Balloons (Every 3 minutes / 180,000 ms with random quotes)
   const [idleStep, setIdleStep] = useState<number>(0);
+  const [currentSofiaQuote, setCurrentSofiaQuote] = useState<string>(SOFIA_COMMENTS[0]);
+  const [currentIvanQuote, setCurrentIvanQuote] = useState<string>(IVAN_COMMENTS[0]);
 
-  useEffect(() => {
-    // Primera aparición a los 5 minutos (300,000 ms)
-    const timer1 = setTimeout(() => {
-      setIdleStep(1);
-    }, 300000);
+  const triggerRandomBalloon = () => {
+    // Pick random quotes
+    const randomSofia = SOFIA_COMMENTS[Math.floor(Math.random() * SOFIA_COMMENTS.length)];
+    const randomIvan = IVAN_COMMENTS[Math.floor(Math.random() * IVAN_COMMENTS.length)];
+    setCurrentSofiaQuote(randomSofia);
+    setCurrentIvanQuote(randomIvan);
 
-    const timer2 = setTimeout(() => {
-      setIdleStep(2);
-    }, 308000);
-
-    const timer3 = setTimeout(() => {
-      setIdleStep(0);
-    }, 326000);
-
-    // Ciclo recurrente cada 5 minutos
-    const interval = setInterval(() => {
-      setIdleStep(1);
-      setTimeout(() => setIdleStep(2), 8000);
-      setTimeout(() => setIdleStep(0), 26000);
-    }, 300000);
+    // Sequence: Sofia speaks first, then Ivan 4s later, then hides after 18s
+    setIdleStep(1);
+    const t1 = setTimeout(() => setIdleStep(2), 4000);
+    const t2 = setTimeout(() => setIdleStep(0), 18000);
 
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  };
+
+  useEffect(() => {
+    // Initial popup after 12 seconds so user sees it quickly on entry
+    const initialTimer = setTimeout(() => {
+      triggerRandomBalloon();
+    }, 12000);
+
+    // Recurring cycle every 3 minutes (180,000 ms)
+    const interval = setInterval(() => {
+      triggerRandomBalloon();
+    }, 180000);
+
+    return () => {
+      clearTimeout(initialTimer);
       clearInterval(interval);
     };
   }, []);
@@ -383,9 +418,21 @@ export default function FloatingChatWidget({
       {/* FLOATING WIDGET (BOTTOM RIGHT) */}
       {/* ========================================================== */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end select-none">
-        {/* DESKTOP ONLY: PROACTIVE EXPANDED BALLOONS (INTERVALO DE 5 MINUTOS) */}
+        {/* PROACTIVE EXPANDED BALLOONS (INTERVALO DE 3 MINUTOS CON FRASES ALEATORIAS) */}
         {!isOpen && idleStep > 0 && (
-          <div className="hidden sm:flex mb-3 flex-col items-end space-y-3 max-w-[320px] animate-in fade-in slide-in-from-bottom-3 duration-500">
+          <div className="flex mb-3 flex-col items-end space-y-2.5 max-w-[calc(100vw-36px)] sm:max-w-[340px] animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
+            {/* Quick Dismiss Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIdleStep(0);
+              }}
+              title="Cerrar notificación"
+              className="absolute -top-2 -left-2 z-20 w-5 h-5 rounded-full bg-black/90 border border-white/30 text-gray-400 hover:text-white flex items-center justify-center text-[10px] cursor-pointer shadow-lg"
+            >
+              ✕
+            </button>
+
             {/* Sofía Speaks */}
             {idleStep >= 1 && (
               <div
@@ -394,9 +441,9 @@ export default function FloatingChatWidget({
                   setIsMaximized(false);
                   setIdleStep(0);
                 }}
-                className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
+                className="group flex items-end gap-2.5 cursor-pointer hover:scale-[1.02] transition-all"
               >
-                <div className="relative w-12 h-12 flex-shrink-0">
+                <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex-shrink-0">
                   <Image
                     src="/images/sofia_pink_beanbag.png"
                     alt="Sofía"
@@ -406,14 +453,13 @@ export default function FloatingChatWidget({
                   />
                   <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#FFD166] animate-ping" />
                 </div>
-                <div className="bg-black/95 border border-[#FF3858]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(255,56,88,0.35)] text-left">
+                <div className="bg-black/95 border border-[#FF3858]/60 rounded-2xl rounded-br-none p-3 sm:p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(255,56,88,0.35)] text-left">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="w-2 h-2 rounded-full bg-[#FF3858] animate-pulse" />
-                    <span className="text-[10px] font-mono text-[#FF3858] font-bold">SOFÍA</span>
+                    <span className="text-[10px] font-mono text-[#FF3858] font-bold uppercase">SOFÍA</span>
                   </div>
-                  <p className="text-xs text-white font-medium leading-snug">
-                    💬 Hola... <br />
-                    <strong className="text-[#FF7A00]">¿Qué estás imaginando hoy?</strong>
+                  <p className="text-xs text-white font-medium leading-relaxed">
+                    {currentSofiaQuote}
                   </p>
                 </div>
               </div>
@@ -427,9 +473,9 @@ export default function FloatingChatWidget({
                   setIsMaximized(false);
                   setIdleStep(0);
                 }}
-                className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
+                className="group flex items-end gap-2.5 cursor-pointer hover:scale-[1.02] transition-all"
               >
-                <div className="relative w-12 h-12 flex-shrink-0">
+                <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex-shrink-0">
                   <Image
                     src="/images/ivan_idea_laptop.png"
                     alt="Iván"
@@ -439,13 +485,13 @@ export default function FloatingChatWidget({
                   />
                   <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
                 </div>
-                <div className="bg-black/95 border border-[#00D1FF]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,209,255,0.35)] text-left">
+                <div className="bg-black/95 border border-[#00D1FF]/60 rounded-2xl rounded-br-none p-3 sm:p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,209,255,0.35)] text-left">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-pulse" />
-                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold">IVÁN</span>
+                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold uppercase">IVÁN</span>
                   </div>
-                  <p className="text-xs text-white font-medium leading-snug">
-                    ⚡ Si ya tienes una idea, yo puedo ayudarte a construirla.
+                  <p className="text-xs text-white font-medium leading-relaxed font-mono">
+                    {currentIvanQuote}
                   </p>
                 </div>
               </div>
