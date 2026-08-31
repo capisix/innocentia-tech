@@ -47,40 +47,6 @@ export default function FloatingChatWidget({
     setIsMaximized((prev) => !prev);
   };
 
-  // Proactive Spontaneous Idle Balloons
-  const [idleStep, setIdleStep] = useState<number>(0);
-
-  useEffect(() => {
-    // Balloon 1: Sofía habla a los 5 minutos (300,000 ms)
-    const timer1 = setTimeout(() => {
-      setIdleStep(1);
-    }, 300000);
-
-    // Balloon 2: Iván complementa a los 5 minutos y 8 segundos (308,000 ms)
-    const timer2 = setTimeout(() => {
-      setIdleStep(2);
-    }, 308000);
-
-    // Auto-dismiss balloons después de 18 segundos de haber aparecido (326,000 ms)
-    const timer3 = setTimeout(() => {
-      setIdleStep(0);
-    }, 326000);
-
-    // Intervalo recurrente cada 5 minutos
-    const interval = setInterval(() => {
-      setIdleStep(1);
-      setTimeout(() => setIdleStep(2), 8000);
-      setTimeout(() => setIdleStep(0), 26000);
-    }, 300000);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearInterval(interval);
-    };
-  }, []);
-
   const [messages, setMessages] = useState<
     Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }>
   >([
@@ -382,130 +348,17 @@ export default function FloatingChatWidget({
       )}
 
       {/* ========================================================== */}
-      {/* FLOATING WIDGET (BOTTOM RIGHT) */}
+      {/* CLEAN FLOATING WIDGET (BOTTOM RIGHT - ZERO INVASIVE OVERLAY) */}
       {/* ========================================================== */}
       <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end select-none">
-        {/* MOBILE COMPACT DYNAMIC PILL (No ocupa la pantalla ni tapa botones) */}
-        {!isOpen && idleStep > 0 && (
-          <div className="sm:hidden mb-2 max-w-[290px] bg-[#07070D]/95 border border-[#FF3858]/40 rounded-full py-1.5 px-3 backdrop-blur-xl shadow-[0_10px_25px_rgba(0,0,0,0.9)] flex items-center justify-between gap-2 animate-in slide-in-from-bottom-2 duration-300">
-            <div
-              onClick={() => {
-                setIsOpen(true);
-                setIsMaximized(false);
-                setIdleStep(0);
-              }}
-              className="flex items-center gap-2 cursor-pointer flex-1 min-w-0"
-            >
-              <div className="relative w-6 h-6 flex-shrink-0">
-                <Image
-                  src={
-                    idleStep === 1
-                      ? "/images/sofia_pink_beanbag.png"
-                      : "/images/ivan_idea_laptop.png"
-                  }
-                  alt="Avatar"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
-              </div>
-              <span className="text-[11px] font-medium text-white truncate">
-                {idleStep === 1
-                  ? "💬 Hola, ¿qué imaginas hoy?"
-                  : "⚡ Te ayudo a construir tu idea"}
-              </span>
-            </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIdleStep(0);
-              }}
-              className="text-gray-400 hover:text-white p-1"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        )}
-
-        {/* DESKTOP PROACTIVE EXPANDED BALLOONS */}
-        {!isOpen && idleStep > 0 && (
-          <div className="hidden sm:flex mb-3 flex-col items-end space-y-3 max-w-[320px] animate-in fade-in slide-in-from-bottom-3 duration-500">
-            {/* Sofía Speaks */}
-            {idleStep >= 1 && (
-              <div
-                onClick={() => {
-                  setIsOpen(true);
-                  setIsMaximized(false);
-                  setIdleStep(0);
-                }}
-                className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
-              >
-                <div className="relative w-12 h-12 flex-shrink-0">
-                  <Image
-                    src="/images/sofia_pink_beanbag.png"
-                    alt="Sofía"
-                    width={48}
-                    height={48}
-                    className="object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.8)] animate-bounce"
-                  />
-                  <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#FFD166] animate-ping" />
-                </div>
-                <div className="bg-black/95 border border-[#FF3858]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(255,56,88,0.35)] text-left">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-[#FF3858] animate-pulse" />
-                    <span className="text-[10px] font-mono text-[#FF3858] font-bold">SOFÍA</span>
-                  </div>
-                  <p className="text-xs text-white font-medium leading-snug">
-                    💬 Hola... <br />
-                    <strong className="text-[#FF7A00]">¿Qué estás imaginando hoy?</strong>
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Iván Speaks */}
-            {idleStep >= 2 && (
-              <div
-                onClick={() => {
-                  setIsOpen(true);
-                  setIsMaximized(false);
-                  setIdleStep(0);
-                }}
-                className="group flex items-end gap-2.5 cursor-pointer hover:scale-105 transition-all"
-              >
-                <div className="relative w-12 h-12 flex-shrink-0">
-                  <Image
-                    src="/images/ivan_idea_laptop.png"
-                    alt="Iván"
-                    width={48}
-                    height={48}
-                    className="object-contain filter drop-shadow-[0_0_12px_rgba(0,209,255,0.8)] animate-bounce"
-                  />
-                  <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
-                </div>
-                <div className="bg-black/95 border border-[#00D1FF]/60 rounded-2xl rounded-br-none p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,209,255,0.35)] text-left">
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-pulse" />
-                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold">IVÁN</span>
-                  </div>
-                  <p className="text-xs text-white font-medium leading-snug">
-                    ⚡ Si ya tienes una idea, yo puedo ayudarte a construirla.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Clean Trigger Pill Button */}
+        {/* Clean Trigger Pill Button (Peaceful, Elegant, No Spontaneous Overlays) */}
         {!isOpen && (
           <button
             onClick={() => {
               setIsOpen(true);
               setIsMaximized(false);
-              setIdleStep(0);
             }}
-            className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_30px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
+            className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_25px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
           >
             <div className="flex items-center -space-x-1.5">
               <div className="w-5 h-5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center overflow-hidden">
@@ -523,7 +376,7 @@ export default function FloatingChatWidget({
           </button>
         )}
 
-        {/* Standard Floating Chat Window (Mobile responsive) */}
+        {/* Standard Floating Chat Window (Mobile & Desktop Responsive) */}
         {isOpen && !isMaximized && (
           <div className="w-[calc(100vw-32px)] sm:w-[400px] h-[520px] max-h-[80vh] rounded-[28px] sm:rounded-[32px] bg-[#07070D]/98 border border-white/25 shadow-[0_25px_70px_rgba(0,0,0,0.95)] backdrop-blur-2xl flex flex-col justify-between overflow-hidden text-left animate-in fade-in zoom-in-95 duration-200">
             {/* Top Bar */}

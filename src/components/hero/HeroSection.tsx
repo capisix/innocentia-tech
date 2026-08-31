@@ -1,81 +1,92 @@
 "use client";
 
 import React from "react";
-import { motion } from "../../lib/motion";
-import { ArrowRight, Sparkles, ChevronDown } from "../../lib/icons";
+import { motion } from "framer-motion";
+import { ArrowRight, MessageSquare, ChevronDown } from "../../lib/icons";
 
 interface HeroSectionProps {
   onOpenProjectModal?: () => void;
   onOpenChatModal?: () => void;
 }
 
-export default function HeroSection({ onOpenProjectModal, onOpenChatModal }: HeroSectionProps) {
+export default function HeroSection({
+  onOpenProjectModal,
+  onOpenChatModal,
+}: HeroSectionProps) {
   return (
-    <section id="hero" className="relative min-h-[90vh] pt-36 pb-16 bg-transparent overflow-hidden flex flex-col justify-between">
-      {/* Main Container */}
-      <div className="max-w-[1440px] mx-auto px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center my-auto">
-        {/* Left Column Content */}
-        <div className="lg:col-span-6 space-y-7 text-left">
-          {/* Top Tagline Badge */}
+    <section
+      id="hero"
+      className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-center pt-24 pb-12 sm:pt-28 sm:pb-16 overflow-hidden"
+    >
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        {/* Left Column: High-Impact Typography & Dual CTA */}
+        <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-left z-10">
+          {/* Subtle Cyber Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/15 text-xs font-mono tracking-widest text-gray-200 uppercase backdrop-blur-md shadow-lg"
-          >
-            <Sparkles className="w-4 h-4 text-[#00D1FF]" />
-            <span>LABORATORIO DE IMAGINACIÓN E INGENIERÍA</span>
-          </motion.div>
-
-          {/* Main Headline */}
-          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/15 backdrop-blur-xl"
+          >
+            <div className="w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
+            <span className="text-[10px] sm:text-xs font-mono tracking-widest text-gray-300 uppercase">
+              LABORATORIO DE IMAGINACIÓN E INGENIERÍA
+            </span>
+          </motion.div>
+
+          {/* Main Kinetic Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.08] uppercase"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.05] uppercase"
           >
             DONDE LA <br />
-            <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(255,56,88,0.5)]">
+            <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] bg-clip-text text-transparent filter drop-shadow-[0_0_35px_rgba(255,56,88,0.45)]">
               IMAGINACIÓN
             </span>{" "}
             <br />
             SE CONVIERTE EN <br />
-            <span className="bg-gradient-to-r from-[#00D1FF] via-[#3A86FF] to-[#8A2BE2] bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(0,209,255,0.5)]">
+            <span className="bg-gradient-to-r from-[#00D1FF] via-[#7000FF] to-[#FF3858] bg-clip-text text-transparent filter drop-shadow-[0_0_35px_rgba(0,209,255,0.45)]">
               TECNOLOGÍA
             </span>
           </motion.h1>
 
-          {/* Subtitle */}
+          {/* Editorial Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-300 text-lg sm:text-xl font-normal max-w-2xl leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-gray-300 font-light leading-relaxed max-w-xl"
           >
-            No desarrollamos aplicaciones por desarrollar software. Transformamos la curiosidad en soluciones útiles, elegantes y significativas.
+            No desarrollamos aplicaciones por desarrollar software. Transformamos la
+            curiosidad en soluciones útiles, elegantes y significativas.
           </motion.p>
 
-          {/* Buttons */}
+          {/* Dual Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-5 pt-3"
+            className="flex flex-wrap items-center gap-4 pt-2"
           >
+            {/* Primary Action: Crear Proyecto */}
             <button
               onClick={onOpenProjectModal}
-              className="group px-9 py-4 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-base tracking-wide flex items-center gap-3 transition-all shadow-[0_0_35px_rgba(255,56,88,0.45)] hover:shadow-[0_0_45px_rgba(255,56,88,0.65)] hover:scale-105 cursor-pointer"
+              className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-sm tracking-wide uppercase flex items-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.5)] hover:scale-105 cursor-pointer"
             >
               <span>Comenzar Proyecto</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+              <ArrowRight className="w-4 h-4" />
             </button>
 
+            {/* Secondary Action: Abrir Chatbot Maximizado */}
             <button
               onClick={onOpenChatModal}
-              className="group px-9 py-4 rounded-full bg-white/[0.04] border border-white/20 hover:border-[#00D1FF]/60 text-white font-bold text-base tracking-wide flex items-center gap-3 transition-all backdrop-blur-xl hover:bg-white/[0.08] shadow-lg cursor-pointer"
+              className="px-6 py-3.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 hover:border-[#00D1FF]/60 text-white font-bold text-sm tracking-wide flex items-center gap-2.5 transition-all backdrop-blur-xl cursor-pointer hover:scale-105"
             >
+              <MessageSquare className="w-4 h-4 text-[#00D1FF]" />
               <span>Preguntar al Chatbot</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform text-[#00D1FF]" />
+              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
             </button>
           </motion.div>
 
@@ -90,53 +101,57 @@ export default function HeroSection({ onOpenProjectModal, onOpenChatModal }: Her
           </motion.p>
         </div>
 
-        {/* Right Column: 4K Cinematic Looping Video Stage */}
+        {/* Right Column: 4K Cinematic Looping Video Stage (Perfect Scale on Mobile & Desktop) */}
         <div className="lg:col-span-6 relative flex justify-center items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-xl h-[480px] sm:h-[540px] flex items-center justify-center"
+            className="relative w-full max-w-[340px] sm:max-w-md lg:max-w-lg aspect-[4/5] sm:aspect-square flex items-center justify-center"
           >
             {/* Stage Container */}
-            <div className="relative z-10 w-full h-full rounded-[36px] bg-gradient-to-b from-white/[0.06] via-black/80 to-black/95 border border-white/20 backdrop-blur-2xl p-4 sm:p-5 shadow-[0_25px_70px_rgba(0,0,0,0.95)] flex flex-col justify-between overflow-hidden group">
+            <div className="relative z-10 w-full h-full rounded-[28px] sm:rounded-[36px] bg-gradient-to-b from-white/[0.08] via-black/80 to-black/95 border border-white/20 backdrop-blur-2xl p-2.5 sm:p-4 shadow-[0_25px_70px_rgba(0,0,0,0.95)] flex flex-col justify-between overflow-hidden group">
               
-              {/* 4K Looping Video Container */}
-              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/90 shadow-2xl flex flex-col justify-between">
+              {/* 4K Looping Video Container with Complete Sphere Visibility */}
+              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#030306] shadow-2xl flex flex-col justify-between">
                 <video
                   src="/videos/hero_floating_astronaut.mp4"
                   autoPlay
                   loop
                   muted
                   playsInline
-                  className="absolute inset-0 w-full h-full object-cover rounded-2xl filter brightness-95 contrast-105 group-hover:scale-105 transition-transform duration-700"
+                  className="absolute inset-0 w-full h-full object-contain sm:object-cover rounded-2xl filter brightness-100 contrast-105 group-hover:scale-105 transition-transform duration-700"
                 />
 
-                {/* Subtle Ambient Vignette & Top Badges */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none rounded-2xl" />
+                {/* Subtle Ambient Vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none rounded-2xl" />
 
                 {/* Top Status Pill */}
-                <div className="relative z-10 p-3 flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold px-3 py-1 rounded-full bg-black/60 border border-white/20 text-white backdrop-blur-md flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-pulse" />
+                <div className="relative z-10 p-2 sm:p-3 flex items-center justify-between">
+                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2.5 sm:px-3 py-1 rounded-full bg-black/70 border border-white/20 text-white backdrop-blur-md flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
                     EXPERIENCIA CINEMÁTICA 4K
                   </span>
-                  <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[#FF3858] backdrop-blur-md">
+                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[#FF3858] backdrop-blur-md">
                     DUAL CORE
                   </span>
                 </div>
 
-                {/* Bottom HUD Banner */}
-                <div className="relative z-10 p-3">
-                  <div className="w-full bg-black/80 border border-white/20 rounded-xl p-3.5 flex items-center justify-between backdrop-blur-xl shadow-2xl">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full bg-[#FF3858] animate-ping" />
+                {/* Bottom HUD Banner (Sleek & Unobtrusive) */}
+                <div className="relative z-10 p-2 sm:p-3">
+                  <div className="w-full bg-black/85 border border-white/20 rounded-xl p-2.5 sm:p-3 flex items-center justify-between backdrop-blur-xl shadow-2xl">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#FF3858] animate-ping flex-shrink-0" />
                       <div className="text-left">
-                        <span className="text-xs sm:text-sm font-bold text-white block">SOFÍA IMAGINA • IVÁN CONSTRUYE</span>
-                        <span className="text-[10px] sm:text-xs text-gray-400 font-mono">INNOCENTIA TRANSFORMA</span>
+                        <span className="text-[11px] sm:text-xs md:text-sm font-bold text-white block leading-tight">
+                          SOFÍA IMAGINA • IVÁN CONSTRUYE
+                        </span>
+                        <span className="text-[8px] sm:text-[10px] text-gray-400 font-mono">
+                          INNOCENTIA TRANSFORMA
+                        </span>
                       </div>
                     </div>
-                    <span className="text-xs font-mono font-bold px-3 py-1 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40">
+                    <span className="text-[10px] sm:text-xs font-mono font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 flex-shrink-0">
                       CORE v3.6
                     </span>
                   </div>
@@ -155,15 +170,15 @@ export default function HeroSection({ onOpenProjectModal, onOpenChatModal }: Her
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="relative z-10 flex flex-col items-center justify-center text-center mt-8 cursor-pointer"
+        className="relative z-10 flex flex-col items-center justify-center text-center mt-6 sm:mt-8 cursor-pointer"
         onClick={() => {
           document.getElementById("filosofia")?.scrollIntoView({ behavior: "smooth" });
         }}
       >
-        <span className="text-xs font-mono tracking-widest text-gray-400 uppercase mb-1.5">
+        <span className="text-[10px] font-mono text-gray-400 tracking-widest uppercase mb-1">
           DESLIZA PARA DESCUBRIR
         </span>
-        <ChevronDown className="w-5 h-5 text-[#FF3858] animate-bounce" />
+        <ChevronDown className="w-4 h-4 text-[#FF3858] animate-bounce" />
       </motion.div>
     </section>
   );
