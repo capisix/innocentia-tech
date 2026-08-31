@@ -2,10 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
-import Footer from "../../components/footer/Footer";
-import ProjectCreationModal from "../../components/common/ProjectCreationModal";
 import {
   Sparkles,
   ChevronDown,
@@ -41,7 +38,6 @@ export default function FAQPage() {
   const [openId, setOpenId] = useState<string | null>("idea-definida");
   const [filter, setFilter] = useState<"todas" | "sofia" | "ivan" | "proceso">("todas");
   const [searchQuery, setSearchQuery] = useState("");
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
   // Cyber Terminal State
   const [terminalHistory, setTerminalHistory] = useState<
@@ -723,13 +719,13 @@ export default function FAQPage() {
               <span>Volver al Inicio</span>
             </Link>
 
-            <button
-              onClick={() => setIsProjectModalOpen(true)}
+            <Link
+              href="/#hero"
               className="px-5 py-2 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_20px_rgba(255,56,88,0.4)] transition-all cursor-pointer hover:scale-105"
             >
-              <span>Crear Proyecto</span>
+              <span>Comenzar Proyecto</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -1035,14 +1031,25 @@ export default function FAQPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
+      {/* Clean Footer */}
+      <footer className="relative bg-[#020204] py-12 border-t border-white/10 text-gray-400 text-xs">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <img
+              src="/images/logo_official_header.png?v=2"
+              alt="INNOCENTIA"
+              className="h-8 w-auto object-contain"
+            />
+            <span className="hidden sm:inline text-gray-500 font-light border-l border-white/10 pl-4">
+              Donde la imaginación se convierte en tecnología.
+            </span>
+          </div>
 
-      {/* Project Modal */}
-      <ProjectCreationModal
-        isOpen={isProjectModalOpen}
-        onClose={() => setIsProjectModalOpen(false)}
-      />
+          <div className="flex flex-wrap items-center justify-center gap-4 text-gray-500 font-mono text-[11px]">
+            <span>© 2024 Innocentia Tech. Todos los derechos reservados.</span>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
