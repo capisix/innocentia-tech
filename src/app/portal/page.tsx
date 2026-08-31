@@ -52,7 +52,7 @@ export default function PortalPage() {
 
   const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat">("proyectos");
   const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat">("tickets");
-  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "pipeline" | "contrato" | "clientes">("tabulador");
+  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "pipeline" | "contrato" | "clientes" | "chat">("tabulador");
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria">("finanzas");
 
   // Vendor Registration & Contract Modal
@@ -77,18 +77,134 @@ export default function PortalPage() {
   const [simProjectAmount, setSimProjectAmount] = useState<number>(200000);
   const [simExternalCosts, setSimExternalCosts] = useState<number>(40000);
 
-  // New Client Registration Form (Cláusula 4 & 5)
-  const [newLeadForm, setNewLeadForm] = useState({
-    name: "",
-    company: "",
-    contactPerson: "",
-    phone: "",
-    email: "",
-    needDesc: "",
-    estimatedBudget: "",
-    evidence: "",
-  });
-  const [leadRegisteredSuccess, setLeadRegisteredSuccess] = useState(false);
+  // Real-time Interactive Chat with Sofía & Iván
+  const [chatMessages, setChatMessages] = useState<Array<{
+    id: string;
+    sender: "sofia" | "ivan" | "user";
+    senderName: string;
+    text: string;
+    time: string;
+    tag?: string;
+  }>>([
+    {
+      id: "m-1",
+      sender: "sofia",
+      senderName: "Sofía (Lead UX/UI & Color)",
+      text: "¡Hola! Estoy supervisando el diseño de Gourmet Express. Las 18 pantallas de checkout y pedidos en Figma están listas al 100%. ¿Quieres revisar algún flujo o animación?",
+      time: "10:30 AM",
+      tag: "🎨 Diseño & UI",
+    },
+    {
+      id: "m-2",
+      sender: "ivan",
+      senderName: "Iván (Software Architect)",
+      text: "Cluster WebSockets y PostgreSQL activo. El Sprint 4 (Stripe & GPS en tiempo real) avanza al 75% con latencia óptima de 18ms. Despliegue estimado el 05 de Septiembre.",
+      time: "10:32 AM",
+      tag: "⚡ Arquitectura & Tech",
+    },
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const [isTyping, setIsTyping] = useState<string | null>(null);
+
+  const handleSendMessage = (textToSend?: string) => {
+    const text = textToSend || chatInput;
+    if (!text.trim()) return;
+
+    const userMsg = {
+      id: "usr-" + Date.now(),
+      sender: "user" as const,
+      senderName: currentUser?.name || "Tú",
+      text: text.trim(),
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    setChatMessages((prev) => [...prev, userMsg]);
+    if (!textToSend) setChatInput("");
+
+    const lower = text.toLowerCase();
+    setIsTyping("Sofía e Iván están analizando el status...");
+
+    setTimeout(() => {
+      if (lower.includes("status") || lower.includes("avance") || lower.includes("cómo va") || lower.includes("estado") || lower.includes("proyecto")) {
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: "ans-ivan-" + Date.now(),
+            sender: "ivan",
+            senderName: "Iván (Software Architect)",
+            text: `El avance global del proyecto está al 75%. Actualmente estamos en el 'Sprint 4: Pasarela de Pagos Stripe & GPS'. Los WebSockets están transmitiendo coordenadas en vivo y la base de datos PostgreSQL está sincronizada con Redis.`,
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "⚡ Status Técnico",
+          },
+          {
+            id: "ans-sofia-" + Date.now(),
+            sender: "sofia",
+            senderName: "Sofía (Lead UX/UI)",
+            text: "Por la parte de diseño, todos los micro-componentes táctiles tienen feedback háptico y animaciones fluidas a 60fps. La siguiente fase de QA inicia el 05 de Septiembre.",
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "🎨 Status Diseño",
+          },
+        ]);
+      } else if (lower.includes("diseño") || lower.includes("pantalla") || lower.includes("figma") || lower.includes("ui") || lower.includes("color")) {
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: "ans-sofia-" + Date.now(),
+            sender: "sofia",
+            senderName: "Sofía (Lead UX/UI)",
+            text: "¡Con gusto! Tenemos 18 pantallas diseñadas con modo oscuro/neón y colorimetría optimizada para retención. Cualquier ajuste de tipografía o botón lo integramos de inmediato.",
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "🎨 Diseño",
+          },
+        ]);
+      } else if (lower.includes("pago") || lower.includes("precio") || lower.includes("factura") || lower.includes("costo") || lower.includes("saldo") || lower.includes("comision")) {
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: "ans-ivan-" + Date.now(),
+            sender: "ivan",
+            senderName: "Iván (Control Administrativo)",
+            text: "El anticipo del 50% ($3,800 USD) fue liquidado y conciliado en Stripe. El saldo restante ($1,900 USD) se liquidará tras la entrega final en App Store / Play Store.",
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "💳 Finanzas & Pagos",
+          },
+        ]);
+      } else if (lower.includes("despliegue") || lower.includes("fecha") || lower.includes("cuándo") || lower.includes("entrega")) {
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: "ans-ivan-" + Date.now(),
+            sender: "ivan",
+            senderName: "Iván (Software Architect)",
+            text: "La fecha programada de entrega y publicación en producción es el 05 de Septiembre. Estamos en tiempo y forma sin retrasos de infraestructura.",
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "🚀 Roadmap",
+          },
+        ]);
+      } else {
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            id: "ans-sofia-" + Date.now(),
+            sender: "sofia",
+            senderName: "Sofía",
+            text: `He recibido tu mensaje: "${text}". Ya lo agregué a las notas del sprint para revisión del equipo.`,
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "✨ Atención",
+          },
+          {
+            id: "ans-ivan-" + Date.now(),
+            sender: "ivan",
+            senderName: "Iván",
+            text: "Si necesitas verificar métricas en tiempo real o ajustar especificaciones técnicas, aquí estamos 24/7.",
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            tag: "⚡ Tech Support",
+          },
+        ]);
+      }
+      setIsTyping(null);
+    }, 700);
+  };
 
   // Sample Demo Data for Usuario (Cliente)
   const clientData = {
@@ -694,31 +810,136 @@ export default function PortalPage() {
               </div>
             )}
 
-            {/* TAB 4: Chat Directo */}
+            {/* TAB 4: Chat Directo Interactivo con Sofía e Iván */}
             {clientTab === "chat" && (
               <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <h3 className="text-xl font-bold text-white uppercase font-mono">
-                    Canal Directo de Ingeniería & Diseño
-                  </h3>
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono">
-                    Sofía & Iván En Línea
+                {/* Header del Chat */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex -space-x-2">
+                      <div className="w-9 h-9 rounded-full bg-[#FF3858]/20 border-2 border-[#FF3858] flex items-center justify-center text-xs shadow-md">
+                        🔴
+                      </div>
+                      <div className="w-9 h-9 rounded-full bg-[#00D1FF]/20 border-2 border-[#00D1FF] flex items-center justify-center text-xs shadow-md">
+                        🔵
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white uppercase font-mono">
+                        Canal Directo de Ingeniería &amp; Diseño
+                      </h3>
+                      <p className="text-xs text-gray-400 font-mono">
+                        Conversa con Sofía (UX/UI) e Iván (Software Architect) en tiempo real.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-start sm:self-auto">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
+                      Sofía &amp; Iván En Línea
+                    </span>
+                  </div>
+                </div>
+
+                {/* Quick Status Prompt Chips */}
+                <div className="space-y-2">
+                  <span className="text-[11px] font-mono text-gray-400 uppercase font-bold block">
+                    ⚡ Preguntas Rápidas de Status &amp; Avance:
                   </span>
-                </div>
-                <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 space-y-4">
-                  <div className="p-3.5 rounded-2xl bg-[#FF3858]/10 border border-[#FF3858]/30 max-w-lg">
-                    <span className="text-[10px] font-bold text-[#FF3858] font-mono block mb-1">SOFÍA (UX/UI):</span>
-                    <p className="text-xs text-gray-200">
-                      Hola Alejandro, terminamos las 18 pantallas del flujo de pedidos. ¿Pudiste revisar el prototipo en Figma?
-                    </p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { text: "📊 ¿Cuál es el status general del proyecto?", label: "Status General" },
+                      { text: "🎨 Sofía, ¿cómo va el diseño de pantallas en Figma?", label: "Diseño & UX (Sofía)" },
+                      { text: "⚡ Iván, ¿cómo va el Sprint 4 y WebSockets GPS?", label: "Backend & Tech (Iván)" },
+                      { text: "🚀 ¿Qué falta para el despliegue final del 05 Sep?", label: "Despliegue & QA" },
+                      { text: "💳 ¿Cuál es el saldo pendiente de facturación?", label: "Pagos & Facturación" },
+                    ].map((chip, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSendMessage(chip.text)}
+                        className="px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-xs font-mono text-gray-300 hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+                      >
+                        <span>{chip.text}</span>
+                      </button>
+                    ))}
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-[#00D1FF]/10 border border-[#00D1FF]/30 max-w-lg">
-                    <span className="text-[10px] font-bold text-[#00D1FF] font-mono block mb-1">IVÁN (TECH):</span>
-                    <p className="text-xs text-gray-200">
-                      Y la base de datos PostgreSQL ya está conectada al cluster de WebSockets para el rastreo GPS en tiempo real.
-                    </p>
-                  </div>
                 </div>
+
+                {/* Messages Feed */}
+                <div className="p-4 sm:p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 max-h-[420px] overflow-y-auto">
+                  {chatMessages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`flex flex-col ${
+                        msg.sender === "user" ? "items-end" : "items-start"
+                      } space-y-1`}
+                    >
+                      <div className="flex items-center gap-2 text-[10px] font-mono text-gray-400 px-1">
+                        <span className="font-bold text-gray-300">{msg.senderName}</span>
+                        {msg.tag && (
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[9px] border ${
+                              msg.sender === "sofia"
+                                ? "bg-[#FF3858]/10 text-[#FF3858] border-[#FF3858]/30"
+                                : msg.sender === "ivan"
+                                ? "bg-[#00D1FF]/10 text-[#00D1FF] border-[#00D1FF]/30"
+                                : "bg-white/10 text-gray-300 border-white/20"
+                            }`}
+                          >
+                            {msg.tag}
+                          </span>
+                        )}
+                        <span>• {msg.time}</span>
+                      </div>
+
+                      <div
+                        className={`p-4 rounded-2xl max-w-xl text-xs sm:text-sm font-mono leading-relaxed ${
+                          msg.sender === "user"
+                            ? "bg-gradient-to-r from-purple-600/30 to-[#00D1FF]/20 border border-[#00D1FF]/40 text-white rounded-tr-none shadow-md"
+                            : msg.sender === "sofia"
+                            ? "bg-[#FF3858]/10 border border-[#FF3858]/30 text-gray-100 rounded-tl-none shadow-md"
+                            : "bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-gray-100 rounded-tl-none shadow-md"
+                        }`}
+                      >
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+
+                  {isTyping && (
+                    <div className="flex items-center gap-2 text-xs font-mono text-[#00D1FF] py-2 animate-pulse">
+                      <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
+                      <span>{isTyping}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Chat Input Bar */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }}
+                  className="flex items-center gap-3 pt-2"
+                >
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Escribe tu consulta o pide el status del proyecto a Sofía e Iván..."
+                    className="flex-1 px-4 py-3 rounded-2xl bg-black border border-white/20 text-white text-xs sm:text-sm font-mono placeholder:text-gray-500 focus:outline-none focus:border-[#00D1FF] shadow-inner"
+                  />
+
+                  <button
+                    type="submit"
+                    className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#00E5FF] text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(0,209,255,0.3)] hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>Enviar</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
               </div>
             )}
           </div>
@@ -1050,6 +1271,7 @@ export default function PortalPage() {
               {[
                 { id: "tabulador", label: "📊 Simulador de Comisiones (Anexo C)" },
                 { id: "pipeline", label: "📈 Pipeline de Prospectos & Ventas" },
+                { id: "chat", label: "💬 Chat Sofía & Iván (Status de Proyectos)" },
                 { id: "contrato", label: "📜 Contrato Legal & Ficha de Atribución" },
                 { id: "clientes", label: "👥 Registro de Clientes (Principio 1er Registro)" },
               ].map((tab) => (
@@ -1476,6 +1698,138 @@ export default function PortalPage() {
                     ))}
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* SUB-TAB 5: CHAT DIRECTO CON SOFÍA & IVÁN (STATUS DE PROYECTOS) */}
+            {advisorTab === "chat" && (
+              <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
+                {/* Header del Chat */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex -space-x-2">
+                      <div className="w-9 h-9 rounded-full bg-[#FF3858]/20 border-2 border-[#FF3858] flex items-center justify-center text-xs shadow-md">
+                        🔴
+                      </div>
+                      <div className="w-9 h-9 rounded-full bg-[#00D1FF]/20 border-2 border-[#00D1FF] flex items-center justify-center text-xs shadow-md">
+                        🔵
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white uppercase font-mono">
+                        Canal Comercial con Sofía &amp; Iván
+                      </h3>
+                      <p className="text-xs text-gray-400 font-mono">
+                        Consulta status técnico, estado de entregables, comisiones y avances para tus clientes.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-start sm:self-auto">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
+                      Sofía &amp; Iván En Línea
+                    </span>
+                  </div>
+                </div>
+
+                {/* Quick Status Prompt Chips */}
+                <div className="space-y-2">
+                  <span className="text-[11px] font-mono text-gray-400 uppercase font-bold block">
+                    ⚡ Consultas Rápidas de Status Comercial:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { text: "📊 ¿Cuál es el status de los proyectos de mis clientes?", label: "Status Clientes" },
+                      { text: "💰 ¿Cuánto se ha cobrado y comisionado este mes?", label: "Comisiones" },
+                      { text: "🎨 Sofía, ¿cómo van las propuestas visuales para cotizaciones?", label: "Diseño & Cotizaciones" },
+                      { text: "⚡ Iván, ¿qué factibilidad técnica tienen los nuevos prospectos?", label: "Factibilidad Tech" },
+                    ].map((chip, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSendMessage(chip.text)}
+                        className="px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-xs font-mono text-gray-300 hover:text-white transition-all cursor-pointer flex items-center gap-1.5"
+                      >
+                        <span>{chip.text}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Messages Feed */}
+                <div className="p-4 sm:p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 max-h-[420px] overflow-y-auto">
+                  {chatMessages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      className={`flex flex-col ${
+                        msg.sender === "user" ? "items-end" : "items-start"
+                      } space-y-1`}
+                    >
+                      <div className="flex items-center gap-2 text-[10px] font-mono text-gray-400 px-1">
+                        <span className="font-bold text-gray-300">{msg.senderName}</span>
+                        {msg.tag && (
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[9px] border ${
+                              msg.sender === "sofia"
+                                ? "bg-[#FF3858]/10 text-[#FF3858] border-[#FF3858]/30"
+                                : msg.sender === "ivan"
+                                ? "bg-[#00D1FF]/10 text-[#00D1FF] border-[#00D1FF]/30"
+                                : "bg-white/10 text-gray-300 border-white/20"
+                            }`}
+                          >
+                            {msg.tag}
+                          </span>
+                        )}
+                        <span>• {msg.time}</span>
+                      </div>
+
+                      <div
+                        className={`p-4 rounded-2xl max-w-xl text-xs sm:text-sm font-mono leading-relaxed ${
+                          msg.sender === "user"
+                            ? "bg-gradient-to-r from-[#00D1FF]/30 to-purple-600/20 border border-[#00D1FF]/40 text-white rounded-tr-none shadow-md"
+                            : msg.sender === "sofia"
+                            ? "bg-[#FF3858]/10 border border-[#FF3858]/30 text-gray-100 rounded-tl-none shadow-md"
+                            : "bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-gray-100 rounded-tl-none shadow-md"
+                        }`}
+                      >
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+
+                  {isTyping && (
+                    <div className="flex items-center gap-2 text-xs font-mono text-[#00D1FF] py-2 animate-pulse">
+                      <span className="w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
+                      <span>{isTyping}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Chat Input Bar */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }}
+                  className="flex items-center gap-3 pt-2"
+                >
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Pregúntale a Sofía e Iván sobre el avance de cualquier cliente o proyecto..."
+                    className="flex-1 px-4 py-3 rounded-2xl bg-black border border-white/20 text-white text-xs sm:text-sm font-mono placeholder:text-gray-500 focus:outline-none focus:border-[#00D1FF] shadow-inner"
+                  />
+
+                  <button
+                    type="submit"
+                    className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#00B4D8] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(0,209,255,0.3)] hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>Enviar</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
               </div>
             )}
           </div>
