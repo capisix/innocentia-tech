@@ -16,9 +16,9 @@ export default function HeroSection({
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-center pt-24 pb-12 sm:pt-28 sm:pb-16 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pt-32 lg:pb-20 overflow-hidden"
     >
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
         {/* Left Column: High-Impact Typography & Dual CTA */}
         <div className="lg:col-span-6 space-y-6 sm:space-y-8 text-left z-10">
           {/* Subtle Cyber Badge */}
@@ -39,7 +39,7 @@ export default function HeroSection({
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.05] uppercase"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.08] uppercase"
           >
             DONDE LA <br />
             <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] bg-clip-text text-transparent filter drop-shadow-[0_0_35px_rgba(255,56,88,0.45)]">
@@ -101,16 +101,16 @@ export default function HeroSection({
           </motion.p>
         </div>
 
-        {/* Right Column: 4K Cinematic Looping Video Stage (Perfect Scale on Mobile & Desktop) */}
-        <div className="lg:col-span-6 relative flex justify-center items-center">
+        {/* Right Column: 4K Cinematic Looping Video Stage (Generous Scale & Ample Spacing) */}
+        <div className="lg:col-span-6 relative flex justify-center items-center mt-6 lg:mt-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-[340px] sm:max-w-md lg:max-w-lg aspect-[4/5] sm:aspect-square flex items-center justify-center"
+            className="relative w-full max-w-[380px] sm:max-w-md lg:max-w-xl aspect-square flex items-center justify-center"
           >
             {/* Stage Container */}
-            <div className="relative z-10 w-full h-full rounded-[28px] sm:rounded-[36px] bg-gradient-to-b from-white/[0.08] via-black/80 to-black/95 border border-white/20 backdrop-blur-2xl p-2.5 sm:p-4 shadow-[0_25px_70px_rgba(0,0,0,0.95)] flex flex-col justify-between overflow-hidden group">
+            <div className="relative z-10 w-full h-full rounded-[32px] sm:rounded-[36px] bg-gradient-to-b from-white/[0.08] via-black/80 to-black/95 border border-white/20 backdrop-blur-2xl p-3 sm:p-4 shadow-[0_25px_70px_rgba(0,0,0,0.95)] flex flex-col justify-between overflow-hidden group">
               
               {/* 4K Looping Video Container with Complete Sphere Visibility */}
               <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#030306] shadow-2xl flex flex-col justify-between">
@@ -127,7 +127,7 @@ export default function HeroSection({
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none rounded-2xl" />
 
                 {/* Top Status Pill */}
-                <div className="relative z-10 p-2 sm:p-3 flex items-center justify-between">
+                <div className="relative z-10 p-2.5 sm:p-3 flex items-center justify-between">
                   <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2.5 sm:px-3 py-1 rounded-full bg-black/70 border border-white/20 text-white backdrop-blur-md flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
                     EXPERIENCIA CINEMÁTICA 4K
@@ -137,8 +137,8 @@ export default function HeroSection({
                   </span>
                 </div>
 
-                {/* Bottom HUD Banner (Sleek & Unobtrusive) */}
-                <div className="relative z-10 p-2 sm:p-3">
+                {/* Bottom HUD Banner */}
+                <div className="relative z-10 p-2.5 sm:p-3">
                   <div className="w-full bg-black/85 border border-white/20 rounded-xl p-2.5 sm:p-3 flex items-center justify-between backdrop-blur-xl shadow-2xl">
                     <div className="flex items-center gap-2 sm:gap-3">
                       <div className="w-2.5 h-2.5 rounded-full bg-[#FF3858] animate-ping flex-shrink-0" />
