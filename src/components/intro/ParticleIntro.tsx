@@ -24,31 +24,59 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    let hasCompleted = false;
+
+    const doComplete = () => {
+      if (hasCompleted) return;
+      hasCompleted = true;
+      try {
+        sessionStorage.setItem("innocentia_intro_viewed", "true");
+      } catch (e) {}
+      setIsVisible(false);
+      setTimeout(onComplete, 600);
+    };
+
     const updateProgress = () => {
       if (video.duration) {
         setProgress((video.currentTime / video.duration) * 100);
+        // If within 0.3s of the end, trigger completion smoothly
+        if (video.currentTime >= video.duration - 0.3) {
+          doComplete();
+        }
       }
     };
 
     const handleEnded = () => {
-      handleSkip();
+      doComplete();
+    };
+
+    const handleLoadedMetadata = () => {
+      if (video.duration && isFinite(video.duration)) {
+        // Safety watchdog timer: force complete 0.5s after natural duration
+        setTimeout(doComplete, (video.duration + 0.5) * 1000);
+      }
     };
 
     video.addEventListener("timeupdate", updateProgress);
     video.addEventListener("ended", handleEnded);
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
 
     // Attempt auto-play
     video.play().catch(() => {
-      // Fallback: If autoplay policy blocks, keep muted
       video.muted = true;
       video.play().catch(() => {});
     });
 
+    // Fallback maximum safety timeout (8 seconds) in case video event stalls
+    const maxSafetyTimeout = setTimeout(doComplete, 8500);
+
     return () => {
       video.removeEventListener("timeupdate", updateProgress);
       video.removeEventListener("ended", handleEnded);
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      clearTimeout(maxSafetyTimeout);
     };
-  }, []);
+  }, [onComplete]);
 
   const toggleMute = () => {
     if (videoRef.current) {
