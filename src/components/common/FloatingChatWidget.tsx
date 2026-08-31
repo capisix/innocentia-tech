@@ -51,25 +51,33 @@ export default function FloatingChatWidget({
   const [idleStep, setIdleStep] = useState<number>(0);
 
   useEffect(() => {
-    // Balloon 1: Sofía habla a los 5 segundos
+    // Balloon 1: Sofía habla a los 5 minutos (300,000 ms)
     const timer1 = setTimeout(() => {
       setIdleStep(1);
-    }, 5000);
+    }, 300000);
 
-    // Balloon 2: Iván complementa a los 10 segundos
+    // Balloon 2: Iván complementa a los 5 minutos y 8 segundos (308,000 ms)
     const timer2 = setTimeout(() => {
       setIdleStep(2);
-    }, 10000);
+    }, 308000);
 
-    // Auto-dismiss balloons después de 24 segundos
+    // Auto-dismiss balloons después de 18 segundos de haber aparecido (326,000 ms)
     const timer3 = setTimeout(() => {
       setIdleStep(0);
-    }, 24000);
+    }, 326000);
+
+    // Intervalo recurrente cada 5 minutos
+    const interval = setInterval(() => {
+      setIdleStep(1);
+      setTimeout(() => setIdleStep(2), 8000);
+      setTimeout(() => setIdleStep(0), 26000);
+    }, 300000);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
+      clearInterval(interval);
     };
   }, []);
 

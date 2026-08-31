@@ -191,6 +191,7 @@ export default function PortalPage() {
                 src="/images/logo_official_header.png"
                 alt="INNOCENTIA"
                 fill
+                unoptimized
                 className="object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.35)] group-hover:scale-105 transition-transform duration-300"
                 priority
               />
