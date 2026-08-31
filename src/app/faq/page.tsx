@@ -786,25 +786,29 @@ export default function FAQPage() {
             </button>
             <button
               onClick={() => setFilter("sofia")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold font-mono transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold font-mono transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
                 filter === "sofia"
                   ? "bg-[#FF3858] text-white shadow-[0_0_15px_rgba(255,56,88,0.5)]"
                   : "bg-white/5 border border-white/15 text-[#FF3858] hover:bg-[#FF3858]/10"
               }`}
             >
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              SOFÍA (UX &amp; ARTE)
+              <div className="w-4 h-4 rounded-full overflow-hidden bg-black/50 border border-white/30 flex-shrink-0 flex items-center justify-center">
+                <img src="/images/sofia_pink_beanbag.png" alt="Sofía" className="w-full h-full object-contain" />
+              </div>
+              <span>SOFÍA (UX &amp; ARTE)</span>
             </button>
             <button
               onClick={() => setFilter("ivan")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold font-mono transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold font-mono transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
                 filter === "ivan"
                   ? "bg-[#00D1FF] text-black shadow-[0_0_15px_rgba(0,209,255,0.5)]"
                   : "bg-white/5 border border-white/15 text-[#00D1FF] hover:bg-[#00D1FF]/10"
               }`}
             >
-              <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
-              IVÁN (INGENIERÍA &amp; CODE)
+              <div className="w-4 h-4 rounded-full overflow-hidden bg-black/50 border border-white/30 flex-shrink-0 flex items-center justify-center">
+                <img src="/images/ivan_standing_stylus.png" alt="Iván" className="w-full h-full object-contain" />
+              </div>
+              <span>IVÁN (INGENIERÍA &amp; CODE)</span>
             </button>
             <button
               onClick={() => setFilter("proceso")}
@@ -867,6 +871,28 @@ export default function FAQPage() {
                     <div key={idx} className="space-y-2 pt-2">
                       {ans.speaker && (
                         <div className="flex items-center gap-2">
+                          <div
+                            className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0 border flex items-center justify-center bg-black/80 shadow-md"
+                            style={{
+                              borderColor: ans.speaker.includes("SOFÍA")
+                                ? "#FF3858"
+                                : ans.speaker.includes("IVÁN")
+                                ? "#00D1FF"
+                                : "#FFD166",
+                            }}
+                          >
+                            <img
+                              src={
+                                ans.speaker.includes("SOFÍA")
+                                  ? "/images/sofia_pink_beanbag.png"
+                                  : ans.speaker.includes("IVÁN")
+                                  ? "/images/ivan_standing_stylus.png"
+                                  : "/images/og_square.png"
+                              }
+                              alt={ans.speaker}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
                           <span
                             className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase"
                             style={{
@@ -945,21 +971,51 @@ export default function FAQPage() {
                     : "bg-black/60 border-white/10 text-gray-400 text-[11px]"
                 }`}
               >
-                <div className="flex items-center justify-between text-[10px] mb-1.5 font-bold">
-                  <span
-                    style={{
-                      color:
-                        item.type === "sofia"
-                          ? "#FF3858"
-                          : item.type === "ivan"
-                          ? "#00D1FF"
-                          : item.type === "user"
-                          ? "#FFD166"
-                          : "#94A3B8",
-                    }}
-                  >
-                    [{item.senderName}]
-                  </span>
+                <div className="flex items-center justify-between text-[10px] mb-2 font-bold">
+                  <div className="flex items-center gap-2">
+                    {/* Small avatar thumbnail */}
+                    <div
+                      className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0 border flex items-center justify-center bg-black shadow-md"
+                      style={{
+                        borderColor:
+                          item.type === "sofia"
+                            ? "#FF3858"
+                            : item.type === "ivan"
+                            ? "#00D1FF"
+                            : item.type === "user"
+                            ? "#FFD166"
+                            : "#94A3B8",
+                      }}
+                    >
+                      <img
+                        src={
+                          item.type === "sofia"
+                            ? "/images/sofia_pink_beanbag.png"
+                            : item.type === "ivan"
+                            ? "/images/ivan_standing_stylus.png"
+                            : item.type === "user"
+                            ? "/images/og_square.png"
+                            : "/images/og_square.png"
+                        }
+                        alt={item.senderName}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <span
+                      style={{
+                        color:
+                          item.type === "sofia"
+                            ? "#FF3858"
+                            : item.type === "ivan"
+                            ? "#00D1FF"
+                            : item.type === "user"
+                            ? "#FFD166"
+                            : "#94A3B8",
+                      }}
+                    >
+                      [{item.senderName}]
+                    </span>
+                  </div>
                   <span className="text-gray-500 font-mono">{item.time}</span>
                 </div>
 
