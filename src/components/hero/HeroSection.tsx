@@ -110,32 +110,32 @@ export default function HeroSection({
             className="relative w-full max-w-[380px] sm:max-w-md lg:max-w-xl aspect-square flex items-center justify-center"
           >
             {/* Stage Container */}
-            <div className="relative z-10 w-full h-full rounded-[32px] sm:rounded-[36px] bg-gradient-to-b from-white/[0.08] via-black/80 to-black/95 border border-white/20 backdrop-blur-2xl p-3 sm:p-4 shadow-[0_25px_70px_rgba(0,0,0,0.95)] flex flex-col justify-between overflow-hidden group">
+            <div className="relative z-10 w-full h-full rounded-[32px] sm:rounded-[36px] bg-black border border-white/20 backdrop-blur-2xl p-2.5 sm:p-3.5 shadow-[0_25px_70px_rgba(0,0,0,0.95)] flex flex-col justify-between overflow-hidden group">
               
               {/* 4K Looping Video Container with Complete Sphere Visibility */}
-              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#030306] shadow-2xl flex flex-col justify-between p-2 sm:p-3">
-                {/* Scaled Video inside the Safe Zone */}
-                <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black shadow-2xl flex flex-col justify-between p-2 sm:p-3">
+                {/* Video inside the Safe Zone with Deep Black Background */}
+                <div className="absolute inset-0 flex items-center justify-center bg-black">
                   <video
                     src="/videos/hero_floating_astronaut.mp4"
                     autoPlay
                     loop
                     muted
                     playsInline
-                    className="w-full h-full object-contain filter brightness-100 contrast-105 scale-[0.88] sm:scale-[0.85] transition-transform duration-700"
+                    className="w-full h-full object-contain filter brightness-105 contrast-105 scale-100 transition-transform duration-700"
                   />
                 </div>
 
                 {/* Subtle Ambient Vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none rounded-2xl" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none rounded-2xl" />
 
                 {/* Top Status Pill */}
                 <div className="relative z-10 p-1.5 sm:p-2 flex items-center justify-between">
-                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2.5 sm:px-3 py-1 rounded-full bg-black/80 border border-white/20 text-white backdrop-blur-md flex items-center gap-1.5">
+                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2.5 sm:px-3 py-1 rounded-full bg-black/90 border border-white/20 text-white backdrop-blur-md flex items-center gap-1.5 shadow-lg">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
                     EXPERIENCIA CINEMÁTICA 4K
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[#FF3858] backdrop-blur-md">
+                  <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[#FF3858] backdrop-blur-md shadow-lg">
                     DUAL CORE
                   </span>
                 </div>
