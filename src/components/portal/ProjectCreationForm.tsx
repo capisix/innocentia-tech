@@ -3,27 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Sparkles,
   ArrowRight,
   CheckCircle2,
   Smartphone,
   Globe,
   BrainCircuit,
   Building2,
-  HelpCircle,
-  Mail,
-  Phone,
-  User,
   ShieldCheck,
-  Briefcase,
-  Copy,
   Check,
   Share2,
-  DollarSign,
-  Clock,
-  Layers,
   Send,
-  ExternalLink,
 } from "../../lib/icons";
 
 interface ProjectCreationFormProps {

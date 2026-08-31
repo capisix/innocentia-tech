@@ -1,10 +1,13 @@
-"use client";
-
 import React, { Suspense } from "react";
 import Link from "next/link";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
-import { Sparkles, ArrowRight, ShieldCheck, Terminal, Users } from "../../lib/icons";
+import { Sparkles } from "../../lib/icons";
+
+export const metadata = {
+  title: "Creación & Cotización de Proyectos | Innocentia Tech",
+  description: "Registra tu proyecto tecnológico y vincúlalo con tu asesor comercial en Innocentia Tech.",
+};
 
 export default function CrearProyectoPage() {
   return (
