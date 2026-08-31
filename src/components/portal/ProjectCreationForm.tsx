@@ -39,12 +39,30 @@ export default function ProjectCreationForm({
   isEmbeddedInPortal = false,
   onProjectCreated,
 }: ProjectCreationFormProps) {
+  // Step 1: Client & Vendor Registration
+  // Step 2: Project Type
+  // Step 3: Design (Sofia)
+  // Step 4: Tech & Backend (Ivan)
+  // Step 5: Scope, Budget & Generation
   const [step, setStep] = useState(1);
   const [isCompleted, setIsCompleted] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [registeredClientId, setRegisteredClientId] = useState("");
   const [createdProjectFolio, setCreatedProjectFolio] = useState("");
 
-  // Form State - Project
+  // Step 1 State - Client Registration
+  const [clientName, setClientName] = useState("");
+  const [clientCompany, setClientCompany] = useState("");
+  const [clientPhone, setClientPhone] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [clientCity, setClientCity] = useState("");
+
+  // Step 1 State - Vendor Attribution
+  const [vendorCode, setVendorCode] = useState(initialVendorCode || "VEN-CARLOS-202");
+  const [vendorName, setVendorName] = useState(initialVendorName || "Carlos Mendoza");
+  const [isClientRegistered, setIsClientRegistered] = useState(false);
+
+  // Form State - Project Specifications
   const [projectName, setProjectName] = useState("");
   const [projectType, setProjectType] = useState("mobile_app");
   const [designNeeds, setDesignNeeds] = useState<string[]>([
@@ -58,18 +76,6 @@ export default function ProjectCreationForm({
   const [timeline, setTimeline] = useState("standard");
   const [budgetRange, setBudgetRange] = useState("150k_350k");
   const [projectDescription, setProjectDescription] = useState("");
-
-  // Form State - Client
-  const [clientName, setClientName] = useState("");
-  const [clientCompany, setClientCompany] = useState("");
-  const [clientPhone, setClientPhone] = useState("");
-  const [clientEmail, setClientEmail] = useState("");
-  const [clientCity, setClientCity] = useState("");
-
-  // Form State - Vendor Attribution
-  const [vendorCode, setVendorCode] = useState(initialVendorCode || "VEN-CARLOS-202");
-  const [vendorName, setVendorName] = useState(initialVendorName || "Carlos Mendoza");
-  const [vendorPhone, setVendorPhone] = useState("+52 999 123 4567");
 
   // Read URL query params if client arrives via referral link (e.g. ?ref=VEN-CARLOS-202&vendedor=Carlos+Mendoza)
   useEffect(() => {
@@ -221,9 +227,10 @@ export default function ProjectCreationForm({
   };
 
   // Generate Referral Share Link
-  const vendorReferralLink = typeof window !== "undefined"
-    ? `${window.location.origin}/crear-proyecto?ref=${encodeURIComponent(vendorCode)}&vendedor=${encodeURIComponent(vendorName)}`
-    : `https://innocentia.tech/crear-proyecto?ref=${vendorCode}`;
+  const vendorReferralLink =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/crear-proyecto?ref=${encodeURIComponent(vendorCode)}&vendedor=${encodeURIComponent(vendorName)}`
+      : `https://innocentia.tech/crear-proyecto?ref=${vendorCode}`;
 
   const copyReferralLink = () => {
     if (navigator.clipboard) {
@@ -233,16 +240,28 @@ export default function ProjectCreationForm({
     }
   };
 
-  const isStep1Valid = projectType.length > 0;
-  const isStep2Valid = designNeeds.length > 0;
-  const isStep3Valid = techFeatures.length > 0;
-  const isStep4Valid = projectName.trim().length >= 3 && projectDescription.trim().length >= 10;
-  const isStep5Valid =
+  // Validations
+  const isStep1Valid =
     clientName.trim().length >= 3 &&
     clientCompany.trim().length >= 2 &&
     clientPhone.trim().length >= 8 &&
     clientEmail.trim().length >= 5 &&
     vendorCode.trim().length >= 3;
+
+  const isStep2Valid = projectType.length > 0;
+  const isStep3Valid = designNeeds.length > 0;
+  const isStep4Valid = techFeatures.length > 0;
+  const isStep5Valid = projectName.trim().length >= 3 && projectDescription.trim().length >= 10;
+
+  const handleRegisterClient = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isStep1Valid) return;
+
+    const cliId = "CLI-" + Math.floor(10000 + Math.random() * 90000);
+    setRegisteredClientId(cliId);
+    setIsClientRegistered(true);
+    setStep(2);
+  };
 
   const handleSubmitProject = (e: React.FormEvent) => {
     e.preventDefault();
@@ -253,44 +272,46 @@ export default function ProjectCreationForm({
     setIsCompleted(true);
 
     const projectSummary = `
-🚀 *FICHA DE CREACIÓN DE PROYECTO • INNOCENTIA TECH*
+🚀 *FICHA OFICIAL DE PROYECTO & COTIZACIÓN • INNOCENTIA TECH*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-📄 *Folio de Registro:* ${folio}
-📅 *Fecha:* ${new Date().toLocaleDateString("es-MX", { dateStyle: "long" })}
+📄 *Folio de Proyecto:* ${folio}
+🆔 *ID de Cliente Registrado:* ${registeredClientId || "CLI-2026-8941"}
+📅 *Fecha de Emisión:* ${new Date().toLocaleDateString("es-MX", { dateStyle: "long" })}
 
-💼 *ASESOR COMERCIAL VINCULADO:*
-• *Código Vendedor:* ${vendorCode}
-• *Nombre Asesor:* ${vendorName}
-• *Atribución:* Tabulador Oficial 20% Máx (Vigencia 24 Meses)
-
-👤 *DATOS DEL CLIENTE:*
+👤 *CLIENTE REGISTRADO:*
 • *Nombre:* ${clientName}
 • *Empresa:* ${clientCompany}
 • *WhatsApp / Tel:* ${clientPhone}
 • *Correo:* ${clientEmail}
 • *Ciudad:* ${clientCity || "No especificada"}
 
-📌 *ESPECIFICACIONES DEL PROYECTO:*
-• *Proyecto:* ${projectName}
-• *Tipo:* ${projectTypes.find((p) => p.id === projectType)?.title}
-• *Inversión Estimada:* ${budgetOptions.find((b) => b.id === budgetRange)?.title} (${budgetOptions.find((b) => b.id === budgetRange)?.usd})
+💼 *ASESOR COMERCIAL VINCULADO:*
+• *Código Vendedor:* ${vendorCode}
+• *Nombre Asesor:* ${vendorName}
+• *Atribución Comercial:* Bolsa 20% Máx (Principio 1er Registro - 24 Meses)
+
+📌 *DETALLES DEL PROYECTO:*
+• *Nombre del Proyecto:* ${projectName}
+• *Tipo de Solución:* ${projectTypes.find((p) => p.id === projectType)?.title}
+• *Rango de Inversión:* ${budgetOptions.find((b) => b.id === budgetRange)?.title} (${budgetOptions.find((b) => b.id === budgetRange)?.usd})
 • *Plazo de Entrega:* ${timelineOptions.find((t) => t.id === timeline)?.title}
 
-🎨 *DISEÑO & EXPERIENCIA (SOFÍA):*
+🎨 *REQUERIMIENTOS DE DISEÑO (SOFÍA):*
 ${designNeeds.map((d) => `  ✓ ${d}`).join("\n")}
 
-⚡ *ARQUITECTURA & TECNOLOGÍA (IVÁN):*
+⚡ *ARQUITECTURA & DESARROLLO (IVÁN):*
 ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
 
 📝 *DESCRIPCIÓN DEL REQUERIMIENTO:*
 "${projectDescription}"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔒 *Proyecto formalmente registrado en Innocentia Tech.*
+🔒 *Proyecto y cliente formalmente vinculados en Innocentia Tech.*
     `.trim();
 
     if (onProjectCreated) {
       onProjectCreated({
         folio,
+        clientId: registeredClientId,
         projectName,
         clientName,
         clientCompany,
@@ -354,6 +375,30 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
         </div>
       </div>
 
+      {/* CLIENT ALREADY REGISTERED SUMMARY (Visible from Step 2 onwards) */}
+      {isClientRegistered && (
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <div>
+              <span className="text-gray-400 block text-[10px] uppercase">Cliente Registrado &amp; Vinculado:</span>
+              <strong className="text-white text-sm">
+                {clientName} ({clientCompany})
+              </strong>
+              <span className="text-emerald-400 ml-2 font-bold">[{registeredClientId}]</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className="text-[11px] text-[#00D1FF] hover:underline self-start sm:self-auto cursor-pointer"
+          >
+            Editar datos del cliente ✎
+          </button>
+        </div>
+      )}
+
       {/* SUCCESS CONFIRMATION MODAL / SCREEN */}
       {isCompleted ? (
         <div className="p-8 sm:p-12 rounded-[32px] bg-gradient-to-br from-emerald-950/40 via-black to-black border-2 border-emerald-500/50 space-y-6 text-center shadow-2xl animate-in zoom-in-95 duration-300">
@@ -369,18 +414,22 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               Folio Oficial: {createdProjectFolio}
             </h2>
             <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed">
-              El proyecto <strong>"{projectName}"</strong> para la empresa <strong>"{clientCompany}"</strong> ha sido registrado formalmente y vinculado al asesor <strong>{vendorName} ({vendorCode})</strong>.
+              El cliente <strong>{clientName} ({registeredClientId})</strong> y su proyecto <strong>"{projectName}"</strong> han quedado formalmente registrados y vinculados al asesor <strong>{vendorName} ({vendorCode})</strong>.
             </p>
           </div>
 
           <div className="p-4 rounded-2xl bg-black/70 border border-white/10 max-w-md mx-auto text-left text-xs font-mono space-y-2">
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Cliente:</span>
-              <strong className="text-white">{clientName}</strong>
+              <span className="text-gray-400">Cliente / Empresa:</span>
+              <strong className="text-white">
+                {clientName} ({clientCompany})
+              </strong>
             </div>
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-gray-400">Asesor Comercial:</span>
-              <strong className="text-[#00D1FF]">{vendorName} ({vendorCode})</strong>
+              <strong className="text-[#00D1FF]">
+                {vendorName} ({vendorCode})
+              </strong>
             </div>
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-gray-400">Bolsa de Comisión:</span>
@@ -397,6 +446,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               type="button"
               onClick={() => {
                 setIsCompleted(false);
+                setIsClientRegistered(false);
                 setStep(1);
                 setProjectName("");
                 setClientName("");
@@ -405,7 +455,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               }}
               className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold uppercase transition-all cursor-pointer"
             >
-              ＋ Crear Otro Proyecto
+              ＋ Registrar Nuevo Cliente &amp; Proyecto
             </button>
 
             {isEmbeddedInPortal ? (
@@ -436,11 +486,11 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 Paso <strong className="text-[#00D1FF]">{step}</strong> de 5
               </span>
               <span className="text-gray-300 font-bold uppercase">
-                {step === 1 && "1. Tipo de Solución Tecnológica"}
-                {step === 2 && "2. Experiencia & Diseño UI/UX (Sofía)"}
-                {step === 3 && "3. Arquitectura & Capacidades (Iván)"}
-                {step === 4 && "4. Alcance, Tiempos & Presupuesto"}
-                {step === 5 && "5. Datos del Cliente & Atribución Comercial"}
+                {step === 1 && "1. REGISTRO DEL CLIENTE & VINCULACIÓN AL ASESOR (OBLIGATORIO)"}
+                {step === 2 && "2. Tipo de Solución Tecnológica"}
+                {step === 3 && "3. Experiencia & Diseño UI/UX (Sofía)"}
+                {step === 4 && "4. Arquitectura & Capacidades (Iván)"}
+                {step === 5 && "5. Alcance, Presupuesto & Generación de Ficha"}
               </span>
             </div>
 
@@ -454,13 +504,151 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
 
           <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
             {/* ======================================================== */}
-            {/* PASO 1: TIPO DE SOLUCIÓN */}
+            {/* PASO 1: REGISTRO DEL CLIENTE & VINCULACIÓN COMERCIAL (OBLIGATORIO PRIMERO) */}
             {/* ======================================================== */}
             {step === 1 && (
+              <div className="space-y-5 animate-in fade-in duration-200">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-xs font-mono text-emerald-300 font-bold uppercase">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>FASE INICIAL: REGISTRO OBLIGATORIO DE CLIENTE &amp; ATRIBUCIÓN</span>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
+                    Registrar Cliente &amp; Asignar Asesor Comercial
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-400 font-light">
+                    Conforme a las Cláusulas 4 y 5 del Contrato Comercial, el registro previo en CRM protege la titularidad del <strong>4% por 24 meses continuos</strong> antes de configurar el proyecto.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs font-mono">
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">
+                      Nombre Completo del Cliente / Contacto *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Ing. Alejandro Morales"
+                      value={clientName}
+                      onChange={(e) => setClientName(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">
+                      Empresa / Razón Social o Negocio *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Gourmet Express S.A. de C.V."
+                      value={clientCompany}
+                      onChange={(e) => setClientCompany(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">WhatsApp / Teléfono Móvil *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="Ej. +52 999 555 1234"
+                      value={clientPhone}
+                      onChange={(e) => setClientPhone(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">Correo Electrónico *</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="Ej. alejandro@gourmetexpress.mx"
+                      value={clientEmail}
+                      onChange={(e) => setClientEmail(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="text-gray-300 block font-bold">Ciudad / Estado / País</label>
+                    <input
+                      type="text"
+                      placeholder="Ej. Mérida, Yucatán, México"
+                      value={clientCity}
+                      onChange={(e) => setClientCity(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+                </div>
+
+                {/* VINCULACIÓN OFICIAL DEL VENDEDOR */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black to-[#00D1FF]/15 border border-[#00D1FF]/40 space-y-3 text-xs font-mono">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <span className="font-bold text-white uppercase flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-[#00D1FF]" />
+                      Atribución Comercial &amp; Vendedor Vinculado
+                    </span>
+                    <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                      Principio de 1er Registro (24 Meses)
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-gray-400 block text-[10px] uppercase">
+                        Código de Vendedor / Asesor *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={vendorCode}
+                        onChange={(e) => setVendorCode(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-xl bg-black border border-[#00D1FF]/40 text-[#00D1FF] font-bold focus:outline-none focus:border-[#00D1FF]"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-gray-400 block text-[10px] uppercase">
+                        Nombre del Asesor Comercial *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={vendorName}
+                        onChange={(e) => setVendorName(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-xl bg-black border border-white/20 text-white font-bold focus:outline-none focus:border-purple-400"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleRegisterClient}
+                    disabled={!isStep1Valid}
+                    className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#3A86FF] hover:from-emerald-300 hover:to-[#00D1FF] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.35)] cursor-pointer transition-all hover:scale-105"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-black" />
+                    <span>Registrar Cliente &amp; Continuar al Creador de Proyecto →</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* PASO 2: TIPO DE SOLUCIÓN */}
+            {/* ======================================================== */}
+            {step === 2 && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="space-y-1">
                   <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
-                    ¿Qué tipo de producto digital vamos a construir?
+                    ¿Qué tipo de producto digital vamos a construir para {clientCompany || clientName}?
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-400 font-light">
                     Selecciona la categoría principal para configurar el stack y el equipo de desarrollo.
@@ -500,9 +688,9 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 2: DISEÑO UI/UX (SOFÍA) */}
+            {/* PASO 3: DISEÑO UI/UX (SOFÍA) */}
             {/* ======================================================== */}
-            {step === 2 && (
+            {step === 3 && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                   <div className="w-9 h-9 rounded-full bg-[#FF3858]/20 border border-[#FF3858] flex items-center justify-center text-xs">
@@ -551,9 +739,9 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 3: ARQUITECTURA & TECNOLOGÍA (IVÁN) */}
+            {/* PASO 4: ARQUITECTURA & TECNOLOGÍA (IVÁN) */}
             {/* ======================================================== */}
-            {step === 3 && (
+            {step === 4 && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                   <div className="w-9 h-9 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF] flex items-center justify-center text-xs">
@@ -602,16 +790,16 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 4: ALCANCE, TIEMPOS & PRESUPUESTO */}
+            {/* PASO 5: ALCANCE, PRESUPUESTO & GENERACIÓN */}
             {/* ======================================================== */}
-            {step === 4 && (
+            {step === 5 && (
               <div className="space-y-5 animate-in fade-in duration-200">
                 <div className="space-y-1">
                   <h3 className="text-base sm:text-lg font-bold text-white uppercase font-mono">
                     Alcance, Descripción &amp; Tiempos de Entrega
                   </h3>
                   <p className="text-xs text-gray-400 font-mono">
-                    Describe la idea del proyecto y selecciona el rango presupuestal estimado.
+                    Describe la idea del proyecto para {clientCompany} y selecciona el rango de inversión estimado.
                   </p>
                 </div>
 
@@ -694,112 +882,9 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               </div>
             )}
 
-            {/* ======================================================== */}
-            {/* PASO 5: DATOS DEL CLIENTE & VINCULACIÓN DE VENDEDOR */}
-            {/* ======================================================== */}
-            {step === 5 && (
-              <div className="space-y-5 animate-in fade-in duration-200">
-                <div className="space-y-1">
-                  <h3 className="text-base sm:text-lg font-bold text-white uppercase font-mono">
-                    Datos del Cliente &amp; Vinculación Comercial
-                  </h3>
-                  <p className="text-xs text-gray-400 font-mono">
-                    Ingresa los datos del cliente para formalizar la ficha de proyecto y blindar la comisión del asesor.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs font-mono">
-                  <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">Nombre Completo del Cliente *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ej. Ing. Alejandro Morales"
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">Empresa / Razón Social *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ej. Gourmet Express S.A. de C.V."
-                      value={clientCompany}
-                      onChange={(e) => setClientCompany(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">WhatsApp / Teléfono *</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="Ej. +52 999 555 1234"
-                      value={clientPhone}
-                      onChange={(e) => setClientPhone(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">Correo Electrónico *</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="Ej. contacto@gourmetexpress.mx"
-                      value={clientEmail}
-                      onChange={(e) => setClientEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
-                    />
-                  </div>
-                </div>
-
-                {/* VINCULACIÓN OFICIAL DEL VENDEDOR */}
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/30 to-[#00D1FF]/10 border border-purple-400/30 space-y-3 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <span className="font-bold text-white uppercase flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-[#00D1FF]" />
-                      Atribución Comercial &amp; Vendedor Vinculado
-                    </span>
-                    <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                      Bolsa 20% Protegida (24 Meses)
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-gray-400 block text-[10px] uppercase">Código de Vendedor / Asesor *</label>
-                      <input
-                        type="text"
-                        required
-                        value={vendorCode}
-                        onChange={(e) => setVendorCode(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-black border border-[#00D1FF]/40 text-[#00D1FF] font-bold focus:outline-none focus:border-[#00D1FF]"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-gray-400 block text-[10px] uppercase">Nombre del Asesor Comercial *</label>
-                      <input
-                        type="text"
-                        required
-                        value={vendorName}
-                        onChange={(e) => setVendorName(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-black border border-white/20 text-white font-bold focus:outline-none focus:border-purple-400"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Wizard Navigation Buttons */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/10">
-              {step > 1 ? (
+            {/* Wizard Navigation Buttons (Steps 2 to 5) */}
+            {step > 1 && (
+              <div className="flex items-center justify-between pt-4 border-t border-white/10">
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
@@ -807,37 +892,34 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 >
                   ← Anterior
                 </button>
-              ) : (
-                <div />
-              )}
 
-              {step < 5 ? (
-                <button
-                  type="button"
-                  onClick={() => setStep(step + 1)}
-                  disabled={
-                    (step === 1 && !isStep1Valid) ||
-                    (step === 2 && !isStep2Valid) ||
-                    (step === 3 && !isStep3Valid) ||
-                    (step === 4 && !isStep4Valid)
-                  }
-                  className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-105"
-                >
-                  <span>Siguiente Paso</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleSubmitProject}
-                  disabled={!isStep5Valid}
-                  className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#FF3858] hover:from-emerald-300 hover:to-[#FF4D6D] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105"
-                >
-                  <Send className="w-4 h-4 text-black" />
-                  <span>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
-                </button>
-              )}
-            </div>
+                {step < 5 ? (
+                  <button
+                    type="button"
+                    onClick={() => setStep(step + 1)}
+                    disabled={
+                      (step === 2 && !isStep2Valid) ||
+                      (step === 3 && !isStep3Valid) ||
+                      (step === 4 && !isStep4Valid)
+                    }
+                    className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-105"
+                  >
+                    <span>Siguiente Paso</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSubmitProject}
+                    disabled={!isStep5Valid}
+                    className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#FF3858] hover:from-emerald-300 hover:to-[#FF4D6D] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105"
+                  >
+                    <Send className="w-4 h-4 text-black" />
+                    <span>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
+                  </button>
+                )}
+              </div>
+            )}
           </form>
         </div>
       )}
