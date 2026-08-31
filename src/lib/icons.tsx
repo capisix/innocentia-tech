@@ -491,3 +491,19 @@ export const Share2 = createIcon(
     <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" />
   </g>
 );
+
+export const Volume2 = createIcon(
+  <g>
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+  </g>
+);
+
+export const VolumeX = createIcon(
+  <g>
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <line x1="23" x2="17" y1="9" y2="15" />
+    <line x1="17" x2="23" y1="9" y2="15" />
+  </g>
+);
+
