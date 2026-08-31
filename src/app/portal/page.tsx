@@ -40,14 +40,14 @@ interface UserProfile {
 }
 
 export default function PortalPage() {
-  // Default to Cliente (or null for Login Screen)
+  // Default to Vendedor / Asesor Comercial para ver inmediatamente la tabla de comisiones
   const [currentUser, setCurrentUser] = useState<UserProfile | null>({
-    id: "usr_101",
-    name: "Alejandro Morales",
-    email: "alejandro@gourmetexpress.mx",
-    role: "usuario",
-    roleTitle: "Cliente Verificado",
-    company: "Gourmet Express S.A.",
+    id: "usr_202",
+    name: "Carlos Mendoza",
+    email: "carlos.mendoza@innocentia.tech",
+    role: "asesor",
+    roleTitle: "Colaborador Comercial Certificado",
+    contractSignedDate: "15 de Agosto de 2026",
   });
 
   const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat">("proyectos");
@@ -307,6 +307,74 @@ export default function PortalPage() {
           </div>
         </div>
       </header>
+
+      {/* Quick Profile Switcher Bar */}
+      <div className="relative z-30 bg-[#07070D]/90 border-b border-white/10 px-4 sm:px-12 py-2.5 backdrop-blur-xl">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-3 overflow-x-auto text-xs font-mono py-0.5">
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <span className="text-[10px] text-gray-400 uppercase font-bold pr-1 hidden md:inline">
+              Perfil Activo:
+            </span>
+
+            <button
+              type="button"
+              onClick={() => handleLoginAs("asesor")}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                currentUser?.role === "asesor"
+                  ? "bg-[#00D1FF]/20 border border-[#00D1FF] text-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.35)]"
+                  : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
+              }`}
+            >
+              <span>💼 Vendedor (Tabla de Comisiones)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLoginAs("usuario")}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                currentUser?.role === "usuario"
+                  ? "bg-[#FF3858]/20 border border-[#FF3858] text-[#FF3858] shadow-[0_0_15px_rgba(255,56,88,0.35)]"
+                  : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
+              }`}
+            >
+              <span>👤 Cliente</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLoginAs("dev")}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                currentUser?.role === "dev"
+                  ? "bg-emerald-500/20 border border-emerald-400 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.35)]"
+                  : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
+              }`}
+            >
+              <span>💻 Dev &amp; UX</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLoginAs("socio")}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                currentUser?.role === "socio"
+                  ? "bg-purple-500/20 border border-purple-400 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.35)]"
+                  : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
+              }`}
+            >
+              <span>👑 Socio / Finanzas</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsVendorModalOpen(true)}
+            className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#00D1FF]/20 to-[#FF3858]/20 border border-[#00D1FF]/40 text-xs font-bold text-white hover:border-[#00D1FF] transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer shadow-md"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-[#00D1FF]" />
+            <span>📋 Ver / Firmar Contrato</span>
+          </button>
+        </div>
+      </div>
 
       {/* Main Portal Body */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-10 relative z-10 space-y-8">
