@@ -597,33 +597,89 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
                   </div>
                 </div>
 
-                {/* Graph Visualization */}
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                  <span className="text-xs text-gray-300 font-semibold block">Telemetría en Vivo</span>
-                  <div className="w-full h-24 flex items-end gap-1.5">
-                    {currentTopic.mockupData.bars.map((bar, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 bg-gradient-to-t from-[#FF3B5C] to-[#00E5FF] rounded-t transition-all duration-500"
-                        style={{ height: `${bar}%` }}
-                      />
-                    ))}
+                {/* App Analytics & Live Telemetry Dashboard */}
+                <div className="p-3.5 rounded-2xl bg-black/60 border border-white/15 space-y-3 shadow-inner">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-ping" />
+                      <span className="text-xs text-white font-bold font-mono">Telemetría de la App</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                      ▲ +34.8% hoy
+                    </span>
+                  </div>
+
+                  {/* Dynamic Activity Bar Chart with Labels */}
+                  <div className="space-y-1">
+                    <div className="w-full h-20 flex items-end gap-1.5 pt-2">
+                      {[
+                        { label: "08:00", h: 45, val: "1.2k" },
+                        { label: "11:00", h: 75, val: "2.8k" },
+                        { label: "14:00", h: 95, val: "4.1k" },
+                        { label: "17:00", h: 80, val: "3.4k" },
+                        { label: "20:00", h: 100, val: "5.2k" },
+                        { label: "23:00", h: 65, val: "2.1k" },
+                      ].map((bar, i) => (
+                        <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group cursor-pointer">
+                          <div
+                            className="w-full rounded-t-md transition-all duration-500 hover:brightness-125"
+                            style={{
+                              height: `${bar.h}%`,
+                              background: i % 2 === 0 
+                                ? "linear-gradient(to top, #FF3B5C, #FF8800)" 
+                                : "linear-gradient(to top, #00E5FF, #8A2BE2)",
+                              boxShadow: i === 4 ? "0 0 12px rgba(0,229,255,0.5)" : "none",
+                            }}
+                          />
+                          <span className="text-[8px] font-mono text-gray-500">{bar.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Realtime Live App Activity Feed */}
+                  <div className="pt-2 border-t border-white/10 space-y-1.5 text-[10px] font-mono">
+                    <div className="flex items-center justify-between text-gray-300 bg-white/[0.03] p-1.5 rounded-lg border border-white/5">
+                      <span className="flex items-center gap-1.5 text-white">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        Transacción procesada
+                      </span>
+                      <span className="text-emerald-400 font-bold">+$1,450 MXN</span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-gray-300 bg-white/[0.03] p-1.5 rounded-lg border border-white/5">
+                      <span className="flex items-center gap-1.5 text-white">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF]" />
+                        Latencia Edge API
+                      </span>
+                      <span className="text-[#00E5FF] font-bold">14ms (Cero Lag)</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Live Core Badge */}
-                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-[10px] space-y-1">
-                  <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Sincronización Dual Core Activa</span>
+                {/* Live Core Badge with Sofia & Ivan Micro-Avatars */}
+                <div className="p-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-[10px] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Sincronización Dual Core Activa</span>
+                    </div>
+                    <div className="flex items-center -space-x-1.5">
+                      <div className="w-4 h-4 rounded-full overflow-hidden border border-[#FF3B5C] bg-black">
+                        <img src="/images/sofia_pink_beanbag.png" alt="S" className="w-full h-full object-contain" />
+                      </div>
+                      <div className="w-4 h-4 rounded-full overflow-hidden border border-[#00E5FF] bg-black">
+                        <img src="/images/ivan_standing_stylus.png" alt="I" className="w-full h-full object-contain" />
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-gray-400 text-[9px] leading-tight">
-                    Sofía diseña la experiencia visual mientras Iván asegura la arquitectura.
+                  <p className="text-gray-400 text-[9px] leading-tight font-light">
+                    Sofía diseña la interfaz fluida mientras Iván asegura la base de datos y APIs.
                   </p>
                 </div>
 
-                <div className="pt-1 text-center">
-                  <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">
+                <div className="pt-0.5 text-center">
+                  <span className="text-[9px] font-mono text-gray-400 uppercase tracking-widest">
                     INNOCENTIA LIVE CORE v3.6
                   </span>
                 </div>
