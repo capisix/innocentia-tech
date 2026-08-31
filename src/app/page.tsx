@@ -28,6 +28,11 @@ export default function Home() {
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
 
+  const openChat = () => {
+    setIsChatOpen(true);
+    setIsChatMaximized(false);
+  };
+
   const openMaximizedChat = () => {
     setIsChatOpen(true);
     setIsChatMaximized(true);
