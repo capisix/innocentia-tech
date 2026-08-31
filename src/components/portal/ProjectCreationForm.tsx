@@ -227,13 +227,18 @@ export default function ProjectCreationForm({
   };
 
   // Generate Referral Share Link
-  const vendorReferralLink =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/crear-proyecto?ref=${encodeURIComponent(vendorCode)}&vendedor=${encodeURIComponent(vendorName)}`
-      : `https://innocentia.tech/crear-proyecto?ref=${vendorCode}`;
+  const [vendorReferralLink, setVendorReferralLink] = useState(`https://innocentia.tech/crear-proyecto?ref=${vendorCode}`);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setVendorReferralLink(
+        `${window.location.origin}/crear-proyecto?ref=${encodeURIComponent(vendorCode)}&vendedor=${encodeURIComponent(vendorName)}`
+      );
+    }
+  }, [vendorCode, vendorName]);
 
   const copyReferralLink = () => {
-    if (navigator.clipboard) {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(vendorReferralLink);
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 3000);

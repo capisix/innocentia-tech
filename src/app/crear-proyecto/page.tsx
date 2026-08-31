@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
@@ -55,8 +55,16 @@ export default function CrearProyectoPage() {
           </p>
         </div>
 
-        {/* The Project Creation Form Component */}
-        <ProjectCreationForm />
+        {/* The Project Creation Form Component wrapped in Suspense */}
+        <Suspense
+          fallback={
+            <div className="p-12 text-center text-xs font-mono text-gray-400">
+              Cargando formulario de creación de proyecto...
+            </div>
+          }
+        >
+          <ProjectCreationForm />
+        </Suspense>
       </div>
 
       {/* Footer minimal */}
