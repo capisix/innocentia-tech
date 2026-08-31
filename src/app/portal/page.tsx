@@ -52,7 +52,7 @@ export default function PortalPage() {
     contractSignedDate: "15 de Agosto de 2026",
   });
 
-  const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat" | "bitacora">("proyectos");
+  const [clientTab, setClientTab] = useState<"proyectos" | "crear_proyecto" | "cotizaciones" | "pagos" | "chat" | "bitacora">("proyectos");
   const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat" | "bitacora">("tickets");
   const [advisorTab, setAdvisorTab] = useState<"tabulador" | "crear_proyecto" | "pipeline" | "contrato" | "clientes" | "chat" | "bitacora">("tabulador");
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria" | "bitacora">("finanzas");
@@ -663,6 +663,25 @@ export default function PortalPage() {
                   Empresa: <strong className="text-white">{clientData.company}</strong> • Proyecto Activo:{" "}
                   <strong className="text-[#00D1FF]">{clientData.project}</strong>
                 </p>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setClientTab("crear_proyecto")}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 to-[#00D1FF]/20 border border-emerald-400/50 text-xs font-mono font-bold text-emerald-300 hover:text-white hover:border-emerald-400 transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>⚡ Iniciar / Crear Nuevo Proyecto</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleLoginAs("asesor")}
+                    className="px-4 py-2 rounded-xl bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-xs font-mono font-bold text-[#00D1FF] hover:bg-[#00D1FF]/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <span>💼 Ver Vista de Vendedor (Tabla de Comisiones) →</span>
+                  </button>
+                </div>
               </div>
 
               {/* Progress Donut Badge */}
@@ -677,6 +696,7 @@ export default function PortalPage() {
             <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
               {[
                 { id: "proyectos", label: "📊 Estado de Proyecto & Sprints" },
+                { id: "crear_proyecto", label: "⚡ Iniciar / Crear Nuevo Proyecto" },
                 { id: "bitacora", label: "📑 Bitácora & Chat de Equipo por Proyecto" },
                 { id: "cotizaciones", label: "📄 Cotizaciones & Documentos" },
                 { id: "pagos", label: "💳 Centro de Pagos" },
@@ -695,6 +715,17 @@ export default function PortalPage() {
                 </button>
               ))}
             </div>
+
+            {/* TAB: Crear Nuevo Proyecto desde Cliente */}
+            {clientTab === "crear_proyecto" && (
+              <div className="space-y-6 text-left">
+                <ProjectCreationForm
+                  initialVendorCode="VEN-CARLOS-202"
+                  initialVendorName="Carlos Mendoza"
+                  isEmbeddedInPortal={true}
+                />
+              </div>
+            )}
 
             {/* TAB 1: Proyectos */}
             {clientTab === "proyectos" && (
