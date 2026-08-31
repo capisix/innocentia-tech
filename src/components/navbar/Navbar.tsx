@@ -42,16 +42,11 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
       <div className="max-w-[1440px] mx-auto px-6 sm:px-8 flex items-center justify-between">
         {/* Official Innocentia Logo */}
         <a href="#hero" className="flex items-center group cursor-pointer">
-          <div className="relative h-10 sm:h-12 w-48 sm:w-60 flex items-center">
-            <Image
-              src="/images/logo_official_header.png"
-              alt="INNOCENTIA"
-              fill
-              unoptimized
-              className="object-contain filter drop-shadow-[0_0_15px_rgba(255,56,88,0.35)] group-hover:scale-105 transition-transform duration-300"
-              priority
-            />
-          </div>
+          <img
+            src="/images/logo_official_header.png?v=2"
+            alt="INNOCENTIA"
+            className="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[240px] object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform duration-300"
+          />
         </a>
 
         {/* Clean Navigation Menu (Single Line, No Awkward Wrap) */}

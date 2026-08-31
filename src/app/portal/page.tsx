@@ -186,16 +186,11 @@ export default function PortalPage() {
         <div className="max-w-[1440px] mx-auto flex items-center justify-between gap-4">
           {/* Official Innocentia Logo */}
           <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-            <div className="relative h-9 sm:h-11 w-44 sm:w-52 flex items-center">
-              <Image
-                src="/images/logo_official_header.png"
-                alt="INNOCENTIA"
-                fill
-                unoptimized
-                className="object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.35)] group-hover:scale-105 transition-transform duration-300"
-                priority
-              />
-            </div>
+            <img
+              src="/images/logo_official_header.png?v=2"
+              alt="INNOCENTIA"
+              className="h-9 sm:h-11 w-auto max-w-[180px] sm:max-w-[220px] object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform duration-300"
+            />
             <span className="hidden sm:inline-block text-[9px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-[#00D1FF] border border-[#00D1FF]/30 font-bold uppercase">
               PORTAL PRIVADO
             </span>
