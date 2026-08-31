@@ -20,7 +20,14 @@ import PromptCTASection from "../components/cta/PromptCTASection";
 import Footer from "../components/footer/Footer";
 
 function HomeContent() {
-  const [introFinished, setIntroFinished] = useState(false);
+  const [introFinished, setIntroFinished] = useState(() => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768 || sessionStorage.getItem("innocentia_intro_viewed") === "true") {
+        return true;
+      }
+    }
+    return false;
+  });
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatMaximized, setIsChatMaximized] = useState(false);

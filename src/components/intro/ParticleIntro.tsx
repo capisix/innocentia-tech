@@ -67,16 +67,24 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
       video.play().catch(() => {});
     });
 
-    // Fallback maximum safety timeout (8 seconds) in case video event stalls
-    const maxSafetyTimeout = setTimeout(doComplete, 8500);
+    // Fast fallback: If video data hasn't loaded within 1.8s, skip immediately
+    const fastBufferFallback = setTimeout(() => {
+      if (!isVideoLoaded) {
+        doComplete();
+      }
+    }, 1800);
+
+    // Fallback maximum safety timeout in case video event stalls
+    const maxSafetyTimeout = setTimeout(doComplete, 7500);
 
     return () => {
       video.removeEventListener("timeupdate", updateProgress);
       video.removeEventListener("ended", handleEnded);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      clearTimeout(fastBufferFallback);
       clearTimeout(maxSafetyTimeout);
     };
-  }, [onComplete]);
+  }, [onComplete, isVideoLoaded]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -92,7 +100,7 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-50 bg-[#040407] flex flex-col items-center justify-center overflow-hidden"
         >
           {/* Background Ambient Glow */}
@@ -105,9 +113,9 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
             autoPlay
             playsInline
             muted={isMuted}
-            preload="auto"
+            preload="metadata"
             onLoadedData={() => setIsVideoLoaded(true)}
-            className={`w-full h-full object-cover transition-opacity duration-700 ${
+            className={`w-full h-full object-cover transition-opacity duration-500 ${
               isVideoLoaded ? "opacity-100" : "opacity-0"
             }`}
           />

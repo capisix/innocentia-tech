@@ -122,6 +122,8 @@ export default function HeroSection({
                     loop
                     muted
                     playsInline
+                    preload="metadata"
+                    poster="/images/hero_dual_desk_studio.png"
                     className="w-full h-full object-contain filter brightness-105 contrast-105 scale-100 transition-transform duration-700"
                   />
                 </div>
