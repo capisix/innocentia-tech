@@ -9,7 +9,6 @@ import { Sparkles } from "../../lib/icons";
 export default function CrearProyectoPage() {
   return (
     <main className="relative min-h-screen bg-[#040407] text-[#F3F4F6] overflow-x-hidden selection:bg-[#00E5FF]/30 selection:text-white">
-      {/* Ambient Canvas */}
       <AmbientLivingCanvas />
 
       {/* Top Header */}
@@ -39,7 +38,6 @@ export default function CrearProyectoPage() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-10 sm:py-16 relative z-10 space-y-8">
-        {/* Title Header */}
         <div className="text-center space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-[#FF3858]/20 via-purple-500/20 to-[#00D1FF]/20 border border-[#00D1FF]/40 text-xs font-mono text-[#00D1FF] font-bold uppercase">
             <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
@@ -55,19 +53,11 @@ export default function CrearProyectoPage() {
           </p>
         </div>
 
-        {/* The Project Creation Form Component wrapped in Suspense */}
-        <Suspense
-          fallback={
-            <div className="p-12 text-center text-xs font-mono text-gray-400">
-              Cargando formulario de creación de proyecto...
-            </div>
-          }
-        >
+        <Suspense fallback={<div className="p-12 text-center text-xs font-mono text-gray-400">Cargando formulario...</div>}>
           <ProjectCreationForm />
         </Suspense>
       </div>
 
-      {/* Footer minimal */}
       <footer className="relative z-10 border-t border-white/10 py-6 text-center text-xs font-mono text-gray-500">
         <p>© 2026 Innocentia Tech. Todos los derechos reservados. Mérida, Yucatán, México.</p>
       </footer>
