@@ -338,12 +338,18 @@ export default function CaseStudiesSection({
 
                 {/* Action Button */}
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between relative z-10">
-                  <span
-                    className={`inline-flex items-center gap-2 text-xs font-bold ${project.accentBtn} transition-colors uppercase tracking-wider`}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedProject(project);
+                    }}
+                    className={`inline-flex items-center gap-2 text-xs font-bold ${project.accentBtn} transition-colors uppercase tracking-wider cursor-pointer`}
                   >
                     <span>Ver caso de estudio</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </span>
+                  </button>
                 </div>
               </div>
             ))}
