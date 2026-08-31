@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
+import VendorContractModal from "../../components/portal/VendorContractModal";
 import {
   Sparkles,
   ArrowRight,
@@ -35,6 +36,7 @@ interface UserProfile {
   role: RoleType;
   roleTitle: string;
   company?: string;
+  contractSignedDate?: string;
 }
 
 export default function PortalPage() {
@@ -50,8 +52,43 @@ export default function PortalPage() {
 
   const [clientTab, setClientTab] = useState<"proyectos" | "cotizaciones" | "pagos" | "chat">("proyectos");
   const [devTab, setDevTab] = useState<"tickets" | "tokens" | "cicd" | "chat">("tickets");
-  const [advisorTab, setAdvisorTab] = useState<"pipeline" | "clientes" | "comisiones" | "cotizador">("pipeline");
+  const [advisorTab, setAdvisorTab] = useState<"tabulador" | "pipeline" | "contrato" | "clientes">("tabulador");
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "gastos" | "comisiones" | "auditoria">("finanzas");
+
+  // Vendor Registration & Contract Modal
+  const [isVendorModalOpen, setIsVendorModalOpen] = useState(false);
+  const [vendorContractData, setVendorContractData] = useState<{
+    name: string;
+    rfc: string;
+    address: string;
+    email: string;
+    phone: string;
+    acceptedDate: string;
+  } | null>({
+    name: "Carlos Mendoza",
+    rfc: "MENC850412XYZ",
+    address: "Mérida, Yucatán, México",
+    email: "carlos.mendoza@innocentia.tech",
+    phone: "+52 999 123 4567",
+    acceptedDate: "15 de Agosto de 2026",
+  });
+
+  // Commission Calculator State (Anexo C)
+  const [simProjectAmount, setSimProjectAmount] = useState<number>(200000);
+  const [simExternalCosts, setSimExternalCosts] = useState<number>(40000);
+
+  // New Client Registration Form (Cláusula 4 & 5)
+  const [newLeadForm, setNewLeadForm] = useState({
+    name: "",
+    company: "",
+    contactPerson: "",
+    phone: "",
+    email: "",
+    needDesc: "",
+    estimatedBudget: "",
+    evidence: "",
+  });
+  const [leadRegisteredSuccess, setLeadRegisteredSuccess] = useState(false);
 
   // Sample Demo Data for Usuario (Cliente)
   const clientData = {
@@ -378,6 +415,22 @@ export default function PortalPage() {
                 </div>
                 <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-white group-hover:translate-x-1 transition-all" />
               </button>
+
+              {/* Registro Oficial de Nuevos Vendedores con Contrato */}
+              <div className="pt-3 border-t border-white/10 text-center space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setIsVendorModalOpen(true)}
+                  className="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#00D1FF]/20 via-purple-900/30 to-[#FF3858]/20 border border-[#00D1FF]/50 hover:border-[#00D1FF] text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center justify-center gap-2 hover:scale-[1.02] transition-all shadow-[0_0_25px_rgba(0,209,255,0.25)] cursor-pointer"
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#00D1FF]" />
+                  <span>Registrarme como Vendedor / Asesor Comercial</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+                <span className="text-[10px] text-gray-400 font-mono block">
+                  Incluye Contrato de Colaboración Comercial &amp; Tabulador Oficial (20%)
+                </span>
+              </div>
             </div>
           </div>
         )}
@@ -801,74 +854,562 @@ export default function PortalPage() {
         )}
 
         {/* ========================================================================= */}
-        {/* 3. PERFIL EXCLUSIVO: ASESOR COMERCIAL (VENTAS) */}
+        {/* 3. PERFIL EXCLUSIVO: ASESOR COMERCIAL (VENTAS & CONTRATO OFICIAL) */}
         {/* ========================================================================= */}
         {currentUser?.role === "asesor" && (
           <div className="space-y-8 animate-in fade-in duration-300">
-            {/* Advisor Greeting Card */}
+            {/* Advisor Greeting Card with Contract Signature Badge */}
             <div className="rounded-[32px] bg-gradient-to-r from-[#00D1FF]/15 via-blue-950/20 to-black/60 border border-[#00D1FF]/30 p-6 sm:p-8 backdrop-blur-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
               <div className="space-y-2 text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 text-xs font-mono text-[#00D1FF] font-bold uppercase">
-                  <span>PANEL COMERCIAL • INNOCENTIA</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 text-xs font-mono text-[#00D1FF] font-bold uppercase">
+                    <Briefcase className="w-3.5 h-3.5" />
+                    <span>PANEL COMERCIAL • INNOCENTIA</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-[10px] font-mono text-emerald-300 font-bold uppercase">
+                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                    <span>Contrato Comercial Firmado Digitalmente</span>
+                  </span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
-                  Bienvenido, {advisorData.name}
+                  Bienvenido, {currentUser.name}
                 </h2>
                 <p className="text-sm text-gray-300 font-light">
-                  Rol: <strong className="text-white">{advisorData.role}</strong> • Cierres del Mes:{" "}
-                  <strong className="text-emerald-400">{advisorData.closedDeals} proyectos</strong>
+                  Colaborador Comercial Certificado • Fecha de Adhesión:{" "}
+                  <strong className="text-[#00D1FF]">{currentUser.contractSignedDate || "15 de Agosto de 2026"}</strong>
                 </p>
               </div>
 
               {/* Metrics Summary */}
-              <div className="flex gap-4">
-                <div className="p-4 rounded-2xl bg-black/80 border border-white/15 text-center space-y-1">
+              <div className="flex gap-3 sm:gap-4 flex-wrap">
+                <div className="p-4 rounded-2xl bg-black/80 border border-white/15 text-center space-y-1 min-w-[120px]">
                   <span className="text-[10px] font-mono text-gray-400 uppercase block">Ventas del Mes</span>
                   <span className="text-2xl font-black text-[#00D1FF] font-mono block">{advisorData.monthSales}</span>
+                  <span className="text-[9px] text-gray-400 font-mono">{advisorData.closedDeals} Cierres</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-black/80 border border-emerald-500/30 text-center space-y-1">
-                  <span className="text-[10px] font-mono text-emerald-400 uppercase block">Comisiones Ganadas (10%)</span>
+                <div className="p-4 rounded-2xl bg-black/80 border border-emerald-500/30 text-center space-y-1 min-w-[120px]">
+                  <span className="text-[10px] font-mono text-emerald-400 uppercase block">Comisiones Ganadas</span>
                   <span className="text-2xl font-black text-emerald-400 font-mono block">{advisorData.earnedCommissions}</span>
+                  <span className="text-[9px] text-emerald-300 font-mono">Bolsa 20% Máx</span>
                 </div>
               </div>
             </div>
 
-            {/* Pipeline Table */}
-            <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <h3 className="text-xl font-bold text-white uppercase font-mono">Pipeline Activo de Prospectos</h3>
-                <span className="text-xs text-gray-400 font-mono">4 Negociaciones en curso</span>
+            {/* ========================================================================= */}
+            {/* TABLA DE COMISIÓN SIEMPRE VISIBLE PARA VENDEDORES (CLÁUSULA 3 & ANEXO A) */}
+            {/* ========================================================================= */}
+            <div className="rounded-[28px] bg-gradient-to-r from-[#00D1FF]/10 via-[#07070D]/90 to-purple-950/20 border border-[#00D1FF]/40 p-5 sm:p-6 space-y-4 shadow-xl text-left">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-sm">
+                    📊
+                  </div>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-black text-white uppercase font-mono tracking-wider">
+                      TABULADOR GENERAL DE COMISIONES (HASTA 20% MÁXIMO)
+                    </h3>
+                    <span className="text-[10px] text-gray-400 font-mono">
+                      Esquema Oficial de Atribución y Bolsa de Comisiones por Operación
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30 font-bold">
+                    Pago a 15 Días Naturales
+                  </span>
+                  <button
+                    onClick={() => setIsVendorModalOpen(true)}
+                    className="text-[10px] font-mono text-[#00D1FF] hover:text-white bg-[#00D1FF]/20 hover:bg-[#00D1FF]/30 px-3 py-1 rounded-full border border-[#00D1FF]/40 font-bold transition-all cursor-pointer"
+                  >
+                    Ver Contrato Completo ↗
+                  </button>
+                </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs font-mono">
-                  <thead>
-                    <tr className="text-gray-400 border-b border-white/10 pb-2">
-                      <th className="py-3 px-4">CLIENTE / EMPRESA</th>
-                      <th className="py-3 px-4">PROYECTO</th>
-                      <th className="py-3 px-4">MONTO</th>
-                      <th className="py-3 px-4">ETAPA</th>
-                      <th className="py-3 px-4 text-right">COMISIÓN ESTIMADA</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {advisorData.pipeline.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="py-3 px-4 font-bold text-white">{row.client}</td>
-                        <td className="py-3 px-4 text-gray-300">{row.project}</td>
-                        <td className="py-3 px-4 text-[#00E5FF] font-bold">{row.amount}</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-gray-200">
-                            {row.stage}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-right font-bold text-emerald-400">{row.comm}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {/* Grid 5 Funciones Comisionables */}
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center font-mono">
+                <div className="p-3 rounded-2xl bg-black/70 border border-[#00D1FF]/30 hover:border-[#00D1FF] transition-all space-y-1.5 shadow-md">
+                  <span className="text-[10px] text-gray-400 block font-bold">1. Titularidad del Cliente</span>
+                  <span className="text-2xl font-black text-[#00D1FF] block">4%</span>
+                  <p className="text-[9px] text-gray-400 leading-tight">Primer registro válido en CRM (Vigencia 24 meses)</p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-black/70 border border-purple-500/30 hover:border-purple-400 transition-all space-y-1.5 shadow-md">
+                  <span className="text-[10px] text-gray-400 block font-bold">2. Levantamiento &amp; Cotización</span>
+                  <span className="text-2xl font-black text-purple-300 block">4%</span>
+                  <p className="text-[9px] text-gray-400 leading-tight">Definición de requerimientos y costeo inicial</p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-black/70 border border-[#FF3858]/30 hover:border-[#FF3858] transition-all space-y-1.5 shadow-md">
+                  <span className="text-[10px] text-gray-400 block font-bold">3. Diseño &amp; Conceptualización</span>
+                  <span className="text-2xl font-black text-[#FF3858] block">4%</span>
+                  <p className="text-[9px] text-gray-400 leading-tight">UX/UI, prototipado y solución tecnológica</p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-black/70 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-1.5 shadow-md">
+                  <span className="text-[10px] text-gray-400 block font-bold">4. Negociación &amp; Cierre</span>
+                  <span className="text-2xl font-black text-emerald-400 block">5%</span>
+                  <p className="text-[9px] text-gray-400 leading-tight">Aprobación del cliente y cobro de anticipo</p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-black/70 border border-amber-500/30 hover:border-amber-400 transition-all space-y-1.5 shadow-md col-span-2 sm:col-span-1">
+                  <span className="text-[10px] text-gray-400 block font-bold">5. Contrato &amp; Formalización</span>
+                  <span className="text-2xl font-black text-amber-300 block">3%</span>
+                  <p className="text-[9px] text-gray-400 leading-tight">Integración documental y firma de contrato</p>
+                </div>
+              </div>
+
+              {/* Reglas de Oro Resumidas */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-white/10 text-[11px] font-mono text-gray-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-emerald-400">✓</span>
+                  <span><strong>Base Comisionable:</strong> Ingreso neto cobrado sin gastos externos ni IVA.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[#00D1FF]">✓</span>
+                  <span><strong>Acumulación:</strong> Una misma persona puede ganar múltiples funciones (hasta 20%).</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-purple-300">✓</span>
+                  <span><strong>Operaciones Futuras:</strong> El titular comercial conserva su 4% por 24 meses.</span>
+                </div>
               </div>
             </div>
+
+            {/* Sub-Navigation Tabs */}
+            <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
+              {[
+                { id: "tabulador", label: "📊 Simulador de Comisiones (Anexo C)" },
+                { id: "pipeline", label: "📈 Pipeline de Prospectos & Ventas" },
+                { id: "contrato", label: "📜 Contrato Legal & Ficha de Atribución" },
+                { id: "clientes", label: "👥 Registro de Clientes (Principio 1er Registro)" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setAdvisorTab(tab.id as any)}
+                  className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                    advisorTab === tab.id
+                      ? "bg-[#00D1FF]/20 border border-[#00D1FF]/50 text-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.25)]"
+                      : "bg-white/[0.03] border border-white/10 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* ======================================================== */}
+            {/* SUB-TAB 1: SIMULADOR DE COMISIONES (ANEXO C) */}
+            {/* ======================================================== */}
+            {advisorTab === "tabulador" && (
+              <div className="space-y-6 text-left">
+                <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white uppercase font-mono">
+                        Calculadora Interactiva de Base Comisionable
+                      </h3>
+                      <p className="text-xs text-gray-400 font-mono">
+                        Simula las ganancias exactas por función según el valor contratado y los costos no comisionables (Anexo C).
+                      </p>
+                    </div>
+                    <span className="text-xs font-mono text-[#00D1FF] bg-[#00D1FF]/10 px-3 py-1.5 rounded-full border border-[#00D1FF]/30">
+                      Ejemplo Base Anexo C: $200k MXN
+                    </span>
+                  </div>
+
+                  {/* Input Controls */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+                      <label className="text-xs font-mono text-gray-300 block">
+                        Valor Total del Contrato (MXN sin IVA):
+                      </label>
+                      <input
+                        type="number"
+                        step="5000"
+                        value={simProjectAmount}
+                        onChange={(e) => setSimProjectAmount(Math.max(0, Number(e.target.value)))}
+                        className="w-full px-4 py-2.5 rounded-xl bg-black border border-white/20 text-xl font-mono font-black text-white focus:outline-none focus:border-[#00D1FF]"
+                      />
+                      <span className="text-[10px] text-gray-500 font-mono">Monto total acordado con el cliente.</span>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+                      <label className="text-xs font-mono text-gray-300 block">
+                        Costos Externos No Comisionables (Hosting, Cloud, APIs, Licencias):
+                      </label>
+                      <input
+                        type="number"
+                        step="1000"
+                        value={simExternalCosts}
+                        onChange={(e) => setSimExternalCosts(Math.max(0, Number(e.target.value)))}
+                        className="w-full px-4 py-2.5 rounded-xl bg-black border border-white/20 text-xl font-mono font-black text-red-300 focus:outline-none focus:border-red-400"
+                      />
+                      <span className="text-[10px] text-gray-500 font-mono">Cláusula 16: Gastos de terceros trasladados al cliente.</span>
+                    </div>
+                  </div>
+
+                  {/* Calculation Result */}
+                  {(() => {
+                    const baseComisionable = Math.max(0, simProjectAmount - simExternalCosts);
+                    const titularidadAmt = baseComisionable * 0.04;
+                    const levantamientoAmt = baseComisionable * 0.04;
+                    const disenoAmt = baseComisionable * 0.04;
+                    const cierreAmt = baseComisionable * 0.05;
+                    const contratoAmt = baseComisionable * 0.03;
+                    const totalComisiones = baseComisionable * 0.20;
+
+                    return (
+                      <div className="space-y-6">
+                        {/* Highlights Banner */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                            <span className="text-[11px] text-gray-400 font-mono uppercase block">Base Comisionable Neta</span>
+                            <h4 className="text-3xl font-black text-white font-mono">
+                              ${baseComisionable.toLocaleString("es-MX")} <span className="text-sm font-normal text-gray-400">MXN</span>
+                            </h4>
+                            <span className="text-[10px] text-gray-400 font-mono block">Monto $ {simProjectAmount.toLocaleString()} - Costos $ {simExternalCosts.toLocaleString()}</span>
+                          </div>
+
+                          <div className="p-5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 space-y-1">
+                            <span className="text-[11px] text-emerald-300 font-mono uppercase block">Bolsa Máxima Total (20%)</span>
+                            <h4 className="text-3xl font-black text-emerald-400 font-mono">
+                              ${totalComisiones.toLocaleString("es-MX")} <span className="text-sm font-normal text-emerald-200">MXN</span>
+                            </h4>
+                            <span className="text-[10px] text-emerald-300 font-mono block">A repartir según funciones ejecutadas</span>
+                          </div>
+
+                          <div className="p-5 rounded-2xl bg-[#00D1FF]/10 border border-[#00D1FF]/30 space-y-1">
+                            <span className="text-[11px] text-[#00D1FF] font-mono uppercase block">Pago de Anticipo (50%)</span>
+                            <h4 className="text-3xl font-black text-[#00D1FF] font-mono">
+                              ${(totalComisiones * 0.5).toLocaleString("es-MX")} <span className="text-sm font-normal text-gray-300">MXN</span>
+                            </h4>
+                            <span className="text-[10px] text-gray-400 font-mono block">A los 15 días tras liquidación de anticipo</span>
+                          </div>
+                        </div>
+
+                        {/* Detailed Table */}
+                        <div className="overflow-x-auto rounded-2xl border border-white/10">
+                          <table className="w-full text-left text-xs font-mono">
+                            <thead className="bg-white/[0.03] text-gray-300 border-b border-white/10">
+                              <tr>
+                                <th className="py-3 px-4">FUNCIÓN COMISIONABLE</th>
+                                <th className="py-3 px-4 text-center">% TABULADOR</th>
+                                <th className="py-3 px-4 text-right">TOTAL COMISIÓN</th>
+                                <th className="py-3 px-4 text-right">EN ANTICIPO (50%)</th>
+                                <th className="py-3 px-4 text-right">EN FINIQUITO (50%)</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5 bg-black/40">
+                              <tr>
+                                <td className="py-3 px-4 font-bold text-[#00D1FF]">1. Titularidad del Cliente (Primer Registro)</td>
+                                <td className="py-3 px-4 text-center font-bold">4%</td>
+                                <td className="py-3 px-4 text-right font-black text-white">${titularidadAmt.toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(titularidadAmt * 0.5).toLocaleString("es-MX")}</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(titularidadAmt * 0.5).toLocaleString("es-MX")}</td>
+                              </tr>
+                              <tr>
+                                <td className="py-3 px-4 font-bold text-purple-300">2. Levantamiento &amp; Cotización</td>
+                                <td className="py-3 px-4 text-center font-bold">4%</td>
+                                <td className="py-3 px-4 text-right font-black text-white">${levantamientoAmt.toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(levantamientoAmt * 0.5).toLocaleString("es-MX")}</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(levantamientoAmt * 0.5).toLocaleString("es-MX")}</td>
+                              </tr>
+                              <tr>
+                                <td className="py-3 px-4 font-bold text-[#FF3858]">3. Diseño, Conceptualización &amp; Propuesta</td>
+                                <td className="py-3 px-4 text-center font-bold">4%</td>
+                                <td className="py-3 px-4 text-right font-black text-white">${disenoAmt.toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(disenoAmt * 0.5).toLocaleString("es-MX")}</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(disenoAmt * 0.5).toLocaleString("es-MX")}</td>
+                              </tr>
+                              <tr>
+                                <td className="py-3 px-4 font-bold text-emerald-400">4. Negociación &amp; Cierre Comercial</td>
+                                <td className="py-3 px-4 text-center font-bold">5%</td>
+                                <td className="py-3 px-4 text-right font-black text-white">${cierreAmt.toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(cierreAmt * 0.5).toLocaleString("es-MX")}</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(cierreAmt * 0.5).toLocaleString("es-MX")}</td>
+                              </tr>
+                              <tr>
+                                <td className="py-3 px-4 font-bold text-amber-300">5. Contrato &amp; Formalización</td>
+                                <td className="py-3 px-4 text-center font-bold">3%</td>
+                                <td className="py-3 px-4 text-right font-black text-white">${contratoAmt.toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(contratoAmt * 0.5).toLocaleString("es-MX")}</td>
+                                <td className="py-3 px-4 text-right text-gray-300">${(contratoAmt * 0.5).toLocaleString("es-MX")}</td>
+                              </tr>
+                            </tbody>
+                            <tfoot className="bg-white/[0.04] border-t border-white/20 font-bold">
+                              <tr>
+                                <td className="py-3 px-4 text-white uppercase">TOTAL MÁXIMO DE BOLSA</td>
+                                <td className="py-3 px-4 text-center text-emerald-400">20%</td>
+                                <td className="py-3 px-4 text-right text-emerald-400 font-black">${totalComisiones.toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-emerald-400 font-black">${(totalComisiones * 0.5).toLocaleString("es-MX")} MXN</td>
+                                <td className="py-3 px-4 text-right text-emerald-400 font-black">${(totalComisiones * 0.5).toLocaleString("es-MX")} MXN</td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* SUB-TAB 2: PIPELINE ACTIVO */}
+            {/* ======================================================== */}
+            {advisorTab === "pipeline" && (
+              <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
+                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                  <h3 className="text-xl font-bold text-white uppercase font-mono">Pipeline Activo de Negociaciones</h3>
+                  <span className="text-xs text-gray-400 font-mono">4 Oportunidades Registradas</span>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs font-mono">
+                    <thead>
+                      <tr className="text-gray-400 border-b border-white/10 pb-2">
+                        <th className="py-3 px-4">CLIENTE / EMPRESA</th>
+                        <th className="py-3 px-4">PROYECTO</th>
+                        <th className="py-3 px-4">MONTO</th>
+                        <th className="py-3 px-4">ETAPA</th>
+                        <th className="py-3 px-4 text-right">COMISIÓN ESTIMADA</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {advisorData.pipeline.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3 px-4 font-bold text-white">{row.client}</td>
+                          <td className="py-3 px-4 text-gray-300">{row.project}</td>
+                          <td className="py-3 px-4 text-[#00E5FF] font-bold">{row.amount}</td>
+                          <td className="py-3 px-4">
+                            <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-gray-200">
+                              {row.stage}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-right font-bold text-emerald-400">{row.comm}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* SUB-TAB 3: CONTRATO LEGAL & FICHA DE ATRIBUCIÓN (ANEXO B) */}
+            {/* ======================================================== */}
+            {advisorTab === "contrato" && (
+              <div className="space-y-6 text-left">
+                {/* Contract Status Card */}
+                <div className="bg-black/80 border border-emerald-500/40 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-4 shadow-2xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400">
+                        <ShieldCheck className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="text-base font-bold text-white uppercase font-mono">
+                          Contrato Comercial de Colaboración Vigente
+                        </h4>
+                        <span className="text-xs text-emerald-400 font-mono">
+                          Firmado y Vinculado a: {currentUser.name} ({currentUser.email})
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setIsVendorModalOpen(true)}
+                      className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono font-bold text-white transition-all self-start sm:self-auto cursor-pointer"
+                    >
+                      Ver / Re-firmar Contrato
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono text-gray-300">
+                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10">
+                      <span className="text-gray-400 text-[10px] block uppercase">Jurisdicción Legal:</span>
+                      <strong className="text-white">Mérida, Yucatán, México</strong>
+                    </div>
+                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10">
+                      <span className="text-gray-400 text-[10px] block uppercase">Plazo de Pago:</span>
+                      <strong className="text-emerald-400">15 Días Naturales</strong>
+                    </div>
+                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10">
+                      <span className="text-gray-400 text-[10px] block uppercase">Protección de Cartera:</span>
+                      <strong className="text-[#00D1FF]">24 Meses Continuos</strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Anexo B: Ficha de Atribución */}
+                <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-4 shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 className="text-base font-bold text-white uppercase font-mono">
+                      ANEXO B: Formato de Ficha de Atribución y Comisiones por Proyecto
+                    </h3>
+                    <span className="text-xs text-gray-400 font-mono">Plantilla Oficial</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3 text-xs font-mono text-gray-300">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div><strong className="text-gray-400">EMPRESA:</strong> INNOCENTIA TECH</div>
+                      <div><strong className="text-gray-400">TITULAR COMERCIAL:</strong> {currentUser.name}</div>
+                      <div><strong className="text-gray-400">MODALIDAD DE PAGO:</strong> Proporcional a cada pago recibido (15 días)</div>
+                      <div><strong className="text-gray-400">BASE COMISIONABLE:</strong> Cobro neto sin gastos de terceros</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* SUB-TAB 4: REGISTRO DE CLIENTES (PRINCIPIO DE 1ER REGISTRO) */}
+            {/* ======================================================== */}
+            {advisorTab === "clientes" && (
+              <div className="space-y-6 text-left">
+                {/* Form to Register Lead */}
+                <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white uppercase font-mono">
+                        Registrar Nuevo Prospecto en CRM (Cláusula 4 y 5)
+                      </h3>
+                      <p className="text-xs text-gray-400 font-mono">
+                        Se te reconocerá como <strong>Titular Comercial (4%)</strong> al registrar con evidencia de contacto válida y verificable.
+                      </p>
+                    </div>
+                    <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
+                      Principio de Primer Registro
+                    </span>
+                  </div>
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      setLeadRegisteredSuccess(true);
+                      setTimeout(() => setLeadRegisteredSuccess(false), 5000);
+                      setNewLeadForm({
+                        name: "",
+                        company: "",
+                        contactPerson: "",
+                        phone: "",
+                        email: "",
+                        needDesc: "",
+                        estimatedBudget: "",
+                        evidence: "",
+                      });
+                    }}
+                    className="space-y-4"
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs font-mono">
+                      <div className="space-y-1">
+                        <label className="text-gray-300 block">Nombre del Cliente *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ej. Ing. Laura Paredes"
+                          value={newLeadForm.name}
+                          onChange={(e) => setNewLeadForm({ ...newLeadForm, name: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-gray-300 block">Empresa / Razón Social *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ej. Grupo Logístico Norte"
+                          value={newLeadForm.company}
+                          onChange={(e) => setNewLeadForm({ ...newLeadForm, company: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-gray-300 block">Teléfono / WhatsApp *</label>
+                        <input
+                          type="tel"
+                          required
+                          placeholder="+52 55 9876 5432"
+                          value={newLeadForm.phone}
+                          onChange={(e) => setNewLeadForm({ ...newLeadForm, phone: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                        />
+                      </div>
+
+                      <div className="space-y-1 sm:col-span-2">
+                        <label className="text-gray-300 block">Descripción de la Necesidad / Proyecto *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ej. ERP de inventarios multi-sucursal con app de repartidores"
+                          value={newLeadForm.needDesc}
+                          onChange={(e) => setNewLeadForm({ ...newLeadForm, needDesc: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-gray-300 block">Evidencia de Contacto / Referido *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Ej. Conversación WhatsApp / Reunión Zoom"
+                          value={newLeadForm.evidence}
+                          onChange={(e) => setNewLeadForm({ ...newLeadForm, evidence: e.target.value })}
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                        />
+                      </div>
+                    </div>
+
+                    {leadRegisteredSuccess && (
+                      <div className="p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>¡Prospecto registrado exitosamente! Se ha generado tu marca de tiempo y titularidad comercial protegida por 24 meses.</span>
+                      </div>
+                    )}
+
+                    <div className="flex justify-end pt-2">
+                      <button
+                        type="submit"
+                        className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#00B4D8] text-black text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-[#00D1FF]/20 hover:scale-105"
+                      >
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Registrar & Proteger Titularidad (4%)</span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {/* Registered Clients Directory */}
+                <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-4 shadow-2xl">
+                  <h3 className="text-base font-bold text-white uppercase font-mono border-b border-white/10 pb-3">
+                    Directorio de Clientes con Titularidad Comercial Protegida
+                  </h3>
+                  <div className="space-y-3">
+                    {advisorData.clients.map((c, idx) => (
+                      <div key={idx} className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+                        <div className="space-y-1">
+                          <span className="text-white font-bold text-sm block">{c.name}</span>
+                          <span className="text-gray-400 block">{c.email} • {c.phone}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="px-3 py-1 rounded-full bg-[#00D1FF]/10 text-[#00D1FF] border border-[#00D1FF]/30 font-bold">
+                            Titularidad 4% Activa (24 Meses)
+                          </span>
+                          <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
+                            {c.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -1164,6 +1705,24 @@ export default function PortalPage() {
           </div>
         )}
       </div>
+
+      {/* Modal Oficial de Registro de Vendedor y Contrato Comercial */}
+      <VendorContractModal
+        isOpen={isVendorModalOpen}
+        onClose={() => setIsVendorModalOpen(false)}
+        onAcceptAndRegister={(data) => {
+          setVendorContractData(data);
+          setIsVendorModalOpen(false);
+          setCurrentUser({
+            id: "usr_" + Math.floor(Math.random() * 1000),
+            name: data.name,
+            email: data.email,
+            role: "asesor",
+            roleTitle: "Colaborador Comercial Certificado",
+            contractSignedDate: data.acceptedDate,
+          });
+        }}
+      />
     </main>
   );
 }
