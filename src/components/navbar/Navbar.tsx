@@ -28,7 +28,7 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
     { name: "Proyectos", href: "#proyectos" },
     { name: "Laboratorio", href: "#playground" },
     { name: "Identidad", href: "#ai-personas" },
-    { name: "Preguntas", href: "#faq" },
+    { name: "Preguntas", href: "/faq" },
   ];
 
   return (

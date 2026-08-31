@@ -1,214 +1,146 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, ChevronDown } from "../../lib/icons";
+import Link from "next/link";
+import Image from "next/image";
+import { Sparkles, ChevronDown, ArrowRight, MessageSquare } from "../../lib/icons";
 
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [filter, setFilter] = useState<"todos" | "sofia" | "ivan">("todos");
 
-  const faqs = [
+  // Top 3 Essential Highlight Questions for the Home Page Teaser
+  const featuredFaqs = [
     {
       q: "¿Necesito tener mi idea completamente definida?",
-      author: "sofia",
       authorName: "Sofía",
       role: "UX & Creatividad",
-      avatar: "🔴",
-      color: "#FF3B5C",
-      a: "No. Muchas veces una idea comienza como una sensación, una necesidad o simplemente la intuición de que exista una mejor manera de hacer algo. Escuchamos lo que imaginas, analizamos el problema, exploramos posibilidades y te ayudamos a convertir esa primera visión en un concepto claro, coherente y viable.",
+      color: "#FF3858",
+      a: "No. Muchas veces una idea comienza como una sensación o necesidad. Escuchamos lo que imaginas, analizamos el problema y te ayudamos a convertir esa primera visión en un concepto claro, coherente y viable.",
     },
     {
       q: "¿Qué tipo de proyectos puede desarrollar Innocentia?",
-      author: "ivan",
       authorName: "Iván",
       role: "Arquitectura & Backend",
-      avatar: "🔵",
-      color: "#00E5FF",
-      a: "Desarrollamos soluciones digitales adaptadas a las necesidades de cada proyecto: plataformas web, aplicaciones móviles, software empresarial, CRM/ERP, dashboards administrativos, marketplaces, reservaciones, automatizaciones, APIs, chatbots y agentes autónomos de IA.",
+      color: "#00D1FF",
+      a: "Desarrollamos soluciones digitales adaptadas a tu negocio: plataformas web en Next.js, aplicaciones móviles nativas, software empresarial, CRM/ERP a medida y agentes autónomos de Inteligencia Artificial.",
     },
     {
-      q: "¿Trabajan únicamente con empresas grandes?",
-      author: "sofia",
-      authorName: "Sofía",
-      role: "UX & Creatividad",
-      avatar: "🔴",
-      color: "#FF3B5C",
-      a: "No. Trabajamos con personas que tienen una idea, emprendedores, startups, pequeñas empresas y organizaciones consolidadas. El tamaño de una empresa no determina el potencial de una idea; lo más importante es la claridad del objetivo.",
-    },
-    {
-      q: "¿Pueden ayudarme también con el diseño y la identidad visual?",
-      author: "sofia",
-      authorName: "Sofía",
-      role: "UX & Creatividad",
-      avatar: "🔴",
-      color: "#FF3B5C",
-      a: "Sí. Desarrollamos la identidad visual completa: concepto de marca, dirección de arte, branding, paleta de colores, tipografía, iconografía, diseño UX/UI, ilustraciones y animaciones para que la tecnología y la identidad se sientan como una sola experiencia.",
-    },
-    {
-      q: "¿Desarrollan software completamente personalizado?",
-      author: "ivan",
+      q: "¿Quién tiene la propiedad del código y diseño desarrollado?",
       authorName: "Iván",
       role: "Arquitectura & Backend",
-      avatar: "🔵",
-      color: "#00E5FF",
-      a: "Sí. Cada proyecto se desarrolla a medida según sus objetivos y necesidades. No intentamos adaptar una empresa a una herramienta genérica; primero comprendemos cómo funciona el proyecto y después diseñamos la solución tecnológica adecuada.",
-    },
-    {
-      q: "¿Utilizan inteligencia artificial en sus soluciones?",
-      author: "ivan",
-      authorName: "Iván",
-      role: "Arquitectura & Backend",
-      avatar: "🔵",
-      color: "#00E5FF",
-      a: "Sí, cuando aporta un beneficio real. La utilizamos para asistir usuarios, automatizar tareas, analizar información, clasificar datos, generar contenido y construir agentes inteligentes de software. No la incorporamos por moda, sino cuando mejora significativamente una solución.",
-    },
-    {
-      q: "¿La inteligencia artificial reemplaza a las personas?",
-      author: "sofia",
-      authorName: "Sofía",
-      role: "UX & Creatividad",
-      avatar: "🔴",
-      color: "#FF3B5C",
-      a: "No. Para Innocentia, la IA es una herramienta capaz de ampliar capacidades humanas. Permite ahorrar tiempo y automatizar tareas repetitivas para que las personas concentren su energía en lo que requiere criterio, creatividad y sensibilidad. La tecnología debe estar al servicio de las personas.",
-    },
-    {
-      q: "¿Pueden conectar mi nuevo sistema con las herramientas que ya utilizo?",
-      author: "ivan",
-      authorName: "Iván",
-      role: "Arquitectura & Backend",
-      avatar: "🔵",
-      color: "#00E5FF",
-      a: "Sí. Desarrollamos integraciones mediante APIs y webhooks para conectar plataformas de pago, CRM, WhatsApp, correo, bases de datos y servicios en la nube en un mismo ecosistema escalable.",
-    },
-    {
-      q: "¿Cuál es su proceso de desarrollo?",
-      author: "ambos",
-      authorName: "Sofía & Iván",
-      role: "Dual Core",
-      avatar: "✨",
-      color: "#8A2BE2",
-      a: "Trabajamos en 5 etapas principales: 1. Descubrimiento (Comprender objetivos), 2. Diseño (Experiencia visual y funcional), 3. Desarrollo (Construir arquitectura), 4. Comprobación (Pruebas y calidad), 5. Entrega y Evolución (Acompañamiento continuo).",
-    },
-    {
-      q: "¿Cuánto cuesta y cuánto tiempo tarda un proyecto?",
-      author: "ivan",
-      authorName: "Iván",
-      role: "Arquitectura & Backend",
-      avatar: "🔵",
-      color: "#00E5FF",
-      a: "Depende del alcance del proyecto. Preferimos ofrecer una estimación basada en información real tras la fase inicial. Además, podemos desarrollar primero un MVP o versión inicial por etapas para validar la idea antes de realizar mayores inversiones.",
-    },
-    {
-      q: "¿El proyecto será mío y ofrecen soporte después de la entrega?",
-      author: "ivan",
-      authorName: "Iván",
-      role: "Arquitectura & Backend",
-      avatar: "🔵",
-      color: "#00E5FF",
-      a: "Sí. Las condiciones de propiedad se establecen claramente desde el inicio. Además, ofrecemos acompañamiento, mantenimiento, soporte y mejoras evolutivas para que la plataforma continúe creciendo junto con tu negocio.",
+      color: "#00D1FF",
+      a: "El cliente al 100%. Una vez concluido el proyecto y cubiertos los acuerdos, todos los derechos sobre el código, arquitectura, diseño y bases de datos son transferidos en su totalidad al cliente.",
     },
   ];
 
-  const filteredFaqs = faqs.filter(
-    (f) => filter === "todos" || f.author === filter || f.author === "ambos"
-  );
-
   return (
-    <section id="faq" className="relative py-16 bg-[#040407] overflow-hidden border-t border-white/10">
-      <div className="max-w-[1440px] mx-auto px-8 relative z-10 space-y-8">
-        {/* Header */}
-        <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/15 text-xs font-mono tracking-wider text-[#FF8800] uppercase">
-            <Sparkles className="w-4 h-4" />
-            <span>RESPUESTAS DE SOFÍA E IVÁN</span>
-          </div>
+    <section id="preguntas" className="py-24 px-6 sm:px-8 max-w-5xl mx-auto text-center relative z-10">
+      {/* Header Badge */}
+      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/15 backdrop-blur-xl mb-6">
+        <Sparkles className="w-3.5 h-3.5 text-[#FFD166]" />
+        <span className="text-[10px] sm:text-xs font-mono tracking-widest text-gray-300 uppercase">
+          CENTRO DE PREGUNTAS FRECUENTES
+        </span>
+      </div>
 
-          <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tight uppercase">
-            PREGUNTAS FRECUENTES
-          </h2>
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-4 uppercase">
+        PREGUNTAS <span className="bg-gradient-to-r from-[#FF3858] to-[#00D1FF] bg-clip-text text-transparent">FRECUENTES</span>
+      </h2>
 
-          <p className="text-gray-300 text-base sm:text-lg font-light">
-            Resolvemos tus dudas creativas y técnicas antes de comenzar tu próximo proyecto.
-          </p>
-        </div>
+      <p className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto mb-10 font-light leading-relaxed">
+        Resolvemos tus dudas principales. Para consultar todas las respuestas y platicar en vivo con Sofía e Iván, visita nuestro centro dedicado.
+      </p>
 
-        {/* Filter Pills */}
-        <div className="flex justify-center flex-wrap gap-3">
-          <button
-            onClick={() => setFilter("todos")}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-              filter === "todos"
-                ? "bg-white/20 border border-white/40 text-white shadow-lg"
-                : "bg-white/[0.04] border border-white/10 text-gray-400 hover:text-white"
-            }`}
-          >
-            Todas ({faqs.length})
-          </button>
-          <button
-            onClick={() => setFilter("sofia")}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-              filter === "sofia"
-                ? "bg-[#FF3B5C]/20 border border-[#FF3B5C] text-white shadow-[0_0_20px_#FF3B5C]"
-                : "bg-white/[0.04] border border-white/10 text-gray-400 hover:text-white"
-            }`}
-          >
-            🔴 Sofía (UX/Diseño)
-          </button>
-          <button
-            onClick={() => setFilter("ivan")}
-            className={`px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-              filter === "ivan"
-                ? "bg-[#00E5FF]/20 border border-[#00E5FF] text-white shadow-[0_0_20px_#00E5FF]"
-                : "bg-white/[0.04] border border-white/10 text-gray-400 hover:text-white"
-            }`}
-          >
-            🔵 Iván (Ingeniería)
-          </button>
-        </div>
-
-        {/* Accordion List */}
-        <div className="space-y-4 text-left max-w-4xl mx-auto">
-          {filteredFaqs.map((faq, idx) => {
-            const isOpen = openIndex === idx;
-            return (
-              <div
-                key={idx}
-                className="rounded-2xl bg-white/[0.02] border border-white/15 overflow-hidden backdrop-blur-2xl transition-all shadow-lg"
+      {/* Featured 3 Questions */}
+      <div className="space-y-3.5 text-left mb-10">
+        {featuredFaqs.map((faq, index) => {
+          const isOpen = openIndex === index;
+          return (
+            <div
+              key={index}
+              className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                isOpen
+                  ? "bg-[#0A0A12] border-white/30 shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
+                  : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
+              }`}
+            >
+              <button
+                onClick={() => setOpenIndex(isOpen ? null : index)}
+                className="w-full p-4 sm:p-5 flex items-center justify-between gap-4 text-left cursor-pointer"
               >
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left hover:bg-white/[0.05] transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">{faq.avatar}</span>
-                    <span className="text-base sm:text-lg font-bold text-white tracking-wide">
-                      {faq.q}
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                    style={{
+                      backgroundColor: faq.color,
+                      boxShadow: `0 0 10px ${faq.color}`,
+                    }}
+                  />
+                  <h3 className="text-sm sm:text-base font-bold text-white leading-snug">
+                    {faq.q}
+                  </h3>
+                </div>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-400 transition-transform duration-300 flex-shrink-0 ${
+                    isOpen ? "rotate-180 text-white" : ""
+                  }`}
+                />
+              </button>
+
+              {isOpen && (
+                <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-gray-300 font-light leading-relaxed border-t border-white/5 space-y-2">
+                  <div className="flex items-center gap-2 pt-2">
+                    <span
+                      className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full uppercase"
+                      style={{
+                        backgroundColor: `${faq.color}20`,
+                        color: faq.color,
+                        border: `1px solid ${faq.color}40`,
+                      }}
+                    >
+                      Responde: {faq.authorName} ({faq.role})
                     </span>
                   </div>
-                  <ChevronDown
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0 ${
-                      isOpen ? "rotate-180 text-white" : ""
-                    }`}
-                  />
-                </button>
+                  <p>{faq.a}</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-                {isOpen && (
-                  <div className="px-6 pb-6 text-sm text-gray-300 font-light leading-relaxed border-t border-white/10 pt-4 space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="text-xs font-mono font-bold px-3 py-1 rounded-full uppercase inline-block"
-                        style={{ backgroundColor: `${faq.color}22`, color: faq.color, border: `1px solid ${faq.color}44` }}
-                      >
-                        Responde {faq.authorName} ({faq.role})
-                      </span>
-                    </div>
-                    <p className="text-base leading-relaxed text-gray-200">{faq.a}</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+      {/* High-Converting Subpage CTA Banner */}
+      <div className="p-6 sm:p-8 rounded-[28px] bg-gradient-to-r from-white/[0.04] via-black/80 to-white/[0.04] border border-white/20 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] flex flex-col sm:flex-row items-center justify-between gap-6 text-left">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center -space-x-2 flex-shrink-0">
+            <div className="w-12 h-12 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)]">
+              <Image src="/images/sofia_pink_beanbag.png" alt="Sofía" width={34} height={34} className="object-contain" />
+            </div>
+            <div className="w-12 h-12 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)]">
+              <Image src="/images/ivan_standing_stylus.png" alt="Iván" width={34} height={34} className="object-contain" />
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-base font-bold text-white uppercase flex items-center gap-2">
+              <span>¿Tienes más preguntas o una idea específica?</span>
+              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                EN VIVO
+              </span>
+            </h4>
+            <p className="text-xs text-gray-400 font-light">
+              Accede a nuestro centro completo de 11+ preguntas y habla en tiempo real con Sofía e Iván.
+            </p>
+          </div>
         </div>
+
+        <Link
+          href="/faq"
+          className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#00D1FF] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.4)] hover:scale-105 transition-all flex-shrink-0"
+        >
+          <span>Ver todas las preguntas &amp; Hablar en Vivo</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );

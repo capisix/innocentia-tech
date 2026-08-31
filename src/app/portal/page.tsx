@@ -118,20 +118,50 @@ export default function PortalPage() {
     ],
   };
 
-  // Sample Demo Data for Socio (Finanzas Globales & Dirección)
+  // Sample Demo Data for Socio (Finanzas Globales, Métricas del Lugar & Estadísticas)
   const partnerData = {
     totalRevenue: "$186,400 USD",
     totalExpenses: "$54,200 USD",
     netProfit: "$132,200 USD",
     profitMargin: "70.9%",
+    activeProjectsTotal: 14,
+    onTimeRate: "98.2%",
     expensesBreakdown: [
-      { category: "Infraestructura Cloud (AWS & Cloudflare)", amount: "$4,800 USD", pct: "8.8%" },
+      { category: "Infraestructura Cloud (AWS, Vercel & Cloudflare)", amount: "$4,800 USD", pct: "8.8%" },
       { category: "Licencias de Software & AI (OpenAI/Claude APIs)", amount: "$6,400 USD", pct: "11.8%" },
       { category: "Comisiones a Asesores Comerciales", amount: "$18,640 USD", pct: "34.4%" },
       { category: "Equipo de Ingeniería & Diseño", amount: "$24,360 USD", pct: "45.0%" },
     ],
-    activeProjectsTotal: 14,
-    onTimeRate: "98.2%",
+    // Location & Place Metrics
+    trafficMetrics: {
+      totalVisitors: "48,920",
+      monthlyGrowth: "+34.2%",
+      activeNow: "142 personas",
+      avgDuration: "4m 32s",
+      bounceRate: "21.4%",
+      leadConversionRate: "8.4%",
+      quotesRequested: 38,
+      dealsClosed: 14,
+      uptime: "99.99%",
+      edgeLatency: "38ms",
+    },
+    geoDistribution: [
+      { country: "México 🇲🇽", users: "30,330", pct: 62, cities: "CDMX (45%), Guadalajara (28%), Monterrey (18%), Querétaro (9%)", trend: "+28%" },
+      { country: "Estados Unidos 🇺🇸", users: "10,270", pct: 21, cities: "Miami (35%), Austin (30%), San Francisco (20%), New York (15%)", trend: "+45%" },
+      { country: "Colombia & LATAM 🇨🇴", users: "5,870", pct: 12, cities: "Bogotá (50%), Medellín (35%), Santiago de Chile (15%)", trend: "+19%" },
+      { country: "España & Europa 🇪🇸", users: "2,450", pct: 5, cities: "Madrid (60%), Barcelona (40%)", trend: "+12%" },
+    ],
+    deviceStats: [
+      { device: "Dispositivos Móviles (iOS / Android)", count: "33,265 visitas", pct: 68, color: "#00E5FF" },
+      { device: "Computadoras / Laptops (Mac / Windows)", count: "14,186 visitas", pct: 29, color: "#FF3858" },
+      { device: "Tablets & Dispositivos Táctiles", count: "1,469 visitas", pct: 3, color: "#FFB703" },
+    ],
+    topPages: [
+      { path: "/ (Inicio)", views: "34,120", avgTime: "3m 15s" },
+      { path: "/#servicios (Capacidades)", views: "18,450", avgTime: "2m 10s" },
+      { path: "/faq (Preguntas & Chat)", views: "12,900", avgTime: "4m 45s" },
+      { path: "/portal (Portal Privado)", views: "8,340", avgTime: "6m 12s" },
+    ],
   };
 
   // Quick Login Profiles Handler
@@ -843,7 +873,7 @@ export default function PortalPage() {
         )}
 
         {/* ========================================================================= */}
-        {/* 4. PERFIL EXCLUSIVO: SOCIO (FINANZAS & DIRECCIÓN) */}
+        {/* 4. PERFIL EXCLUSIVO: SOCIO (MÉTRICAS DEL LUGAR, ESTADÍSTICAS & FINANZAS) */}
         {/* ========================================================================= */}
         {currentUser?.role === "socio" && (
           <div className="space-y-8 animate-in fade-in duration-300">
@@ -851,60 +881,286 @@ export default function PortalPage() {
             <div className="rounded-[32px] bg-gradient-to-r from-purple-900/25 via-indigo-950/20 to-black/60 border border-purple-500/40 p-6 sm:p-8 backdrop-blur-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-2xl">
               <div className="space-y-2 text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/40 text-xs font-mono text-purple-300 font-bold uppercase">
-                  <span>DIRECCIÓN EJECUTIVA • INNOCENTIA TECH</span>
+                  <span>DIRECCIÓN EJECUTIVA &amp; BOARD • INNOCENTIA TECH</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
-                  Panel de Control Financiero & Métricas
+                  Métricas Globales &amp; Control Estratégico
                 </h2>
                 <p className="text-sm text-gray-300 font-light">
-                  Márgenes de rentabilidad, balance global de ingresos vs egresos y salud operativa del ecosistema.
+                  Métricas de audiencia por lugar, estadísticas de conversión, rendimiento técnico y salud financiera del ecosistema.
                 </p>
               </div>
 
               {/* Profit Margin Badge */}
-              <div className="p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center space-y-1">
-                <span className="text-[10px] font-mono text-gray-400 uppercase block">Margen Neto Global</span>
-                <span className="text-3xl font-black text-purple-300 font-mono block">{partnerData.profitMargin}</span>
-                <span className="text-[10px] text-gray-400 font-mono">14 Proyectos Activos</span>
+              <div className="flex gap-3">
+                <div className="p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center space-y-1">
+                  <span className="text-[10px] font-mono text-gray-400 uppercase block">Visitantes Totales</span>
+                  <span className="text-2xl sm:text-3xl font-black text-[#00E5FF] font-mono block">
+                    {partnerData.trafficMetrics.totalVisitors}
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-mono font-bold flex items-center justify-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    {partnerData.trafficMetrics.activeNow} en vivo
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center space-y-1">
+                  <span className="text-[10px] font-mono text-gray-400 uppercase block">Margen Neto</span>
+                  <span className="text-2xl sm:text-3xl font-black text-purple-300 font-mono block">
+                    {partnerData.profitMargin}
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-mono">14 Proyectos</span>
+                </div>
               </div>
             </div>
 
-            {/* Financial Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-[32px] bg-black/80 border border-white/15 space-y-2 text-left">
-                <span className="text-xs text-gray-400 font-mono uppercase">Ingresos Totales (Q3)</span>
-                <h3 className="text-3xl font-black text-emerald-400 font-mono">{partnerData.totalRevenue}</h3>
-                <span className="text-xs text-gray-400 block">+24.5% vs trimestre anterior</span>
-              </div>
-
-              <div className="p-6 rounded-[32px] bg-black/80 border border-white/15 space-y-2 text-left">
-                <span className="text-xs text-gray-400 font-mono uppercase">Egresos & Costos Operativos</span>
-                <h3 className="text-3xl font-black text-red-400 font-mono">{partnerData.totalExpenses}</h3>
-                <span className="text-xs text-gray-400 block">Nómina, Cloud y Licencias</span>
-              </div>
-
-              <div className="p-6 rounded-[32px] bg-black/80 border border-purple-500/40 space-y-2 text-left">
-                <span className="text-xs text-purple-300 font-mono uppercase">Utilidad Neta Disponible</span>
-                <h3 className="text-3xl font-black text-white font-mono">{partnerData.netProfit}</h3>
-                <span className="text-xs text-emerald-400 block">Salud Financiera Excelente</span>
-              </div>
+            {/* Socio Sub-Navigation Tabs */}
+            <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
+              {[
+                { id: "metricas_lugar", label: "📍 Métricas del Lugar & Tráfico Geográfico" },
+                { id: "estadisticas", label: "📊 Estadísticas de Plataforma & Conversiones" },
+                { id: "finanzas", label: "💰 Finanzas & Rentabilidad Global" },
+                { id: "gastos", label: "📑 Desglose de Gastos & Operación" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setPartnerTab(tab.id as any)}
+                  className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                    partnerTab === tab.id
+                      ? "bg-purple-600/30 border border-purple-400 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                      : "bg-white/[0.03] border border-white/10 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
-            {/* Expenses Breakdown */}
-            <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
-              <h3 className="text-xl font-bold text-white uppercase font-mono">Desglose de Costos de Operación</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {partnerData.expensesBreakdown.map((item, idx) => (
-                  <div key={idx} className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
-                    <div className="space-y-1">
-                      <h4 className="text-sm font-bold text-white">{item.category}</h4>
-                      <span className="text-xs text-gray-400 font-mono">{item.pct} del presupuesto total</span>
-                    </div>
-                    <span className="text-base font-extrabold text-gray-200 font-mono">{item.amount}</span>
+            {/* ======================================================== */}
+            {/* TAB 1: MÉTRICAS DEL LUGAR & TRÁFICO GEOGRÁFICO */}
+            {/* ======================================================== */}
+            {partnerTab === "metricas_lugar" && (
+              <div className="space-y-6 text-left">
+                {/* Geographic Overview Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-5 rounded-[24px] bg-black/80 border border-white/15 space-y-1">
+                    <span className="text-[11px] text-gray-400 font-mono uppercase block">Visitas este Mes</span>
+                    <h4 className="text-2xl font-black text-white font-mono">{partnerData.trafficMetrics.totalVisitors}</h4>
+                    <span className="text-xs text-emerald-400 font-mono block font-bold">{partnerData.trafficMetrics.monthlyGrowth} vs mes anterior</span>
                   </div>
-                ))}
+
+                  <div className="p-5 rounded-[24px] bg-black/80 border border-white/15 space-y-1">
+                    <span className="text-[11px] text-gray-400 font-mono uppercase block">Tiempo Medio en Sitio</span>
+                    <h4 className="text-2xl font-black text-[#00E5FF] font-mono">{partnerData.trafficMetrics.avgDuration}</h4>
+                    <span className="text-xs text-gray-400 font-mono block">Alta retención de lectura</span>
+                  </div>
+
+                  <div className="p-5 rounded-[24px] bg-black/80 border border-white/15 space-y-1">
+                    <span className="text-[11px] text-gray-400 font-mono uppercase block">Tasa de Rebote</span>
+                    <h4 className="text-2xl font-black text-emerald-400 font-mono">{partnerData.trafficMetrics.bounceRate}</h4>
+                    <span className="text-xs text-emerald-400 font-mono block">Excelente (&lt; 35% estándar)</span>
+                  </div>
+
+                  <div className="p-5 rounded-[24px] bg-black/80 border border-white/15 space-y-1">
+                    <span className="text-[11px] text-gray-400 font-mono uppercase block">Usuarios Activos Ahora</span>
+                    <h4 className="text-2xl font-black text-[#FF3858] font-mono flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF3858] animate-ping" />
+                      {partnerData.trafficMetrics.activeNow}
+                    </h4>
+                    <span className="text-xs text-gray-400 font-mono block">En tiempo real</span>
+                  </div>
+                </div>
+
+                {/* Country Breakdown & Cities */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  {/* Left: Geo Distribution */}
+                  <div className="lg:col-span-7 bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-5 shadow-2xl">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold text-white uppercase font-mono">
+                        Distribución de Audiencia por País
+                      </h3>
+                      <span className="text-xs text-[#00E5FF] font-mono font-bold">Top Mercados</span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {partnerData.geoDistribution.map((geo, idx) => (
+                        <div key={idx} className="space-y-2 p-3.5 rounded-2xl bg-white/[0.02] border border-white/10">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-bold text-white">{geo.country}</span>
+                            <div className="flex items-center gap-3">
+                              <span className="text-xs text-emerald-400 font-mono font-bold">{geo.trend}</span>
+                              <span className="text-xs font-mono font-black text-white">{geo.users} ({geo.pct}%)</span>
+                            </div>
+                          </div>
+
+                          {/* Progress Bar */}
+                          <div className="w-full h-2.5 rounded-full bg-white/10 overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-[#FF3858] via-purple-500 to-[#00D1FF]"
+                              style={{ width: `${geo.pct}%` }}
+                            />
+                          </div>
+
+                          <div className="text-[11px] text-gray-400 font-mono">
+                            <strong className="text-gray-300">Ciudades clave:</strong> {geo.cities}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right: Devices & Popular Pages */}
+                  <div className="lg:col-span-5 space-y-6">
+                    {/* Device Breakdown */}
+                    <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 backdrop-blur-2xl space-y-4 shadow-2xl">
+                      <h3 className="text-lg font-bold text-white uppercase font-mono border-b border-white/10 pb-3">
+                        Dispositivos de Acceso
+                      </h3>
+                      <div className="space-y-3">
+                        {partnerData.deviceStats.map((dev, idx) => (
+                          <div key={idx} className="space-y-1.5">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-200">{dev.device}</span>
+                              <span className="font-bold text-white">{dev.pct}%</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div
+                                className="h-full rounded-full"
+                                style={{ width: `${dev.pct}%`, backgroundColor: dev.color }}
+                              />
+                            </div>
+                            <span className="text-[10px] text-gray-400 font-mono">{dev.count}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Top Pages */}
+                    <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 backdrop-blur-2xl space-y-3 shadow-2xl">
+                      <h3 className="text-base font-bold text-white uppercase font-mono border-b border-white/10 pb-2">
+                        Páginas Más Visitadas
+                      </h3>
+                      <div className="space-y-2">
+                        {partnerData.topPages.map((pg, idx) => (
+                          <div key={idx} className="p-2.5 rounded-xl bg-white/[0.02] border border-white/10 flex items-center justify-between text-xs font-mono">
+                            <span className="text-white font-semibold truncate pr-2">{pg.path}</span>
+                            <div className="text-right flex-shrink-0">
+                              <span className="text-[#00E5FF] font-bold block">{pg.views}</span>
+                              <span className="text-[10px] text-gray-400 block">{pg.avgTime}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* TAB 2: ESTADÍSTICAS DE PLATAFORMA & CONVERSIONES */}
+            {/* ======================================================== */}
+            {partnerTab === "estadisticas" && (
+              <div className="space-y-6 text-left">
+                {/* Conversion Funnel */}
+                <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white uppercase font-mono">
+                        Embudo de Conversión &amp; Rendimiento de Leads
+                      </h3>
+                      <p className="text-xs text-gray-400">Desde la primera visita hasta la firma de contrato.</p>
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-xs font-bold">
+                      Tasa de Éxito: {partnerData.trafficMetrics.leadConversionRate}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+                      <span className="text-xs font-mono text-gray-400 uppercase">1. Tráfico Cualificado</span>
+                      <h4 className="text-3xl font-black text-white font-mono">{partnerData.trafficMetrics.totalVisitors}</h4>
+                      <p className="text-[11px] text-gray-400">Visitantes únicos mensuales a la web.</p>
+                    </div>
+
+                    <div className="p-5 rounded-2xl bg-[#00E5FF]/10 border border-[#00D1FF]/30 space-y-2">
+                      <span className="text-xs font-mono text-[#00E5FF] uppercase">2. Propuestas Solicitadas</span>
+                      <h4 className="text-3xl font-black text-[#00D1FF] font-mono">{partnerData.trafficMetrics.quotesRequested}</h4>
+                      <p className="text-[11px] text-gray-300">Generadas con el Creador de Proyectos.</p>
+                    </div>
+
+                    <div className="p-5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 space-y-2">
+                      <span className="text-xs font-mono text-emerald-400 uppercase">3. Proyectos Cerrados</span>
+                      <h4 className="text-3xl font-black text-emerald-400 font-mono">{partnerData.trafficMetrics.dealsClosed}</h4>
+                      <p className="text-[11px] text-emerald-200">En desarrollo activo con anticipo cubierto.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Cloud & Tech Health */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="p-6 rounded-[32px] bg-black/80 border border-white/15 space-y-2">
+                    <span className="text-xs font-mono text-gray-400 uppercase">Disponibilidad de Servidores (Uptime)</span>
+                    <h3 className="text-3xl font-black text-emerald-400 font-mono">{partnerData.trafficMetrics.uptime}</h3>
+                    <p className="text-xs text-gray-400">Infraestructura Vercel Edge Serverless con redundancia multi-zona.</p>
+                  </div>
+
+                  <div className="p-6 rounded-[32px] bg-black/80 border border-white/15 space-y-2">
+                    <span className="text-xs font-mono text-gray-400 uppercase">Latencia Global Promedio</span>
+                    <h3 className="text-3xl font-black text-[#00E5FF] font-mono">{partnerData.trafficMetrics.edgeLatency}</h3>
+                    <p className="text-xs text-gray-400">Carga ultra-rápida en CDN distribuida en 300+ ciudades.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* TAB 3: FINANZAS & RENTABILIDAD */}
+            {/* ======================================================== */}
+            {partnerTab === "finanzas" && (
+              <div className="space-y-6 text-left">
+                {/* Financial Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="p-6 rounded-[32px] bg-black/80 border border-white/15 space-y-2 text-left">
+                    <span className="text-xs text-gray-400 font-mono uppercase">Ingresos Totales (Q3)</span>
+                    <h3 className="text-3xl font-black text-emerald-400 font-mono">{partnerData.totalRevenue}</h3>
+                    <span className="text-xs text-gray-400 block">+24.5% vs trimestre anterior</span>
+                  </div>
+
+                  <div className="p-6 rounded-[32px] bg-black/80 border border-white/15 space-y-2 text-left">
+                    <span className="text-xs text-gray-400 font-mono uppercase">Egresos &amp; Costos Operativos</span>
+                    <h3 className="text-3xl font-black text-red-400 font-mono">{partnerData.totalExpenses}</h3>
+                    <span className="text-xs text-gray-400 block">Nómina, Cloud y Licencias</span>
+                  </div>
+
+                  <div className="p-6 rounded-[32px] bg-black/80 border border-purple-500/40 space-y-2 text-left">
+                    <span className="text-xs text-purple-300 font-mono uppercase">Utilidad Neta Disponible</span>
+                    <h3 className="text-3xl font-black text-white font-mono">{partnerData.netProfit}</h3>
+                    <span className="text-xs text-emerald-400 block">Salud Financiera Excelente</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* TAB 4: GASTOS DE OPERACIÓN */}
+            {/* ======================================================== */}
+            {partnerTab === "gastos" && (
+              <div className="bg-black/80 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl space-y-6 text-left shadow-2xl">
+                <h3 className="text-xl font-bold text-white uppercase font-mono">Desglose de Costos de Operación</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {partnerData.expensesBreakdown.map((item, idx) => (
+                    <div key={idx} className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-bold text-white">{item.category}</h4>
+                        <span className="text-xs text-gray-400 font-mono">{item.pct} del presupuesto total</span>
+                      </div>
+                      <span className="text-base font-extrabold text-gray-200 font-mono">{item.amount}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
