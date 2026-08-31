@@ -44,9 +44,12 @@ export const metadata: Metadata = {
     images: ["https://innocentia.tech/images/og_preview.png?v=11"],
   },
   icons: {
-    icon: "/images/og_square.png?v=11",
-    shortcut: "/images/og_square.png?v=11",
-    apple: "/images/og_square.png?v=11",
+    icon: [
+      { url: "/images/favicon_transparent.png?v=12", type: "image/png" },
+      { url: "/favicon.ico?v=12" },
+    ],
+    shortcut: "/images/favicon_transparent.png?v=12",
+    apple: "/apple-icon.png?v=12",
   },
 };
 
@@ -61,7 +64,12 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {/* OpenGraph & Social Preview Fallbacks */}
+        {/* Favicon Transparente Oficial */}
+        <link rel="icon" type="image/png" href="/images/favicon_transparent.png?v=12" />
+        <link rel="shortcut icon" href="/favicon.ico?v=12" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=12" />
+
+        {/* OpenGraph & Social Preview Fallbacks (Fondo Blanco Oficial para WhatsApp/Redes) */}
         <meta property="og:title" content="Innocentia Tech • Laboratorio de Software & IA" />
         <meta property="og:description" content="Donde la imaginación se convierte en tecnología. Apps móviles, desarrollo web de alta escala y soluciones con IA." />
         <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=11" />

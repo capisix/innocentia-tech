@@ -887,7 +887,7 @@ export default function FAQPage() {
                                   ? "/images/sofia_pink_beanbag.png"
                                   : ans.speaker.includes("IVÁN")
                                   ? "/images/ivan_standing_stylus.png"
-                                  : "/images/og_square.png"
+                                  : "/images/favicon_transparent.png"
                               }
                               alt={ans.speaker}
                               className="w-full h-full object-contain"
@@ -994,8 +994,8 @@ export default function FAQPage() {
                             : item.type === "ivan"
                             ? "/images/ivan_standing_stylus.png"
                             : item.type === "user"
-                            ? "/images/og_square.png"
-                            : "/images/og_square.png"
+                            ? "/images/favicon_transparent.png"
+                            : "/images/favicon_transparent.png"
                         }
                         alt={item.senderName}
                         className="w-full h-full object-contain"
