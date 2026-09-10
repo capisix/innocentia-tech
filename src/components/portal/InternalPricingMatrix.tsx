@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DollarSign,
   Briefcase,
@@ -44,6 +44,33 @@ export default function InternalPricingMatrix({
   const [calcDiseno, setCalcDiseno] = useState<"base" | "personalizado" | "avanzado">("personalizado");
   const [calcClientName, setCalcClientName] = useState("");
   const [copiedQuote, setCopiedQuote] = useState(false);
+  const [preloadedLeadNotice, setPreloadedLeadNotice] = useState<string | null>(null);
+
+  // Auto-load preloaded lead from localStorage if coming from Mesa de Trabajo
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("innocentia_calculator_lead");
+        if (stored) {
+          const lead = JSON.parse(stored);
+          if (lead && lead.clientName) {
+            setCalcClientName(`${lead.clientName} (${lead.clientCompany})`);
+            setActiveTab("calculadora");
+            if (lead.projectType === "mobile_app") {
+              setCalcTier("movil");
+            } else if (lead.projectType === "web_platform") {
+              setCalcTier("plataforma");
+            } else {
+              setCalcTier("mvp");
+            }
+            setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} (${lead.projectName}).`);
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Error reading calculator lead:", err);
+    }
+  }, []);
 
   // Price Override Mode
   const [isCustomPriceActive, setIsCustomPriceActive] = useState(false);
@@ -498,11 +525,28 @@ export default function InternalPricingMatrix({
 
       {/* TAB 4: CALCULADORA DE COTIZACIÓN INTERACTIVA (CON EDICIÓN DE PRECIO Y EXTRAS) */}
       {activeTab === "calculadora" && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
-          {/* LEFT COLUMN: CONTROLS, PRICE OVERRIDE & EXTRAS BUILDER */}
-          <div className="lg:col-span-7 space-y-5">
-            {/* 1. Prospect Info */}
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+        <div className="space-y-4">
+          {preloadedLeadNotice && (
+            <div className="p-3.5 rounded-2xl bg-[#00D1FF]/15 border border-[#00D1FF]/40 text-[#00D1FF] text-xs font-mono font-bold flex items-center justify-between shadow-lg animate-in fade-in">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#00D1FF]" />
+                <span>{preloadedLeadNotice} Puedes ajustar el nivel tecnológico, alcance de diseño y módulos adicionales abajo.</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreloadedLeadNotice(null)}
+                className="text-xs text-gray-400 hover:text-white cursor-pointer ml-3"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-1">
+            {/* LEFT COLUMN: CONTROLS, PRICE OVERRIDE & EXTRAS BUILDER */}
+            <div className="lg:col-span-7 space-y-5">
+              {/* 1. Prospect Info */}
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
               <label className="block text-xs font-mono text-gray-300 font-bold">
                 Nombre del Cliente / Empresa Prospecto:
               </label>
@@ -950,6 +994,7 @@ export default function InternalPricingMatrix({
               </span>
             </div>
           </div>
+        </div>
         </div>
       )}
 

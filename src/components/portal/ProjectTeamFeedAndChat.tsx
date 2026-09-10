@@ -226,6 +226,12 @@ export default function ProjectTeamFeedAndChat({
     }
   }, []);
 
+  // Unread messages state & notification counter
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(3);
+  const [selectedLeadForAnswers, setSelectedLeadForAnswers] = useState<IncomingLead | null>(null);
+  const [copiedAnswers, setCopiedAnswers] = useState(false);
+  const [calculatorBridgeNotice, setCalculatorBridgeNotice] = useState<string | null>(null);
+
   // Proposal Builder State
   const [selectedLeadForProposal, setSelectedLeadForProposal] = useState<IncomingLead | null>(null);
   const [selectedDemoId, setSelectedDemoId] = useState<string>("demo_conectada");
@@ -236,6 +242,19 @@ export default function ProjectTeamFeedAndChat({
   const [copiedProposal, setCopiedProposal] = useState(false);
 
   const selectedDemo = MULTIPLATFORM_DEMOS.find((d) => d.id === selectedDemoId) || MULTIPLATFORM_DEMOS[0];
+
+  // Helper to load lead into quotation calculator
+  const handleLoadInCalculator = (lead: IncomingLead) => {
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("innocentia_calculator_lead", JSON.stringify(lead));
+        setCalculatorBridgeNotice(`✓ Datos de "${lead.clientName}" listos para cotizar.`);
+        setTimeout(() => setCalculatorBridgeNotice(null), 4000);
+      }
+    } catch (err) {
+      console.error("Error setting calculator lead:", err);
+    }
+  };
 
   // Blog Posts State
   const [posts, setPosts] = useState<BlogPost[]>([
@@ -420,7 +439,10 @@ ${pricingText}
 
           <button
             type="button"
-            onClick={() => setActiveTab("chat")}
+            onClick={() => {
+              setActiveTab("chat");
+              setUnreadMessagesCount(0);
+            }}
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "chat"
                 ? "bg-purple-600 text-white shadow-lg"
@@ -429,6 +451,12 @@ ${pricingText}
           >
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Chat del Equipo</span>
+            {unreadMessagesCount > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-mono font-black animate-pulse flex items-center gap-1 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                {unreadMessagesCount} nuevos
+              </span>
+            )}
           </button>
 
           <button
@@ -446,135 +474,231 @@ ${pricingText}
         </div>
       </div>
 
+      {/* Bridge Notification Toast */}
+      {calculatorBridgeNotice && (
+        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center justify-between shadow-xl animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>{calculatorBridgeNotice} Abre la pestaña <strong>"Tabulador y Cotizador Base"</strong> para armar la cotización con precios y extras.</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setCalculatorBridgeNotice(null)}
+            className="text-xs text-gray-400 hover:text-white cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* ======================================================== */}
       {/* TAB 1: BANDEJA DE LEADS ENTRANTES & GENERADOR DE PROPUESTAS */}
       {/* ======================================================== */}
       {activeTab === "leads" && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {incomingLeads.map((lead) => {
-              const isUnassigned = lead.vendorCode === "SIN-ASESOR" || lead.vendorName.includes("Sin Asesor");
-              return (
-                <div
-                  key={lead.id}
-                  className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/40 transition-all shadow-xl text-left"
-                >
-                  <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-bold">
-                          {lead.id}
-                        </span>
-                        <span
-                          className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border font-bold ${
-                            isUnassigned
-                              ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
-                              : "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                          }`}
-                        >
-                          {isUnassigned ? "⚠️ Por Canalizar (CEO)" : "✓ Asesor Asignado"}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-black text-white">{lead.clientName}</h3>
-                      <p className="text-xs font-mono text-[#00D1FF]">{lead.clientCompany}</p>
-                    </div>
+          {/* FEATURED: ÚLTIMA SOLICITUD DE USUARIO RECIBIDA */}
+          {incomingLeads.length > 0 && (
+            <div className="p-6 sm:p-7 rounded-[32px] bg-gradient-to-r from-cyan-950/40 via-purple-950/30 to-black/80 border-2 border-[#00D1FF] space-y-4 shadow-[0_0_30px_rgba(0,209,255,0.2)] text-left relative overflow-hidden">
+              <div className="absolute top-0 right-0 px-4 py-1.5 rounded-bl-2xl bg-gradient-to-l from-[#FF3858] to-[#00D1FF] text-white text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5 shadow-md">
+                <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                <span>Última Solicitud Entrante • {incomingLeads[0].date}</span>
+              </div>
 
-                    <div className="text-right text-[10px] font-mono text-gray-400">
-                      <span>{lead.date}</span>
-                    </div>
-                  </div>
+              <div className="flex items-center gap-2 pt-1">
+                <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold">
+                  {incomingLeads[0].id}
+                </span>
+                <span className="px-3 py-1 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 text-[10px] font-mono font-bold uppercase">
+                  {incomingLeads[0].status}
+                </span>
+              </div>
 
-                  {/* Project Specs */}
-                  <div className="space-y-2 text-xs font-mono">
-                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1">
-                      <span className="text-gray-400 block text-[10px] uppercase font-bold">Proyecto Solicitado:</span>
-                      <strong className="text-white text-sm block">{lead.projectName}</strong>
-                      <p className="text-gray-300 font-light leading-relaxed mt-1">"{lead.description}"</p>
-                    </div>
+              <div className="space-y-1">
+                <h3 className="text-2xl font-black text-white">{incomingLeads[0].clientName}</h3>
+                <p className="text-sm font-mono text-[#00D1FF] font-bold">{incomingLeads[0].clientCompany}</p>
+              </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[11px]">
-                      <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
-                        <span className="text-gray-400 block text-[9px] uppercase">WhatsApp:</span>
-                        <a
-                          href={"https://wa.me/" + lead.clientPhone.replace(/[^0-9]/g, "")}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-emerald-400 font-bold hover:underline"
-                        >
-                          {lead.clientPhone}
-                        </a>
-                      </div>
-                      <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
-                        <span className="text-gray-400 block text-[9px] uppercase">Correo:</span>
-                        <span className="text-gray-200 truncate block">{lead.clientEmail}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Vendor Routing Dropdown for CEO / Socios */}
-                  <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/30 flex items-center justify-between gap-3 text-xs font-mono">
-                    <div>
-                      <span className="text-purple-300 text-[10px] uppercase block font-bold">Asesor a Cargo:</span>
-                      <span className="text-white font-bold">{lead.vendorName}</span>
-                    </div>
-
-                    {(userRole === "ceo" || userRole === "socio") && (
-                      <select
-                        value={lead.vendorName}
-                        onChange={(e) => handleAssignVendor(lead.id, e.target.value)}
-                        className="px-3 py-1.5 rounded-xl bg-black border border-purple-400 text-xs font-mono text-purple-200 focus:outline-none cursor-pointer"
-                      >
-                        <option value="Sin Asesor (Por Canalizar por Dirección)">Por Canalizar (Sin Asesor)</option>
-                        <option value="Carlos Mendoza">Asignar a Carlos Mendoza</option>
-                        <option value="Iván Castillo (CEO)">Atender por Iván Castillo (CEO)</option>
-                        <option value="Daniel Torre (Socio)">Atender por Daniel Torre</option>
-                        <option value="Jorge Pérez (Socio)">Atender por Jorge Pérez</option>
-                      </select>
-                    )}
-                  </div>
-
-                  {/* Action Buttons: Download PDF & Open Proposal Builder */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        generateProjectPdf({
-                          folio: lead.id,
-                          projectName: lead.projectName,
-                          clientName: lead.clientName,
-                          clientCompany: lead.clientCompany,
-                          clientPhone: lead.clientPhone,
-                          clientEmail: lead.clientEmail,
-                          vendorName: lead.vendorName,
-                          vendorCode: lead.vendorCode,
-                          budgetRange: lead.budgetRange,
-                          timeline: lead.timeline,
-                          description: lead.description,
-                          date: lead.date,
-                        })
-                      }
-                      className="py-2.5 px-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-white text-xs font-mono font-bold uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                      title="Descargar Ficha Oficial en PDF"
+              {/* Specs & Full Answers Preview */}
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/15 space-y-2 text-xs font-mono">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-gray-400 text-[10px] uppercase font-bold border-b border-white/10 pb-2 gap-1">
+                  <span>Proyecto: <strong className="text-white text-xs">{incomingLeads[0].projectName}</strong></span>
+                  <span>Presupuesto Estimado: <strong className="text-emerald-400">{incomingLeads[0].budgetRange || "$150k - $350k MXN"}</strong></span>
+                </div>
+                <p className="text-gray-300 leading-relaxed italic text-sm">
+                  "{incomingLeads[0].description}"
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-white/10 text-[11px]">
+                  <div>
+                    <span className="text-gray-400">📱 WhatsApp:</span>{" "}
+                    <a
+                      href={"https://wa.me/" + incomingLeads[0].clientPhone.replace(/[^0-9]/g, "")}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-emerald-400 font-bold hover:underline"
                     >
-                      <FileText className="w-3.5 h-3.5 text-[#00D1FF]" />
-                      <span>📄 Ficha PDF</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedLeadForProposal(lead);
-                        setCopiedProposal(false);
-                      }}
-                      className="py-2.5 px-3 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Armar Propuesta →</span>
-                    </button>
+                      {incomingLeads[0].clientPhone}
+                    </a>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">✉️ Correo:</span>{" "}
+                    <span className="text-gray-200">{incomingLeads[0].clientEmail}</span>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+
+              {/* 3 Main Action Buttons */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedLeadForAnswers(incomingLeads[0])}
+                  className="py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md hover:scale-[1.02]"
+                >
+                  <FileText className="w-4 h-4 text-[#00D1FF]" />
+                  <span>📄 Ver Respuestas & PDF</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleLoadInCalculator(incomingLeads[0])}
+                  className="py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md hover:scale-[1.02]"
+                >
+                  <TrendingUp className="w-4 h-4 text-purple-200" />
+                  <span>⚡ Cargar en Cotizador</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedLeadForProposal(incomingLeads[0]);
+                    setCopiedProposal(false);
+                  }}
+                  className="py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white font-mono font-black text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-[0_0_20px_rgba(255,56,88,0.3)] hover:scale-[1.02]"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Armar Propuesta →</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ALL LEADS LIST */}
+          <div className="pt-2">
+            <div className="flex items-center justify-between pb-3">
+              <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-wider">
+                Historial de Todas las Solicitudes Entrantes ({incomingLeads.length}):
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {incomingLeads.map((lead) => {
+                const isUnassigned = lead.vendorCode === "SIN-ASESOR" || lead.vendorName.includes("Sin Asesor");
+                return (
+                  <div
+                    key={lead.id}
+                    className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/40 transition-all shadow-xl text-left"
+                  >
+                    <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-bold">
+                            {lead.id}
+                          </span>
+                          <span
+                            className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border font-bold ${
+                              isUnassigned
+                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                                : "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                            }`}
+                          >
+                            {isUnassigned ? "⚠️ Por Canalizar (CEO)" : "✓ Asesor Asignado"}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-black text-white">{lead.clientName}</h3>
+                        <p className="text-xs font-mono text-[#00D1FF]">{lead.clientCompany}</p>
+                      </div>
+
+                      <div className="text-right text-[10px] font-mono text-gray-400">
+                        <span>{lead.date}</span>
+                      </div>
+                    </div>
+
+                    {/* Project Specs */}
+                    <div className="space-y-2 text-xs font-mono">
+                      <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1">
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Proyecto Solicitado:</span>
+                        <strong className="text-white text-sm block">{lead.projectName}</strong>
+                        <p className="text-gray-300 font-light leading-relaxed mt-1">"{lead.description}"</p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
+                        <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
+                          <span className="text-gray-400 block text-[9px] uppercase">WhatsApp:</span>
+                          <a
+                            href={"https://wa.me/" + lead.clientPhone.replace(/[^0-9]/g, "")}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-emerald-400 font-bold hover:underline"
+                          >
+                            {lead.clientPhone}
+                          </a>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
+                          <span className="text-gray-400 block text-[9px] uppercase">Correo:</span>
+                          <span className="text-gray-200 truncate block">{lead.clientEmail}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Vendor Routing Dropdown for CEO / Socios */}
+                    <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/30 flex items-center justify-between gap-3 text-xs font-mono">
+                      <div>
+                        <span className="text-purple-300 text-[10px] uppercase block font-bold">Asesor a Cargo:</span>
+                        <span className="text-white font-bold">{lead.vendorName}</span>
+                      </div>
+
+                      {(userRole === "ceo" || userRole === "socio") && (
+                        <select
+                          value={lead.vendorName}
+                          onChange={(e) => handleAssignVendor(lead.id, e.target.value)}
+                          className="px-3 py-1.5 rounded-xl bg-black border border-purple-400 text-xs font-mono text-purple-200 focus:outline-none cursor-pointer"
+                        >
+                          <option value="Sin Asesor (Por Canalizar por Dirección)">Por Canalizar (Sin Asesor)</option>
+                          <option value="Carlos Mendoza">Asignar a Carlos Mendoza</option>
+                          <option value="Iván Castillo (CEO)">Atender por Iván Castillo (CEO)</option>
+                          <option value="Daniel Torre (Socio)">Atender por Daniel Torre</option>
+                          <option value="Jorge Pérez (Socio)">Atender por Jorge Pérez</option>
+                        </select>
+                      )}
+                    </div>
+
+                    {/* Action Buttons: View Answers/PDF & Proposal */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedLeadForAnswers(lead)}
+                        className="py-2.5 px-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-white text-xs font-mono font-bold uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                        title="Ver respuestas del formulario y descargar PDF"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-[#00D1FF]" />
+                        <span>📄 Respuestas &amp; PDF</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedLeadForProposal(lead);
+                          setCopiedProposal(false);
+                        }}
+                        className="py-2.5 px-3 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Armar Propuesta →</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -742,6 +866,189 @@ ${pricingText}
               >
                 <span>Enviar Propuesta por WhatsApp</span>
                 <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* MODAL: VER RESPUESTAS COMPLETAS DEL FORMULARIO Y PDF */}
+      {/* ======================================================== */}
+      {selectedLeadForAnswers && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+          <div className="relative w-full max-w-3xl bg-[#07070E] border-2 border-[#00D1FF]/50 rounded-[32px] p-6 sm:p-8 space-y-6 shadow-[0_0_50px_rgba(0,209,255,0.2)] my-auto text-left max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-start justify-between border-b border-white/10 pb-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 font-bold uppercase">
+                    Solicitud Registrada • {selectedLeadForAnswers.id}
+                  </span>
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                    ✓ Formulario Completo
+                  </span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black text-white uppercase mt-1">
+                  Respuestas de {selectedLeadForAnswers.clientName}
+                </h3>
+                <p className="text-xs font-mono text-[#00D1FF]">
+                  {selectedLeadForAnswers.clientCompany} • Registrado el {selectedLeadForAnswers.date}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedLeadForAnswers(null)}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer text-xs font-mono"
+              >
+                ✕ Cerrar
+              </button>
+            </div>
+
+            {/* Content: Form Answers Breakdown */}
+            <div className="space-y-4 text-xs font-mono">
+              {/* 1. Contact & Company Details */}
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2.5">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block border-b border-white/5 pb-1.5">
+                  1. Datos del Solicitante &amp; Empresa:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Nombre Completo:</span>
+                    <strong className="text-white text-sm">{selectedLeadForAnswers.clientName}</strong>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Empresa / Negocio:</span>
+                    <strong className="text-[#00D1FF] text-sm">{selectedLeadForAnswers.clientCompany}</strong>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Teléfono WhatsApp:</span>
+                    <a
+                      href={"https://wa.me/" + selectedLeadForAnswers.clientPhone.replace(/[^0-9]/g, "")}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-emerald-400 font-bold hover:underline"
+                    >
+                      {selectedLeadForAnswers.clientPhone}
+                    </a>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Correo Electrónico:</span>
+                    <span className="text-gray-200">{selectedLeadForAnswers.clientEmail}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Project Scope & Architecture */}
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2.5">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block border-b border-white/5 pb-1.5">
+                  2. Alcance Técnico &amp; Requerimientos:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Nombre del Proyecto:</span>
+                    <strong className="text-white">{selectedLeadForAnswers.projectName}</strong>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Tipo de Plataforma:</span>
+                    <span className="text-purple-300 font-bold">
+                      {selectedLeadForAnswers.projectType === "web_platform"
+                        ? "Plataforma Web B2B / SaaS"
+                        : selectedLeadForAnswers.projectType === "mobile_app"
+                        ? "App Móvil iOS & Android / PWA"
+                        : "Desarrollo Integral a Medida"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Presupuesto Estimado:</span>
+                    <strong className="text-emerald-400 font-bold">
+                      {selectedLeadForAnswers.budgetRange || "$150k - $350k MXN"}
+                    </strong>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px]">Tiempo Deseado de Entrega:</span>
+                    <span className="text-amber-300 font-bold">
+                      {selectedLeadForAnswers.timeline === "express"
+                        ? "⚡ Express (3 a 6 semanas)"
+                        : "Estándar (1 a 3 meses)"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Textual Requirements / Detailed Description */}
+              <div className="p-4 rounded-2xl bg-black/60 border border-[#00D1FF]/30 space-y-1.5">
+                <span className="text-[10px] font-bold text-[#00D1FF] uppercase tracking-wider block">
+                  3. Requerimientos Explicados por el Cliente:
+                </span>
+                <p className="text-gray-200 leading-relaxed text-sm italic bg-white/[0.02] p-3 rounded-xl border border-white/5">
+                  "{selectedLeadForAnswers.description}"
+                </p>
+              </div>
+
+              {/* 4. Advisor Assignment */}
+              <div className="p-3.5 rounded-2xl bg-purple-950/30 border border-purple-500/30 flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-purple-300 text-[10px] uppercase font-bold block">Asesor Asignado:</span>
+                  <span className="text-white font-bold">{selectedLeadForAnswers.vendorName}</span>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-200 text-[10px] font-bold border border-purple-500/40">
+                  {selectedLeadForAnswers.vendorCode}
+                </span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() =>
+                  generateProjectPdf({
+                    folio: selectedLeadForAnswers.id,
+                    projectName: selectedLeadForAnswers.projectName,
+                    clientName: selectedLeadForAnswers.clientName,
+                    clientCompany: selectedLeadForAnswers.clientCompany,
+                    clientPhone: selectedLeadForAnswers.clientPhone,
+                    clientEmail: selectedLeadForAnswers.clientEmail,
+                    vendorName: selectedLeadForAnswers.vendorName,
+                    vendorCode: selectedLeadForAnswers.vendorCode,
+                    budgetRange: selectedLeadForAnswers.budgetRange,
+                    timeline: selectedLeadForAnswers.timeline,
+                    description: selectedLeadForAnswers.description,
+                    date: selectedLeadForAnswers.date,
+                  })
+                }
+                className="py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+              >
+                <FileText className="w-4 h-4 text-[#00D1FF]" />
+                <span>📥 Descargar PDF</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleLoadInCalculator(selectedLeadForAnswers);
+                  setSelectedLeadForAnswers(null);
+                }}
+                className="py-3 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+              >
+                <TrendingUp className="w-4 h-4 text-purple-200" />
+                <span>⚡ Cargar en Cotizador</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const leadToQuote = selectedLeadForAnswers;
+                  setSelectedLeadForAnswers(null);
+                  setSelectedLeadForProposal(leadToQuote);
+                  setCopiedProposal(false);
+                }}
+                className="py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white font-mono font-black text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-[0_0_20px_rgba(255,56,88,0.3)] hover:scale-[1.02]"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Armar Propuesta →</span>
               </button>
             </div>
           </div>

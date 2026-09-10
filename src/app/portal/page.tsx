@@ -1604,6 +1604,10 @@ function PortalMainContent() {
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Chats Multi-Equipo</span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-mono font-black animate-pulse flex items-center gap-1 shadow-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  3
+                </span>
               </button>
             </div>
 
@@ -3031,6 +3035,10 @@ function PortalMainContent() {
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Chats de Proyectos</span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-mono font-black animate-pulse flex items-center gap-1 shadow-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  3
+                </span>
               </button>
             </div>
 
