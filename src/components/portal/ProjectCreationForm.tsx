@@ -49,6 +49,8 @@ export default function ProjectCreationForm({
   // Step 1 State - Vendor Attribution
   const [vendorCode, setVendorCode] = useState(initialVendorCode || "VEN-CARLOS-202");
   const [vendorName, setVendorName] = useState(initialVendorName || "Carlos Mendoza");
+  const [isLockedByReferral, setIsLockedByReferral] = useState(false);
+  const [vendorSelectMode, setVendorSelectMode] = useState<"carlos" | "direct" | "custom">("carlos");
   const [isClientRegistered, setIsClientRegistered] = useState(false);
 
   // Form State - Project Specifications
@@ -73,8 +75,12 @@ export default function ProjectCreationForm({
         const urlParams = new URLSearchParams(window.location.search);
         const ref = urlParams.get("ref") || urlParams.get("vendedor_id");
         const vend = urlParams.get("vendedor") || urlParams.get("asesor");
-        if (ref) setVendorCode(ref);
-        if (vend) setVendorName(decodeURIComponent(vend));
+        if (ref || vend) {
+          setIsLockedByReferral(true);
+          setVendorSelectMode("custom");
+          if (ref) setVendorCode(ref);
+          if (vend) setVendorName(decodeURIComponent(vend));
+        }
       }
     } catch (err) {
       // Safe SSR fallback
@@ -585,41 +591,123 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 </div>
 
                 {/* VINCULACIÓN OFICIAL DEL VENDEDOR */}
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black to-[#00D1FF]/15 border border-[#00D1FF]/40 space-y-3 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black to-[#00D1FF]/15 border border-[#00D1FF]/40 space-y-3.5 text-xs font-mono">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2">
                     <span className="font-bold text-white uppercase flex items-center gap-1.5">
                       <ShieldCheck className="w-4 h-4 text-[#00D1FF]" />
                       Atribución Comercial &amp; Vendedor Vinculado
                     </span>
-                    <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                      Principio de 1er Registro (24 Meses)
-                    </span>
+                    {isLockedByReferral ? (
+                      <span className="text-[10px] text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/40 font-bold flex items-center gap-1 self-start sm:self-auto">
+                        <span>🔒 Vinculado por Enlace de Asesor (Bloqueado)</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30 self-start sm:self-auto">
+                        Principio de 1er Registro (24 Meses)
+                      </span>
+                    )}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* If not locked by referral link, allow choosing from registered advisors or direct */}
+                  {!isLockedByReferral && (
+                    <div className="space-y-1.5">
+                      <label className="text-gray-300 block text-[11px] font-bold">
+                        ¿Cómo te contactaste con Innocentia Tech? (Seleccionar Asesor)
+                      </label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVendorSelectMode("carlos");
+                            setVendorCode("VEN-CARLOS-202");
+                            setVendorName("Carlos Mendoza");
+                          }}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                            vendorSelectMode === "carlos"
+                              ? "bg-[#00D1FF]/20 border-[#00D1FF] text-white shadow-[0_0_15px_rgba(0,209,255,0.2)]"
+                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          <span className="text-xs font-bold block text-white">Carlos Mendoza</span>
+                          <span className="text-[9px] font-mono text-[#00D1FF] block">Asesor Comercial Senior</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVendorSelectMode("direct");
+                            setVendorCode("INN-DIRECT-01");
+                            setVendorName("Innocentia Tech Core (Dirección General)");
+                          }}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                            vendorSelectMode === "direct"
+                              ? "bg-purple-600/30 border-purple-400 text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          <span className="text-xs font-bold block text-white">Directo con Innocentia</span>
+                          <span className="text-[9px] font-mono text-purple-300 block">Dirección General</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setVendorSelectMode("custom");
+                            setVendorCode("");
+                            setVendorName("");
+                          }}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                            vendorSelectMode === "custom"
+                              ? "bg-white/10 border-white/40 text-white"
+                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          <span className="text-xs font-bold block text-white">Otro Asesor / Código</span>
+                          <span className="text-[9px] font-mono text-gray-400 block">Ingresar manualmente</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Attribution Inputs (Read-only if locked by referral link or in preset mode) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                     <div className="space-y-1">
-                      <label className="text-gray-400 block text-[10px] uppercase">
-                        Código de Vendedor / Asesor *
+                      <label className="text-gray-400 block text-[10px] uppercase flex items-center justify-between">
+                        <span>Código de Vendedor / Asesor *</span>
+                        {isLockedByReferral && <span className="text-amber-400">🔒 Fijo</span>}
                       </label>
                       <input
                         type="text"
                         required
+                        readOnly={isLockedByReferral || vendorSelectMode !== "custom"}
                         value={vendorCode}
                         onChange={(e) => setVendorCode(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-black border border-[#00D1FF]/40 text-[#00D1FF] font-bold focus:outline-none focus:border-[#00D1FF]"
+                        placeholder="Ej. VEN-001"
+                        className={`w-full px-3.5 py-2.5 rounded-xl bg-black border font-bold focus:outline-none transition-all ${
+                          isLockedByReferral || vendorSelectMode !== "custom"
+                            ? "border-[#00D1FF]/40 text-[#00D1FF] opacity-90 cursor-not-allowed bg-black/80"
+                            : "border-white/20 text-[#00D1FF] focus:border-[#00D1FF]"
+                        }`}
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-gray-400 block text-[10px] uppercase">
-                        Nombre del Asesor Comercial *
+                      <label className="text-gray-400 block text-[10px] uppercase flex items-center justify-between">
+                        <span>Nombre del Asesor Comercial *</span>
+                        {isLockedByReferral && <span className="text-amber-400">🔒 Fijo</span>}
                       </label>
                       <input
                         type="text"
                         required
+                        readOnly={isLockedByReferral || vendorSelectMode !== "custom"}
                         value={vendorName}
                         onChange={(e) => setVendorName(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-black border border-white/20 text-white font-bold focus:outline-none focus:border-purple-400"
+                        placeholder="Ej. Nombre del Asesor"
+                        className={`w-full px-3.5 py-2.5 rounded-xl bg-black border font-bold focus:outline-none transition-all ${
+                          isLockedByReferral || vendorSelectMode !== "custom"
+                            ? "border-white/20 text-white opacity-90 cursor-not-allowed bg-black/80"
+                            : "border-white/20 text-white focus:border-purple-400"
+                        }`}
                       />
                     </div>
                   </div>
