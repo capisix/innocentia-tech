@@ -12,6 +12,8 @@ import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix
 import {
   Sparkles,
   ArrowRight,
+  TrendingDown,
+  Download,
   CheckCircle2,
   TrendingUp,
   DollarSign,
@@ -46,9 +48,12 @@ import {
   Flame,
 } from "../../lib/icons";
 
+export type FinanceSection = "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo";
+
 interface FinanceRecord {
   id: string;
   type: "ingreso" | "gasto" | "servicio";
+  section: FinanceSection;
   concept: string;
   category: string;
   amount: number;
@@ -56,6 +61,8 @@ interface FinanceRecord {
   status: "pagado" | "pendiente" | "recurrente";
   dueDate?: string;
   provider?: string;
+  beneficiary?: string;
+  projectRef?: string;
   sourceAccount: string;
   registeredBy: string;
 }
@@ -218,6 +225,9 @@ function PortalMainContent() {
   const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
+
+  // Finance Category Filter Tab (Ingresos por Proyecto, Gastos Cloud, Comisiones Vendedores, Pago/Sueldos)
+  const [financeCategoryTab, setFinanceCategoryTab] = useState<"todos" | "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo">("todos");
 
   // Filters for Audit Log
   const [auditFilterAccount, setAuditFilterAccount] = useState<string>("all");
@@ -472,35 +482,56 @@ function PortalMainContent() {
     setSelectedProjectForAssign(null);
   };
 
-  // Finance Records (Socio / CEO)
+  // Finance Records (Socio / CEO) - Categorizado por Ingresos por Proyecto, Gastos Cloud, Comisiones Vendedores, Pago/Sueldos
   const [financeRecords, setFinanceRecords] = useState<FinanceRecord[]>([
+    // 1. INGRESO POR PROYECTO
     {
       id: "FIN-01",
       type: "ingreso",
+      section: "ingreso_proyecto",
       concept: "Anticipo 60% - Clínica Médica AI (Fase 2)",
-      category: "Proyectos Software",
+      category: "Anticipo de Proyecto",
       amount: 120000,
       date: "01 de Septiembre de 2026",
       status: "pagado",
+      projectRef: "Clínica Médica AI",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
     },
     {
       id: "FIN-02",
       type: "ingreso",
-      concept: "Pago Sprint 3 - Gourmet Express",
-      category: "Proyectos Software",
+      section: "ingreso_proyecto",
+      concept: "Pago Sprint 3 - Gourmet Express App Móvil",
+      category: "Liquidación Sprint",
       amount: 80000,
       date: "05 de Septiembre de 2026",
       status: "pagado",
+      projectRef: "Gourmet Express",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Jorge Pérez (Socio)",
     },
     {
       id: "FIN-03",
+      type: "ingreso",
+      section: "ingreso_proyecto",
+      concept: "Anticipo 50% - Fintech Seguros & Pólizas AI",
+      category: "Anticipo de Proyecto",
+      amount: 50000,
+      date: "08 de Septiembre de 2026",
+      status: "pagado",
+      projectRef: "Fintech Seguros",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      registeredBy: "Daniel Torre (Socio)",
+    },
+
+    // 2. GASTOS OPERATIVOS & CLOUD
+    {
+      id: "FIN-04",
       type: "gasto",
-      concept: "AWS Cloud Infrastructure - Servidores Producción",
-      category: "Servidores & Hosting",
+      section: "gasto_operativo",
+      concept: "AWS Cloud Infrastructure - Servidores Producción EC2/RDS",
+      category: "Infraestructura Cloud",
       amount: 14500,
       date: "02 de Septiembre de 2026",
       status: "recurrente",
@@ -510,10 +541,11 @@ function PortalMainContent() {
       registeredBy: "Daniel Torre (Socio)",
     },
     {
-      id: "FIN-04",
+      id: "FIN-05",
       type: "gasto",
+      section: "gasto_operativo",
       concept: "Vercel Enterprise & Cloudflare DNS Pro",
-      category: "Servidores & Hosting",
+      category: "Hosting & Dominio Edge",
       amount: 6200,
       date: "04 de Septiembre de 2026",
       status: "recurrente",
@@ -523,21 +555,11 @@ function PortalMainContent() {
       registeredBy: "Daniel Torre (Socio)",
     },
     {
-      id: "FIN-05",
-      type: "gasto",
-      concept: "Comisión Venta - Carlos Mendoza (Clínica Médica)",
-      category: "Comisiones Asesores",
-      amount: 22200,
-      date: "03 de Septiembre de 2026",
-      status: "pagado",
-      sourceAccount: "BBVA Operativa & Nómina",
-      registeredBy: "Iván Castillo (CEO)",
-    },
-    {
       id: "FIN-06",
       type: "servicio",
+      section: "gasto_operativo",
       concept: "OpenAI API & Anthropic Claude Tokens",
-      category: "IA & LLM APIs",
+      category: "APIs de IA & Modelos",
       amount: 8900,
       date: "07 de Septiembre de 2026",
       status: "recurrente",
@@ -549,20 +571,8 @@ function PortalMainContent() {
     {
       id: "FIN-07",
       type: "servicio",
-      concept: "Google Workspace - 4 Correos Corporativos (ID: 4010-7271-4245-9196)",
-      category: "Servicios & Herramientas Cloud",
-      amount: 396,
-      date: "23 de Septiembre de 2026",
-      status: "recurrente",
-      dueDate: "01 de Octubre de 2026",
-      provider: "Google LLC",
-      sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      registeredBy: "Iván Castillo (CEO)",
-    },
-    {
-      id: "FIN-10",
-      type: "servicio",
-      concept: "ManyChat Pro Enterprise - Automatización WhatsApp & Redes (Suscripción Anual)",
+      section: "gasto_operativo",
+      concept: "ManyChat Pro Enterprise - Automatización WhatsApp & Redes",
       category: "Marketing & Chatbots AI",
       amount: 7000,
       date: "15 de Septiembre de 2026",
@@ -575,8 +585,9 @@ function PortalMainContent() {
     {
       id: "FIN-08",
       type: "servicio",
+      section: "gasto_operativo",
       concept: "Antigravity AI Engine & Infraestructura SDK",
-      category: "IA & Herramientas de Desarrollo",
+      category: "Herramientas de IA & SDK",
       amount: 800,
       date: "01 de Septiembre de 2026",
       status: "recurrente",
@@ -588,8 +599,9 @@ function PortalMainContent() {
     {
       id: "FIN-09",
       type: "servicio",
+      section: "gasto_operativo",
       concept: "ChatGPT Team & OpenAI API Clusters",
-      category: "IA & LLM APIs",
+      category: "Suscripción IA",
       amount: 600,
       date: "01 de Septiembre de 2026",
       status: "recurrente",
@@ -599,43 +611,152 @@ function PortalMainContent() {
       registeredBy: "Iván Castillo (CEO)",
     },
     {
+      id: "FIN-10",
+      type: "servicio",
+      section: "gasto_operativo",
+      concept: "Google Workspace - 4 Correos Corporativos (ID: 4010-7271-4245-9196)",
+      category: "Servicios Cloud",
+      amount: 396,
+      date: "23 de Septiembre de 2026",
+      status: "recurrente",
+      dueDate: "01 de Octubre de 2026",
+      provider: "Google LLC",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      registeredBy: "Iván Castillo (CEO)",
+    },
+    {
       id: "FIN-11",
       type: "gasto",
-      concept: "Chip de Telefonía Móvil / SIM Card (Línea Oficial)",
-      category: "Comunicaciones & Telefonía",
+      section: "gasto_operativo",
+      concept: "Chip de Telefonía Móvil / SIM Card (Línea +52 960 177 1556)",
+      category: "Telecomunicaciones",
       amount: 230,
       date: "09 de Septiembre de 2026",
       status: "pagado",
       provider: "Telefonía Móvil",
-      sourceAccount: "Pago en Efectivo",
+      sourceAccount: "Caja Chica Efectivo",
       registeredBy: "Daniel Torre (Socio)",
+    },
+
+    // 3. COMISIONES DE VENDEDORES
+    {
+      id: "FIN-12",
+      type: "gasto",
+      section: "comision_vendedor",
+      concept: "Comisión Venta Cerrada - Clínica Médica AI (18.5%)",
+      category: "Comisiones Asesores",
+      amount: 22200,
+      date: "03 de Septiembre de 2026",
+      status: "pagado",
+      beneficiary: "Carlos Mendoza (Asesor Comercial)",
+      projectRef: "Clínica Médica AI",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Iván Castillo (CEO)",
+    },
+    {
+      id: "FIN-13",
+      type: "gasto",
+      section: "comision_vendedor",
+      concept: "Comisión Venta - Gourmet Express (12%)",
+      category: "Comisiones Asesores",
+      amount: 9600,
+      date: "06 de Septiembre de 2026",
+      status: "pagado",
+      beneficiary: "Carlos Mendoza (Asesor Comercial)",
+      projectRef: "Gourmet Express",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Jorge Pérez (Socio)",
+    },
+    {
+      id: "FIN-14",
+      type: "gasto",
+      section: "comision_vendedor",
+      concept: "Comisión Provisión Pendiente - Fintech Seguros (12%)",
+      category: "Comisiones Asesores",
+      amount: 6000,
+      date: "08 de Septiembre de 2026",
+      status: "pendiente",
+      dueDate: "30 de Septiembre de 2026",
+      beneficiary: "Carlos Mendoza (Asesor Comercial)",
+      projectRef: "Fintech Seguros",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Daniel Torre (Socio)",
+    },
+
+    // 4. PAGO O SUELDOS / NÓMINA TÉCNICA
+    {
+      id: "FIN-15",
+      type: "gasto",
+      section: "nomina_sueldo",
+      concept: "Honorarios Lead Developer - Ing. Rodrigo Pacheco (Sprint 1-3)",
+      category: "Sueldos / Honorarios Tech",
+      amount: 18000,
+      date: "05 de Septiembre de 2026",
+      status: "pagado",
+      beneficiary: "Ing. Rodrigo Pacheco (Dev Lead)",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Iván Castillo (CEO)",
+    },
+    {
+      id: "FIN-16",
+      type: "gasto",
+      section: "nomina_sueldo",
+      concept: "Honorarios Lead UX/UI Designer - Sofía Valenzuela (Figma & Wireframes)",
+      category: "Sueldos / Honorarios Diseño",
+      amount: 14000,
+      date: "05 de Septiembre de 2026",
+      status: "pagado",
+      beneficiary: "Sofía Valenzuela (UX/UI Lead)",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Iván Castillo (CEO)",
+    },
+    {
+      id: "FIN-17",
+      type: "gasto",
+      section: "nomina_sueldo",
+      concept: "Honorarios DevOps & Cloud Architecture - Iván Castillo",
+      category: "Sueldos / Honorarios Infra",
+      amount: 15000,
+      date: "05 de Septiembre de 2026",
+      status: "pagado",
+      beneficiary: "Iván Castillo (DevOps Lead)",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      registeredBy: "Iván Castillo (CEO)",
     },
   ]);
 
   // New Finance Movement Modal State
   const [isFinanceModalOpen, setIsFinanceModalOpen] = useState(false);
-  const [finType, setFinType] = useState<"ingreso" | "gasto" | "servicio">("gasto");
+  const [finSection, setFinSection] = useState<FinanceSection>("gasto_operativo");
   const [finConcept, setFinConcept] = useState("");
-  const [finCategory, setFinCategory] = useState("Servidores & Hosting");
+  const [finCategory, setFinCategory] = useState("Infraestructura Cloud");
   const [finAmount, setFinAmount] = useState<number>(5000);
   const [finDueDate, setFinDueDate] = useState("30 de Septiembre de 2026");
   const [finProvider, setFinProvider] = useState("");
+  const [finBeneficiary, setFinBeneficiary] = useState("");
+  const [finProjectRef, setFinProjectRef] = useState("");
   const [finSourceAccount, setFinSourceAccount] = useState("Santander Corporativa (Innocentia Tech)");
 
   const handleAddFinanceRecord = (e: React.FormEvent) => {
     e.preventDefault();
     if (!finConcept.trim() || finAmount <= 0) return;
 
+    const mappedType: "ingreso" | "gasto" | "servicio" =
+      finSection === "ingreso_proyecto" ? "ingreso" : "gasto";
+
     const newRec: FinanceRecord = {
       id: "FIN-" + Date.now().toString().slice(-4),
-      type: finType,
+      type: mappedType,
+      section: finSection,
       concept: finConcept,
       category: finCategory,
       amount: Number(finAmount),
       date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }),
-      status: finType === "ingreso" ? "pagado" : "recurrente",
+      status: finSection === "ingreso_proyecto" ? "pagado" : "recurrente",
       dueDate: finDueDate,
       provider: finProvider || undefined,
+      beneficiary: finBeneficiary || undefined,
+      projectRef: finProjectRef || undefined,
       sourceAccount: finSourceAccount,
       registeredBy: `${activeUser.name} (${activeUser.role === 'ceo' ? 'CEO' : 'Socio'})`,
     };
@@ -646,19 +767,23 @@ function PortalMainContent() {
     const newLog: AuditLogEntry = {
       id: "LOG-" + Date.now().toString().slice(-4),
       timestamp: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
-      action: finType === "ingreso" ? "INGRESO" : "GASTO",
+      action: finSection === "ingreso_proyecto" ? "INGRESO" : "GASTO",
       authorName: activeUser.name,
       authorRole: activeUser.roleTitle,
       sourceAccount: finSourceAccount,
       target: finConcept,
       amount: Number(finAmount),
-      details: `Registro de ${finType} en categoría "${finCategory}" cargado a cuenta "${finSourceAccount}".`,
+      details: `Registro en categoría "${finCategory}" (${finSection}) cargado a cuenta "${finSourceAccount}".`,
     };
     setAuditLogs((prev) => [newLog, ...prev]);
 
-    setIsFinanceModalOpen(false);
+    // Reset Form
     setFinConcept("");
+    setFinProvider("");
+    setFinBeneficiary("");
+    setFinProjectRef("");
     setFinAmount(5000);
+    setIsFinanceModalOpen(false);
   };
 
   const handleDeleteFinanceRecord = (id: string) => {
@@ -837,9 +962,21 @@ function PortalMainContent() {
     }
   };
 
-  // Commission Calculations
-  const totalIncome = financeRecords.filter((r) => r.type === "ingreso").reduce((sum, r) => sum + r.amount, 0);
-  const totalExpenses = financeRecords.filter((r) => r.type === "gasto" || r.type === "servicio").reduce((sum, r) => sum + r.amount, 0);
+  // Categorized Financial Calculations
+  const ingresosProyectos = financeRecords.filter((r) => r.section === "ingreso_proyecto" || r.type === "ingreso");
+  const totalIngresosProyectos = ingresosProyectos.reduce((sum, r) => sum + r.amount, 0);
+
+  const gastosOperativos = financeRecords.filter((r) => r.section === "gasto_operativo" || (r.type === "servicio" && r.section !== "nomina_sueldo" && r.section !== "comision_vendedor"));
+  const totalGastosOperativos = gastosOperativos.reduce((sum, r) => sum + r.amount, 0);
+
+  const comisionesVendedores = financeRecords.filter((r) => r.section === "comision_vendedor");
+  const totalComisionesVendedores = comisionesVendedores.reduce((sum, r) => sum + r.amount, 0);
+
+  const sueldosNomina = financeRecords.filter((r) => r.section === "nomina_sueldo");
+  const totalSueldosNomina = sueldosNomina.reduce((sum, r) => sum + r.amount, 0);
+
+  const totalIncome = totalIngresosProyectos;
+  const totalExpenses = totalGastosOperativos + totalComisionesVendedores + totalSueldosNomina;
   const netProfit = totalIncome - totalExpenses;
 
   // Filtered Audit Logs
@@ -1437,43 +1574,508 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* CEO Tab 3: Supervisión Financiera */}
+            {/* CEO Tab 3: Supervisión Financiera Categorizada */}
             {ceoTab === "finanzas" && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                  <div className="p-6 rounded-[24px] bg-[#07070E] border border-white/15">
-                    <span className="text-xs font-mono text-gray-400 uppercase">Ingresos Facturados</span>
-                    <h3 className="text-2xl font-black text-emerald-400 mt-1">${totalIncome.toLocaleString()} MXN</h3>
+              <div className="space-y-6 text-left">
+                {/* Header with Title & Action */}
+                <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+                  <div>
+                    <span className="text-[10px] font-mono text-[#00D1FF] uppercase font-bold tracking-widest flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+                      Supervisión de Dirección General
+                    </span>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tight mt-1 flex items-center gap-2">
+                      <DollarSign className="w-6 h-6 text-emerald-400" />
+                      <span>Supervisión Financiera Global</span>
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Organizado por ingresos de proyecto, costos operativos cloud, comisiones de vendedores y dispersión de nómina técnica.
+                    </p>
                   </div>
-                  <div className="p-6 rounded-[24px] bg-[#07070E] border border-white/15">
-                    <span className="text-xs font-mono text-gray-400 uppercase">Costos de Operación</span>
-                    <h3 className="text-2xl font-black text-rose-400 mt-1">${totalExpenses.toLocaleString()} MXN</h3>
-                  </div>
-                  <div className="p-6 rounded-[24px] bg-[#07070E] border border-white/15">
-                    <span className="text-xs font-mono text-gray-400 uppercase">Utilidad Líquida</span>
-                    <h3 className="text-2xl font-black text-[#00D1FF] mt-1">${netProfit.toLocaleString()} MXN</h3>
+
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => setIsFinanceModalOpen(true)}
+                      className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(0,209,255,0.3)] cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>Registrar Movimiento</span>
+                    </button>
                   </div>
                 </div>
 
-                {/* Finance Table with Accounts */}
-                <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-4">
-                  <h3 className="text-lg font-black text-white uppercase">Movimientos Registrados</h3>
-                  <div className="divide-y divide-white/10">
-                    {financeRecords.map((r) => (
-                      <div key={r.id} className="py-3.5 flex items-center justify-between gap-4">
-                        <div>
-                          <span className="text-sm font-bold text-white block">{r.concept}</span>
-                          <span className="text-[11px] font-mono text-gray-400">
-                            {r.category} • <strong className="text-gray-300">{r.sourceAccount}</strong> • Registrado por: <strong className="text-[#00D1FF]">{r.registeredBy}</strong>
-                          </span>
-                        </div>
-                        <span className={`text-sm font-black font-mono ${r.type === "ingreso" ? "text-emerald-400" : "text-rose-400"}`}>
-                          {r.type === "ingreso" ? "+" : "-"}${r.amount.toLocaleString()} MXN
-                        </span>
-                      </div>
-                    ))}
+                {/* 5 High-Impact Metric Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                  {/* 1. Ingresos */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "ingreso_proyecto" ? "todos" : "ingreso_proyecto")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "ingreso_proyecto" ? "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]" : "border-emerald-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-emerald-400 uppercase font-bold">1. Ingresos Proyecto</span>
+                      <TrendingUp className="w-4 h-4 text-emerald-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-emerald-400 font-mono">${totalIngresosProyectos.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {ingresosProyectos.length} cobros facturados
+                    </span>
+                  </div>
+
+                  {/* 2. Gastos Cloud */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "gasto_operativo" ? "todos" : "gasto_operativo")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "gasto_operativo" ? "border-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.3)]" : "border-rose-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-rose-400 uppercase font-bold">2. Gastos & Cloud</span>
+                      <TrendingDown className="w-4 h-4 text-rose-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-rose-400 font-mono">${totalGastosOperativos.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {gastosOperativos.length} servicios cloud/herramientas
+                    </span>
+                  </div>
+
+                  {/* 3. Comisiones */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "comision_vendedor" ? "todos" : "comision_vendedor")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "comision_vendedor" ? "border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)]" : "border-amber-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-amber-400 uppercase font-bold">3. Comisiones Venta</span>
+                      <Briefcase className="w-4 h-4 text-amber-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-amber-400 font-mono">${totalComisionesVendedores.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {comisionesVendedores.length} asignadas (Carlos M.)
+                    </span>
+                  </div>
+
+                  {/* 4. Sueldos */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "nomina_sueldo" ? "todos" : "nomina_sueldo")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "nomina_sueldo" ? "border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.3)]" : "border-cyan-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold">4. Pago o Sueldos</span>
+                      <Users className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-cyan-400 font-mono">${totalSueldosNomina.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {sueldosNomina.length} honorarios técnicos
+                    </span>
+                  </div>
+
+                  {/* 5. Utilidad Líquida */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-b from-[#07070E] to-purple-950/20 border border-purple-500/40 shadow-[0_0_25px_rgba(168,85,247,0.15)]">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-purple-400 uppercase font-bold">Utilidad Neta</span>
+                      <DollarSign className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#00D1FF] font-mono">${netProfit.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-purple-300 font-bold block mt-1">
+                      {((netProfit / (totalIncome || 1)) * 100).toFixed(1)}% margen en caja
+                    </span>
                   </div>
                 </div>
+
+                {/* Category Filter Pills */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("todos")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      financeCategoryTab === "todos"
+                        ? "bg-white text-black shadow-lg"
+                        : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                    }`}
+                  >
+                    ✨ Todos los Movimientos ({financeRecords.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("ingreso_proyecto")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "ingreso_proyecto"
+                        ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                        : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
+                    }`}
+                  >
+                    <span>📈 1. Ingresos por Proyecto (${totalIngresosProyectos.toLocaleString()} MXN)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("gasto_operativo")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "gasto_operativo"
+                        ? "bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"
+                        : "bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/30"
+                    }`}
+                  >
+                    <span>📉 2. Gastos Operativos & Cloud (${totalGastosOperativos.toLocaleString()} MXN)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("comision_vendedor")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "comision_vendedor"
+                        ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                        : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30"
+                    }`}
+                  >
+                    <span>💼 3. Comisiones Vendedores (${totalComisionesVendedores.toLocaleString()} MXN)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("nomina_sueldo")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "nomina_sueldo"
+                        ? "bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                        : "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/30"
+                    }`}
+                  >
+                    <span>👥 4. Pago o Sueldos (${totalSueldosNomina.toLocaleString()} MXN)</span>
+                  </button>
+                </div>
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 1: INGRESOS POR PROYECTO */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "ingreso_proyecto") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-emerald-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 1
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <TrendingUp className="w-5 h-5 text-emerald-400" />
+                            <span>Ingresos por Proyecto</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Cobros de anticipos, sprints liquidados y entregables de software de clientes.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Ingresos</span>
+                        <span className="text-lg font-black text-emerald-400 font-mono">+${totalIngresosProyectos.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Proyecto / Referencia</th>
+                            <th className="py-3 px-3">Concepto / Hito</th>
+                            <th className="py-3 px-3">Cuenta Receptora</th>
+                            <th className="py-3 px-3">Registrado Por</th>
+                            <th className="py-3 px-3">Fecha</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {ingresosProyectos.map((r) => (
+                            <tr key={r.id} className="hover:bg-emerald-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.projectRef || r.concept}</strong>
+                                <span className="text-[10px] text-gray-400">{r.category}</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-emerald-300 font-mono text-[10px]">
+                                  💳 {r.sourceAccount}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-300 font-bold">{r.registeredBy}</td>
+                              <td className="py-3.5 px-3 text-gray-400">{r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-emerald-400 text-sm">
+                                +${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 2: GASTOS OPERATIVOS & CLOUD */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "gasto_operativo") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-rose-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-rose-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 2
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <TrendingDown className="w-5 h-5 text-rose-400" />
+                            <span>Gastos Operativos & Infraestructura Cloud</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Servidores de producción, hosting edge, APIs de IA, suscripciones corporativas e insumos de conectividad.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Operativo</span>
+                        <span className="text-lg font-black text-rose-400 font-mono">-${totalGastosOperativos.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Proveedor / Servicio</th>
+                            <th className="py-3 px-3">Concepto & Alcance</th>
+                            <th className="py-3 px-3">Categoría</th>
+                            <th className="py-3 px-3">Cuenta de Cargo</th>
+                            <th className="py-3 px-3">Próximo Corte</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {gastosOperativos.map((r) => (
+                            <tr key={r.id} className="hover:bg-rose-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.provider || r.concept}</strong>
+                                <span className="text-[10px] text-gray-400 font-mono">{r.registeredBy}</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                  {r.category}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-300">{r.sourceAccount}</td>
+                              <td className="py-3.5 px-3 text-amber-300">{r.dueDate || r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-500/20 text-rose-400 border border-rose-500/40">
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-rose-400 text-sm">
+                                -${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 3: COMISIONES DE VENDEDORES */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "comision_vendedor") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-amber-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-amber-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 3
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <Briefcase className="w-5 h-5 text-amber-400" />
+                            <span>Comisiones de Vendedores</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Porcentajes pactados por cierre de clientes y captación de contratos comerciales.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Comisiones</span>
+                        <span className="text-lg font-black text-amber-400 font-mono">-${totalComisionesVendedores.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Asesor Comercial</th>
+                            <th className="py-3 px-3">Proyecto Referencia</th>
+                            <th className="py-3 px-3">Concepto & % Tabulador</th>
+                            <th className="py-3 px-3">Cuenta de Dispersión</th>
+                            <th className="py-3 px-3">Fecha / Corte</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {comisionesVendedores.map((r) => (
+                            <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
+                                <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-purple-300 font-bold">{r.projectRef || "Proyecto General"}</td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                  💳 {r.sourceAccount}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-400">{r.dueDate || r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                                    r.status === "pagado"
+                                      ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                      : "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                  }`}
+                                >
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-amber-400 text-sm">
+                                -${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 4: PAGO O SUELDOS / NÓMINA TÉCNICA */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "nomina_sueldo") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-cyan-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 4
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <Users className="w-5 h-5 text-cyan-400" />
+                            <span>Pago o Sueldos / Nómina Técnica</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Honorarios profesionales, dispersión de nómina a ingenieros de software, diseñadores UX/UI y DevOps.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Nómina</span>
+                        <span className="text-lg font-black text-cyan-400 font-mono">-${totalSueldosNomina.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Integrante & Rol Técnico</th>
+                            <th className="py-3 px-3">Concepto / Entregables</th>
+                            <th className="py-3 px-3">Especialidad</th>
+                            <th className="py-3 px-3">Cuenta de Dispersión</th>
+                            <th className="py-3 px-3">Fecha</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {sueldosNomina.map((r) => (
+                            <tr key={r.id} className="hover:bg-cyan-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.beneficiary || r.concept}</strong>
+                                <span className="text-[10px] text-cyan-400 font-mono">Equipo Técnico</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                  {r.category}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-300 font-mono text-[11px]">{r.sourceAccount}</td>
+                              <td className="py-3.5 px-3 text-gray-400">{r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-cyan-400 text-sm">
+                                -${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -1657,106 +2259,508 @@ function PortalMainContent() {
               </button>
             </div>
 
-            {/* Partner Tab 1: Finanzas & Gastos */}
+            {/* Partner Tab 1: Supervisión Financiera Categorizada */}
             {partnerTab === "finanzas" && (
-              <div className="space-y-6">
-                {/* Financial Overview Metrics */}
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                  <div className="p-5 rounded-2xl bg-[#07070E] border border-white/15">
-                    <span className="text-[11px] font-mono text-gray-400 uppercase block">Ingresos Totales</span>
-                    <span className="text-xl font-black text-emerald-400 mt-1 block">${totalIncome.toLocaleString()} MXN</span>
+              <div className="space-y-6 text-left">
+                {/* Header with Title & Action */}
+                <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+                  <div>
+                    <span className="text-[10px] font-mono text-purple-400 uppercase font-bold tracking-widest flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                      Supervisión de Socios & Finanzas
+                    </span>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tight mt-1 flex items-center gap-2">
+                      <DollarSign className="w-6 h-6 text-emerald-400" />
+                      <span>Supervisión Financiera Global</span>
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Organizado por ingresos de proyecto, costos operativos cloud, comisiones de vendedores y dispersión de nómina técnica.
+                    </p>
                   </div>
-                  <div className="p-5 rounded-2xl bg-[#07070E] border border-white/15">
-                    <span className="text-[11px] font-mono text-gray-400 uppercase block">Gastos Operativos</span>
-                    <span className="text-xl font-black text-rose-400 mt-1 block">${totalExpenses.toLocaleString()} MXN</span>
-                  </div>
-                  <div className="p-5 rounded-2xl bg-[#07070E] border border-white/15">
-                    <span className="text-[11px] font-mono text-gray-400 uppercase block">Utilidad Neta</span>
-                    <span className="text-xl font-black text-purple-400 mt-1 block">${netProfit.toLocaleString()} MXN</span>
-                  </div>
-                  <div className="p-5 rounded-2xl bg-[#07070E] border border-white/15">
-                    <span className="text-[11px] font-mono text-gray-400 uppercase block">Próximos Cortes</span>
-                    <span className="text-xl font-black text-amber-400 mt-1 block">3 en 15 días</span>
-                  </div>
-                </div>
 
-                {/* Interactive Movements Table with Add/Delete/Edit */}
-                <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                    <div>
-                      <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-emerald-400" />
-                        <span>Libro Contable con Cuentas de Origen</span>
-                      </h2>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        Registro y trazabilidad de ingresos, gastos, cuenta de origen y socio responsable.
-                      </p>
-                    </div>
-
+                  <div className="flex items-center gap-3 flex-wrap">
                     <button
                       type="button"
                       onClick={() => setIsFinanceModalOpen(true)}
-                      className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 to-[#00D1FF] text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 transition-all shadow-lg cursor-pointer"
+                      className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(147,51,234,0.3)] cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
                       <span>Registrar Movimiento</span>
                     </button>
                   </div>
+                </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs font-mono">
-                      <thead>
-                        <tr className="border-b border-white/15 text-gray-400 uppercase">
-                          <th className="py-3 px-3">Tipo</th>
-                          <th className="py-3 px-3">Concepto</th>
-                          <th className="py-3 px-3">Cuenta de Origen</th>
-                          <th className="py-3 px-3">Registrado Por</th>
-                          <th className="py-3 px-3">Fecha / Corte</th>
-                          <th className="py-3 px-3 text-right">Monto</th>
-                          <th className="py-3 px-3 text-center">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/10">
-                        {financeRecords.map((r) => (
-                          <tr key={r.id} className="hover:bg-white/[0.02]">
-                            <td className="py-3 px-3">
-                              <span
-                                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                                  r.type === "ingreso"
-                                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-                                    : "bg-rose-500/20 text-rose-400 border border-rose-500/40"
-                                }`}
-                              >
-                                {r.type}
-                              </span>
-                            </td>
-                            <td className="py-3 px-3 font-bold text-white">{r.concept}</td>
-                            <td className="py-3 px-3">
-                              <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
-                                {r.sourceAccount}
-                              </span>
-                            </td>
-                            <td className="py-3 px-3 text-purple-300 font-bold">{r.registeredBy}</td>
-                            <td className="py-3 px-3 text-gray-300">{r.dueDate || r.date}</td>
-                            <td className={`py-3 px-3 text-right font-black ${r.type === "ingreso" ? "text-emerald-400" : "text-rose-400"}`}>
-                              {r.type === "ingreso" ? "+" : "-"}${r.amount.toLocaleString()} MXN
-                            </td>
-                            <td className="py-3 px-3 text-center">
-                              <button
-                                type="button"
-                                onClick={() => handleDeleteFinanceRecord(r.id)}
-                                className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                title="Eliminar registro"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {/* 5 High-Impact Metric Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                  {/* 1. Ingresos */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "ingreso_proyecto" ? "todos" : "ingreso_proyecto")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "ingreso_proyecto" ? "border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]" : "border-emerald-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-emerald-400 uppercase font-bold">1. Ingresos Proyecto</span>
+                      <TrendingUp className="w-4 h-4 text-emerald-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-emerald-400 font-mono">${totalIngresosProyectos.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {ingresosProyectos.length} cobros facturados
+                    </span>
+                  </div>
+
+                  {/* 2. Gastos Cloud */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "gasto_operativo" ? "todos" : "gasto_operativo")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "gasto_operativo" ? "border-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.3)]" : "border-rose-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-rose-400 uppercase font-bold">2. Gastos & Cloud</span>
+                      <TrendingDown className="w-4 h-4 text-rose-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-rose-400 font-mono">${totalGastosOperativos.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {gastosOperativos.length} servicios cloud/herramientas
+                    </span>
+                  </div>
+
+                  {/* 3. Comisiones */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "comision_vendedor" ? "todos" : "comision_vendedor")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "comision_vendedor" ? "border-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)]" : "border-amber-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-amber-400 uppercase font-bold">3. Comisiones Venta</span>
+                      <Briefcase className="w-4 h-4 text-amber-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-amber-400 font-mono">${totalComisionesVendedores.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {comisionesVendedores.length} asignadas (Carlos M.)
+                    </span>
+                  </div>
+
+                  {/* 4. Sueldos */}
+                  <div
+                    onClick={() => setFinanceCategoryTab(financeCategoryTab === "nomina_sueldo" ? "todos" : "nomina_sueldo")}
+                    className={`p-5 rounded-2xl bg-[#07070E] border transition-all cursor-pointer hover:scale-[1.02] ${
+                      financeCategoryTab === "nomina_sueldo" ? "border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.3)]" : "border-cyan-500/30"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold">4. Pago o Sueldos</span>
+                      <Users className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-cyan-400 font-mono">${totalSueldosNomina.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-gray-400 block mt-1">
+                      {sueldosNomina.length} honorarios técnicos
+                    </span>
+                  </div>
+
+                  {/* 5. Utilidad Líquida */}
+                  <div className="p-5 rounded-2xl bg-gradient-to-b from-[#07070E] to-purple-950/20 border border-purple-500/40 shadow-[0_0_25px_rgba(168,85,247,0.15)]">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono text-purple-400 uppercase font-bold">Utilidad Neta</span>
+                      <DollarSign className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#00D1FF] font-mono">${netProfit.toLocaleString()} MXN</h3>
+                    <span className="text-[11px] text-purple-300 font-bold block mt-1">
+                      {((netProfit / (totalIncome || 1)) * 100).toFixed(1)}% margen en caja
+                    </span>
                   </div>
                 </div>
+
+                {/* Category Filter Pills */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("todos")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      financeCategoryTab === "todos"
+                        ? "bg-white text-black shadow-lg"
+                        : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                    }`}
+                  >
+                    ✨ Todos los Movimientos ({financeRecords.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("ingreso_proyecto")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "ingreso_proyecto"
+                        ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                        : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
+                    }`}
+                  >
+                    <span>📈 1. Ingresos por Proyecto (${totalIngresosProyectos.toLocaleString()} MXN)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("gasto_operativo")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "gasto_operativo"
+                        ? "bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"
+                        : "bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/30"
+                    }`}
+                  >
+                    <span>📉 2. Gastos Operativos & Cloud (${totalGastosOperativos.toLocaleString()} MXN)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("comision_vendedor")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "comision_vendedor"
+                        ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                        : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30"
+                    }`}
+                  >
+                    <span>💼 3. Comisiones Vendedores (${totalComisionesVendedores.toLocaleString()} MXN)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinanceCategoryTab("nomina_sueldo")}
+                    className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      financeCategoryTab === "nomina_sueldo"
+                        ? "bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                        : "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/30"
+                    }`}
+                  >
+                    <span>👥 4. Pago o Sueldos (${totalSueldosNomina.toLocaleString()} MXN)</span>
+                  </button>
+                </div>
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 1: INGRESOS POR PROYECTO */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "ingreso_proyecto") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-emerald-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 1
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <TrendingUp className="w-5 h-5 text-emerald-400" />
+                            <span>Ingresos por Proyecto</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Cobros de anticipos, sprints liquidados y entregables de software de clientes.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Ingresos</span>
+                        <span className="text-lg font-black text-emerald-400 font-mono">+${totalIngresosProyectos.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Proyecto / Referencia</th>
+                            <th className="py-3 px-3">Concepto / Hito</th>
+                            <th className="py-3 px-3">Cuenta Receptora</th>
+                            <th className="py-3 px-3">Registrado Por</th>
+                            <th className="py-3 px-3">Fecha</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {ingresosProyectos.map((r) => (
+                            <tr key={r.id} className="hover:bg-emerald-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.projectRef || r.concept}</strong>
+                                <span className="text-[10px] text-gray-400">{r.category}</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-emerald-300 font-mono text-[10px]">
+                                  💳 {r.sourceAccount}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-300 font-bold">{r.registeredBy}</td>
+                              <td className="py-3.5 px-3 text-gray-400">{r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-emerald-400 text-sm">
+                                +${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 2: GASTOS OPERATIVOS & CLOUD */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "gasto_operativo") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-rose-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-rose-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 2
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <TrendingDown className="w-5 h-5 text-rose-400" />
+                            <span>Gastos Operativos & Infraestructura Cloud</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Servidores de producción, hosting edge, APIs de IA, suscripciones corporativas e insumos de conectividad.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Operativo</span>
+                        <span className="text-lg font-black text-rose-400 font-mono">-${totalGastosOperativos.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Proveedor / Servicio</th>
+                            <th className="py-3 px-3">Concepto & Alcance</th>
+                            <th className="py-3 px-3">Categoría</th>
+                            <th className="py-3 px-3">Cuenta de Cargo</th>
+                            <th className="py-3 px-3">Próximo Corte</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {gastosOperativos.map((r) => (
+                            <tr key={r.id} className="hover:bg-rose-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.provider || r.concept}</strong>
+                                <span className="text-[10px] text-gray-400 font-mono">{r.registeredBy}</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                  {r.category}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-300">{r.sourceAccount}</td>
+                              <td className="py-3.5 px-3 text-amber-300">{r.dueDate || r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-500/20 text-rose-400 border border-rose-500/40">
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-rose-400 text-sm">
+                                -${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 3: COMISIONES DE VENDEDORES */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "comision_vendedor") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-amber-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-amber-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 3
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <Briefcase className="w-5 h-5 text-amber-400" />
+                            <span>Comisiones de Vendedores</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Porcentajes pactados por cierre de clientes y captación de contratos comerciales.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Comisiones</span>
+                        <span className="text-lg font-black text-amber-400 font-mono">-${totalComisionesVendedores.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Asesor Comercial</th>
+                            <th className="py-3 px-3">Proyecto Referencia</th>
+                            <th className="py-3 px-3">Concepto & % Tabulador</th>
+                            <th className="py-3 px-3">Cuenta de Dispersión</th>
+                            <th className="py-3 px-3">Fecha / Corte</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {comisionesVendedores.map((r) => (
+                            <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
+                                <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-purple-300 font-bold">{r.projectRef || "Proyecto General"}</td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                  💳 {r.sourceAccount}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-400">{r.dueDate || r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                                    r.status === "pagado"
+                                      ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                      : "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                  }`}
+                                >
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-amber-400 text-sm">
+                                -${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* CATEGORY 4: PAGO O SUELDOS / NÓMINA TÉCNICA */}
+                {/* ========================================================================= */}
+                {(financeCategoryTab === "todos" || financeCategoryTab === "nomina_sueldo") && (
+                  <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-cyan-500/30 space-y-4 shadow-xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-[10px] font-mono font-bold uppercase">
+                            Sección 4
+                          </span>
+                          <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                            <Users className="w-5 h-5 text-cyan-400" />
+                            <span>Pago o Sueldos / Nómina Técnica</span>
+                          </h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          Honorarios profesionales, dispersión de nómina a ingenieros de software, diseñadores UX/UI y DevOps.
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Subtotal Nómina</span>
+                        <span className="text-lg font-black text-cyan-400 font-mono">-${totalSueldosNomina.toLocaleString()} MXN</span>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs font-mono">
+                        <thead>
+                          <tr className="border-b border-white/15 text-gray-400 uppercase">
+                            <th className="py-3 px-3">Integrante & Rol Técnico</th>
+                            <th className="py-3 px-3">Concepto / Entregables</th>
+                            <th className="py-3 px-3">Especialidad</th>
+                            <th className="py-3 px-3">Cuenta de Dispersión</th>
+                            <th className="py-3 px-3">Fecha</th>
+                            <th className="py-3 px-3">Estado</th>
+                            <th className="py-3 px-3 text-right">Monto</th>
+                            <th className="py-3 px-3 text-center">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/10">
+                          {sueldosNomina.map((r) => (
+                            <tr key={r.id} className="hover:bg-cyan-500/[0.03] transition-colors">
+                              <td className="py-3.5 px-3">
+                                <strong className="text-white block font-bold">{r.beneficiary || r.concept}</strong>
+                                <span className="text-[10px] text-cyan-400 font-mono">Equipo Técnico</span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                  {r.category}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-gray-300 font-mono text-[11px]">{r.sourceAccount}</td>
+                              <td className="py-3.5 px-3 text-gray-400">{r.date}</td>
+                              <td className="py-3.5 px-3">
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right font-black text-cyan-400 text-sm">
+                                -${r.amount.toLocaleString()} MXN
+                              </td>
+                              <td className="py-3.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteFinanceRecord(r.id)}
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                  title="Eliminar registro"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -2364,66 +3368,111 @@ function PortalMainContent() {
         <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
           <form
             onSubmit={handleAddFinanceRecord}
-            className="w-full max-w-lg bg-[#07070E] border border-purple-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl text-left space-y-4"
+            className="w-full max-w-xl bg-[#07070E] border border-purple-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl text-left space-y-5 animate-in fade-in zoom-in-95 duration-200"
           >
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <span className="text-[10px] font-mono text-purple-400 font-bold uppercase">Libro Contable</span>
-                <h3 className="text-lg font-black text-white">Nuevo Registro de Movimiento</h3>
+                <span className="text-[10px] font-mono text-purple-400 font-bold uppercase tracking-wider">Libro Contable & Tesorería</span>
+                <h3 className="text-xl font-black text-white mt-0.5">Nuevo Registro Financiero</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsFinanceModalOpen(false)}
-                className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400"
+                className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
               >
                 ✕
               </button>
             </div>
 
-            <div className="space-y-3 text-xs font-mono">
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setFinType("gasto")}
-                  className={`py-2 rounded-xl border text-center font-bold uppercase ${
-                    finType === "gasto" ? "bg-rose-500/20 text-rose-400 border-rose-500" : "bg-white/5 text-gray-400 border-white/10"
-                  }`}
-                >
-                  Gasto
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFinType("ingreso")}
-                  className={`py-2 rounded-xl border text-center font-bold uppercase ${
-                    finType === "ingreso" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500" : "bg-white/5 text-gray-400 border-white/10"
-                  }`}
-                >
-                  Ingreso
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFinType("servicio")}
-                  className={`py-2 rounded-xl border text-center font-bold uppercase ${
-                    finType === "servicio" ? "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]" : "bg-white/5 text-gray-400 border-white/10"
-                  }`}
-                >
-                  Servicio
-                </button>
+            <div className="space-y-4 text-xs font-mono">
+              {/* Category Selector 4 Buttons */}
+              <div>
+                <label className="block text-gray-400 mb-1.5 font-bold uppercase text-[10px]">
+                  1. Selecciona la Categoría Financiera:
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFinSection("ingreso_proyecto");
+                      setFinCategory("Anticipo de Proyecto");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finSection === "ingreso_proyecto"
+                        ? "bg-emerald-500/20 text-emerald-400 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    📈 1. Ingreso
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFinSection("gasto_operativo");
+                      setFinCategory("Infraestructura Cloud");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finSection === "gasto_operativo"
+                        ? "bg-rose-500/20 text-rose-400 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    📉 2. Gasto Cloud
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFinSection("comision_vendedor");
+                      setFinCategory("Comisiones Asesores");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finSection === "comision_vendedor"
+                        ? "bg-amber-500/20 text-amber-400 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    💼 3. Comisión
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFinSection("nomina_sueldo");
+                      setFinCategory("Sueldos / Honorarios Tech");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finSection === "nomina_sueldo"
+                        ? "bg-cyan-500/20 text-cyan-400 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    👥 4. Sueldo/Nómina
+                  </button>
+                </div>
               </div>
 
+              {/* Concept Input */}
               <div>
-                <label className="block text-gray-400 mb-1">Concepto del Movimiento:</label>
+                <label className="block text-gray-400 mb-1">Concepto Detallado del Movimiento:</label>
                 <input
                   type="text"
                   value={finConcept}
                   onChange={(e) => setFinConcept(e.target.value)}
-                  placeholder="ej: Pago de Servidor Cloud AWS"
+                  placeholder={
+                    finSection === "ingreso_proyecto"
+                      ? "ej: Anticipo 50% Desarrollo App Móvil"
+                      : finSection === "gasto_operativo"
+                      ? "ej: Servidores Producción AWS / Vercel Pro"
+                      : finSection === "comision_vendedor"
+                      ? "ej: Comisión Venta Cierre 18% Clínica Médica"
+                      : "ej: Honorarios Sprint 1 - Lead Developer Backend"
+                  }
                   required
-                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 font-mono text-xs"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              {/* Amount & Subcategory */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-gray-400 mb-1">Monto (MXN):</label>
                   <input
@@ -2432,43 +3481,127 @@ function PortalMainContent() {
                     onChange={(e) => setFinAmount(Number(e.target.value))}
                     required
                     min={1}
-                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 font-mono text-sm font-bold"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-400 mb-1">Categoría:</label>
+                  <label className="block text-gray-400 mb-1">Subcategoría:</label>
                   <select
                     value={finCategory}
                     onChange={(e) => setFinCategory(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-mono text-xs"
                   >
-                    <option value="Servidores & Hosting">Servidores & Hosting</option>
-                    <option value="Proyectos Software">Proyectos Software</option>
-                    <option value="Comisiones Asesores">Comisiones Asesores</option>
-                    <option value="Nómina & Honorarios">Nómina & Honorarios</option>
-                    <option value="IA & LLM APIs">IA & LLM APIs</option>
+                    {finSection === "ingreso_proyecto" && (
+                      <>
+                        <option value="Anticipo de Proyecto">Anticipo de Proyecto</option>
+                        <option value="Liquidación Sprint">Liquidación Sprint</option>
+                        <option value="Pago Final Entrega">Pago Final Entrega</option>
+                        <option value="Mantenimiento Mensual">Mantenimiento Mensual</option>
+                      </>
+                    )}
+                    {finSection === "gasto_operativo" && (
+                      <>
+                        <option value="Infraestructura Cloud">Infraestructura Cloud</option>
+                        <option value="Hosting & Dominio Edge">Hosting & Dominio Edge</option>
+                        <option value="APIs de IA & Modelos">APIs de IA & Modelos</option>
+                        <option value="Marketing & Chatbots AI">Marketing & Chatbots AI</option>
+                        <option value="Herramientas de IA & SDK">Herramientas de IA & SDK</option>
+                        <option value="Servicios Cloud">Servicios Cloud</option>
+                        <option value="Telecomunicaciones">Telecomunicaciones (SIM/Chip)</option>
+                      </>
+                    )}
+                    {finSection === "comision_vendedor" && (
+                      <>
+                        <option value="Comisiones Asesores">Comisión Venta Cierre</option>
+                        <option value="Bono de Prospección">Bono de Prospección</option>
+                        <option value="Provisión de Comisión">Provisión de Comisión</option>
+                      </>
+                    )}
+                    {finSection === "nomina_sueldo" && (
+                      <>
+                        <option value="Sueldos / Honorarios Tech">Sueldos / Honorarios Tech</option>
+                        <option value="Sueldos / Honorarios Diseño">Sueldos / Honorarios Diseño</option>
+                        <option value="Sueldos / Honorarios Infra">Sueldos / Honorarios Infra / DevOps</option>
+                        <option value="Bono de Desempeño">Bono de Desempeño</option>
+                      </>
+                    )}
                   </select>
                 </div>
               </div>
 
+              {/* Dynamic Context Fields */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {finSection === "ingreso_proyecto" && (
+                  <div>
+                    <label className="block text-gray-400 mb-1">Proyecto / Cliente:</label>
+                    <input
+                      type="text"
+                      value={finProjectRef}
+                      onChange={(e) => setFinProjectRef(e.target.value)}
+                      placeholder="ej: Clínica Médica AI"
+                      className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                    />
+                  </div>
+                )}
+
+                {finSection === "gasto_operativo" && (
+                  <div>
+                    <label className="block text-gray-400 mb-1">Proveedor / Servicio:</label>
+                    <input
+                      type="text"
+                      value={finProvider}
+                      onChange={(e) => setFinProvider(e.target.value)}
+                      placeholder="ej: Amazon Web Services / Vercel"
+                      className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                    />
+                  </div>
+                )}
+
+                {(finSection === "comision_vendedor" || finSection === "nomina_sueldo") && (
+                  <div>
+                    <label className="block text-gray-400 mb-1">Beneficiario / Asesor / Integrante:</label>
+                    <input
+                      type="text"
+                      value={finBeneficiary}
+                      onChange={(e) => setFinBeneficiary(e.target.value)}
+                      placeholder={finSection === "comision_vendedor" ? "ej: Carlos Mendoza" : "ej: Ing. Rodrigo Pacheco"}
+                      className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-gray-400 mb-1">Fecha de Corte / Vencimiento:</label>
+                  <input
+                    type="text"
+                    value={finDueDate}
+                    onChange={(e) => setFinDueDate(e.target.value)}
+                    placeholder="ej: 30 de Septiembre de 2026"
+                    className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Source Account Selector */}
               <div>
-                <label className="block text-gray-400 mb-1">Cuenta de Origen / Destino:</label>
+                <label className="block text-gray-400 mb-1">Cuenta Bancaria de Origen / Receptora:</label>
                 <select
                   value={finSourceAccount}
                   onChange={(e) => setFinSourceAccount(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold"
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold text-xs"
                 >
                   <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa (Innocentia Tech)</option>
                   <option value="BBVA Operativa & Nómina">BBVA Operativa & Nómina</option>
                   <option value="Stripe Gateway / Tarjeta">Stripe Gateway / Tarjeta</option>
                   <option value="Transferencia SPEI Directa">Transferencia SPEI Directa</option>
+                  <option value="Caja Chica Efectivo">Caja Chica Efectivo (Línea SIM / Menores)</option>
                   <option value="PayPal Business Internacional">PayPal Business Internacional</option>
-                  <option value="Caja Chica Efectivo">Caja Chica Efectivo</option>
                 </select>
               </div>
 
-              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-[11px] text-gray-300">
-                <span>Registrado por: <strong>{activeUser.name}</strong> ({activeUser.roleTitle})</span>
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-[11px] text-gray-300 flex items-center justify-between">
+                <span>Registrado por: <strong className="text-white">{activeUser.name}</strong> ({activeUser.roleTitle})</span>
+                <span className="text-[10px] font-mono text-purple-400 font-bold">Bitácora Activa</span>
               </div>
             </div>
 
@@ -2476,15 +3609,15 @@ function PortalMainContent() {
               <button
                 type="button"
                 onClick={() => setIsFinanceModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-mono"
+                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-mono transition-all cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-black uppercase tracking-wider shadow-lg"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 hover:scale-105 text-white text-xs font-black uppercase tracking-wider shadow-lg transition-all cursor-pointer"
               >
-                Guardar en Libro
+                Guardar en Libro Contable
               </button>
             </div>
           </form>

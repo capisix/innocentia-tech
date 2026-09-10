@@ -589,3 +589,19 @@ export const RotateCcw = createIcon(
     <path d="M3 3v5h5" />
   </g>
 );
+
+export const Download = createIcon(
+  <g>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" x2="12" y1="15" y2="3" />
+  </g>
+);
+
+export const TrendingDown = createIcon(
+  <g>
+    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+    <polyline points="17 18 23 18 23 12" />
+  </g>
+);
+
