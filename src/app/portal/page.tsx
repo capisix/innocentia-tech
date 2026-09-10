@@ -71,12 +71,17 @@ export interface AuditLogEntry {
   id: string;
   timestamp: string;
   action: "INGRESO" | "GASTO" | "EDICION" | "ELIMINACION" | "ASIGNACION_TECNICO" | "CAMBIO_ESTADO";
+  paymentStatus?: "realizado" | "pendiente" | "automatico";
+  year?: number;
+  month?: number;
+  day?: number;
   authorName: string;
   authorRole: string;
   sourceAccount?: string;
   target: string;
   amount?: number;
   details: string;
+  category?: string;
 }
 
 interface ServerService {
@@ -229,9 +234,15 @@ function PortalMainContent() {
   // Finance Category Filter Tab (Ingresos por Proyecto, Gastos Cloud, Comisiones Vendedores, Pago/Sueldos)
   const [financeCategoryTab, setFinanceCategoryTab] = useState<"todos" | "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo">("todos");
 
-  // Filters for Audit Log
+  // Filters for Audit Log & Bitácora de Movimientos
+  const [auditFilterPaymentStatus, setAuditFilterPaymentStatus] = useState<string>("all"); // "all" | "realizado" | "pendiente" | "automatico"
+  const [auditFilterYear, setAuditFilterYear] = useState<string>("all"); // "all" | "2026" | "2025"
+  const [auditFilterMonth, setAuditFilterMonth] = useState<string>("all"); // "all" | "1".."12"
+  const [auditFilterDayRange, setAuditFilterDayRange] = useState<string>("all"); // "all" | "hoy" | "7dias" | "30dias" | "1".."31"
   const [auditFilterAccount, setAuditFilterAccount] = useState<string>("all");
   const [auditFilterAuthor, setAuditFilterAuthor] = useState<string>("all");
+  const [auditViewMode, setAuditViewMode] = useState<"ambas" | "grafica" | "lista">("ambas");
+  const [auditChartMetric, setAuditChartMetric] = useState<"flujo" | "cuentas" | "estados">("flujo");
 
   // ==========================================
   // SHARED DATABASE MOCK STATE
@@ -311,127 +322,294 @@ function PortalMainContent() {
     },
   ]);
 
-  // Audit Logs State
+  // Audit Logs State con Metadata de Estados de Pago y Fechas
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([
     {
       id: "LOG-101",
       timestamp: "09 Sep 2026, 18:35",
       action: "INGRESO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 9,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       target: "Clínica Médica AI - Anticipo Fase 2",
       amount: 120000,
+      category: "Ingreso por Proyecto",
       details: "Recepción de anticipo 60% vía transferencia SPEI validado por Dirección General.",
     },
     {
       id: "LOG-102",
       timestamp: "09 Sep 2026, 15:20",
       action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 9,
+      day: 9,
       authorName: "Daniel Torre",
       authorRole: "Socio Operaciones",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      target: "AWS Cloud Infrastructure",
+      target: "AWS Cloud Infrastructure - ECS & RDS",
       amount: 14500,
-      details: "Pago programado de servidores ECS y base de datos relacional Aurora.",
+      category: "Infraestructura Cloud",
+      details: "Cargo automático programado de servidores ECS y base de datos relacional Aurora.",
     },
     {
       id: "LOG-103",
       timestamp: "08 Sep 2026, 12:45",
       action: "ASIGNACION_TECNICO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 8,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "Gestión Operativa Core",
       target: "Clínica Médica AI",
+      category: "Designación Técnica",
       details: "Asignación de Ing. Rodrigo Pacheco (Tech Lead) y Sofía (UX Lead) para entrega de Sprint 4.",
     },
     {
       id: "LOG-104",
       timestamp: "07 Sep 2026, 11:10",
       action: "INGRESO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 7,
       authorName: "Jorge Pérez",
       authorRole: "Socio Estrategia",
       sourceAccount: "BBVA Operativa & Nómina",
       target: "Gourmet Express - Sprint 3",
       amount: 80000,
-      details: "Liquidación de Sprint 3 por cliente Roberto Garza validado en conciliación.",
+      category: "Ingreso por Proyecto",
+      details: "Liquidación de Sprint 3 por cliente Roberto Garza validado en conciliación bancaria.",
     },
     {
       id: "LOG-105",
       timestamp: "06 Sep 2026, 17:00",
       action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 9,
+      day: 6,
       authorName: "Daniel Torre",
       authorRole: "Socio Operaciones",
       sourceAccount: "Stripe Gateway / Tarjeta",
       target: "Vercel Enterprise & Cloudflare DNS",
       amount: 6200,
-      details: "Renovación mensual de cluster edge y protección contra ataques DDoS.",
+      category: "Hosting & Dominio",
+      details: "Renovación automática mensual de cluster edge y protección contra ataques DDoS.",
     },
     {
       id: "LOG-106",
       timestamp: "05 Sep 2026, 14:30",
       action: "GASTO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 5,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "BBVA Operativa & Nómina",
       target: "Comisión Venta - Carlos Mendoza",
       amount: 22200,
-      details: "Aprobación y dispersión de comisión de venta por cierre de Clínica Médica AI.",
+      category: "Comisión Vendedor",
+      details: "Aprobación y dispersión de comisión de venta (18.5%) por cierre de Clínica Médica AI.",
     },
     {
       id: "LOG-107",
       timestamp: "09 Sep 2026, 19:30",
       action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 9,
+      day: 9,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      target: "Google Workspace ($355 MXN)",
-      amount: 355,
-      details: "Configuración de pago recurrente mensual para 4 buzones de correo corporativo.",
+      target: "Google Workspace - 4 Correos",
+      amount: 396,
+      category: "Servicios Cloud",
+      details: "Configuración de pago recurrente mensual domiciliado para buzones de correo corporativo.",
     },
     {
       id: "LOG-108",
       timestamp: "09 Sep 2026, 19:32",
       action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 9,
+      day: 9,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      target: "Antigravity AI SDK ($800 MXN)",
+      target: "Antigravity AI Engine SDK",
       amount: 800,
-      details: "Suscripción mensual a Antigravity AI Engine para automatización e ingeniería.",
+      category: "Herramientas IA",
+      details: "Suscripción recurrente a Antigravity AI Engine para automatización e ingeniería.",
     },
     {
       id: "LOG-109",
       timestamp: "09 Sep 2026, 19:33",
       action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 9,
+      day: 9,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      target: "ChatGPT Team / OpenAI ($600 MXN)",
+      target: "ChatGPT Team / OpenAI Clusters",
       amount: 600,
+      category: "APIs de IA",
       details: "Suscripción recurrente mensual a ChatGPT Team y acceso a modelos GPT-4o.",
     },
     {
       id: "LOG-110",
-      timestamp: "09 Sep 2026, 19:38",
+      timestamp: "15 Sep 2026, 09:00",
       action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 9,
+      day: 15,
       authorName: "Iván Castillo",
       authorRole: "CEO / Director General",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      target: "ManyChat Pro Anual ($7,000 MXN)",
+      target: "ManyChat Pro Enterprise",
       amount: 7000,
-      details: "Programación de suscripción anual de automatización ManyChat con inicio de cargo el 15 de Septiembre.",
+      category: "Marketing & Chatbots AI",
+      details: "Programación de suscripción anual ManyChat con inicio de débito automático el 15 de Septiembre.",
     },
     {
       id: "LOG-111",
       timestamp: "09 Sep 2026, 22:15",
       action: "GASTO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 9,
       authorName: "Daniel Torre",
       authorRole: "Socio Operaciones",
-      sourceAccount: "Pago en Efectivo",
-      target: "Chip Telefonía Móvil ($230 MXN)",
+      sourceAccount: "Caja Chica Efectivo",
+      target: "Chip SIM Telefonía Móvil (+52 960 177 1556)",
       amount: 230,
-      details: "Compra de chip SIM de telefonía móvil por $230 MXN en efectivo registrado por Daniel Torre.",
+      category: "Telecomunicaciones",
+      details: "Compra y activación en efectivo de chip SIM de línea oficial por $230 MXN.",
+    },
+    {
+      id: "LOG-112",
+      timestamp: "08 Sep 2026, 16:20",
+      action: "INGRESO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 8,
+      authorName: "Daniel Torre",
+      authorRole: "Socio Operaciones",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      target: "Fintech Seguros - Anticipo 50%",
+      amount: 50000,
+      category: "Ingreso por Proyecto",
+      details: "Cobro confirmado de anticipo del 50% para desarrollo de sistema de pólizas inteligentes.",
+    },
+    {
+      id: "LOG-113",
+      timestamp: "15 Sep 2026, 12:00",
+      action: "GASTO",
+      paymentStatus: "pendiente",
+      year: 2026,
+      month: 9,
+      day: 15,
+      authorName: "Daniel Torre",
+      authorRole: "Socio Operaciones",
+      sourceAccount: "BBVA Operativa & Nómina",
+      target: "Comisión Pendiente - Fintech Seguros (Carlos Mendoza)",
+      amount: 6000,
+      category: "Comisión Vendedor",
+      details: "Provisión de comisión del 12% programada para dispersión en próximo corte quincenal.",
+    },
+    {
+      id: "LOG-114",
+      timestamp: "30 Sep 2026, 18:00",
+      action: "GASTO",
+      paymentStatus: "pendiente",
+      year: 2026,
+      month: 9,
+      day: 30,
+      authorName: "Jorge Pérez",
+      authorRole: "Socio Estrategia",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      target: "OpenAI API & Claude Tokens (Fin de Mes)",
+      amount: 8900,
+      category: "APIs de IA",
+      details: "Estimación y apartado presupuestal para corte de consumo de tokens LLM a final de mes.",
+    },
+    {
+      id: "LOG-115",
+      timestamp: "05 Sep 2026, 10:00",
+      action: "GASTO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 5,
+      authorName: "Iván Castillo",
+      authorRole: "CEO / Director General",
+      sourceAccount: "BBVA Operativa & Nómina",
+      target: "Nómina Tech Lead - Ing. Rodrigo Pacheco",
+      amount: 18000,
+      category: "Pago / Sueldo Técnico",
+      details: "Dispersión de honorarios de desarrollo backend y microservicios Sprints 1 a 3.",
+    },
+    {
+      id: "LOG-116",
+      timestamp: "05 Sep 2026, 10:30",
+      action: "GASTO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 9,
+      day: 5,
+      authorName: "Iván Castillo",
+      authorRole: "CEO / Director General",
+      sourceAccount: "BBVA Operativa & Nómina",
+      target: "Nómina UX/UI Lead - Sofía Valenzuela",
+      amount: 14000,
+      category: "Pago / Sueldo Diseño",
+      details: "Dispersión de honorarios por wireframes en Figma, assets vectoriales y diseño UI.",
+    },
+    {
+      id: "LOG-117",
+      timestamp: "10 Ago 2026, 14:00",
+      action: "INGRESO",
+      paymentStatus: "realizado",
+      year: 2026,
+      month: 8,
+      day: 10,
+      authorName: "Iván Castillo",
+      authorRole: "CEO / Director General",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      target: "Logística Express - Liquidación Entrega Final",
+      amount: 95000,
+      category: "Ingreso por Proyecto",
+      details: "Liquidación final por entrega y puesta en marcha de plataforma de logística (Agosto 2026).",
+    },
+    {
+      id: "LOG-118",
+      timestamp: "15 Ago 2026, 16:30",
+      action: "GASTO",
+      paymentStatus: "automatico",
+      year: 2026,
+      month: 8,
+      day: 15,
+      authorName: "Daniel Torre",
+      authorRole: "Socio Operaciones",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      target: "AWS Cloud Infrastructure (Agosto)",
+      amount: 13200,
+      category: "Infraestructura Cloud",
+      details: "Cargo automático mensual de servidores e infraestructura cloud del mes de Agosto.",
     },
   ]);
 
@@ -979,12 +1157,81 @@ function PortalMainContent() {
   const totalExpenses = totalGastosOperativos + totalComisionesVendedores + totalSueldosNomina;
   const netProfit = totalIncome - totalExpenses;
 
-  // Filtered Audit Logs
+  // Filtered Audit Logs with Rich Filters (Estado de Pago, Año, Mes, Día/Rango, Cuenta, Autor)
   const filteredAuditLogs = auditLogs.filter((log) => {
+    // 1. Payment Status Filter
+    if (auditFilterPaymentStatus !== "all" && log.paymentStatus !== auditFilterPaymentStatus) {
+      return false;
+    }
+
+    // 2. Year Filter
+    if (auditFilterYear !== "all" && log.year !== Number(auditFilterYear)) {
+      return false;
+    }
+
+    // 3. Month Filter
+    if (auditFilterMonth !== "all" && log.month !== Number(auditFilterMonth)) {
+      return false;
+    }
+
+    // 4. Day / Range Filter
+    if (auditFilterDayRange !== "all") {
+      if (auditFilterDayRange === "hoy") {
+        if (log.day !== 9 || log.month !== 9) return false;
+      } else if (auditFilterDayRange === "7dias") {
+        if (!log.day || log.day < 3 || log.month !== 9) return false;
+      } else if (auditFilterDayRange === "30dias") {
+        if (log.month !== 9 && log.month !== 8) return false;
+      } else {
+        const targetDay = Number(auditFilterDayRange);
+        if (log.day !== targetDay) return false;
+      }
+    }
+
+    // 5. Account Filter
     if (auditFilterAccount !== "all" && log.sourceAccount !== auditFilterAccount) return false;
+
+    // 6. Author Filter
     if (auditFilterAuthor !== "all" && log.authorName !== auditFilterAuthor) return false;
+
     return true;
   });
+
+  // Calculate Aggregated Metrics for Filtered Set
+  const auditIngresos = filteredAuditLogs.filter((l) => l.action === "INGRESO").reduce((sum, l) => sum + (l.amount || 0), 0);
+  const auditGastos = filteredAuditLogs.filter((l) => l.action === "GASTO").reduce((sum, l) => sum + (l.amount || 0), 0);
+  const auditNeto = auditIngresos - auditGastos;
+
+  const countRealizados = filteredAuditLogs.filter((l) => l.paymentStatus === "realizado").length;
+  const sumRealizados = filteredAuditLogs.filter((l) => l.paymentStatus === "realizado").reduce((sum, l) => sum + (l.amount || 0), 0);
+
+  const countPendientes = filteredAuditLogs.filter((l) => l.paymentStatus === "pendiente").length;
+  const sumPendientes = filteredAuditLogs.filter((l) => l.paymentStatus === "pendiente").reduce((sum, l) => sum + (l.amount || 0), 0);
+
+  const countAutomaticos = filteredAuditLogs.filter((l) => l.paymentStatus === "automatico").length;
+  const sumAutomaticos = filteredAuditLogs.filter((l) => l.paymentStatus === "automatico").reduce((sum, l) => sum + (l.amount || 0), 0);
+
+  // Grouped Timeline Data for Bar Chart
+  const timelineGroups = filteredAuditLogs
+    .filter((l) => l.amount && l.amount > 0)
+    .reduce((acc, log) => {
+      const key = `${log.day || 1} ${log.month === 9 ? 'Sep' : log.month === 8 ? 'Ago' : 'Jul'}`;
+      if (!acc[key]) {
+        acc[key] = { label: key, ingreso: 0, gasto: 0, pendiente: 0, automatico: 0, total: 0 };
+      }
+      if (log.action === "INGRESO") {
+        acc[key].ingreso += log.amount || 0;
+      } else {
+        if (log.paymentStatus === "pendiente") acc[key].pendiente += log.amount || 0;
+        else if (log.paymentStatus === "automatico") acc[key].automatico += log.amount || 0;
+        else acc[key].gasto += log.amount || 0;
+      }
+      acc[key].total += log.amount || 0;
+      return acc;
+    }, {} as Record<string, { label: string; ingreso: number; gasto: number; pendiente: number; automatico: number; total: number }>);
+
+  const timelineList = Object.values(timelineGroups);
+  const maxTimelineVal = Math.max(...timelineList.map((t) => Math.max(t.ingreso, t.gasto + t.automatico + t.pendiente)), 100000);
 
   return (
     <main className="relative min-h-screen bg-[#040407] text-[#F3F4F6] overflow-x-hidden selection:bg-[#00E5FF]/30 selection:text-white pb-24">
@@ -2079,92 +2326,620 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* CEO Tab 4: Bitácora de Auditoría */}
+            {/* CEO Tab 4: Bitácora de Auditoría, Filtros Avanzados & Gráfica Financiera */}
             {ceoTab === "auditoria" && (
-              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6 shadow-2xl text-left">
+                {/* Header with Title & View Mode Toggle */}
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
                   <div>
-                    <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                      <Clock className="w-5 h-5 text-[#00D1FF]" />
-                      <span>Bitácora de Auditoría & Registro de Movimientos</span>
-                    </h2>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      Registro inmutable de transacciones, cuentas de origen, fechas y socios responsables.
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 text-[10px] font-mono font-bold uppercase tracking-wider">
+                        Auditoría Inmutable
+                      </span>
+                      <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-[#00D1FF]" />
+                        <span>Bitácora de Auditoría, Movimientos & Gráfica</span>
+                      </h2>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Trazabilidad completa con filtros por estado de pago (realizados, pendientes, automáticos), fecha (día, mes, año) y analítica visual.
                     </p>
                   </div>
 
-                  {/* Filters */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <select
-                      value={auditFilterAccount}
-                      onChange={(e) => setAuditFilterAccount(e.target.value)}
-                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                  {/* View Mode Toggle Switch */}
+                  <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-black/60 border border-white/15">
+                    <button
+                      type="button"
+                      onClick={() => setAuditViewMode("ambas")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        auditViewMode === "ambas"
+                          ? "bg-white text-black shadow-md"
+                          : "text-gray-400 hover:text-white"
+                      }`}
                     >
-                      <option value="all">Todas las Cuentas</option>
-                      <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa</option>
-                      <option value="BBVA Operativa & Nómina">BBVA Operativa</option>
-                      <option value="Stripe Gateway / Tarjeta">Stripe Gateway</option>
-                    </select>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Completa</span>
+                    </button>
 
-                    <select
-                      value={auditFilterAuthor}
-                      onChange={(e) => setAuditFilterAuthor(e.target.value)}
-                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                    <button
+                      type="button"
+                      onClick={() => setAuditViewMode("grafica")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        auditViewMode === "grafica"
+                          ? "bg-[#00D1FF] text-black shadow-md font-black"
+                          : "text-gray-400 hover:text-white"
+                      }`}
                     >
-                      <option value="all">Todos los Autores</option>
-                      <option value="Iván Castillo">Iván Castillo (CEO)</option>
-                      <option value="Daniel Torre">Daniel Torre (Socio)</option>
-                      <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
-                    </select>
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      <span>Gráfica</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setAuditViewMode("lista")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        auditViewMode === "lista"
+                          ? "bg-purple-600 text-white shadow-md font-black"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Lista</span>
+                    </button>
                   </div>
                 </div>
 
-                {/* Audit Feed List */}
-                <div className="space-y-3">
-                  {filteredAuditLogs.map((log) => (
-                    <div
-                      key={log.id}
-                      className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span
-                            className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
-                              log.action === "INGRESO"
-                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
-                                : log.action === "GASTO"
-                                ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
-                                : log.action === "ASIGNACION_TECNICO"
-                                ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
-                                : "bg-purple-500/20 text-purple-400 border-purple-500/40"
-                            }`}
-                          >
-                            {log.action}
-                          </span>
-                          <span className="text-[10px] font-mono text-gray-400">{log.timestamp}</span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
-                            💳 {log.sourceAccount}
-                          </span>
-                        </div>
-                        <h4 className="text-xs font-bold text-white mt-1">{log.details}</h4>
-                        <span className="text-[10px] font-mono text-gray-400 block">
-                          Objetivo: <strong className="text-gray-200">{log.target}</strong>
-                        </span>
+                {/* 4 Summary Highlight Metrics for Filtered Dataset */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/25">
+                    <div className="flex items-center justify-between text-emerald-400 text-[10px] font-mono font-bold uppercase">
+                      <span>🟢 Pagos Realizados</span>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-lg font-black text-emerald-400 font-mono mt-1 block">
+                      ${sumRealizados.toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{countRealizados} movimientos liquidados</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-amber-500/[0.04] border border-amber-500/25">
+                    <div className="flex items-center justify-between text-amber-400 text-[10px] font-mono font-bold uppercase">
+                      <span>🟡 Pagos Pendientes</span>
+                      <Clock className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-lg font-black text-amber-400 font-mono mt-1 block">
+                      ${sumPendientes.toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{countPendientes} en provisión / por corte</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-cyan-500/[0.04] border border-cyan-500/25">
+                    <div className="flex items-center justify-between text-cyan-400 text-[10px] font-mono font-bold uppercase">
+                      <span>🔄 Pagos Automáticos</span>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-lg font-black text-cyan-400 font-mono mt-1 block">
+                      ${sumAutomaticos.toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{countAutomaticos} cargos domiciliados</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-purple-500/[0.04] border border-purple-500/25">
+                    <div className="flex items-center justify-between text-purple-400 text-[10px] font-mono font-bold uppercase">
+                      <span>💰 Flujo Neto Período</span>
+                      <DollarSign className="w-3.5 h-3.5" />
+                    </div>
+                    <span className={`text-lg font-black font-mono mt-1 block ${auditNeto >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {auditNeto >= 0 ? '+' : '-'}${Math.abs(auditNeto).toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">Ing: +${auditIngresos.toLocaleString()} • Egr: -${auditGastos.toLocaleString()}</span>
+                  </div>
+                </div>
+
+                {/* ========================================================================= */}
+                {/* FILTER CONTROLS: ESTADO DE PAGO, AÑO, MES, DÍA/RANGO, CUENTA, SOCIO */}
+                {/* ========================================================================= */}
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-4">
+                  {/* Row 1: Payment Status Pills */}
+                  <div>
+                    <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block mb-2">
+                      Filtro por Estado de Pago:
+                    </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("all")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                          auditFilterPaymentStatus === "all"
+                            ? "bg-white text-black shadow-md"
+                            : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                        }`}
+                      >
+                        ✨ Todos ({filteredAuditLogs.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("realizado")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          auditFilterPaymentStatus === "realizado"
+                            ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                            : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
+                        }`}
+                      >
+                        <span>🟢 Pagos Realizados ({countRealizados})</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("pendiente")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          auditFilterPaymentStatus === "pendiente"
+                            ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                            : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30"
+                        }`}
+                      >
+                        <span>🟡 Pagos Pendientes ({countPendientes})</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("automatico")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          auditFilterPaymentStatus === "automatico"
+                            ? "bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                            : "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/30"
+                        }`}
+                      >
+                        <span>🔄 Pagos Automáticos ({countAutomaticos})</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Date & Account Selectors */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-2 border-t border-white/5 text-xs font-mono">
+                    {/* Year Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">📅 Por Año:</label>
+                      <select
+                        value={auditFilterYear}
+                        onChange={(e) => setAuditFilterYear(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-[#00D1FF]"
+                      >
+                        <option value="all">Todos los Años</option>
+                        <option value="2026">2026 (Actual)</option>
+                        <option value="2025">2025</option>
+                      </select>
+                    </div>
+
+                    {/* Month Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">📆 Por Mes:</label>
+                      <select
+                        value={auditFilterMonth}
+                        onChange={(e) => setAuditFilterMonth(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-[#00D1FF]"
+                      >
+                        <option value="all">Todos los Meses</option>
+                        <option value="9">Septiembre (Actual)</option>
+                        <option value="8">Agosto</option>
+                        <option value="7">Julio</option>
+                        <option value="6">Junio</option>
+                        <option value="5">Mayo</option>
+                        <option value="4">Abril</option>
+                        <option value="3">Marzo</option>
+                        <option value="2">Febrero</option>
+                        <option value="1">Enero</option>
+                      </select>
+                    </div>
+
+                    {/* Day / Range Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">🕐 Por Día / Rango:</label>
+                      <select
+                        value={auditFilterDayRange}
+                        onChange={(e) => setAuditFilterDayRange(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-[#00D1FF]"
+                      >
+                        <option value="all">Cualquier Día</option>
+                        <option value="hoy">Hoy (09 Sep)</option>
+                        <option value="7dias">Últimos 7 Días</option>
+                        <option value="30dias">Últimos 30 Días</option>
+                        <option value="9">Día 9</option>
+                        <option value="8">Día 8</option>
+                        <option value="7">Día 7</option>
+                        <option value="6">Día 6</option>
+                        <option value="5">Día 5</option>
+                        <option value="10">Día 10</option>
+                        <option value="15">Día 15</option>
+                        <option value="30">Día 30</option>
+                      </select>
+                    </div>
+
+                    {/* Account Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">💳 Por Cuenta:</label>
+                      <select
+                        value={auditFilterAccount}
+                        onChange={(e) => setAuditFilterAccount(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-[#00D1FF]"
+                      >
+                        <option value="all">Todas las Cuentas</option>
+                        <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa</option>
+                        <option value="BBVA Operativa & Nómina">BBVA Operativa</option>
+                        <option value="Stripe Gateway / Tarjeta">Stripe Gateway</option>
+                        <option value="Caja Chica Efectivo">Caja Chica Efectivo</option>
+                      </select>
+                    </div>
+
+                    {/* Author Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">👤 Por Socio:</label>
+                      <select
+                        value={auditFilterAuthor}
+                        onChange={(e) => setAuditFilterAuthor(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-[#00D1FF]"
+                      >
+                        <option value="all">Todos los Socios</option>
+                        <option value="Iván Castillo">Iván Castillo (CEO)</option>
+                        <option value="Daniel Torre">Daniel Torre (Socio)</option>
+                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
+                      </select>
+                    </div>
+
+                    {/* Reset Filter Button */}
+                    <div className="flex items-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuditFilterPaymentStatus("all");
+                          setAuditFilterYear("all");
+                          setAuditFilterMonth("all");
+                          setAuditFilterDayRange("all");
+                          setAuditFilterAccount("all");
+                          setAuditFilterAuthor("all");
+                        }}
+                        className="w-full px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10 hover:border-white/20 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Restablecer</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ========================================================================= */}
+                {/* INTERACTIVE GRAPH VIEW (GRÁFICA FINANCIERA & DISTRIBUCIÓN) */}
+                {/* ========================================================================= */}
+                {(auditViewMode === "ambas" || auditViewMode === "grafica") && (
+                  <div className="p-6 rounded-[28px] bg-gradient-to-b from-white/[0.04] to-black/60 border border-[#00D1FF]/30 space-y-5 shadow-2xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                      <div>
+                        <span className="text-[10px] font-mono text-[#00D1FF] uppercase font-bold">Analítica & Flujo de Caja</span>
+                        <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-[#00D1FF]" />
+                          <span>Gráfica Financiera por Fecha & Cuentas</span>
+                        </h3>
                       </div>
 
-                      <div className="text-left md:text-right flex-shrink-0">
-                        {log.amount && (
-                          <span className={`text-sm font-black font-mono block ${log.action === "INGRESO" ? "text-emerald-400" : "text-rose-400"}`}>
-                            {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
-                          </span>
-                        )}
-                        <span className="text-[10px] font-mono text-[#00D1FF] block mt-0.5">
-                          👤 {log.authorName} ({log.authorRole})
-                        </span>
+                      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/10 text-xs font-mono">
+                        <button
+                          type="button"
+                          onClick={() => setAuditChartMetric("flujo")}
+                          className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                            auditChartMetric === "flujo" ? "bg-[#00D1FF] text-black font-black" : "text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          Flujo por Fecha
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAuditChartMetric("cuentas")}
+                          className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                            auditChartMetric === "cuentas" ? "bg-purple-600 text-white font-black" : "text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          Por Cuentas
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAuditChartMetric("estados")}
+                          className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                            auditChartMetric === "estados" ? "bg-emerald-500 text-black font-black" : "text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          Por Estados
+                        </button>
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    {/* CHART 1: Timeline Bar Chart */}
+                    {auditChartMetric === "flujo" && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-[11px] font-mono text-gray-400">
+                          <span>Escala Máxima: ${maxTimelineVal.toLocaleString()} MXN</span>
+                          <div className="flex items-center gap-3">
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" /> Ingreso</span>
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block" /> Gasto Realizado</span>
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#00D1FF] inline-block" /> Automático</span>
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" /> Pendiente</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 pt-6 pb-2 items-end min-h-[220px]">
+                          {timelineList.map((item, idx) => {
+                            const ingPct = Math.min(100, Math.round((item.ingreso / maxTimelineVal) * 160));
+                            const expPct = Math.min(100, Math.round((item.gasto / maxTimelineVal) * 160));
+                            const autoPct = Math.min(100, Math.round((item.automatico / maxTimelineVal) * 160));
+                            const pendPct = Math.min(100, Math.round((item.pendiente / maxTimelineVal) * 160));
+
+                            return (
+                              <div key={idx} className="flex flex-col items-center gap-2 group">
+                                <div className="w-full flex items-end justify-center gap-1 h-36 relative bg-white/[0.02] rounded-xl p-1.5 border border-white/5 group-hover:border-[#00D1FF]/40 transition-all">
+                                  {/* Tooltip on hover */}
+                                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center z-30 bg-[#07070E] border border-white/20 px-2.5 py-1 rounded-lg text-[10px] font-mono text-white whitespace-nowrap shadow-xl">
+                                    <span>Total: ${item.total.toLocaleString()} MXN</span>
+                                    {item.ingreso > 0 && <span className="text-emerald-400">+{item.ingreso.toLocaleString()} MXN</span>}
+                                    {(item.gasto + item.automatico) > 0 && <span className="text-rose-400">-{(item.gasto + item.automatico).toLocaleString()} MXN</span>}
+                                  </div>
+
+                                  {item.ingreso > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-md transition-all duration-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                                      style={{ height: `${Math.max(12, ingPct)}px` }}
+                                      title={`Ingreso: $${item.ingreso.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                  {item.gasto > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-rose-600 to-rose-400 rounded-t-md transition-all duration-500 shadow-[0_0_10px_rgba(244,63,94,0.3)]"
+                                      style={{ height: `${Math.max(12, expPct)}px` }}
+                                      title={`Gasto: $${item.gasto.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                  {item.automatico > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-cyan-600 to-[#00D1FF] rounded-t-md transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                                      style={{ height: `${Math.max(12, autoPct)}px` }}
+                                      title={`Automático: $${item.automatico.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                  {item.pendiente > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-amber-600 to-amber-400 rounded-t-md border-t border-dashed border-amber-300 transition-all duration-500"
+                                      style={{ height: `${Math.max(12, pendPct)}px` }}
+                                      title={`Pendiente: $${item.pendiente.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                </div>
+                                <span className="text-[10px] font-mono text-gray-300 font-bold">{item.label}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CHART 2: Bank Account Distribution */}
+                    {auditChartMetric === "cuentas" && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+                          <span className="text-xs font-mono font-bold text-white block uppercase">Distribución por Cuentas Bancarias</span>
+                          
+                          {/* Santander */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">🏦 Santander Corporativa</span>
+                              <span className="text-white font-bold">$221,696 MXN (64%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full" style={{ width: "64%" }} />
+                            </div>
+                          </div>
+
+                          {/* BBVA */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">🏦 BBVA Operativa & Nómina</span>
+                              <span className="text-white font-bold">$149,800 MXN (28%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-blue-600 to-[#00D1FF] rounded-full" style={{ width: "28%" }} />
+                            </div>
+                          </div>
+
+                          {/* Stripe */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">💳 Stripe Gateway / Tarjeta</span>
+                              <span className="text-white font-bold">$6,200 MXN (6%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full" style={{ width: "6%" }} />
+                            </div>
+                          </div>
+
+                          {/* Caja Chica */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">💵 Caja Chica Efectivo</span>
+                              <span className="text-white font-bold">$230 MXN (2%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" style={{ width: "2%" }} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+                          <span className="text-xs font-mono font-bold text-white block uppercase">Distribución por Categorías</span>
+
+                          {/* Proyectos */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-emerald-400">📈 Proyectos Software</span>
+                              <span className="text-white font-bold">$250,000 MXN (67%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-emerald-500 rounded-full" style={{ width: "67%" }} />
+                            </div>
+                          </div>
+
+                          {/* Nómina */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-cyan-400">👥 Pago o Sueldos</span>
+                              <span className="text-white font-bold">$47,000 MXN (13%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-cyan-500 rounded-full" style={{ width: "13%" }} />
+                            </div>
+                          </div>
+
+                          {/* Gastos Cloud */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-rose-400">📉 Gastos Cloud & Ops</span>
+                              <span className="text-white font-bold">$38,626 MXN (10%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-rose-500 rounded-full" style={{ width: "10%" }} />
+                            </div>
+                          </div>
+
+                          {/* Comisiones */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-amber-400">💼 Comisiones Vendedores</span>
+                              <span className="text-white font-bold">$37,800 MXN (10%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-amber-500 rounded-full" style={{ width: "10%" }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CHART 3: States Distribution */}
+                    {auditChartMetric === "estados" && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2">
+                          <span className="text-xs font-mono uppercase font-bold text-emerald-400">Pagos Realizados</span>
+                          <h4 className="text-2xl font-black text-white font-mono">${sumRealizados.toLocaleString()} MXN</h4>
+                          <p className="text-[11px] text-gray-400">{countRealizados} transacciones concluidas con comprobante</p>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-center space-y-2">
+                          <span className="text-xs font-mono uppercase font-bold text-amber-400">Pagos Pendientes</span>
+                          <h4 className="text-2xl font-black text-white font-mono">${sumPendientes.toLocaleString()} MXN</h4>
+                          <p className="text-[11px] text-gray-400">{countPendientes} en provisión por corte programado</p>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-center space-y-2">
+                          <span className="text-xs font-mono uppercase font-bold text-cyan-400">Pagos Automáticos</span>
+                          <h4 className="text-2xl font-black text-white font-mono">${sumAutomaticos.toLocaleString()} MXN</h4>
+                          <p className="text-[11px] text-gray-400">{countAutomaticos} suscripciones activas recurrentes</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* ========================================================================= */}
+                {/* AUDIT LOG DETAILED FEED LIST (Visible in ambas and lista) */}
+                {/* ========================================================================= */}
+                {(auditViewMode === "ambas" || auditViewMode === "lista") && (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between pb-1">
+                      <span className="text-xs font-mono font-bold text-gray-400 uppercase">
+                        Movimientos Encontrados ({filteredAuditLogs.length}):
+                      </span>
+                      {filteredAuditLogs.length === 0 && (
+                        <span className="text-xs font-mono text-amber-400">Ningún registro coincide con los filtros aplicados.</span>
+                      )}
+                    </div>
+
+                    {filteredAuditLogs.map((log) => (
+                      <div
+                        key={log.id}
+                        className="p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group hover:bg-white/[0.04]"
+                      >
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                                log.action === "INGRESO"
+                                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                  : log.action === "GASTO"
+                                  ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
+                                  : log.action === "ASIGNACION_TECNICO"
+                                  ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                  : "bg-purple-500/20 text-purple-400 border-purple-500/40"
+                              }`}
+                            >
+                              {log.action}
+                            </span>
+
+                            {/* Payment Status Tag */}
+                            <span
+                              className={`text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${
+                                log.paymentStatus === "realizado"
+                                  ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+                                  : log.paymentStatus === "pendiente"
+                                  ? "bg-amber-500/15 text-amber-300 border-amber-500/30"
+                                  : "bg-cyan-500/15 text-cyan-300 border-cyan-500/30"
+                              }`}
+                            >
+                              {log.paymentStatus === "realizado" && "🟢 Pago Realizado"}
+                              {log.paymentStatus === "pendiente" && "🟡 Pago Pendiente"}
+                              {log.paymentStatus === "automatico" && "🔄 Pago Automático"}
+                              {!log.paymentStatus && "✓ Registro"}
+                            </span>
+
+                            <span className="text-[10px] font-mono text-gray-400">{log.timestamp}</span>
+
+                            {log.category && (
+                              <span className="text-[9px] font-mono px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-gray-300">
+                                {log.category}
+                              </span>
+                            )}
+
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
+                              💳 {log.sourceAccount}
+                            </span>
+                          </div>
+
+                          <h4 className="text-sm font-bold text-white mt-1">{log.details}</h4>
+                          <span className="text-[11px] font-mono text-gray-400 block">
+                            Objetivo / Concepto: <strong className="text-gray-200">{log.target}</strong>
+                          </span>
+                        </div>
+
+                        <div className="text-left md:text-right flex-shrink-0 space-y-1">
+                          {log.amount && (
+                            <span
+                              className={`text-base font-black font-mono block ${
+                                log.action === "INGRESO"
+                                  ? "text-emerald-400"
+                                  : log.paymentStatus === "pendiente"
+                                  ? "text-amber-400"
+                                  : log.paymentStatus === "automatico"
+                                  ? "text-[#00D1FF]"
+                                  : "text-rose-400"
+                              }`}
+                            >
+                              {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
+                            </span>
+                          )}
+                          <span className="text-[10px] font-mono text-[#00D1FF] block">
+                            👤 {log.authorName} ({log.authorRole})
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
@@ -2766,87 +3541,612 @@ function PortalMainContent() {
 
             {/* Partner Tab 2: Auditoría y Cuentas */}
             {partnerTab === "auditoria" && (
-              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6 shadow-2xl text-left">
+                {/* Header with Title & View Mode Toggle */}
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
                   <div>
-                    <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                      <Clock className="w-5 h-5 text-purple-400" />
-                      <span>Auditoría de Movimientos & Trazabilidad de Cuentas</span>
-                    </h2>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      Consulta cada acción, fecha, banco de procedencia y socio responsable de cada registro.
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider">
+                        Supervisión Socios
+                      </span>
+                      <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-purple-400" />
+                        <span>Auditoría de Movimientos, Filtros & Gráfica</span>
+                      </h2>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Trazabilidad completa con filtros por estado de pago (realizados, pendientes, automáticos), fecha (día, mes, año) y analítica visual.
                     </p>
                   </div>
 
-                  {/* Filters */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <select
-                      value={auditFilterAccount}
-                      onChange={(e) => setAuditFilterAccount(e.target.value)}
-                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                  {/* View Mode Toggle Switch */}
+                  <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-black/60 border border-white/15">
+                    <button
+                      type="button"
+                      onClick={() => setAuditViewMode("ambas")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        auditViewMode === "ambas"
+                          ? "bg-white text-black shadow-md"
+                          : "text-gray-400 hover:text-white"
+                      }`}
                     >
-                      <option value="all">Todas las Cuentas</option>
-                      <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa</option>
-                      <option value="BBVA Operativa & Nómina">BBVA Operativa</option>
-                      <option value="Stripe Gateway / Tarjeta">Stripe Gateway</option>
-                    </select>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Completa</span>
+                    </button>
 
-                    <select
-                      value={auditFilterAuthor}
-                      onChange={(e) => setAuditFilterAuthor(e.target.value)}
-                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                    <button
+                      type="button"
+                      onClick={() => setAuditViewMode("grafica")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        auditViewMode === "grafica"
+                          ? "bg-purple-600 text-white shadow-md font-black"
+                          : "text-gray-400 hover:text-white"
+                      }`}
                     >
-                      <option value="all">Todos los Socios</option>
-                      <option value="Iván Castillo">Iván Castillo (CEO)</option>
-                      <option value="Daniel Torre">Daniel Torre (Socio)</option>
-                      <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
-                    </select>
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      <span>Gráfica</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setAuditViewMode("lista")}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        auditViewMode === "lista"
+                          ? "bg-purple-600 text-white shadow-md font-black"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Lista</span>
+                    </button>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  {filteredAuditLogs.map((log) => (
-                    <div
-                      key={log.id}
-                      className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span
-                            className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
-                              log.action === "INGRESO"
-                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
-                                : log.action === "GASTO"
-                                ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
-                                : "bg-purple-500/20 text-purple-400 border-purple-500/40"
-                            }`}
-                          >
-                            {log.action}
-                          </span>
-                          <span className="text-[10px] font-mono text-gray-400">{log.timestamp}</span>
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
-                            🏦 {log.sourceAccount}
-                          </span>
-                        </div>
-                        <h4 className="text-xs font-bold text-white mt-1">{log.details}</h4>
-                        <span className="text-[10px] font-mono text-gray-400 block">
-                          Concepto: <strong className="text-gray-200">{log.target}</strong>
-                        </span>
+                {/* 4 Summary Highlight Metrics for Filtered Dataset */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="p-4 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/25">
+                    <div className="flex items-center justify-between text-emerald-400 text-[10px] font-mono font-bold uppercase">
+                      <span>🟢 Pagos Realizados</span>
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-lg font-black text-emerald-400 font-mono mt-1 block">
+                      ${sumRealizados.toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{countRealizados} movimientos liquidados</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-amber-500/[0.04] border border-amber-500/25">
+                    <div className="flex items-center justify-between text-amber-400 text-[10px] font-mono font-bold uppercase">
+                      <span>🟡 Pagos Pendientes</span>
+                      <Clock className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-lg font-black text-amber-400 font-mono mt-1 block">
+                      ${sumPendientes.toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{countPendientes} en provisión / por corte</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-cyan-500/[0.04] border border-cyan-500/25">
+                    <div className="flex items-center justify-between text-cyan-400 text-[10px] font-mono font-bold uppercase">
+                      <span>🔄 Pagos Automáticos</span>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-lg font-black text-cyan-400 font-mono mt-1 block">
+                      ${sumAutomaticos.toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{countAutomaticos} cargos domiciliados</span>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-purple-500/[0.04] border border-purple-500/25">
+                    <div className="flex items-center justify-between text-purple-400 text-[10px] font-mono font-bold uppercase">
+                      <span>💰 Flujo Neto Período</span>
+                      <DollarSign className="w-3.5 h-3.5" />
+                    </div>
+                    <span className={`text-lg font-black font-mono mt-1 block ${auditNeto >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {auditNeto >= 0 ? '+' : '-'}${Math.abs(auditNeto).toLocaleString()} MXN
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono block mt-0.5">Ing: +${auditIngresos.toLocaleString()} • Egr: -${auditGastos.toLocaleString()}</span>
+                  </div>
+                </div>
+
+                {/* FILTER CONTROLS: ESTADO DE PAGO, AÑO, MES, DÍA/RANGO, CUENTA, SOCIO */}
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-4">
+                  {/* Row 1: Payment Status Pills */}
+                  <div>
+                    <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block mb-2">
+                      Filtro por Estado de Pago:
+                    </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("all")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                          auditFilterPaymentStatus === "all"
+                            ? "bg-white text-black shadow-md"
+                            : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                        }`}
+                      >
+                        ✨ Todos ({filteredAuditLogs.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("realizado")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          auditFilterPaymentStatus === "realizado"
+                            ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                            : "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30"
+                        }`}
+                      >
+                        <span>🟢 Pagos Realizados ({countRealizados})</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("pendiente")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          auditFilterPaymentStatus === "pendiente"
+                            ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                            : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30"
+                        }`}
+                      >
+                        <span>🟡 Pagos Pendientes ({countPendientes})</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setAuditFilterPaymentStatus("automatico")}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          auditFilterPaymentStatus === "automatico"
+                            ? "bg-cyan-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                            : "bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/30"
+                        }`}
+                      >
+                        <span>🔄 Pagos Automáticos ({countAutomaticos})</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Date & Account Selectors */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-2 border-t border-white/5 text-xs font-mono">
+                    {/* Year Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">📅 Por Año:</label>
+                      <select
+                        value={auditFilterYear}
+                        onChange={(e) => setAuditFilterYear(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-purple-400"
+                      >
+                        <option value="all">Todos los Años</option>
+                        <option value="2026">2026 (Actual)</option>
+                        <option value="2025">2025</option>
+                      </select>
+                    </div>
+
+                    {/* Month Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">📆 Por Mes:</label>
+                      <select
+                        value={auditFilterMonth}
+                        onChange={(e) => setAuditFilterMonth(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-purple-400"
+                      >
+                        <option value="all">Todos los Meses</option>
+                        <option value="9">Septiembre (Actual)</option>
+                        <option value="8">Agosto</option>
+                        <option value="7">Julio</option>
+                        <option value="6">Junio</option>
+                        <option value="5">Mayo</option>
+                        <option value="4">Abril</option>
+                        <option value="3">Marzo</option>
+                        <option value="2">Febrero</option>
+                        <option value="1">Enero</option>
+                      </select>
+                    </div>
+
+                    {/* Day / Range Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">🕐 Por Día / Rango:</label>
+                      <select
+                        value={auditFilterDayRange}
+                        onChange={(e) => setAuditFilterDayRange(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-purple-400"
+                      >
+                        <option value="all">Cualquier Día</option>
+                        <option value="hoy">Hoy (09 Sep)</option>
+                        <option value="7dias">Últimos 7 Días</option>
+                        <option value="30dias">Últimos 30 Días</option>
+                        <option value="9">Día 9</option>
+                        <option value="8">Día 8</option>
+                        <option value="7">Día 7</option>
+                        <option value="6">Día 6</option>
+                        <option value="5">Día 5</option>
+                        <option value="10">Día 10</option>
+                        <option value="15">Día 15</option>
+                        <option value="30">Día 30</option>
+                      </select>
+                    </div>
+
+                    {/* Account Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">💳 Por Cuenta:</label>
+                      <select
+                        value={auditFilterAccount}
+                        onChange={(e) => setAuditFilterAccount(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-purple-400"
+                      >
+                        <option value="all">Todas las Cuentas</option>
+                        <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa</option>
+                        <option value="BBVA Operativa & Nómina">BBVA Operativa</option>
+                        <option value="Stripe Gateway / Tarjeta">Stripe Gateway</option>
+                        <option value="Caja Chica Efectivo">Caja Chica Efectivo</option>
+                      </select>
+                    </div>
+
+                    {/* Author Filter */}
+                    <div>
+                      <label className="block text-[10px] text-gray-400 uppercase font-bold mb-1">👤 Por Socio:</label>
+                      <select
+                        value={auditFilterAuthor}
+                        onChange={(e) => setAuditFilterAuthor(e.target.value)}
+                        className="w-full px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-gray-200 focus:outline-none focus:border-purple-400"
+                      >
+                        <option value="all">Todos los Socios</option>
+                        <option value="Iván Castillo">Iván Castillo (CEO)</option>
+                        <option value="Daniel Torre">Daniel Torre (Socio)</option>
+                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
+                      </select>
+                    </div>
+
+                    {/* Reset Filter Button */}
+                    <div className="flex items-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuditFilterPaymentStatus("all");
+                          setAuditFilterYear("all");
+                          setAuditFilterMonth("all");
+                          setAuditFilterDayRange("all");
+                          setAuditFilterAccount("all");
+                          setAuditFilterAuthor("all");
+                        }}
+                        className="w-full px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10 hover:border-white/20 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Restablecer</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* INTERACTIVE GRAPH VIEW (GRÁFICA FINANCIERA & DISTRIBUCIÓN) */}
+                {(auditViewMode === "ambas" || auditViewMode === "grafica") && (
+                  <div className="p-6 rounded-[28px] bg-gradient-to-b from-white/[0.04] to-black/60 border border-purple-500/30 space-y-5 shadow-2xl">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                      <div>
+                        <span className="text-[10px] font-mono text-purple-400 uppercase font-bold">Analítica & Flujo de Caja</span>
+                        <h3 className="text-lg font-black text-white uppercase flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-purple-400" />
+                          <span>Gráfica Financiera por Fecha & Cuentas</span>
+                        </h3>
                       </div>
 
-                      <div className="text-left md:text-right flex-shrink-0">
-                        {log.amount && (
-                          <span className={`text-sm font-black font-mono block ${log.action === "INGRESO" ? "text-emerald-400" : "text-rose-400"}`}>
-                            {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
-                          </span>
-                        )}
-                        <span className="text-[10px] font-mono text-purple-300 block mt-0.5">
-                          ✍️ Registrado por: <strong>{log.authorName}</strong>
-                        </span>
+                      <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/10 text-xs font-mono">
+                        <button
+                          type="button"
+                          onClick={() => setAuditChartMetric("flujo")}
+                          className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                            auditChartMetric === "flujo" ? "bg-purple-600 text-white font-black" : "text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          Flujo por Fecha
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAuditChartMetric("cuentas")}
+                          className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                            auditChartMetric === "cuentas" ? "bg-purple-600 text-white font-black" : "text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          Por Cuentas
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setAuditChartMetric("estados")}
+                          className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                            auditChartMetric === "estados" ? "bg-emerald-500 text-black font-black" : "text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          Por Estados
+                        </button>
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    {/* CHART 1: Timeline Bar Chart */}
+                    {auditChartMetric === "flujo" && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-[11px] font-mono text-gray-400">
+                          <span>Escala Máxima: ${maxTimelineVal.toLocaleString()} MXN</span>
+                          <div className="flex items-center gap-3">
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" /> Ingreso</span>
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block" /> Gasto Realizado</span>
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block" /> Automático</span>
+                            <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" /> Pendiente</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 pt-6 pb-2 items-end min-h-[220px]">
+                          {timelineList.map((item, idx) => {
+                            const ingPct = Math.min(100, Math.round((item.ingreso / maxTimelineVal) * 160));
+                            const expPct = Math.min(100, Math.round((item.gasto / maxTimelineVal) * 160));
+                            const autoPct = Math.min(100, Math.round((item.automatico / maxTimelineVal) * 160));
+                            const pendPct = Math.min(100, Math.round((item.pendiente / maxTimelineVal) * 160));
+
+                            return (
+                              <div key={idx} className="flex flex-col items-center gap-2 group">
+                                <div className="w-full flex items-end justify-center gap-1 h-36 relative bg-white/[0.02] rounded-xl p-1.5 border border-white/5 group-hover:border-purple-500/40 transition-all">
+                                  {/* Tooltip on hover */}
+                                  <div className="absolute -top-12 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center z-30 bg-[#07070E] border border-white/20 px-2.5 py-1 rounded-lg text-[10px] font-mono text-white whitespace-nowrap shadow-xl">
+                                    <span>Total: ${item.total.toLocaleString()} MXN</span>
+                                    {item.ingreso > 0 && <span className="text-emerald-400">+{item.ingreso.toLocaleString()} MXN</span>}
+                                    {(item.gasto + item.automatico) > 0 && <span className="text-rose-400">-{(item.gasto + item.automatico).toLocaleString()} MXN</span>}
+                                  </div>
+
+                                  {item.ingreso > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-md transition-all duration-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                                      style={{ height: `${Math.max(12, ingPct)}px` }}
+                                      title={`Ingreso: $${item.ingreso.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                  {item.gasto > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-rose-600 to-rose-400 rounded-t-md transition-all duration-500 shadow-[0_0_10px_rgba(244,63,94,0.3)]"
+                                      style={{ height: `${Math.max(12, expPct)}px` }}
+                                      title={`Gasto: $${item.gasto.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                  {item.automatico > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-cyan-600 to-cyan-400 rounded-t-md transition-all duration-500 shadow-[0_0_10px_rgba(6,182,212,0.3)]"
+                                      style={{ height: `${Math.max(12, autoPct)}px` }}
+                                      title={`Automático: $${item.automatico.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                  {item.pendiente > 0 && (
+                                    <div
+                                      className="w-3.5 bg-gradient-to-t from-amber-600 to-amber-400 rounded-t-md border-t border-dashed border-amber-300 transition-all duration-500"
+                                      style={{ height: `${Math.max(12, pendPct)}px` }}
+                                      title={`Pendiente: $${item.pendiente.toLocaleString()} MXN`}
+                                    />
+                                  )}
+                                </div>
+                                <span className="text-[10px] font-mono text-gray-300 font-bold">{item.label}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CHART 2: Bank Account Distribution */}
+                    {auditChartMetric === "cuentas" && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+                          <span className="text-xs font-mono font-bold text-white block uppercase">Distribución por Cuentas Bancarias</span>
+                          
+                          {/* Santander */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">🏦 Santander Corporativa</span>
+                              <span className="text-white font-bold">$221,696 MXN (64%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full" style={{ width: "64%" }} />
+                            </div>
+                          </div>
+
+                          {/* BBVA */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">🏦 BBVA Operativa & Nómina</span>
+                              <span className="text-white font-bold">$149,800 MXN (28%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-blue-600 to-[#00D1FF] rounded-full" style={{ width: "28%" }} />
+                            </div>
+                          </div>
+
+                          {/* Stripe */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">💳 Stripe Gateway / Tarjeta</span>
+                              <span className="text-white font-bold">$6,200 MXN (6%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full" style={{ width: "6%" }} />
+                            </div>
+                          </div>
+
+                          {/* Caja Chica */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">💵 Caja Chica Efectivo</span>
+                              <span className="text-white font-bold">$230 MXN (2%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" style={{ width: "2%" }} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+                          <span className="text-xs font-mono font-bold text-white block uppercase">Distribución por Categorías</span>
+
+                          {/* Proyectos */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-emerald-400">📈 Proyectos Software</span>
+                              <span className="text-white font-bold">$250,000 MXN (67%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-emerald-500 rounded-full" style={{ width: "67%" }} />
+                            </div>
+                          </div>
+
+                          {/* Nómina */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-cyan-400">👥 Pago o Sueldos</span>
+                              <span className="text-white font-bold">$47,000 MXN (13%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-cyan-500 rounded-full" style={{ width: "13%" }} />
+                            </div>
+                          </div>
+
+                          {/* Gastos Cloud */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-rose-400">📉 Gastos Cloud & Ops</span>
+                              <span className="text-white font-bold">$38,626 MXN (10%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-rose-500 rounded-full" style={{ width: "10%" }} />
+                            </div>
+                          </div>
+
+                          {/* Comisiones */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-amber-400">💼 Comisiones Vendedores</span>
+                              <span className="text-white font-bold">$37,800 MXN (10%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-amber-500 rounded-full" style={{ width: "10%" }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CHART 3: States Distribution */}
+                    {auditChartMetric === "estados" && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2">
+                          <span className="text-xs font-mono uppercase font-bold text-emerald-400">Pagos Realizados</span>
+                          <h4 className="text-2xl font-black text-white font-mono">${sumRealizados.toLocaleString()} MXN</h4>
+                          <p className="text-[11px] text-gray-400">{countRealizados} transacciones concluidas con comprobante</p>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-center space-y-2">
+                          <span className="text-xs font-mono uppercase font-bold text-amber-400">Pagos Pendientes</span>
+                          <h4 className="text-2xl font-black text-white font-mono">${sumPendientes.toLocaleString()} MXN</h4>
+                          <p className="text-[11px] text-gray-400">{countPendientes} en provisión por corte programado</p>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-center space-y-2">
+                          <span className="text-xs font-mono uppercase font-bold text-cyan-400">Pagos Automáticos</span>
+                          <h4 className="text-2xl font-black text-white font-mono">${sumAutomaticos.toLocaleString()} MXN</h4>
+                          <p className="text-[11px] text-gray-400">{countAutomaticos} suscripciones activas recurrentes</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* AUDIT LOG DETAILED FEED LIST (Visible in ambas and lista) */}
+                {(auditViewMode === "ambas" || auditViewMode === "lista") && (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between pb-1">
+                      <span className="text-xs font-mono font-bold text-gray-400 uppercase">
+                        Movimientos Encontrados ({filteredAuditLogs.length}):
+                      </span>
+                      {filteredAuditLogs.length === 0 && (
+                        <span className="text-xs font-mono text-amber-400">Ningún registro coincide con los filtros aplicados.</span>
+                      )}
+                    </div>
+
+                    {filteredAuditLogs.map((log) => (
+                      <div
+                        key={log.id}
+                        className="p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group hover:bg-white/[0.04]"
+                      >
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                                log.action === "INGRESO"
+                                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                  : log.action === "GASTO"
+                                  ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
+                                  : log.action === "ASIGNACION_TECNICO"
+                                  ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                  : "bg-purple-500/20 text-purple-400 border-purple-500/40"
+                              }`}
+                            >
+                              {log.action}
+                            </span>
+
+                            {/* Payment Status Tag */}
+                            <span
+                              className={`text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${
+                                log.paymentStatus === "realizado"
+                                  ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+                                  : log.paymentStatus === "pendiente"
+                                  ? "bg-amber-500/15 text-amber-300 border-amber-500/30"
+                                  : "bg-cyan-500/15 text-cyan-300 border-cyan-500/30"
+                              }`}
+                            >
+                              {log.paymentStatus === "realizado" && "🟢 Pago Realizado"}
+                              {log.paymentStatus === "pendiente" && "🟡 Pago Pendiente"}
+                              {log.paymentStatus === "automatico" && "🔄 Pago Automático"}
+                              {!log.paymentStatus && "✓ Registro"}
+                            </span>
+
+                            <span className="text-[10px] font-mono text-gray-400">{log.timestamp}</span>
+
+                            {log.category && (
+                              <span className="text-[9px] font-mono px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-gray-300">
+                                {log.category}
+                              </span>
+                            )}
+
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
+                              💳 {log.sourceAccount}
+                            </span>
+                          </div>
+
+                          <h4 className="text-sm font-bold text-white mt-1">{log.details}</h4>
+                          <span className="text-[11px] font-mono text-gray-400 block">
+                            Objetivo / Concepto: <strong className="text-gray-200">{log.target}</strong>
+                          </span>
+                        </div>
+
+                        <div className="text-left md:text-right flex-shrink-0 space-y-1">
+                          {log.amount && (
+                            <span
+                              className={`text-base font-black font-mono block ${
+                                log.action === "INGRESO"
+                                  ? "text-emerald-400"
+                                  : log.paymentStatus === "pendiente"
+                                  ? "text-amber-400"
+                                  : log.paymentStatus === "automatico"
+                                  ? "text-[#00D1FF]"
+                                  : "text-rose-400"
+                              }`}
+                            >
+                              {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
+                            </span>
+                          )}
+                          <span className="text-[10px] font-mono text-purple-300 block">
+                            👤 {log.authorName} ({log.authorRole})
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
