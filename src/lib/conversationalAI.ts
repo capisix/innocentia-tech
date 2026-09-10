@@ -213,6 +213,21 @@ const RULES: MatchRule[] = [
       },
     ],
   },
+
+  // 13. Contacto, Teléfono y WhatsApp Oficial de Innocentia
+  {
+    keywords: ["telefono", "teléfono", "whatsapp", "whats", "numero", "número", "celular", "llamar", "marcar", "contacto", "9601771556", "960 177 1556"],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "IVÁN: Nuestro canal oficial de atención directa y WhatsApp es el +52 960 177 1556 (9601771556). También estamos disponibles en contacto@innocentia.tech y ventas@innocentia.tech.",
+          "SOFÍA: Puedes escribirnos por WhatsApp al 960 177 1556 en cualquier momento para cotizar o revisar dudas específicas de tu proyecto.",
+        ],
+      },
+    ],
+  },
 ];
 
 let lastResponseIndex: { [key: string]: number } = {};

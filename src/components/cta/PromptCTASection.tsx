@@ -22,7 +22,7 @@ export default function PromptCTASection({ onOpenProjectModal }: PromptCTASectio
     setSubmitted(true);
 
     const encodedMessage = encodeURIComponent(`Hola Innocentia! Me gustaría construir el siguiente proyecto: ${promptText}`);
-    window.open(`https://api.whatsapp.com/send?text=${encodedMessage}`, "_blank");
+    window.open(`https://wa.me/529601771556?text=${encodedMessage}`, "_blank");
   };
 
   return (

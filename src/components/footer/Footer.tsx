@@ -22,8 +22,8 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Official Email Channels */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 font-mono text-[11px] w-full lg:w-auto">
+          {/* Official Email & WhatsApp Channels */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-[11px] w-full lg:w-auto">
             <a
               href="mailto:contacto@innocentia.tech"
               className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-white transition-all flex items-center gap-2 group"
@@ -42,10 +42,20 @@ export default function Footer() {
 
             <a
               href="mailto:soporte@innocentia.tech"
-              className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-emerald-400 transition-all flex items-center gap-2 group sm:col-span-2 lg:col-span-1"
+              className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-emerald-400 transition-all flex items-center gap-2 group"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:scale-125 transition-transform" />
               <span>soporte@innocentia.tech</span>
+            </a>
+
+            <a
+              href="https://wa.me/529601771556"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 transition-all flex items-center gap-2 group"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse group-hover:scale-125 transition-transform" />
+              <span>WhatsApp: +52 960 177 1556</span>
             </a>
           </div>
         </div>

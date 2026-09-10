@@ -325,7 +325,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
 
     // Open WhatsApp pre-filled message
     const encoded = encodeURIComponent(projectSummary);
-    window.open(`https://api.whatsapp.com/send?text=${encoded}`, "_blank");
+    window.open(`https://wa.me/529601771556?text=${encoded}`, "_blank");
   };
 
   return (
