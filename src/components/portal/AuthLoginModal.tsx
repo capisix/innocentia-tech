@@ -195,267 +195,165 @@ interface AuthLoginModalProps {
 }
 
 export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLoginModalProps) {
-  const [selectedRole, setSelectedRole] = useState<RoleType>("ceo");
-  const [selectedUserKey, setSelectedUserKey] = useState<string>("ivan_ceo");
+  const [inputIdentifier, setInputIdentifier] = useState<string>("");
   const [inputPassword, setInputPassword] = useState<string>("");
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   if (!isOpen) return null;
-
-  const activePreset = ROLE_PRESETS.find((p) => p.role === selectedRole) || ROLE_PRESETS[0];
-  const activeUser = USER_ACCOUNTS[selectedUserKey] || activePreset.defaultUser;
-
-  const handleRoleTabClick = (role: RoleType) => {
-    setSelectedRole(role);
-    setAuthError(null);
-    setInputPassword("");
-    const preset = ROLE_PRESETS.find((p) => p.role === role);
-    if (preset && preset.users.length > 0) {
-      const foundKey = Object.keys(USER_ACCOUNTS).find((k) => USER_ACCOUNTS[k].id === preset.users[0].id);
-      if (foundKey) setSelectedUserKey(foundKey);
-    }
-  };
-
-  const handleSelectSpecificUser = (userKey: string) => {
-    setSelectedUserKey(userKey);
-    setAuthError(null);
-    setInputPassword("");
-    const user = USER_ACCOUNTS[userKey];
-    if (user) {
-      setSelectedRole(user.role);
-    }
-  };
 
   const handleAuthenticate = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setAuthError(null);
 
-    // Strict Password Validation
-    if (!inputPassword.trim()) {
-      setAuthError("Por favor, ingresa tu contraseña de seguridad para acceder.");
+    const identifier = inputIdentifier.trim().toLowerCase();
+    const password = inputPassword.trim();
+
+    if (!identifier || !password) {
+      setAuthError("Ingresa tu correo o usuario y tu contraseña de seguridad.");
       return;
     }
 
-    if (inputPassword.trim() !== activeUser.password) {
-      setAuthError("Contraseña incorrecta. Acceso restringido por seguridad.");
-      return;
-    }
+    setIsLoading(true);
 
-    // Success: save authenticated state
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("innocentia_session_auth_id", activeUser.id);
-      localStorage.setItem("innocentia_active_role", activeUser.role);
-      localStorage.setItem("innocentia_active_user", JSON.stringify(activeUser));
-      localStorage.setItem("innocentia_auth_token", "AUTH_" + activeUser.id + "_" + Date.now());
-      localStorage.setItem("innocentia_auth_user_id", activeUser.id);
-    }
+    setTimeout(() => {
+      // Find matching user by email, id, key, or first name
+      const foundEntry = Object.entries(USER_ACCOUNTS).find(([key, u]) => {
+        const matchesIdentifier =
+          u.email.toLowerCase() === identifier ||
+          u.id.toLowerCase() === identifier ||
+          key.toLowerCase() === identifier ||
+          u.name.toLowerCase().split(" ")[0] === identifier ||
+          u.name.toLowerCase() === identifier;
 
-    if (onSelectRole) {
-      onSelectRole(activeUser.role, activeUser);
-    } else {
-      window.location.href = `/portal?role=${activeUser.role}&userId=${activeUser.id}`;
-    }
+        return matchesIdentifier && u.password === password;
+      });
+
+      if (!foundEntry) {
+        setIsLoading(false);
+        setAuthError("Credenciales incorrectas. Acceso restringido por seguridad.");
+        return;
+      }
+
+      const [, matchedUser] = foundEntry;
+
+      // Success: Save auth session
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("innocentia_session_auth_id", matchedUser.id);
+        localStorage.setItem("innocentia_active_role", matchedUser.role);
+        localStorage.setItem("innocentia_active_user", JSON.stringify(matchedUser));
+        localStorage.setItem("innocentia_auth_token", "AUTH_" + matchedUser.id + "_" + Date.now());
+        localStorage.setItem("innocentia_auth_user_id", matchedUser.id);
+      }
+
+      setIsLoading(false);
+
+      if (onSelectRole) {
+        onSelectRole(matchedUser.role, matchedUser);
+      } else {
+        window.location.href = `/portal?role=${matchedUser.role}&userId=${matchedUser.id}`;
+      }
+      onClose();
+    }, 300);
   };
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-300 text-left">
-      <div className="relative w-full max-w-4xl bg-[#07070E] border border-white/20 rounded-[32px] shadow-[0_0_90px_rgba(0,209,255,0.2)] overflow-hidden my-auto flex flex-col md:flex-row">
+      <div className="relative w-full max-w-lg bg-[#07070E] border border-white/20 rounded-[32px] shadow-[0_0_90px_rgba(0,209,255,0.2)] overflow-hidden my-auto p-6 sm:p-8">
         {/* Background Ambient Glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#FF3858]/20 via-[#00D1FF]/10 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#FF3858]/20 via-[#00D1FF]/10 to-transparent blur-3xl pointer-events-none" />
 
-        {/* Left Column: Role & User Selector */}
-        <div className="w-full md:w-5/12 bg-black/50 border-b md:border-b-0 md:border-r border-white/10 p-6 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#FF3858] to-[#00D1FF] p-0.5 flex items-center justify-center shadow-lg">
-                <div className="w-full h-full bg-[#07070E] rounded-[14px] flex items-center justify-center">
-                  <Lock className="w-5 h-5 text-[#00D1FF]" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-base font-black text-white uppercase tracking-wider">
-                  Acceso Seguro
-                </h3>
-                <p className="text-[11px] font-mono text-gray-400">
-                  Autenticación de Usuarios
-                </p>
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer z-20"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="relative z-10 space-y-6">
+          {/* Header */}
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 flex items-center justify-center shadow-lg flex-shrink-0">
+              <div className="w-full h-full bg-[#07070E] rounded-[14px] flex items-center justify-center">
+                <Lock className="w-6 h-6 text-[#00D1FF]" />
               </div>
             </div>
-
-            {/* Roles List */}
-            <div className="space-y-2">
-              {ROLE_PRESETS.map((preset) => {
-                const IconComponent = preset.icon;
-                const isSelected = selectedRole === preset.role;
-                return (
-                  <button
-                    key={preset.role}
-                    type="button"
-                    onClick={() => handleRoleTabClick(preset.role)}
-                    className={`w-full p-3.5 rounded-2xl border transition-all text-left flex items-center gap-3.5 cursor-pointer ${
-                      isSelected
-                        ? "bg-white/10 border-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.2)] scale-[1.02]"
-                        : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.05]"
-                    }`}
-                  >
-                    <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                        isSelected ? "bg-[#00D1FF]/20 text-[#00D1FF]" : "bg-white/5 text-gray-400"
-                      }`}
-                    >
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="text-xs font-bold text-white truncate block">
-                          {preset.title}
-                        </span>
-                        <span
-                          className={`text-[9px] font-mono px-2 py-0.5 rounded-full border ${preset.badgeColor}`}
-                        >
-                          {preset.badge}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-gray-400 truncate mt-0.5">
-                        {preset.users.map((u) => u.name).join(" • ")}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
+            <div>
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-emerald-400 mb-1">
+                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                <span>SSL 256-BIT CIFRADO SEGURO</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                Acceso al Portal
+              </h2>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-400 font-mono">
-            <span>Encriptación SSL 256-bit</span>
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          </div>
-        </div>
+          <p className="text-xs text-gray-400 font-mono">
+            Ingresa tus credenciales autorizadas. El sistema detectará automáticamente tu nivel de acceso y permisos asignados.
+          </p>
 
-        {/* Right Column: User Selection, Credentials & Strict Password Validation */}
-        <div className="w-full md:w-7/12 p-6 sm:p-8 flex flex-col justify-between relative">
-          {/* Close Button */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer z-20"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-gray-300 mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-[#00D1FF] animate-pulse" />
-              <span>NIVEL REQUERIDO: {activePreset.badge.toUpperCase()}</span>
+          {/* Clean Anonymous Login Form */}
+          <form onSubmit={handleAuthenticate} className="space-y-4">
+            <div>
+              <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5 text-[#00D1FF]" />
+                <span>Correo Electrónico o Usuario:</span>
+              </label>
+              <input
+                type="text"
+                value={inputIdentifier}
+                onChange={(e) => {
+                  setInputIdentifier(e.target.value);
+                  if (authError) setAuthError(null);
+                }}
+                placeholder="ejemplo: tu-usuario@innocentia.tech"
+                className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
+                autoFocus
+              />
             </div>
 
-            <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2.5">
-              {activePreset.title}
-            </h2>
+            <div>
+              <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
+                <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
+                <span>Contraseña de Seguridad:</span>
+              </label>
+              <input
+                type="password"
+                value={inputPassword}
+                onChange={(e) => {
+                  setInputPassword(e.target.value);
+                  if (authError) setAuthError(null);
+                }}
+                placeholder="Escribe tu contraseña"
+                className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
+              />
+            </div>
 
-            {/* If there are multiple users (Socios: Daniel Torre & Jorge Pérez), show selector buttons */}
-            {activePreset.users.length > 1 && (
-              <div className="mt-4 p-3.5 rounded-2xl bg-purple-950/30 border border-purple-500/40">
-                <span className="text-[10px] font-mono text-purple-300 uppercase tracking-wider block font-bold mb-2">
-                  Selecciona la cuenta de Socio a autenticar:
-                </span>
-                <div className="grid grid-cols-2 gap-2">
-                  {activePreset.users.map((u) => {
-                    const uKey = Object.keys(USER_ACCOUNTS).find((k) => USER_ACCOUNTS[k].id === u.id) || "";
-                    const isSelected = activeUser.id === u.id;
-                    return (
-                      <button
-                        key={u.id}
-                        type="button"
-                        onClick={() => handleSelectSpecificUser(uKey)}
-                        className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-purple-600/40 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)] text-white"
-                            : "bg-black/50 border-white/10 text-gray-400 hover:border-white/30 hover:text-white"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-8 h-8 rounded-full bg-purple-500/30 text-purple-200 text-xs font-mono flex items-center justify-center font-bold">
-                            {u.avatarLetter}
-                          </span>
-                          <div className="truncate">
-                            <span className="text-xs font-bold block truncate">{u.name}</span>
-                            <span className="text-[9px] font-mono opacity-70 block truncate">{u.roleTitle}</span>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+            {authError && (
+              <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-center gap-2.5 animate-in shake">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
+                <span>{authError}</span>
               </div>
             )}
 
-            {/* User Profile Card */}
-            <div className="mt-4 p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-mono text-gray-400 uppercase tracking-wider block">
-                    Cuenta Seleccionada:
-                  </span>
-                  <span className="text-base font-black text-white">{activeUser.name}</span>
-                  <span className="text-xs font-mono text-gray-300 block">{activeUser.email}</span>
-                  <span className="text-[10px] font-mono text-[#00D1FF] block mt-0.5">{activeUser.roleTitle}</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center gap-1">
-                    <Lock className="w-3 h-3" />
-                    <span>Requiere Clave</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Interactive Mandatory Password Form */}
-            <form onSubmit={handleAuthenticate} className="mt-4 space-y-3">
-              <div>
-                <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
-                  <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
-                  <span>Contraseña de Seguridad Requerida:</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="password"
-                    value={inputPassword}
-                    onChange={(e) => {
-                      setInputPassword(e.target.value);
-                      if (authError) setAuthError(null);
-                    }}
-                    placeholder="Escribe tu contraseña de acceso"
-                    className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
-                    autoFocus
-                  />
-                </div>
-              </div>
-
-              {authError && (
-                <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-center gap-2.5 animate-in shake">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
-                  <span>{authError}</span>
-                </div>
-              )}
-            </form>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="mt-6 pt-4 border-t border-white/10 space-y-3">
             <button
-              type="button"
-              onClick={() => handleAuthenticate()}
-              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.4)] hover:scale-[1.02] cursor-pointer"
+              type="submit"
+              disabled={isLoading}
+              className="w-full mt-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.4)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-50"
             >
               <Lock className="w-4 h-4" />
-              <span>Validar Contraseña y Entrar</span>
+              <span>{isLoading ? "Validando..." : "Autenticar y Entrar"}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+          </form>
 
-            <p className="text-[10px] text-center text-gray-400 font-mono">
-              El acceso a balances financieros, proyectos ejecutivos y asignación de técnicos está estrictamente protegido.
-            </p>
+          {/* Footer Security Notice */}
+          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[10px] text-gray-500 font-mono">
+            <span>Innocentia Tech Security Core</span>
+            <span>Zero-Knowledge Gateway</span>
           </div>
         </div>
       </div>
