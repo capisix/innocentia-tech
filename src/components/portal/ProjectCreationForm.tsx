@@ -17,7 +17,9 @@ import {
   Clock,
   Sparkles,
   Phone,
+  FileText,
 } from "../../lib/icons";
+import { generateProjectPdf } from "../../lib/generateProjectPdf";
 
 interface ProjectCreationFormProps {
   initialVendorCode?: string;
@@ -545,6 +547,32 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-white/10">
+            <button
+              type="button"
+              onClick={() =>
+                generateProjectPdf({
+                  folio: createdProjectFolio,
+                  projectName: projectName || "Plataforma Tecnológica",
+                  clientName,
+                  clientCompany,
+                  clientPhone,
+                  clientEmail,
+                  vendorName: vendorName || "Dirección General Innocentia",
+                  vendorCode: vendorCode || "INN-DIRECT-01",
+                  projectType,
+                  designNeeds,
+                  techFeatures,
+                  budgetRange: budgetOptions.find((b) => b.id === budgetRange)?.title,
+                  timeline: timelineOptions.find((t) => t.id === timeline)?.title,
+                  description: projectDescription,
+                })
+              }
+              className="px-6 py-3 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 text-white text-xs font-mono font-bold uppercase transition-all shadow-[0_0_25px_rgba(0,209,255,0.35)] flex items-center gap-2 cursor-pointer hover:scale-105"
+            >
+              <FileText className="w-4 h-4 text-white" />
+              <span>📄 Descargar Ficha Oficial en PDF</span>
+            </button>
+
             <Link
               href="/"
               className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold uppercase transition-all shadow-md"

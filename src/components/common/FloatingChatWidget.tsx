@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Send, Sparkles, Maximize2, Minimize2, ArrowRight } from "../../lib/icons";
+import { X, Send, Sparkles, Maximize2, Minimize2, ArrowRight, RotateCcw, Clock } from "../../lib/icons";
 import Image from "next/image";
 import { getIntelligentHumanReply } from "../../lib/conversationalAI";
 
@@ -115,9 +115,10 @@ export default function FloatingChatWidget({
     };
   }, []);
 
-  const [messages, setMessages] = useState<
-    Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }>
-  >([
+  const SESSION_STORAGE_KEY = "innocentia_chat_session_history";
+  const SESSION_EXPIRATION_MS = 2 * 60 * 60 * 1000; // 2 horas de inactividad
+
+  const DEFAULT_WELCOME_MESSAGES: Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }> = [
     {
       id: "1",
       sender: "sofia",
@@ -128,7 +129,54 @@ export default function FloatingChatWidget({
       sender: "ivan",
       text: "Y yo soy Iván. Estoy listo para estructurar la arquitectura, definir la base de datos, APIs y el código escalable.",
     },
-  ]);
+  ];
+
+  const [messages, setMessages] = useState<
+    Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }>
+  >(DEFAULT_WELCOME_MESSAGES);
+
+  // Load chat from session or reset if older than 2 hours of inactivity
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const elapsed = Date.now() - (parsed.lastActivity || 0);
+          if (elapsed < SESSION_EXPIRATION_MS && Array.isArray(parsed.messages) && parsed.messages.length > 0) {
+            setMessages(parsed.messages);
+          } else {
+            // Expired after 2 hours
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
+  // Save conversation state and timestamp on message changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && messages.length > 2) {
+      try {
+        localStorage.setItem(
+          SESSION_STORAGE_KEY,
+          JSON.stringify({
+            messages,
+            lastActivity: Date.now(),
+          })
+        );
+      } catch (e) {}
+    }
+  }, [messages]);
+
+  const handleResetChat = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    }
+    setMessages(DEFAULT_WELCOME_MESSAGES);
+  };
 
   const quickQuestions = [
     {
@@ -264,8 +312,17 @@ export default function FloatingChatWidget({
                 </div>
               </div>
 
-              {/* Action Buttons (Minimize / Close) */}
+              {/* Action Buttons (Reset / Minimize / Close) */}
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleResetChat}
+                  title="Reiniciar conversación (Se conserva por 2h o puedes reiniciarla manualmente)"
+                  className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Nueva conversación</span>
+                </button>
                 <button
                   onClick={toggleMaximize}
                   title="Modo Flotante"
@@ -570,6 +627,14 @@ export default function FloatingChatWidget({
 
               {/* Actions */}
               <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleResetChat}
+                  title="Nueva conversación (La sesión se guarda por 2h o puedes reiniciarla aquí)"
+                  className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
                 <button
                   onClick={toggleMaximize}
                   title="Maximizar ventana"

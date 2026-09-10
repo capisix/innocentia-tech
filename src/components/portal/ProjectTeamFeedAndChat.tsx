@@ -18,6 +18,7 @@ import {
   Check,
   Building2,
 } from "../../lib/icons";
+import { generateProjectPdf } from "../../lib/generateProjectPdf";
 
 export interface IncomingLead {
   id: string;
@@ -532,18 +533,45 @@ ${pricingText}
                     )}
                   </div>
 
-                  {/* Action Button: Open Proposal Builder */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedLeadForProposal(lead);
-                      setCopiedProposal(false);
-                    }}
-                    className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>Armar Propuesta &amp; Enviar Demo Multiplataforma →</span>
-                  </button>
+                  {/* Action Buttons: Download PDF & Open Proposal Builder */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        generateProjectPdf({
+                          folio: lead.id,
+                          projectName: lead.projectName,
+                          clientName: lead.clientName,
+                          clientCompany: lead.clientCompany,
+                          clientPhone: lead.clientPhone,
+                          clientEmail: lead.clientEmail,
+                          vendorName: lead.vendorName,
+                          vendorCode: lead.vendorCode,
+                          budgetRange: lead.budgetRange,
+                          timeline: lead.timeline,
+                          description: lead.description,
+                          date: lead.date,
+                        })
+                      }
+                      className="py-2.5 px-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-white text-xs font-mono font-bold uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                      title="Descargar Ficha Oficial en PDF"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-[#00D1FF]" />
+                      <span>📄 Ficha PDF</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedLeadForProposal(lead);
+                        setCopiedProposal(false);
+                      }}
+                      className="py-2.5 px-3 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Armar Propuesta →</span>
+                    </button>
+                  </div>
                 </div>
               );
             })}
