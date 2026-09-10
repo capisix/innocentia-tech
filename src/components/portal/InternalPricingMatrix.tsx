@@ -14,41 +14,156 @@ import {
   Smartphone,
   Globe,
   Crown,
+  Plus,
+  Trash2,
+  Edit3,
+  RotateCcw,
+  Bot,
+  CreditCard,
+  Cloud,
+  Shield,
+  FileText,
 } from "../../lib/icons";
 
-export default function InternalPricingMatrix() {
-  const [activeTab, setActiveTab] = useState<"renta" | "proyecto" | "diseno" | "calculadora" | "reglas">("renta");
-  const [calcModalidad, setCalcModalidad] = useState<"renta" | "proyecto">("renta");
-  const [calcTier, setCalcTier] = useState<"esencial" | "conectada" | "avanzada" | "mvp" | "plataforma" | "movil">("conectada");
+interface CustomExtra {
+  id: string;
+  name: string;
+  price: number;
+}
+
+export default function InternalPricingMatrix({
+  userRole = "socio",
+  userName = "Equipo Innocentia",
+}: {
+  userRole?: string;
+  userName?: string;
+} = {}) {
+  const [activeTab, setActiveTab] = useState<"renta" | "proyecto" | "diseno" | "calculadora" | "reglas">("calculadora");
+  const [calcModalidad, setCalcModalidad] = useState<"renta" | "proyecto">("proyecto");
+  const [calcTier, setCalcTier] = useState<"esencial" | "conectada" | "avanzada" | "mvp" | "plataforma" | "movil">("mvp");
   const [calcDiseno, setCalcDiseno] = useState<"base" | "personalizado" | "avanzado">("personalizado");
   const [calcClientName, setCalcClientName] = useState("");
   const [copiedQuote, setCopiedQuote] = useState(false);
 
-  let implCost = 0;
-  let monthlyCost = 0;
+  // Price Override Mode
+  const [isCustomPriceActive, setIsCustomPriceActive] = useState(false);
+  const [customBasePriceInput, setCustomBasePriceInput] = useState<string>("");
+  const [customMonthlyInput, setCustomMonthlyInput] = useState<string>("");
+
+  // Preset Extras Selected
+  const [selectedExtras, setSelectedExtras] = useState<{ [key: string]: boolean }>({
+    whatsapp_bot: false,
+    stripe_payments: false,
+    cloud_infra: false,
+    pwa_mobile: false,
+    audit_reports: false,
+    support_247: false,
+    multi_language: false,
+    domain_ssl: false,
+  });
+
+  // Custom User-Defined Extras
+  const [customExtrasList, setCustomExtrasList] = useState<CustomExtra[]>([]);
+  const [newExtraName, setNewExtraName] = useState("");
+  const [newExtraPrice, setNewExtraPrice] = useState("");
+
+  // Commercial Discount
+  const [discountPercent, setDiscountPercent] = useState<number>(0);
+
+  // Catalog of standard preset extras
+  const presetCatalog = [
+    {
+      id: "whatsapp_bot",
+      name: "Chatbot IA & Conexión WhatsApp Business Oficial",
+      price: 18500,
+      icon: Bot,
+      desc: "Meta Cloud API, respuestas inteligentes 24/7 y captura de leads.",
+      tag: "Popular",
+    },
+    {
+      id: "stripe_payments",
+      name: "Pasarela de Pagos Stripe / SPEI / Checkout Seguro",
+      price: 12000,
+      icon: CreditCard,
+      desc: "Cobros en línea, suscripciones automáticas y webhooks bancarios.",
+      tag: "Fintech",
+    },
+    {
+      id: "cloud_infra",
+      name: "Infraestructura Cloud Dedicada & BD Aurora/PostgreSQL",
+      price: 15000,
+      icon: Cloud,
+      desc: "Servidores de alta disponibilidad, réplicas y SSL empresarial.",
+      tag: "Cloud",
+    },
+    {
+      id: "pwa_mobile",
+      name: "Módulo App Móvil PWA con Notificaciones Push",
+      price: 24000,
+      icon: Smartphone,
+      desc: "Acceso instalable en iOS y Android con notificaciones directas.",
+      tag: "Mobile",
+    },
+    {
+      id: "audit_reports",
+      name: "Panel de Auditoría Inmutable & Reportes PDF Ejecutivos",
+      price: 14000,
+      icon: FileText,
+      desc: "Trazabilidad de movimientos con filtros y generación de PDF formal.",
+      tag: "Seguridad",
+    },
+    {
+      id: "support_247",
+      name: "Póliza de Soporte Prioritario 24/7 & Mantenimiento Anual",
+      price: 28000,
+      icon: Shield,
+      desc: "SLA de respuesta < 2 horas, monitoreo de caídas y backups diarios.",
+      tag: "Garantía",
+    },
+    {
+      id: "multi_language",
+      name: "Módulo Multi-Idioma Dinámico (Español / Inglés)",
+      price: 9500,
+      icon: Globe,
+      desc: "Internacionalización de plataforma con switch de idioma en tiempo real.",
+      tag: "Global",
+    },
+    {
+      id: "domain_ssl",
+      name: "Dominio Corporativo .tech/.com, DNS & Certificado SSL",
+      price: 4500,
+      icon: ShieldCheck,
+      desc: "Configuración integral de DNS, registros SPF/DKIM y seguridad Web.",
+      tag: "Dominio",
+    },
+  ];
+
+  // Calculate standard formula base cost
+  let autoImplCost = 0;
+  let autoMonthlyCost = 0;
   let disenoExtra = 0;
 
   if (calcModalidad === "renta") {
     if (calcTier === "esencial") {
-      implCost = 15000;
-      monthlyCost = 2500;
+      autoImplCost = 15000;
+      autoMonthlyCost = 2500;
     } else if (calcTier === "conectada") {
-      implCost = 28000;
-      monthlyCost = 4500;
+      autoImplCost = 28000;
+      autoMonthlyCost = 4500;
     } else {
-      implCost = 65000;
-      monthlyCost = 9500;
+      autoImplCost = 65000;
+      autoMonthlyCost = 9500;
     }
   } else {
     if (calcTier === "esencial" || calcTier === "mvp") {
-      implCost = 120000;
-      monthlyCost = 0;
+      autoImplCost = 120000;
+      autoMonthlyCost = 0;
     } else if (calcTier === "conectada" || calcTier === "plataforma") {
-      implCost = 250000;
-      monthlyCost = 0;
+      autoImplCost = 250000;
+      autoMonthlyCost = 0;
     } else {
-      implCost = 450000;
-      monthlyCost = 0;
+      autoImplCost = 450000;
+      autoMonthlyCost = 0;
     }
   }
 
@@ -58,34 +173,113 @@ export default function InternalPricingMatrix() {
     disenoExtra = 45000;
   }
 
-  const totalImplementacion = implCost + (calcModalidad === "renta" ? disenoExtra : 0);
-  const totalProyecto = implCost + (calcModalidad === "proyecto" ? disenoExtra : 0);
-  const comisionVendedor = Math.round((calcModalidad === "renta" ? totalImplementacion : totalProyecto) * 0.15);
+  // Base costs after manual override (if enabled)
+  const basePrice =
+    isCustomPriceActive && customBasePriceInput !== "" && !isNaN(Number(customBasePriceInput))
+      ? Number(customBasePriceInput)
+      : autoImplCost;
 
+  const monthlyPrice =
+    isCustomPriceActive && customMonthlyInput !== "" && !isNaN(Number(customMonthlyInput))
+      ? Number(customMonthlyInput)
+      : autoMonthlyCost;
+
+  // Calculate preset extras cost
+  const presetExtrasCost = presetCatalog.reduce((acc, extra) => {
+    return selectedExtras[extra.id] ? acc + extra.price : acc;
+  }, 0);
+
+  // Calculate custom extras cost
+  const customExtrasCost = customExtrasList.reduce((acc, item) => acc + item.price, 0);
+  const totalExtrasCost = presetExtrasCost + customExtrasCost;
+
+  // Subtotal before discount
+  const subtotalInvestment = basePrice + disenoExtra + totalExtrasCost;
+
+  // Discount calculation
+  const discountAmount = Math.round(subtotalInvestment * (discountPercent / 100));
+  const finalTotal = Math.max(0, subtotalInvestment - discountAmount);
+
+  // Seller commission calculation (15% on final total)
+  const comisionVendedor = Math.round(finalTotal * 0.15);
+
+  // Toggle Preset Extra
+  const togglePresetExtra = (id: string) => {
+    setSelectedExtras((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  // Add Custom Extra
+  const handleAddCustomExtra = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newExtraName.trim() || !newExtraPrice || isNaN(Number(newExtraPrice))) return;
+
+    const newExtra: CustomExtra = {
+      id: "CUST-" + Date.now(),
+      name: newExtraName.trim(),
+      price: Number(newExtraPrice),
+    };
+
+    setCustomExtrasList((prev) => [...prev, newExtra]);
+    setNewExtraName("");
+    setNewExtraPrice("");
+  };
+
+  // Remove Custom Extra
+  const handleRemoveCustomExtra = (id: string) => {
+    setCustomExtrasList((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  // Copy Full Quote Proposal
   const handleCopyQuote = () => {
-    const text = 
-      "*PROPUESTA DE DESARROLLO — INNOCENTIA TECH*\n" +
-      "Cliente: " + (calcClientName || "Estimado Cliente") + "\n" +
-      "Fecha: " + new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }) + "\n\n" +
-      "*1. MODALIDAD: " + (calcModalidad === "renta" ? "SaaS / Renta con Implementación" : "Desarrollo a la Medida (Código Propio)") + "*\n" +
-      "* Nivel Tecnológico: " + calcTier.toUpperCase() + "\n" +
-      "* Nivel de Diseño: " + (calcDiseno === "base" ? "Identidad Adaptada" : calcDiseno === "personalizado" ? "UI/UX Personalizado en Figma" : "Experiencia de Marca Avanzada 60FPS") + "\n\n" +
-      "*2. ESQUEMA DE INVERSIÓN (MXN antes de IVA):*\n" +
+    const activePresetExtras = presetCatalog.filter((e) => selectedExtras[e.id]);
+    const allActiveExtras = [
+      ...activePresetExtras.map((e) => `• ${e.name}: +$${e.price.toLocaleString()} MXN`),
+      ...customExtrasList.map((e) => `• ${e.name} (A la medida): +$${e.price.toLocaleString()} MXN`),
+    ];
+
+    const text =
+      `*═══════════════════════════════════════════*\n` +
+      `*PROPUESTA DE DESARROLLO TECNOLÓGICO — INNOCENTIA TECH*\n` +
+      `*═══════════════════════════════════════════*\n\n` +
+      `👤 *Cliente / Empresa:* ${calcClientName || "Cliente Prospecto"}\n` +
+      `📅 *Fecha de Emisión:* ${new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })}\n` +
+      `💼 *Asesor / Socio:* ${userName} (${userRole.toUpperCase()})\n\n` +
+      `*1. MODALIDAD Y ALCANCE:*\n` +
+      `• *Modalidad:* ${calcModalidad === "renta" ? "SaaS / Renta con Implementación Base" : "Desarrollo por Proyecto a Medida (Código Propio)"}\n` +
+      `• *Nivel Tecnológico:* ${calcTier.toUpperCase()}\n` +
+      `• *Diseño UI/UX:* ${calcDiseno === "base" ? "Identidad Adaptada (Incluida)" : calcDiseno === "personalizado" ? "Diseño Personalizado en Figma (+$22,000 MXN)" : "Experiencia de Marca Avanzada 60FPS (+$45,000 MXN)"}\n\n` +
+      (allActiveExtras.length > 0
+        ? `*2. EXTRAS & MÓDULOS ADICIONALES INCLUIDOS:*\n${allActiveExtras.join("\n")}\n\n`
+        : "") +
+      `*3. RESUMEN DE INVERSIÓN (MXN antes de IVA):*\n` +
+      `• *Precio Base:* $${basePrice.toLocaleString()} MXN ${isCustomPriceActive ? "(Ajuste personalizado)" : ""}\n` +
+      (disenoExtra > 0 ? `• *Diseño UI/UX:* +$${disenoExtra.toLocaleString()} MXN\n` : "") +
+      (totalExtrasCost > 0 ? `• *Total de Extras:* +$${totalExtrasCost.toLocaleString()} MXN\n` : "") +
+      (discountPercent > 0 ? `• *Descuento Comercial (${discountPercent}%):* -$${discountAmount.toLocaleString()} MXN\n` : "") +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       (calcModalidad === "renta"
-        ? "* Implementación Inicial: $" + totalImplementacion.toLocaleString() + " MXN\n* Renta Mensual: $" + monthlyCost.toLocaleString() + " MXN/mes"
-        : "* Inversión Total: $" + totalProyecto.toLocaleString() + " MXN (50% anticipo, 30% sprint medio, 20% entrega final)") + "\n\n" +
-      "*3. INCLUYE:*\n" +
-      "* Arquitectura de software moderna y optimizada\n" +
-      "* Panel de administración web responsivo\n" +
-      "* Seguridad SSL 256-bit y respaldos continuos\n" +
-      "* Soporte técnico prioritario de Innocentia Tech\n\n" +
-      "_Nota: Consumos de APIs de IA (OpenAI) y WhatsApp Business se facturan según volumen._\n" +
-      "Para formalizar tu proyecto, contáctanos en ventas@innocentia.tech o visita https://innocentia.tech";
+        ? `🔥 *INVERSIÓN TOTAL IMPLEMENTACIÓN:* $${finalTotal.toLocaleString()} MXN\n` +
+          `🔄 *RENTA MENSUAL DE SERVICIO:* $${monthlyPrice.toLocaleString()} MXN/mes\n`
+        : `🔥 *INVERSIÓN TOTAL DEL PROYECTO:* $${finalTotal.toLocaleString()} MXN\n` +
+          `💳 *Esquema de Pago:* 50% anticipo al iniciar, 30% al sprint medio, 20% contra entrega final.\n`) +
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+      `*4. BENEFICIOS Y GARANTÍAS INCLUIDAS:*\n` +
+      `✓ Arquitectura de software moderna y optimizada (Next.js / TypeScript / Tailwind CSS)\n` +
+      `✓ Panel de administración web responsivo para métricas y control\n` +
+      `✓ Seguridad de grado bancario SSL 256-bit y respaldos continuos\n` +
+      `✓ Soporte técnico directo del equipo de ingeniería de Innocentia Tech\n\n` +
+      `_Nota: Los consumos de APIs externas de IA (OpenAI) y WhatsApp Business se facturan según volumen._\n\n` +
+      `🌐 *Web:* https://innocentia.tech\n` +
+      `📱 *WhatsApp Oficial:* +52 960 177 1556\n` +
+      `📧 *Contacto:* ventas@innocentia.tech`;
 
     if (typeof navigator !== "undefined") {
       navigator.clipboard.writeText(text);
       setCopiedQuote(true);
-      setTimeout(() => setCopiedQuote(false), 3000);
+      setTimeout(() => setCopiedQuote(false), 3500);
     }
   };
 
@@ -302,105 +496,459 @@ export default function InternalPricingMatrix() {
         </div>
       )}
 
+      {/* TAB 4: CALCULADORA DE COTIZACIÓN INTERACTIVA (CON EDICIÓN DE PRECIO Y EXTRAS) */}
       {activeTab === "calculadora" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
-          <div className="lg:col-span-7 space-y-4">
-            <div>
-              <label className="block text-xs font-mono text-gray-300 mb-1">Nombre del Cliente / Empresa:</label>
+          {/* LEFT COLUMN: CONTROLS, PRICE OVERRIDE & EXTRAS BUILDER */}
+          <div className="lg:col-span-7 space-y-5">
+            {/* 1. Prospect Info */}
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+              <label className="block text-xs font-mono text-gray-300 font-bold">
+                Nombre del Cliente / Empresa Prospecto:
+              </label>
               <input
                 type="text"
                 value={calcClientName}
                 onChange={(e) => setCalcClientName(e.target.value)}
-                placeholder="ej: Clínica Médica AI / Dr. Roberto"
-                className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none"
+                placeholder="ej: Clínica Médica AI / Dr. Roberto / Grupo Horizon"
+                className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
               />
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-mono text-gray-300 mb-1">Modalidad:</label>
-                <select
-                  value={calcModalidad}
-                  onChange={(e) => setCalcModalidad(e.target.value as any)}
-                  className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono"
-                >
-                  <option value="renta">Renta Mensual (SaaS)</option>
-                  <option value="proyecto">Desarrollo por Proyecto</option>
-                </select>
+
+            {/* 2. Base Configuration */}
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
+              <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block">
+                Configuración Base de Software:
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-mono text-gray-300 mb-1">Modalidad:</label>
+                  <select
+                    value={calcModalidad}
+                    onChange={(e) => setCalcModalidad(e.target.value as any)}
+                    className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
+                  >
+                    <option value="proyecto">Desarrollo por Proyecto (Propio)</option>
+                    <option value="renta">Renta Mensual (SaaS)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono text-gray-300 mb-1">Nivel Tecnológico:</label>
+                  <select
+                    value={calcTier}
+                    onChange={(e) => setCalcTier(e.target.value as any)}
+                    className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
+                  >
+                    {calcModalidad === "renta" ? (
+                      <>
+                        <option value="esencial">Esencial ($15k / $2.5k mes)</option>
+                        <option value="conectada">Conectada Pyme ($28k / $4.5k mes)</option>
+                        <option value="avanzada">Avanzada ($65k / $9.5k mes)</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="mvp">MVP a Medida ($80k - $180k)</option>
+                        <option value="plataforma">Plataforma Multi-Rol ($180k - $400k)</option>
+                        <option value="movil">App Móvil iOS/Android (+$400k)</option>
+                      </>
+                    )}
+                  </select>
+                </div>
               </div>
+
               <div>
-                <label className="block text-xs font-mono text-gray-300 mb-1">Nivel Tecnológico:</label>
+                <label className="block text-xs font-mono text-gray-300 mb-1">Alcance de Diseño UI/UX:</label>
                 <select
-                  value={calcTier}
-                  onChange={(e) => setCalcTier(e.target.value as any)}
-                  className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono"
+                  value={calcDiseno}
+                  onChange={(e) => setCalcDiseno(e.target.value as any)}
+                  className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
                 >
-                  {calcModalidad === "renta" ? (
-                    <>
-                      <option value="esencial">Esencial (Básico)</option>
-                      <option value="conectada">Conectada (Pyme)</option>
-                      <option value="avanzada">Avanzada (Mediana)</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="mvp">MVP a Medida ($80k-$180k)</option>
-                      <option value="plataforma">Plataforma Multi-Rol ($180k-$400k)</option>
-                      <option value="movil">App Móvil iOS/Android (+$400k)</option>
-                    </>
-                  )}
+                  <option value="base">Identidad Adaptada (Incluida en paquete base)</option>
+                  <option value="personalizado">Diseño Personalizado Figma (+$22,000 MXN)</option>
+                  <option value="avanzado">Experiencia de Marca Avanzada 60FPS (+$45,000 MXN)</option>
                 </select>
               </div>
             </div>
-            <div>
-              <label className="block text-xs font-mono text-gray-300 mb-1">Alcance de Diseño UI/UX:</label>
-              <select
-                value={calcDiseno}
-                onChange={(e) => setCalcDiseno(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono"
+
+            {/* 3. EDITAR PRECIO / AJUSTE MANUAL (FEATURE) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/30 to-black/40 border border-purple-500/30 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Edit3 className="w-4 h-4 text-purple-400" />
+                  <span className="text-xs font-mono font-bold text-white uppercase">
+                    Ajustar / Editar Precio Base Manualmente
+                  </span>
+                </div>
+
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isCustomPriceActive}
+                    onChange={(e) => {
+                      setIsCustomPriceActive(e.target.checked);
+                      if (e.target.checked && customBasePriceInput === "") {
+                        setCustomBasePriceInput(String(autoImplCost));
+                        if (calcModalidad === "renta") setCustomMonthlyInput(String(autoMonthlyCost));
+                      }
+                    }}
+                    className="sr-only peer"
+                  />
+                  <div className="w-9 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                </label>
+              </div>
+
+              {isCustomPriceActive ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-purple-500/20 animate-in fade-in duration-200">
+                  <div>
+                    <label className="block text-[11px] font-mono text-purple-300 mb-1">
+                      {calcModalidad === "renta" ? "Costo Implementación Inicial (MXN):" : "Inversión Base Proyecto (MXN):"}
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2 text-xs font-mono text-gray-400">$</span>
+                      <input
+                        type="number"
+                        value={customBasePriceInput}
+                        onChange={(e) => setCustomBasePriceInput(e.target.value)}
+                        placeholder={String(autoImplCost)}
+                        className="w-full pl-7 pr-3 py-1.5 rounded-xl bg-black/80 border border-purple-500/50 text-white text-xs font-mono focus:outline-none focus:border-purple-400"
+                      />
+                    </div>
+                  </div>
+
+                  {calcModalidad === "renta" && (
+                    <div>
+                      <label className="block text-[11px] font-mono text-purple-300 mb-1">
+                        Renta Mensual SaaS (MXN/mes):
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2 text-xs font-mono text-gray-400">$</span>
+                        <input
+                          type="number"
+                          value={customMonthlyInput}
+                          onChange={(e) => setCustomMonthlyInput(e.target.value)}
+                          placeholder={String(autoMonthlyCost)}
+                          className="w-full pl-7 pr-3 py-1.5 rounded-xl bg-black/80 border border-purple-500/50 text-white text-xs font-mono focus:outline-none focus:border-purple-400"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="sm:col-span-2 flex items-center justify-between text-[10px] font-mono text-gray-400 pt-1">
+                    <span>💡 Precio tabulador automático: ${autoImplCost.toLocaleString()} MXN</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCustomBasePriceInput(String(autoImplCost));
+                        setCustomMonthlyInput(String(autoMonthlyCost));
+                      }}
+                      className="text-purple-300 hover:text-white flex items-center gap-1 cursor-pointer"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      <span>Revertir a Tabulador</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-[11px] font-mono text-gray-400">
+                  Calculando automáticamente con tabulador oficial (${autoImplCost.toLocaleString()} MXN). Activa el interruptor para ingresar un monto específico negociado.
+                </p>
+              )}
+            </div>
+
+            {/* 4. AGREGAR EXTRAS & COMPLEMENTOS (FEATURE) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-[#00D1FF]/30 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#00D1FF]" />
+                  <span className="text-xs font-mono font-bold text-white uppercase">
+                    Extras & Módulos Adicionales ({presetCatalog.filter((e) => selectedExtras[e.id]).length + customExtrasList.length})
+                  </span>
+                </div>
+                <span className="text-xs font-mono font-bold text-[#00D1FF]">
+                  +${totalExtrasCost.toLocaleString()} MXN
+                </span>
+              </div>
+
+              {/* Preset Extras List */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {presetCatalog.map((extra) => {
+                  const IconComponent = extra.icon;
+                  const isChecked = !!selectedExtras[extra.id];
+
+                  return (
+                    <button
+                      key={extra.id}
+                      type="button"
+                      onClick={() => togglePresetExtra(extra.id)}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-1.5 ${
+                        isChecked
+                          ? "bg-[#00D1FF]/10 border-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.15)]"
+                          : "bg-white/[0.02] border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`p-1.5 rounded-lg ${
+                              isChecked ? "bg-[#00D1FF] text-black" : "bg-white/5 text-gray-400"
+                            }`}
+                          >
+                            <IconComponent className="w-3.5 h-3.5" />
+                          </div>
+                          <span className="text-[11px] font-bold text-white leading-snug">{extra.name}</span>
+                        </div>
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => {}}
+                          className="mt-1 accent-[#00D1FF] pointer-events-none"
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between text-[10px] font-mono mt-1 pt-1.5 border-t border-white/5">
+                        <span className="text-gray-400">{extra.desc}</span>
+                        <span className={`font-bold ml-2 whitespace-nowrap ${isChecked ? "text-[#00D1FF]" : "text-emerald-400"}`}>
+                          +${extra.price.toLocaleString()} MXN
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom Extras Added List */}
+              {customExtrasList.length > 0 && (
+                <div className="space-y-2 pt-2 border-t border-white/10">
+                  <span className="text-[10px] font-mono text-amber-300 uppercase font-bold block">
+                    Extras Personalizados a la Medida:
+                  </span>
+                  <div className="space-y-1.5">
+                    {customExtrasList.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs font-mono"
+                      >
+                        <span className="text-amber-200 font-bold flex items-center gap-1.5">
+                          <Sparkles className="w-3 h-3 text-amber-400" />
+                          {item.name}
+                        </span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-white font-bold">+${item.price.toLocaleString()} MXN</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveCustomExtra(item.id)}
+                            className="text-rose-400 hover:text-rose-200 p-1 cursor-pointer transition-colors"
+                            title="Eliminar extra"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Add Custom Extra Form */}
+              <form
+                onSubmit={handleAddCustomExtra}
+                className="p-3 rounded-xl bg-black/50 border border-white/10 space-y-2.5"
               >
-                <option value="base">Identidad Adaptada (Incluida)</option>
-                <option value="personalizado">Diseño Personalizado Figma (+$22,000)</option>
-                <option value="avanzado">Experiencia de Marca Avanzada 60FPS (+$45,000)</option>
-              </select>
+                <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block">
+                  ➕ Agregar Extra a la Medida (Personalizado):
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                  <input
+                    type="text"
+                    value={newExtraName}
+                    onChange={(e) => setNewExtraName(e.target.value)}
+                    placeholder="Concepto (ej: Conexión ERP SAP / Facturación SAT 4.0)"
+                    className="sm:col-span-7 px-3 py-1.5 rounded-lg bg-white/5 border border-white/15 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
+                  />
+                  <div className="sm:col-span-3 relative">
+                    <span className="absolute left-2.5 top-1.5 text-xs font-mono text-gray-400">$</span>
+                    <input
+                      type="number"
+                      value={newExtraPrice}
+                      onChange={(e) => setNewExtraPrice(e.target.value)}
+                      placeholder="Precio MXN"
+                      className="w-full pl-6 pr-2 py-1.5 rounded-lg bg-white/5 border border-white/15 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={!newExtraName.trim() || !newExtraPrice}
+                    className="sm:col-span-2 py-1.5 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-mono font-bold text-xs flex items-center justify-center gap-1 cursor-pointer transition-all"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Añadir</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* 5. Descuento Comercial Opcional */}
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+              <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block">
+                Descuento Comercial Autorizado:
+              </span>
+              <div className="flex items-center gap-2 flex-wrap">
+                {[0, 5, 10, 15, 20].map((pct) => (
+                  <button
+                    key={pct}
+                    type="button"
+                    onClick={() => setDiscountPercent(pct)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                      discountPercent === pct
+                        ? pct === 0
+                          ? "bg-white text-black shadow-md"
+                          : "bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]"
+                        : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                    }`}
+                  >
+                    {pct === 0 ? "0% (Regular)" : `-${pct}% Descuento`}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="lg:col-span-5 p-5 rounded-2xl bg-white/[0.03] border border-[#00D1FF]/40 space-y-4 flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-mono text-[#00D1FF] uppercase font-bold block">
-                Cotización Estimada
-              </span>
-              <h3 className="text-lg font-black text-white mt-1">{calcClientName || "Cliente Prospecto"}</h3>
-              <div className="mt-4 pt-3 border-t border-white/10 space-y-2 text-xs font-mono">
-                {calcModalidad === "renta" ? (
-                  <>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Implementación Inicial:</span>
-                      <strong className="text-amber-300">{"$" + totalImplementacion.toLocaleString() + " MXN"}</strong>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Renta Mensual:</span>
-                      <strong className="text-emerald-400">{"$" + monthlyCost.toLocaleString() + " MXN/mes"}</strong>
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Inversión Proyecto:</span>
-                    <strong className="text-emerald-400">{"$" + totalProyecto.toLocaleString() + " MXN"}</strong>
+
+          {/* RIGHT COLUMN: LIVE QUOTE SUMMARY & PROPOSAL GENERATOR */}
+          <div className="lg:col-span-5 p-6 rounded-[28px] bg-gradient-to-b from-white/[0.04] to-black/80 border border-[#00D1FF]/40 space-y-5 flex flex-col justify-between shadow-2xl">
+            <div className="space-y-4">
+              {/* Header Box */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-[#00D1FF] uppercase font-bold tracking-wider">
+                    Cotización Estimada en Tiempo Real
+                  </span>
+                  {isCustomPriceActive && (
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-bold">
+                      ✏️ Precio Editado
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-xl font-black text-white mt-1">
+                  {calcClientName || "Cliente Prospecto"}
+                </h3>
+                <span className="text-xs font-mono text-gray-400 block mt-0.5">
+                  Modalidad: <strong>{calcModalidad === "renta" ? "SaaS / Renta" : "Desarrollo por Proyecto"}</strong> • {calcTier.toUpperCase()}
+                </span>
+              </div>
+
+              {/* Itemized Breakdown */}
+              <div className="pt-3 border-t border-white/10 space-y-2.5 text-xs font-mono">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400 flex items-center gap-1">
+                    <span>Base de Software:</span>
+                    {isCustomPriceActive && <span className="text-[10px] text-purple-400">(manual)</span>}
+                  </span>
+                  <strong className="text-white">${basePrice.toLocaleString()} MXN</strong>
+                </div>
+
+                {disenoExtra > 0 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-400">Diseño UI/UX ({calcDiseno}):</span>
+                    <strong className="text-[#00D1FF]">+${disenoExtra.toLocaleString()} MXN</strong>
                   </div>
                 )}
-                <div className="flex justify-between pt-2 border-t border-white/10 text-[11px]">
-                  <span className="text-gray-400">Comisión Vendedor (15%):</span>
-                  <span className="text-[#FF3858] font-bold">{"$" + comisionVendedor.toLocaleString() + " MXN"}</span>
+
+                {/* Extras Items */}
+                {totalExtrasCost > 0 && (
+                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/10 space-y-1.5 my-2">
+                    <div className="flex justify-between text-[11px] font-bold text-gray-300">
+                      <span>Módulos Extras ({presetCatalog.filter((e) => selectedExtras[e.id]).length + customExtrasList.length}):</span>
+                      <span className="text-emerald-400">+${totalExtrasCost.toLocaleString()} MXN</span>
+                    </div>
+                    <div className="space-y-1 pt-1 max-h-36 overflow-y-auto scrollbar-none">
+                      {presetCatalog
+                        .filter((e) => selectedExtras[e.id])
+                        .map((extra) => (
+                          <div key={extra.id} className="flex justify-between text-[10px] text-gray-400">
+                            <span className="truncate pr-2">• {extra.name}</span>
+                            <span className="text-gray-300 font-mono flex-shrink-0">+${extra.price.toLocaleString()}</span>
+                          </div>
+                        ))}
+                      {customExtrasList.map((item) => (
+                        <div key={item.id} className="flex justify-between text-[10px] text-amber-300">
+                          <span className="truncate pr-2">• {item.name}</span>
+                          <span className="font-mono flex-shrink-0">+${item.price.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Subtotal */}
+                <div className="flex justify-between pt-1 text-gray-400">
+                  <span>Subtotal Inversión:</span>
+                  <span className="text-gray-200">${subtotalInvestment.toLocaleString()} MXN</span>
+                </div>
+
+                {/* Discount */}
+                {discountPercent > 0 && (
+                  <div className="flex justify-between text-rose-400 font-bold">
+                    <span>Descuento Comercial (-{discountPercent}%):</span>
+                    <span>-${discountAmount.toLocaleString()} MXN</span>
+                  </div>
+                )}
+
+                {/* Final Inversion Highlight */}
+                <div className="pt-3 border-t border-white/15 space-y-1">
+                  {calcModalidad === "renta" ? (
+                    <>
+                      <div className="flex justify-between items-baseline">
+                        <span className="text-xs text-gray-300 uppercase font-bold">Implementación Inicial:</span>
+                        <strong className="text-xl font-black text-amber-300 font-mono">
+                          ${finalTotal.toLocaleString()} MXN
+                        </strong>
+                      </div>
+                      <div className="flex justify-between items-baseline pt-1">
+                        <span className="text-xs text-gray-300 uppercase font-bold">Renta Mensual SaaS:</span>
+                        <strong className="text-xl font-black text-emerald-400 font-mono">
+                          ${monthlyPrice.toLocaleString()} MXN/mes
+                        </strong>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-xs text-gray-300 uppercase font-bold">Inversión Final Proyecto:</span>
+                      <strong className="text-2xl font-black text-emerald-400 font-mono">
+                        ${finalTotal.toLocaleString()} MXN
+                      </strong>
+                    </div>
+                  )}
+                </div>
+
+                {/* Seller Commission Highlight */}
+                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between text-xs font-mono mt-3">
+                  <span className="text-rose-300 font-bold flex items-center gap-1.5">
+                    <Crown className="w-4 h-4 text-[#FF3858]" />
+                    Comisión Vendedor (15%):
+                  </span>
+                  <span className="text-[#FF3858] text-base font-black font-mono">
+                    ${comisionVendedor.toLocaleString()} MXN
+                  </span>
                 </div>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={handleCopyQuote}
-              className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:scale-105 transition-all cursor-pointer shadow-lg"
-            >
-              {copiedQuote ? <Check className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
-              <span>{copiedQuote ? "¡Propuesta Copiada!" : "Copiar Propuesta para Cliente"}</span>
-            </button>
+
+            {/* Action Button: Copy Formal Proposal */}
+            <div className="pt-4 border-t border-white/10 space-y-2">
+              <button
+                type="button"
+                onClick={handleCopyQuote}
+                className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] text-white font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shadow-[0_0_25px_rgba(255,56,88,0.3)]"
+              >
+                {copiedQuote ? <Check className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
+                <span>{copiedQuote ? "¡Propuesta Copiada al Portapapeles!" : "Copiar Propuesta para Cliente"}</span>
+              </button>
+              <span className="text-[10px] font-mono text-gray-400 text-center block">
+                Formato listo para pegar directamente en WhatsApp, Email o Propuesta Comercial.
+              </span>
+            </div>
           </div>
         </div>
       )}
