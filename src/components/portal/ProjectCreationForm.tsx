@@ -13,6 +13,10 @@ import {
   Check,
   Share2,
   Send,
+  MessageSquare,
+  Clock,
+  Sparkles,
+  Phone,
 } from "../../lib/icons";
 
 interface ProjectCreationFormProps {
@@ -371,38 +375,43 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-white font-mono uppercase tracking-wider">
-                Asesor Comercial Asignado:
+                {isEmbeddedInPortal ? "Asesor Comercial Asignado:" : "Atención & Asignación:"}
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] text-[10px] font-mono font-bold border border-[#00D1FF]/30">
-                {vendorCode}
+                {vendorCode || "INNOCENTIA DIRECTO"}
               </span>
             </div>
             <p className="text-xs text-gray-300 font-mono">
-              <strong>{vendorName}</strong> • Atribución comercial y comisiones vinculadas conforme a contrato.
+              <strong>{vendorName || "Dirección General & Equipo de Arquitectura"}</strong>
+              {isEmbeddedInPortal
+                ? " • Atribución comercial y comisiones vinculadas conforme a contrato."
+                : " • Tu proyecto será atendido directamente por nuestro equipo directivo y técnico."}
             </p>
           </div>
         </div>
 
-        {/* Shareable Link Generator for Vendors */}
-        <div className="flex items-center gap-2 self-start md:self-auto">
-          <button
-            type="button"
-            onClick={copyReferralLink}
-            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-xs font-mono text-gray-200 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
-          >
-            {copiedLink ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-emerald-300 font-bold">¡Link Copiado!</span>
-              </>
-            ) : (
-              <>
-                <Share2 className="w-3.5 h-3.5 text-[#00D1FF]" />
-                <span>Copiar Link para Cliente</span>
-              </>
-            )}
-          </button>
-        </div>
+        {/* Shareable Link Generator (Only for internal vendor portal view) */}
+        {isEmbeddedInPortal && (
+          <div className="flex items-center gap-2 self-start md:self-auto">
+            <button
+              type="button"
+              onClick={copyReferralLink}
+              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-xs font-mono text-gray-200 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              {copiedLink ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-300 font-bold">¡Link Copiado!</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  <span>Copiar Link para Cliente</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* CLIENT ALREADY REGISTERED SUMMARY (Visible from Step 2 onwards) */}
@@ -411,7 +420,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase">Cliente Registrado &amp; Vinculado:</span>
+              <span className="text-gray-400 block text-[10px] uppercase">Cliente Registrado:</span>
               <strong className="text-white text-sm">
                 {clientName} ({clientCompany})
               </strong>
@@ -429,49 +438,120 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
         </div>
       )}
 
-      {/* SUCCESS CONFIRMATION MODAL / SCREEN */}
+      {/* SUCCESS CONFIRMATION MODAL / SCREEN (DIDÁCTICA & ORIENTADA AL CLIENTE) */}
       {isCompleted ? (
-        <div className="p-8 sm:p-12 rounded-[32px] bg-gradient-to-br from-emerald-950/40 via-black to-black border-2 border-emerald-500/50 space-y-6 text-center shadow-2xl animate-in zoom-in-95 duration-300">
-          <div className="w-20 h-20 rounded-3xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#00D1FF]/10 via-[#07070E] to-[#FF3858]/10 border-2 border-[#00D1FF]/40 space-y-8 text-center shadow-[0_0_80px_rgba(0,209,255,0.15)] animate-in zoom-in-95 duration-300 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-[#00D1FF]/15 to-transparent blur-3xl pointer-events-none" />
+
+          {/* Badge Icon */}
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-500/30 via-[#00D1FF]/30 to-[#FF3858]/20 border-2 border-emerald-400 flex items-center justify-center mx-auto shadow-[0_0_35px_rgba(16,185,129,0.4)]">
             <CheckCircle2 className="w-10 h-10 text-emerald-400" />
           </div>
 
-          <div className="space-y-2 max-w-lg mx-auto">
-            <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold uppercase border border-emerald-500/40">
-              Proyecto Creado &amp; Vinculado con Éxito
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase font-mono tracking-tight">
-              Folio Oficial: {createdProjectFolio}
+          <div className="space-y-3 max-w-xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold uppercase border border-emerald-500/40">
+              <Clock className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <span>Solicitud Recibida • En Evaluación Técnica</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white uppercase font-mono tracking-tight">
+              ¡Tu Proyecto Está en Marcha!
             </h2>
+            <div className="inline-block px-4 py-1.5 rounded-xl bg-white/10 border border-white/20 text-[#00D1FF] font-mono font-bold text-sm sm:text-base">
+              Folio Oficial: {createdProjectFolio}
+            </div>
             <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed">
-              El cliente <strong>{clientName} ({registeredClientId})</strong> y su proyecto <strong>"{projectName}"</strong> han quedado formalmente registrados y vinculados al asesor <strong>{vendorName} ({vendorCode})</strong>.
+              Hola <strong>{clientName}</strong>, hemos recibido con éxito las especificaciones técnicas para{" "}
+              <strong>"{projectName || "Tu Aplicación"}"</strong> de <strong>{clientCompany}</strong>.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-black/70 border border-white/10 max-w-md mx-auto text-left text-xs font-mono space-y-2">
+          {/* Ficha Resumen */}
+          <div className="p-5 rounded-2xl bg-black/80 border border-white/15 max-w-lg mx-auto text-left text-xs font-mono space-y-2.5 shadow-xl">
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Cliente / Empresa:</span>
-              <strong className="text-white">
-                {clientName} ({clientCompany})
-              </strong>
+              <span className="text-gray-400">Cliente & Empresa:</span>
+              <strong className="text-white">{clientName} ({clientCompany})</strong>
             </div>
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Asesor Comercial:</span>
-              <strong className="text-[#00D1FF]">
-                {vendorName} ({vendorCode})
-              </strong>
+              <span className="text-gray-400">Teléfono Registrado:</span>
+              <strong className="text-white">{clientPhone}</strong>
             </div>
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Bolsa de Comisión:</span>
-              <strong className="text-emerald-400">Hasta 20% Base Comisionable</strong>
+              <span className="text-gray-400">Canal de Asignación:</span>
+              <strong className="text-[#00D1FF]">{vendorName || "Dirección General Innocentia"}</strong>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Protección de Cartera:</span>
-              <strong className="text-purple-300">24 Meses Continuos</strong>
+              <span className="text-gray-400">Estado de la Solicitud:</span>
+              <strong className="text-amber-400 font-bold">⏳ Análisis de Arquitectura en Curso</strong>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+          {/* Proceso Didáctico de Próximos Pasos */}
+          <div className="max-w-2xl mx-auto space-y-3 text-left">
+            <h4 className="text-xs font-mono font-bold text-gray-400 uppercase tracking-wider text-center">
+              ¿Qué ocurre a continuación?
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1.5">
+                <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center font-mono">
+                  1
+                </div>
+                <h5 className="text-xs font-bold text-white font-mono">Triaje Técnico</h5>
+                <p className="text-[11px] text-gray-400 font-mono leading-tight">
+                  Iván y el equipo de ingeniería evalúan la arquitectura y módulos óptimos para tu app.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#00D1FF]/30 space-y-1.5 shadow-[0_0_15px_rgba(0,209,255,0.1)]">
+                <div className="w-6 h-6 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] font-bold text-xs flex items-center justify-center font-mono">
+                  2
+                </div>
+                <h5 className="text-xs font-bold text-[#00D1FF] font-mono">Propuesta & Demo</h5>
+                <p className="text-[11px] text-gray-400 font-mono leading-tight">
+                  Preparamos la propuesta formal y seleccionamos la demo interactiva multiplataforma.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1.5">
+                <div className="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xs flex items-center justify-center font-mono">
+                  3
+                </div>
+                <h5 className="text-xs font-bold text-white font-mono">Contacto Directo</h5>
+                <p className="text-[11px] text-gray-400 font-mono leading-tight">
+                  Te contactaremos por WhatsApp o llamada para afinar dudas y mostrarte la demo en vivo.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Módulo de Chat Directo y Contacto Inmediato */}
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-black to-[#00D1FF]/10 border border-emerald-500/40 max-w-xl mx-auto space-y-3 text-center">
+            <div className="flex items-center justify-center gap-2 text-emerald-400 font-mono font-bold text-xs">
+              <MessageSquare className="w-4 h-4 text-emerald-400" />
+              <span>¿Tienes alguna duda urgente o requerimiento especial?</span>
+            </div>
+            <p className="text-[11px] text-gray-300 font-mono">
+              Puedes hablar directamente con un especialista de Innocentia Tech vía WhatsApp indicando tu Folio <strong>{createdProjectFolio}</strong>.
+            </p>
+            <a
+              href={`https://wa.me/529601771556?text=${encodeURIComponent(`Hola Innocentia Tech, acabo de enviar mi cotización con Folio ${createdProjectFolio} para mi empresa ${clientCompany}. Me gustaría consultar una duda sobre mi proyecto.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_25px_rgba(16,185,129,0.4)] cursor-pointer hover:scale-105"
+            >
+              <Phone className="w-4 h-4 text-black" />
+              <span>Consultar Dudas por WhatsApp (+52 960 177 1556)</span>
+            </a>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-white/10">
+            <Link
+              href="/"
+              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold uppercase transition-all shadow-md"
+            >
+              ← Volver al Sitio Principal (innocentia.tech)
+            </Link>
+
             <button
               type="button"
               onClick={() => {
@@ -481,29 +561,14 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 setProjectName("");
                 setClientName("");
                 setClientCompany("");
+                setClientPhone("");
+                setClientEmail("");
                 setProjectDescription("");
               }}
-              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold uppercase transition-all cursor-pointer"
+              className="px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 text-gray-300 hover:text-white text-xs font-mono transition-all cursor-pointer"
             >
-              ＋ Registrar Nuevo Cliente &amp; Proyecto
+              ＋ Cotizar Otro Proyecto
             </button>
-
-            {isEmbeddedInPortal ? (
-              <button
-                type="button"
-                onClick={() => setIsCompleted(false)}
-                className="px-6 py-3 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 text-white text-xs font-mono font-bold uppercase transition-all shadow-lg cursor-pointer"
-              >
-                Volver al Panel Comercial
-              </button>
-            ) : (
-              <Link
-                href="/portal"
-                className="px-6 py-3 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 text-white text-xs font-mono font-bold uppercase transition-all shadow-lg"
-              >
-                Ir al Portal de Seguimiento ↗
-              </Link>
-            )}
           </div>
         </div>
       ) : (
