@@ -259,6 +259,73 @@ export default function FloatingChatWidget({
     }, 800);
   };
 
+  const renderMessageBubble = (text: string, isSmall: boolean = false) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    const hasFormLink =
+      text.includes("crear-proyecto") ||
+      text.includes("#onboarding") ||
+      text.includes("onboarding") ||
+      text.includes("formulario") ||
+      text.includes("cotización") ||
+      text.includes("cotizacion") ||
+      text.includes("cotizar");
+
+    const handleFormClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (onOpenProjectModal) {
+        handleClose();
+        onOpenProjectModal();
+      } else {
+        window.location.href = "/crear-proyecto";
+      }
+    };
+
+    return (
+      <div className="space-y-2 whitespace-pre-line">
+        <p>
+          {parts.map((part, i) => {
+            if (part.match(urlRegex)) {
+              return (
+                <a
+                  key={i}
+                  href={part.includes("crear-proyecto") || part.includes("onboarding") ? "/crear-proyecto" : part}
+                  onClick={(e) => {
+                    if (part.includes("crear-proyecto") || part.includes("onboarding")) {
+                      handleFormClick(e);
+                    }
+                  }}
+                  target={part.startsWith("http") && !part.includes("innocentia.tech") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="text-[#00D1FF] underline hover:text-white font-bold transition-colors cursor-pointer inline-block break-all"
+                >
+                  {part}
+                </a>
+              );
+            }
+            return part;
+          })}
+        </p>
+
+        {hasFormLink && (
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={handleFormClick}
+              className={`inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#FF3858] via-[#8A2BE2] to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black uppercase tracking-wider shadow-[0_0_20px_rgba(0,209,255,0.4)] hover:shadow-[0_0_30px_rgba(255,56,88,0.6)] hover:scale-[1.03] active:scale-[0.97] transition-all border border-white/20 group cursor-pointer ${
+                isSmall ? "px-3 py-2 text-[10px]" : "px-4 py-2.5 text-xs"
+              }`}
+            >
+              <span className="text-sm">🚀</span>
+              <span>Registrar Proyecto & Llenar Formulario</span>
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
       {/* ========================================================== */}
@@ -411,33 +478,7 @@ export default function FloatingChatWidget({
                         </span>
                       </div>
                     )}
-                    <div className="space-y-2 whitespace-pre-line">
-                      <p>{msg.text}</p>
-                      
-                      {msg.sender !== "user" && msg.text.includes("#onboarding") && (
-                        <div className="pt-2">
-                          <a
-                            href="/#onboarding"
-                            onClick={(e) => {
-                              if (typeof window !== "undefined") {
-                                if (window.location.pathname === "/" || window.location.pathname === "") {
-                                  const el = document.getElementById("onboarding");
-                                  if (el) {
-                                    e.preventDefault();
-                                    el.scrollIntoView({ behavior: "smooth" });
-                                  }
-                                }
-                              }
-                            }}
-                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#FF3858] via-[#8A2BE2] to-[#00D1FF] text-white font-bold text-xs shadow-[0_0_15px_rgba(0,209,255,0.35)] hover:shadow-[0_0_25px_rgba(255,56,88,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/20 group"
-                          >
-                            <span className="text-sm">🚀</span>
-                            <span>Registrar Proyecto & Llenar Formulario</span>
-                            <span className="group-hover:translate-x-1 transition-transform">→</span>
-                          </a>
-                        </div>
-                      )}
-                    </div>
+                    {renderMessageBubble(msg.text, false)}
                   </div>
                 </div>
               ))}
@@ -716,7 +757,7 @@ export default function FloatingChatWidget({
                         {msg.sender === "sofia" ? "SOFÍA (UX/ARTE)" : "IVÁN (TECH/CÓDIGO)"}
                       </span>
                     )}
-                    <p>{msg.text}</p>
+                    {renderMessageBubble(msg.text, true)}
                   </div>
                 </div>
               ))}

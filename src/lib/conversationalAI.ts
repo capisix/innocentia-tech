@@ -14,51 +14,61 @@ interface MatchRule {
 }
 
 const RULES: MatchRule[] = [
-  // 1. Logos Vectoriales / Curvas / Formatos SVG / Illustrator
+  // 1. Pregunta combinada: Qué necesito para cotizar / Logo y Aplicación / Cotizar proyecto completo
   {
-    keywords: ["vector", "svg", "illustrator", "curvas", "eps", "pdf editable", "escalable", "formato vector"],
+    keywords: [
+      "logo y una aplicacion",
+      "logo y una aplicación",
+      "logo y app",
+      "cotizar un logo y",
+      "que necesito para cotizar",
+      "qué necesito para cotizar",
+      "requisitos para cotizar",
+      "como cotizar",
+      "cómo cotizar",
+      "para cotizar",
+    ],
     responses: [
       {
-        speaker: "SOFÍA",
-        type: "sofia",
+        speaker: "DUAL",
+        type: "both",
         text: [
-          "¡Claro que sí! Todo logotipo que diseñamos se entrega en formato 100% vectorial (.SVG, .AI de Adobe Illustrator y .EPS en curvas).",
-          "Esto significa que podrás escalarlo desde un favicon de 16px hasta un espectacular panorámico gigante sin perder ni un milímetro de nitidez. Además, te entregamos las versiones en positivo, negativo, monocromático y su paleta de colores oficial.\n\n🚀 Si deseas iniciar el diseño de tu logotipo o identidad, puedes registrarte y llenar el formulario de cotización aquí:\n👉 https://innocentia.tech/#onboarding",
-        ],
-      },
-      {
-        speaker: "SOFÍA",
-        type: "sofia",
-        text: [
-          "¡Por supuesto! El diseño vectorial es la base de cualquier identidad profesional. Te entregamos los archivos maestros en vectores limpios, optimizados para impresión en gran formato, serigrafía, bordado y código web en SVG con carga instantánea.\n\n👉 Llena tu solicitud en 1 minuto aquí para iniciar tu cotización: https://innocentia.tech/#onboarding",
+          "SOFÍA: ¡Es muy sencillo! Para tu logotipo o marca solo necesitamos conocer de qué trata tu negocio, a quién va dirigido y tus preferencias de colores o estilo.",
+          "IVÁN: Y para tu aplicación o sistema web, solo cuéntanos qué funciones imaginas (por ejemplo: si llevará usuarios, catálogo, citas o cobros con tarjeta). Llenando nuestro formulario en 2 minutos te preparamos la cotización completa y desglosada.\n\n🚀 Puedes contarnos tu idea y cotizarla aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
-  // 2. Creación de Logo / Identidad de Marca / Branding
+  // 2. Creación de Logo / Identidad de Marca / Branding / Vectores
   {
-    keywords: ["logo", "logotipo", "isotipo", "imagotipo", "marca", "branding", "identidad visual", "colores de marca"],
+    keywords: [
+      "logo",
+      "logotipo",
+      "isotipo",
+      "imagotipo",
+      "marca",
+      "branding",
+      "identidad visual",
+      "colores de marca",
+      "vector",
+      "svg",
+      "illustrator",
+      "curvas",
+    ],
     responses: [
       {
         speaker: "SOFÍA",
         type: "sofia",
         text: [
-          "¡Me encanta dar vida a nuevas marcas! Para tu logo trabajamos en la conceptualización, exploración de formas, psicología del color y tipografía personalizada.",
-          "Te entregamos un manual de identidad completo con aplicaciones digitales, versiones para modo claro y oscuro, y todos los assets listos para tus redes y tu web.\n\n🚀 Para recibir tu propuesta personalizada, llena el formulario de registro aquí:\n👉 https://innocentia.tech/#onboarding",
-        ],
-      },
-      {
-        speaker: "SOFÍA",
-        type: "sofia",
-        text: [
-          "Diseñar una marca es capturar el alma de tu proyecto. En Innocentia creamos logotipos memorables que destacan en pantallas digitales y en físico, acompañados de su guía de estilo tipográfico y paleta cromática.\n\n👉 Puedes iniciar llenando el formulario de tu proyecto aquí: https://innocentia.tech/#onboarding",
+          "¡Me encanta dar vida a nuevas marcas! Diseñamos tu logotipo desde cero, asegurando que transmita confianza y profesionalismo.",
+          "Te entregamos todos los formatos vectoriales listos para imprimir en cualquier tamaño, usar en redes sociales y en tu sitio web.\n\n🚀 Para iniciar tu diseño y recibir tu cotización, llena el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
-  // 3. Diseño UI/UX, Prototipos, Figma
+  // 3. Diseño UI/UX, Pantallas, Prototipos, Figma
   {
     keywords: ["figma", "ux", "ui", "prototipo", "interfaz", "diseño web", "wireframe", "pantallas", "mockup"],
     responses: [
@@ -66,8 +76,8 @@ const RULES: MatchRule[] = [
         speaker: "SOFÍA",
         type: "sofia",
         text: [
-          "En UX/UI construimos el sistema de diseño completo en Figma con componentes interactivos a 60 fps.",
-          "Diseñamos cada flujo pensando en la facilidad de uso de tus clientes, con animaciones fluidas y microinteracciones que convierten visitantes en usuarios recurrentes. Podrás probar y navegar el prototipo en tu teléfono antes de programar una sola línea de código.\n\n🚀 Registra tu proyecto y requerimientos de diseño aquí:\n👉 https://innocentia.tech/#onboarding",
+          "Diseñamos pantallas atractivas, modernas y muy fáciles de usar para tus clientes.",
+          "Podrás probar el diseño interactivo directamente en tu teléfono antes de programar, para asegurarnos de que todo quede exactamente como lo soñaste.\n\n🚀 Cuéntanos qué pantallas necesitas llenando el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
@@ -81,45 +91,46 @@ const RULES: MatchRule[] = [
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: Diseñamos la experiencia de tu app con gestos táctiles naturales, modo oscuro/claro y navegación fluida pensada para pulgares.",
-          "IVÁN: Y en la parte de ingeniería, desarrollamos con arquitectura nativa y multiplataforma (React Native / Flutter) conectada a backend en tiempo real, notificaciones push, modo offline y publicación directa en App Store y Google Play.\n\n🚀 Puedes registrar los requerimientos de tu app móvil aquí para recibir tu cotización técnica desglosada:\n👉 https://innocentia.tech/#onboarding",
+          "SOFÍA: Diseñamos la experiencia de tu app para que sea intuitiva, bonita y fácil de navegar con una sola mano.",
+          "IVÁN: Y yo me encargo de programarla para que funcione súper rápido en iPhone y Android. Podemos incluir notificaciones, mapas, pagos o lo que requiera tu negocio. Con llenar el formulario te enviamos el costo exacto y tiempos.\n\n🚀 Registra los datos de tu app aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
       {
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "Desarrollamos aplicaciones móviles de alto rendimiento para iOS y Android con sincronización en tiempo real, autenticación biométrica y consumo de batería ultra eficiente. Podemos integrar pasarelas de pago, geolocalización, cámara y sincronización con tu base de datos central.\n\n👉 Inicia llenando la solicitud de tu proyecto aquí: https://innocentia.tech/#onboarding",
+          "Creamos aplicaciones móviles a la medida para iPhone y Android, fáciles de administrar y listas para publicar en las tiendas de apps.",
+          "Para decirte el presupuesto exacto solo necesitamos saber qué funciones te gustaría incluir. Llena el formulario en 2 minutos y te preparamos la propuesta:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
-  // 5. Plataformas Web, SaaS, Sistemas a Medida, CRM, ERP
+  // 5. Plataformas Web, SaaS, Sistemas a Medida, CRM, Tiendas en Línea
   {
-    keywords: ["saas", "plataforma", "sistema", "crm", "erp", "portal", "dashboard", "panel", "administrativo", "base de datos", "backend", "fullstack", "nextjs", "react"],
+    keywords: ["saas", "plataforma", "sistema", "crm", "erp", "portal", "dashboard", "panel", "administrativo", "base de datos", "backend", "fullstack", "tienda", "ecommerce", "e-commerce"],
     responses: [
       {
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "Estructuramos plataformas web y SaaS completas sobre Next.js 15, PostgreSQL y arquitectura serverless. Incluye autenticación segura, roles de usuario (admin, cliente, operador), pasarela de cobros recurrentes (Stripe / Mercado Pago) y paneles analíticos en tiempo real.",
-          "Todo el código se entrega modular, documentado y listo para escalar a miles de usuarios concurrentes.\n\n🚀 Para cotizar tu plataforma y recibir una propuesta a la medida, llena el formulario de registro aquí:\n👉 https://innocentia.tech/#onboarding",
+          "Desarrollamos sistemas web y plataformas que automatizan tu negocio: paneles para administrar clientes, pedidos, cobros en línea y reportes en tiempo real.",
+          "Son fáciles de usar desde cualquier computadora o celular. Cuéntanos qué proceso deseas digitalizar llenando el formulario para armar tu cotización:\n\n🚀 Llena tu solicitud aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
-  // 6. Inteligencia Artificial, Agentes, Chatbots, Automatización
+  // 6. Inteligencia Artificial, Agentes, Chatbots, WhatsApp
   {
-    keywords: ["ia", "inteligencia artificial", "agente", "chatbot", "chat bot", "automatizar", "automatizacion", "gpt", "llm", "deep learning", "gemini", "openai"],
+    keywords: ["ia", "inteligencia artificial", "agente", "chatbot", "chat bot", "automatizar", "automatizacion", "gpt", "llm", "openai"],
     responses: [
       {
         speaker: "DUAL",
         type: "both",
         text: [
-          "IVÁN: Integramos agentes de Inteligencia Artificial conectados a los datos de tu empresa (mediante RAG y embeddings vectoriales). Pueden atender clientes por WhatsApp, generar cotizaciones automáticas o analizar reportes en segundos.",
-          "SOFÍA: Y cuidamos que la interfaz de conversación sea empática, rápida y con una personalidad fiel a tu marca para que los usuarios sientan una atención humana y natural.\n\n🚀 Puedes llenar tu solicitud de automatización con IA aquí:\n👉 https://innocentia.tech/#onboarding",
+          "IVÁN: Conectamos asistentes de Inteligencia Artificial a tu WhatsApp o página web para atender a tus clientes 24/7, responder dudas comunes y agendar citas automáticamente.",
+          "SOFÍA: Y cuidamos que las respuestas se sientan cálidas, humanas y con el tono de tu marca.\n\n🚀 Para cotizar un asistente de IA para tu negocio, llena el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
@@ -133,8 +144,8 @@ const RULES: MatchRule[] = [
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "Manejamos presupuestos transparentes y modulares por etapas o sprints semanales, lo que te permite pagar conforme validas avances reales:",
-          "• Identidad de Marca y Prototipado UX/UI: Desde proyectos ágiles hasta sistemas completos.\n• Landing Pages & Web Corporativa: Rápidas, optimizadas para SEO y móviles.\n• MVPs y Apps / SaaS a medida: Entregados en sprints de 2 a 4 semanas.\n\n🚀 Puedes registrar tu proyecto y llenar el formulario directo para obtener tu cotización desglosada y adaptada a lo que necesitas aquí:\n👉 https://innocentia.tech/#onboarding",
+          "Manejamos precios accesibles y esquemas flexibles (pago por etapas o modalidad de renta mensual con todo incluido):",
+          "• Logotipos e Identidad Visual: Entregas rápidas con archivos vectoriales.\n• Sitios Web y Tiendas Online: Listos para vender y atraer clientes.\n• Aplicaciones y Sistemas a Medida: Desarrollados paso a paso para que pagues conforme apruebas avances.\n\n🚀 Para darte el presupuesto exacto según tu idea, llena el formulario en 2 minutos:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
@@ -148,14 +159,14 @@ const RULES: MatchRule[] = [
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "Trabajamos con metodología ágil en sprints de entrega continua:",
-          "• Branding y Prototipos UI/UX: 5 a 10 días hábiles con revisiones directas en Figma.\n• Landing pages y webs interactivas: 1 a 2 semanas.\n• Aplicaciones completas y MVPs: De 3 a 6 semanas, con despliegues semanales para que pruebes el avance en vivo.\n\n🚀 Para definir el cronograma exacto de tu proyecto, regístralo en nuestro formulario aquí:\n👉 https://innocentia.tech/#onboarding",
+          "Trabajamos con entregas rápidas y transparentes:",
+          "• Logotipos y Diseños: De 3 a 7 días hábiles.\n• Sitios Web y Páginas de Venta: De 1 a 2 semanas.\n• Aplicaciones y Plataformas: De 3 a 6 semanas con avances visibles cada semana.\n\n🚀 Cuéntanos tu fecha objetivo llenando el formulario para adaptarnos a tu calendario:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
-  // 9. Seguridad, Código, Hosting, Nube, Base de Datos
+  // 9. Seguridad, Código, Hosting, Servidores
   {
     keywords: ["seguridad", "hosting", "servidor", "nube", "cloud", "cifrado", "ssl", "postgresql", "supabase", "aws", "vercel"],
     responses: [
@@ -163,7 +174,7 @@ const RULES: MatchRule[] = [
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "La seguridad y la propiedad del código son innegociables: todo el software se despliega con certificados SSL automáticos, bases de datos cifradas en reposo y en tránsito, copias de seguridad diarias y repositorios privados de Git transferidos al 100% a tu empresa.\n\n👉 Inicia tu proyecto de forma segura registrándote aquí: https://innocentia.tech/#onboarding",
+          "Tu información y la de tus clientes siempre están protegidas: incluimos certificados de seguridad SSL, respaldos automáticos y servidores rápidos y estables. Además, el proyecto y el código son 100% tuyos.\n\n👉 Inicia tu proyecto de forma segura aquí: https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
@@ -177,8 +188,8 @@ const RULES: MatchRule[] = [
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: ¡Hola! Qué alegría saludarte. Soy Sofía, encargada del diseño, arte y experiencia de usuario en Innocentia.",
-          "IVÁN: ¡Hola! Y yo soy Iván, a cargo de la arquitectura, código y tecnología. Cuéntanos, ¿qué proyecto o idea tienes en mente hoy?\n\nSi deseas cotizar de inmediato, puedes llenar el formulario aquí: https://innocentia.tech/#onboarding",
+          "SOFÍA: ¡Hola! Qué gusto saludarte. Yo me encargo del diseño, la imagen y que todo se vea increíble.",
+          "IVÁN: ¡Hola! Y yo me encargo de la programación y que todo funcione a la perfección. Cuéntanos, ¿qué idea o proyecto tienes en mente?\n\nSi deseas cotizar de inmediato, puedes llenar el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
@@ -192,8 +203,8 @@ const RULES: MatchRule[] = [
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: ¡Somos el corazón de Innocentia Tech! Yo represento la imaginación, la creatividad visual y el diseño centrado en personas.",
-          "IVÁN: Y yo represento la ingeniería rigurosa, el desarrollo de software y la infraestructura escalable. Juntos convertimos cualquier idea en tecnología real y funcional.\n\n🚀 Puedes iniciar tu cotización directa aquí: https://innocentia.tech/#onboarding",
+          "SOFÍA: ¡Somos el equipo de Innocentia Tech! Creamos marcas, sitios web y aplicaciones que ayudan a negocios a crecer y vender más.",
+          "IVÁN: Te acompañamos desde la idea inicial hasta el lanzamiento final. Cuéntanos tu proyecto y con gusto te preparamos una propuesta sin compromiso:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
@@ -207,7 +218,7 @@ const RULES: MatchRule[] = [
         speaker: "SOFÍA",
         type: "sofia",
         text: [
-          "¡Con muchísimo gusto! Cuando estés listo para comenzar o quieras explorar más detalles, aquí estaremos. Puedes registrarte y llenar el formulario de cotización aquí:\n👉 https://innocentia.tech/#onboarding ✨",
+          "¡Con muchísimo gusto! Cuando desees dar el siguiente paso, aquí estaremos para apoyarte. Puedes llenar el formulario de cotización aquí:\n👉 https://innocentia.tech/crear-proyecto ✨",
         ],
       },
     ],
@@ -221,8 +232,8 @@ const RULES: MatchRule[] = [
         speaker: "DUAL",
         type: "both",
         text: [
-          "IVÁN: Nuestro canal oficial de atención directa y WhatsApp es el +52 960 177 1556 (9601771556). También estamos disponibles en contacto@innocentia.tech y ventas@innocentia.tech.",
-          "SOFÍA: Puedes escribirnos por WhatsApp al 960 177 1556 en cualquier momento o llenar el formulario de cotización en https://innocentia.tech/#onboarding para comenzar de inmediato.",
+          "IVÁN: Nuestro canal oficial de WhatsApp y atención telefónica es el +52 960 177 1556. También nos puedes escribir a contacto@innocentia.tech.",
+          "SOFÍA: Puedes escribirnos por WhatsApp al 960 177 1556 en cualquier momento o llenar el formulario de cotización en https://innocentia.tech/crear-proyecto para comenzar de inmediato.",
         ],
       },
     ],
@@ -278,15 +289,17 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
     query.includes("dibuj") ||
     query.includes("estilo") ||
     query.includes("bonit") ||
-    query.includes("color");
+    query.includes("color") ||
+    query.includes("logo") ||
+    query.includes("marca");
 
   if (isDesignFocused) {
     return {
       speaker: "SOFÍA",
       type: "sofia",
       text: [
-        `Comprendo lo que buscas sobre "${userQuery}". En diseño cuidamos cada detalle visual, desde la paleta de colores hasta la composición y legibilidad.`,
-        "Podemos crear propuestas personalizadas para que tu producto transmita exactamente el valor y la confianza que deseas.\n\n🚀 Puedes registrar tu proyecto y cotizarlo en directo aquí:\n👉 https://innocentia.tech/#onboarding",
+        `¡Claro que sí! Con respecto a "${userQuery}", en diseño nos enfocamos en que tu proyecto tenga una imagen atractiva, moderna y profesional.`,
+        "Para conocer tu estilo y prepararte una propuesta personalizada, llena el formulario aquí en 2 minutos:\n👉 https://innocentia.tech/crear-proyecto",
       ],
     };
   }
@@ -296,15 +309,17 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
     query.includes("lenguaje") ||
     query.includes("servidor") ||
     query.includes("velocidad") ||
-    query.includes("codigo");
+    query.includes("codigo") ||
+    query.includes("app") ||
+    query.includes("sistema");
 
   if (isCodeFocused) {
     return {
       speaker: "IVÁN",
       type: "ivan",
       text: [
-        `Respecto a tu consulta sobre "${userQuery}": en Innocentia desarrollamos con estándares modernos de ingeniería, garantizando código limpio, tiempos de respuesta ultra rápidos y alta seguridad.`,
-        "Cuéntame más sobre los requerimientos técnicos o llena el formulario directo para armar tu cotización:\n👉 https://innocentia.tech/#onboarding",
+        `Sobre tu consulta de "${userQuery}": nosotros nos encargamos de toda la parte técnica para que tu software sea rápido, seguro y fácil de usar.`,
+        "Cuéntanos las funciones que imaginas llenando el formulario y te enviamos la cotización desglosada:\n👉 https://innocentia.tech/crear-proyecto",
       ],
     };
   }
@@ -314,8 +329,8 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
     speaker: "DUAL",
     type: "both",
     text: [
-      `SOFÍA: Entendido. Nos encanta analizar nuevas ideas como "${userQuery}".`,
-      "IVÁN: Cuéntanos un poco más sobre el alcance o llena el formulario directo para estructurar un Blueprint con cotización y tiempos de entrega:\n👉 https://innocentia.tech/#onboarding",
+      `SOFÍA: ¡Excelente idea! Nos encantaría ayudarte con "${userQuery}".`,
+      "IVÁN: Es muy fácil empezar: solo cuéntanos qué necesitas en nuestro formulario en 2 minutos y te preparamos la cotización completa:\n👉 https://innocentia.tech/crear-proyecto",
     ],
   };
 }
