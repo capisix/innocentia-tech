@@ -137,6 +137,7 @@ function PortalMainContent() {
   const urlRole = searchParams.get("role") as RoleType | null;
 
   // Active Role & User State
+  const [isMounted, setIsMounted] = useState(false);
   const [activeRole, setActiveRole] = useState<RoleType>("ceo");
   const [activeUser, setActiveUser] = useState<UserAccount>(USER_ACCOUNTS.ivan_ceo);
   const [authenticatedUserId, setAuthenticatedUserId] = useState<string | null>(null);
@@ -148,6 +149,7 @@ function PortalMainContent() {
 
   // Initialize from URL and enforce mandatory password lock for CEO & Socios
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window !== "undefined") {
       const sessionAuthId = sessionStorage.getItem("innocentia_session_auth_id");
       if (sessionAuthId) {
@@ -156,8 +158,10 @@ function PortalMainContent() {
         if (storedUser) {
           try {
             const parsed = JSON.parse(storedUser);
-            setActiveUser(parsed);
-            setActiveRole(parsed.role);
+            if (parsed && parsed.id && parsed.role) {
+              setActiveUser(parsed);
+              setActiveRole(parsed.role);
+            }
           } catch (e) {}
         }
       } else {
@@ -2924,7 +2928,7 @@ function PortalMainContent() {
                         </div>
 
                         <div className="text-left md:text-right flex-shrink-0 space-y-1">
-                          {log.amount && (
+                          {typeof log.amount === "number" && (
                             <span
                               className={`text-base font-black font-mono block ${
                                 log.action === "INGRESO"
@@ -2936,7 +2940,7 @@ function PortalMainContent() {
                                   : "text-rose-400"
                               }`}
                             >
-                              {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
+                              {log.action === "INGRESO" ? "+" : "-"}${(log.amount || 0).toLocaleString()} MXN
                             </span>
                           )}
                           <span className="text-[10px] font-mono text-[#00D1FF] block">
@@ -2956,7 +2960,7 @@ function PortalMainContent() {
             )}
 
             {ceoTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="socio" userName={activeUser.name} />
+              <ProjectTeamFeedAndChat userRole="ceo" userName={activeUser.name} />
             )}
           </div>
         )}
@@ -4135,7 +4139,7 @@ function PortalMainContent() {
                         </div>
 
                         <div className="text-left md:text-right flex-shrink-0 space-y-1">
-                          {log.amount && (
+                          {typeof log.amount === "number" && (
                             <span
                               className={`text-base font-black font-mono block ${
                                 log.action === "INGRESO"
@@ -4147,7 +4151,7 @@ function PortalMainContent() {
                                   : "text-rose-400"
                               }`}
                             >
-                              {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
+                              {log.action === "INGRESO" ? "+" : "-"}${(log.amount || 0).toLocaleString()} MXN
                             </span>
                           )}
                           <span className="text-[10px] font-mono text-purple-300 block">
