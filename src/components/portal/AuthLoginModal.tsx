@@ -243,6 +243,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
 
     // Success: save authenticated state
     if (typeof window !== "undefined") {
+      sessionStorage.setItem("innocentia_session_auth_id", activeUser.id);
       localStorage.setItem("innocentia_active_role", activeUser.role);
       localStorage.setItem("innocentia_active_user", JSON.stringify(activeUser));
       localStorage.setItem("innocentia_auth_token", "AUTH_" + activeUser.id + "_" + Date.now());
