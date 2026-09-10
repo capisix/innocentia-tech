@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sparkles,
   MessageSquare,
@@ -14,7 +14,28 @@ import {
   Users,
   Briefcase,
   Layers,
+  Share2,
+  Check,
+  Building2,
 } from "../../lib/icons";
+
+export interface IncomingLead {
+  id: string;
+  clientName: string;
+  clientCompany: string;
+  clientPhone: string;
+  clientEmail: string;
+  vendorCode: string;
+  vendorName: string;
+  projectName: string;
+  projectType: string;
+  budgetRange: string;
+  timeline?: string;
+  description: string;
+  date: string;
+  status: "Nueva Solicitud" | "En Revisión" | "Propuesta Enviada" | "Cerrado";
+  assignedVendor?: string;
+}
 
 interface ProjectItem {
   id: string;
@@ -56,53 +77,164 @@ interface ChatMessage {
 }
 
 interface ProjectTeamFeedAndChatProps {
-  currentRole?: string;
-  currentUserName?: string;
+  userRole?: string;
+  userName?: string;
 }
 
+export const MULTIPLATFORM_DEMOS = [
+  {
+    id: "demo_esencial",
+    badge: "Opción 1",
+    title: "Plataforma Esencial (Catálogo, Citas & Panel Base)",
+    category: "Pymes & Servicios",
+    desc: "Diseño UX/UI personalizado, catálogo o menú dinámico, sistema de agenda de citas y panel administrativo.",
+    url: "https://innocentia.tech/#servicios",
+    idealFor: "Consultorios, clínicas, despachos legales, marcas de autor y servicios profesionales.",
+    defaultPricing: "Implementación: $12,000 MXN + Renta: $2,200 MXN/mes",
+  },
+  {
+    id: "demo_conectada",
+    badge: "Opción 2",
+    title: "Plataforma Conectada (App Móvil, Reservas & WhatsApp)",
+    category: "Delivery, Logística & Retail",
+    desc: "App nativa iOS & Android / PWA, ruteo en vivo, notificaciones automáticas por WhatsApp API y pasarela de pagos.",
+    url: "https://innocentia.tech/#playground",
+    idealFor: "Restaurantes, dark kitchens, mensajería, e-commerce interactivo y control de sucursales.",
+    defaultPricing: "Implementación: $28,000 MXN + Renta: $4,500 MXN/mes",
+  },
+  {
+    id: "demo_avanzada",
+    badge: "Opción 3",
+    title: "Plataforma Avanzada (SaaS a Medida, Agentes IA & ERP)",
+    category: "High-Tech & Inteligencia Artificial",
+    desc: "Agentes de Inteligencia Artificial (LLM/RAG), automatización con WebSockets, facturación y reportes analíticos.",
+    url: "https://innocentia.tech/#proyectos",
+    idealFor: "Startups, empresas con procesos operativos propios, fintech y plataformas de alto volumen.",
+    defaultPricing: "Implementación: $65,000 MXN + Renta: $9,500 MXN/mes",
+  },
+];
+
 export default function ProjectTeamFeedAndChat({
-  currentRole = "asesor",
-  currentUserName = "Carlos Mendoza",
+  userRole = "socio",
+  userName = "Daniel Torre",
 }: ProjectTeamFeedAndChatProps) {
   // Available Projects
   const projects: ProjectItem[] = [
     {
       id: "proj-1",
       name: "App Móvil Delivery & Reservas en Tiempo Real",
-      client: "Gourmet Express S.A. (Alejandro Morales)",
+      client: "Gourmet Express S.A. (Lic. Roberto Garza)",
       status: "En Desarrollo (Sprint 4)",
-      leadDesigner: "Sofía (UX/UI & Color)",
-      leadDev: "Rodrigo Silva (Tech Lead) & Iván Core",
+      leadDesigner: "Sofía (UX/UI & Colorimetría)",
+      leadDev: "Ing. Rodrigo Pacheco & Iván Castillo (CEO)",
       leadSales: "Carlos Mendoza (Comercial)",
-      partnerLead: "Dirección General",
+      partnerLead: "Daniel Torre & Jorge Pérez",
       progress: 75,
     },
     {
       id: "proj-2",
       name: "Plataforma Clínica Médica con Diagnóstico AI",
-      client: "Medicloud (Dr. Roberto Garza)",
-      status: "Anticipo Cubierto (Sprint 1)",
+      client: "Clínica Médica AI (Dra. Mariana Valdés)",
+      status: "Sprint 4 Activo",
       leadDesigner: "Sofía (UX/UI Lead)",
-      leadDev: "Iván (Neural Engine)",
+      leadDev: "Ing. Rodrigo Pacheco (Tech Lead)",
       leadSales: "Carlos Mendoza (Comercial)",
       partnerLead: "Dirección General",
-      progress: 30,
+      progress: 68,
     },
     {
       id: "proj-3",
-      name: "ERP de Inventarios & WebSockets Logística",
-      client: "Grupo Logístico Norte (Ing. Laura Paredes)",
-      status: "Cotización Aprobada",
-      leadDesigner: "Sofía (Prototipado)",
-      leadDev: "Rodrigo Silva & Iván Core",
+      name: "Fintech Seguros MX - Portal B2B",
+      client: "Fintech Seguros MX (Lic. Andrea Morales)",
+      status: "Por Iniciar (Fase 0)",
+      leadDesigner: "Sofía (UX/UI Lead)",
+      leadDev: "Por Asignar (CEO)",
       leadSales: "Carlos Mendoza (Comercial)",
       partnerLead: "Dirección General",
-      progress: 15,
+      progress: 10,
     },
   ];
 
   const [selectedProjectId, setSelectedProjectId] = useState<string>("proj-1");
-  const [activeTab, setActiveTab] = useState<"blog" | "chat">("blog");
+  const [activeTab, setActiveTab] = useState<"leads" | "chat" | "blog">("leads");
+
+  // Incoming Leads State (populated from localStorage or default mocks)
+  const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
+    {
+      id: "PROJ-894120",
+      clientName: "Lic. Andrea Morales",
+      clientCompany: "Fintech Seguros MX",
+      clientPhone: "+52 55 4123 9876",
+      clientEmail: "andrea@fintechseguros.mx",
+      vendorCode: "SIN-ASESOR",
+      vendorName: "Sin Asesor (Por Canalizar por Dirección General)",
+      projectName: "Portal de Cotizaciones y Emisión de Pólizas B2B",
+      projectType: "web_platform",
+      budgetRange: "150k_350k",
+      timeline: "express",
+      description: "Requerimos una plataforma web rápida donde brokers puedan cotizar seguros y emitir carátulas en PDF con firma digital.",
+      date: "Hoy, 10:15 AM",
+      status: "Nueva Solicitud",
+      assignedVendor: "Sin Asignar",
+    },
+    {
+      id: "PROJ-719302",
+      clientName: "Arq. Valentina Suárez",
+      clientCompany: "Ikal Chukum Acabados",
+      clientPhone: "+52 999 123 4567",
+      clientEmail: "valentina@ikalchukum.com",
+      vendorCode: "VEN-CARLOS-202",
+      vendorName: "Carlos Mendoza",
+      projectName: "E-Commerce Exclusivo y Calculadora de Metros Cuadrados",
+      projectType: "mobile_app",
+      budgetRange: "80k_150k",
+      timeline: "standard",
+      description: "Catálogo de lujo para distribución nacional con cotizador en tiempo real según el metraje de obra.",
+      date: "Ayer, 04:20 PM",
+      status: "En Revisión",
+      assignedVendor: "Carlos Mendoza",
+    },
+  ]);
+
+  // Load leads from localStorage on mount & listen for new events
+  useEffect(() => {
+    const loadLeads = () => {
+      try {
+        if (typeof window !== "undefined") {
+          const stored = localStorage.getItem("innocentia_incoming_leads");
+          if (stored) {
+            const parsed: IncomingLead[] = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setIncomingLeads((prev) => {
+                const map = new Map<string, IncomingLead>();
+                [...parsed, ...prev].forEach((item) => map.set(item.id, item));
+                return Array.from(map.values());
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Error loading leads:", err);
+      }
+    };
+
+    loadLeads();
+    if (typeof window !== "undefined") {
+      window.addEventListener("innocentia_lead_created", loadLeads);
+      return () => window.removeEventListener("innocentia_lead_created", loadLeads);
+    }
+  }, []);
+
+  // Proposal Builder State
+  const [selectedLeadForProposal, setSelectedLeadForProposal] = useState<IncomingLead | null>(null);
+  const [selectedDemoId, setSelectedDemoId] = useState<string>("demo_conectada");
+  const [proposalPricingModel, setProposalPricingModel] = useState<"renta" | "desarrollo">("renta");
+  const [customImplementationCost, setCustomImplementationCost] = useState<string>("$24,000 MXN");
+  const [customMonthlyCost, setCustomMonthlyCost] = useState<string>("$3,800 MXN / mes");
+  const [customDevCost, setCustomDevCost] = useState<string>("$120,000 MXN");
+  const [copiedProposal, setCopiedProposal] = useState(false);
+
+  const selectedDemo = MULTIPLATFORM_DEMOS.find((d) => d.id === selectedDemoId) || MULTIPLATFORM_DEMOS[0];
 
   // Blog Posts State
   const [posts, setPosts] = useState<BlogPost[]>([
@@ -127,7 +259,7 @@ export default function ProjectTeamFeedAndChat({
       id: "p-2",
       projectId: "proj-1",
       authorRole: "dev",
-      authorName: "Rodrigo Silva & Iván",
+      authorName: "Ing. Rodrigo Pacheco & Iván Castillo",
       authorTitle: "Dev Lead & Software Architect",
       date: "Hoy, 11:30 AM",
       title: "⚡ Staging Desplegado: WebSockets GPS & PostgreSQL Conectados",
@@ -140,437 +272,448 @@ export default function ProjectTeamFeedAndChat({
       },
       commentsCount: 2,
     },
-    {
-      id: "p-3",
-      projectId: "proj-1",
-      authorRole: "sales",
-      authorName: "Carlos Mendoza",
-      authorTitle: "Asesor Comercial",
-      date: "Ayer, 04:45 PM",
-      title: "💼 Aprobación de Alcance y Confirmación de Anticipo",
-      content:
-        "El cliente Alejandro Morales aprobó el alcance de la Fase 04 sin modificaciones de presupuesto. La orden de trabajo y contrato fueron formalizados con éxito.",
-      category: "Ventas & Alcance",
-      attachment: {
-        label: "Ficha de Atribución COT-104.pdf",
-        type: "contract",
-      },
-      commentsCount: 1,
-    },
-    {
-      id: "p-4",
-      projectId: "proj-1",
-      authorRole: "partner",
-      authorName: "Dirección General",
-      authorTitle: "Socio Fundador",
-      date: "Ayer, 06:00 PM",
-      title: "👑 Liberación de Infraestructura & Conciliación de Comisiones",
-      content:
-        "Se autorizó la ampliación de instancias Redis en AWS y la asignación del tabulador de comisiones correspondiente a la bolsa del 20% conforme a contrato.",
-      category: "Finanzas & Auditoría",
-      attachment: {
-        label: "Reporte Financiero Q3",
-        type: "metrics",
-      },
-      commentsCount: 4,
-    },
   ]);
 
   // Chat Messages State
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: "c-1",
+      id: "m-1",
       projectId: "proj-1",
       authorRole: "sales",
-      authorName: "Carlos Mendoza (Ventas)",
+      authorName: "Carlos Mendoza",
       authorTitle: "Asesor Comercial",
-      text: "Equipo, el cliente nos pregunta si en la vista de pedidos podemos resaltar el tiempo estimado de llegada en color ámbar.",
-      time: "10:45 AM",
+      text: "Equipo, el cliente acaba de enviar su requerimiento. Ya revisé la cotización base y les compartí el demo de la plataforma conectada.",
+      time: "10:00 AM",
     },
     {
-      id: "c-2",
-      projectId: "proj-1",
-      authorRole: "designer",
-      authorName: "Sofía (Diseño)",
-      authorTitle: "Lead UX/UI",
-      text: "¡Excelente idea Carlos! Ajusté el token #FFB703 en Figma con un glow sutil para que sea ultra legible.",
-      time: "10:48 AM",
-    },
-    {
-      id: "c-3",
+      id: "m-2",
       projectId: "proj-1",
       authorRole: "dev",
-      authorName: "Rodrigo Silva (Dev)",
+      authorName: "Ing. Rodrigo Pacheco",
       authorTitle: "Tech Lead",
-      text: "Recibido. Ya lo integré en el componente de Tailwind y en staging está visible.",
-      time: "10:52 AM",
+      text: "Excelente. La arquitectura está modularizada en Next.js y WebSockets, listos para arrancar Sprint 1 en cuanto validen el anticipo.",
+      time: "10:18 AM",
     },
     {
-      id: "c-4",
+      id: "m-3",
       projectId: "proj-1",
       authorRole: "partner",
-      authorName: "Dirección (Socio)",
-      authorTitle: "Board",
-      text: "Excelente velocidad de respuesta equipo. El sprint sigue en tiempo para entrega el 05 Sep.",
-      time: "11:00 AM",
+      authorName: "Daniel Torre",
+      authorTitle: "Socio Operaciones",
+      text: "Recibido. Movimiento conciliado en bitácora de finanzas y cuenta de origen validada.",
+      time: "10:30 AM",
     },
   ]);
 
-  // New Post Form State
-  const [isPosting, setIsPosting] = useState(false);
-  const [newPostTitle, setNewPostTitle] = useState("");
-  const [newPostContent, setNewPostContent] = useState("");
-  const [newPostCategory, setNewPostCategory] = useState<BlogPost["category"]>("UI / UX");
-
-  // New Chat Message State
   const [chatText, setChatText] = useState("");
-
-  const activeProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
-  const projectPosts = posts.filter((p) => p.projectId === selectedProjectId);
-  const projectMessages = messages.filter((m) => m.projectId === selectedProjectId);
-
-  const handleCreatePost = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPostTitle.trim() || !newPostContent.trim()) return;
-
-    const newPost: BlogPost = {
-      id: "p-" + Date.now(),
-      projectId: selectedProjectId,
-      authorRole:
-        currentRole === "dev"
-          ? "dev"
-          : currentRole === "socio"
-          ? "partner"
-          : currentRole === "asesor"
-          ? "sales"
-          : "designer",
-      authorName: currentUserName,
-      authorTitle:
-        currentRole === "dev"
-          ? "Ingeniería & Dev"
-          : currentRole === "socio"
-          ? "Socio / Finanzas"
-          : currentRole === "asesor"
-          ? "Asesor Comercial"
-          : "Diseño & UX",
-      date: "Hace unos momentos",
-      title: newPostTitle.trim(),
-      content: newPostContent.trim(),
-      category: newPostCategory,
-      commentsCount: 0,
-    };
-
-    setPosts([newPost, ...posts]);
-    setNewPostTitle("");
-    setNewPostContent("");
-    setIsPosting(false);
-  };
 
   const handleSendChatMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatText.trim()) return;
 
     const newMsg: ChatMessage = {
-      id: "c-" + Date.now(),
+      id: "msg-" + Date.now(),
       projectId: selectedProjectId,
-      authorRole:
-        currentRole === "dev"
-          ? "dev"
-          : currentRole === "socio"
-          ? "partner"
-          : currentRole === "asesor"
-          ? "sales"
-          : "client",
-      authorName: currentUserName,
-      authorTitle:
-        currentRole === "dev"
-          ? "Dev & UX"
-          : currentRole === "socio"
-          ? "Socio"
-          : currentRole === "asesor"
-          ? "Ventas"
-          : "Cliente",
+      authorRole: userRole === "ceo" || userRole === "socio" ? "partner" : userRole === "dev" ? "dev" : "sales",
+      authorName: userName,
+      authorTitle: userRole === "ceo" ? "Director General" : userRole === "socio" ? "Socio Co-Fundador" : userRole === "dev" ? "Ingeniero Dev" : "Asesor Comercial",
       text: chatText.trim(),
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      time: new Date().toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }),
     };
 
-    setMessages([...messages, newMsg]);
+    setMessages((prev) => [...prev, newMsg]);
     setChatText("");
-
-    // Simulate auto acknowledgment from other team roles
-    setTimeout(() => {
-      if (currentRole === "asesor" || currentRole === "usuario") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: "c-bot-" + Date.now(),
-            projectId: selectedProjectId,
-            authorRole: "designer",
-            authorName: "Sofía (Diseño)",
-            authorTitle: "Lead UX/UI",
-            text: "Anotado. Lo revisamos con el equipo de diseño e ingeniería para el siguiente release.",
-            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          },
-        ]);
-      }
-    }, 1000);
   };
 
+  const handleAssignVendor = (leadId: string, vendorName: string) => {
+    setIncomingLeads((prev) =>
+      prev.map((l) => (l.id === leadId ? { ...l, vendorName, vendorCode: vendorName.includes("Carlos") ? "VEN-CARLOS-202" : "INN-DIRECT-01", status: "En Revisión" } : l))
+    );
+  };
+
+  // Generate Formal Proposal Message
+  const getProposalFormattedMessage = (lead: IncomingLead) => {
+    const isRenta = proposalPricingModel === "renta";
+    return [
+      "🚀 *PROPUESTA DE COTIZACIÓN FORMAL • INNOCENTIA TECH*",
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "Estimado/a *" + lead.clientName + "* (" + lead.clientCompany + "),",
+      "",
+      "Es un gusto saludarte. En *Innocentia Tech* revisamos tu solicitud para el proyecto *\"" + lead.projectName + "\"" y hemos preparado la siguiente propuesta técnica y comercial:",
+      "",
+      "📌 *SOLUCIÓN PROPUESTA:*",
+      "• *Modelo:* " + selectedDemo.title + " (" + selectedDemo.category + ")",
+      "• *Alcance:* " + selectedDemo.desc,
+      "",
+      "💎 *DEMO EN VIVO MULTIPLATAFORMA:*",
+      "Puedes probar la experiencia interactiva, navegación fluida a 60 FPS y arquitectura táctil directamente en este enlace:",
+      "👉 " + selectedDemo.url,
+      "",
+      "📊 *ESQUEMA DE INVERSIÓN SUGERIDO:*",
+      isRenta
+        ? "• *Modalidad:* Renta Mensual SaaS (Incluye Infraestructura & Mantenimiento Continuo)\n• *Implementación & Personalización Inicial:* " + customImplementationCost + "\n• *Mensualidad Operativa:* " + customMonthlyCost + " (Hosting, actualizaciones, seguridad y soporte)"
+        : "• *Modalidad:* Desarrollo a Medida (Propiedad Total de Código)\n• *Inversión Total de Desarrollo:* " + customDevCost + " (Pagos por Sprints contra entregables validados)",
+      "",
+      "👤 *TU ASESOR ASIGNADO:*",
+      "• *Nombre:* " + lead.vendorName,
+      "• *Canal Oficial:* +52 960 177 1556 • contacto@innocentia.tech",
+      "",
+      "¿Cuándo te vendría bien agendar una videollamada breve de 15 minutos para mostrarte el prototipo en vivo y afinar detalles?",
+      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "*Innocentia Tech Core* • Mérida, Yucatán, México."
+    ].join("\n");
+  };
+
+  const handleCopyProposal = (lead: IncomingLead) => {
+    const text = getProposalFormattedMessage(lead);
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedProposal(true);
+      setTimeout(() => setCopiedProposal(false), 3000);
+    }
+  };
+
+  const handleSendWhatsAppProposal = (lead: IncomingLead) => {
+    const text = getProposalFormattedMessage(lead);
+    const cleanPhone = lead.clientPhone.replace(/[^0-9]/g, "");
+    const url = cleanPhone ? ("https://wa.me/" + cleanPhone + "?text=" + encodeURIComponent(text)) : ("https://wa.me/529601771556?text=" + encodeURIComponent(text));
+    window.open(url, "_blank");
+  };
+
+  const activeProject = projects.find((p) => p.id === selectedProjectId) || projects[0];
+  const projectMessages = messages.filter((m) => m.projectId === selectedProjectId);
+
   return (
-    <div className="space-y-6 text-left animate-in fade-in duration-300">
-      {/* Top Banner & Project Selector */}
-      <div className="rounded-[32px] bg-gradient-to-r from-purple-900/25 via-indigo-950/20 to-black/80 border border-purple-500/30 p-6 sm:p-8 backdrop-blur-2xl space-y-6 shadow-2xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/40 text-xs font-mono text-purple-300 font-bold uppercase">
-              <Users className="w-3.5 h-3.5" />
-              <span>COLABORACIÓN MULTI-ROL • INNOCENTIA TEAM</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight font-mono">
-              Bitácora &amp; Chat de Proyecto
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-400 font-light">
-              Canal de coordinación unificado entre <strong>Diseñadores (Sofía)</strong>, <strong>Ingenieros (Iván)</strong>, <strong>Vendedores</strong> y <strong>Socios</strong>.
-            </p>
+    <div className="w-full space-y-6 text-left animate-in fade-in duration-300">
+      {/* Top Header & Sub-tabs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-[28px] bg-[#07070E] border border-white/15 backdrop-blur-2xl">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/30 text-[10px] font-mono text-[#00D1FF] uppercase font-bold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>SISTEMA DE MENSAJES, LEADS &amp; DEMOS MULTIPLATAFORMA</span>
           </div>
-
-          {/* Project Selector Dropdown */}
-          <div className="space-y-1.5 flex-shrink-0">
-            <label className="text-[10px] font-mono text-gray-400 uppercase font-bold block">
-              Seleccionar Proyecto Activo:
-            </label>
-            <select
-              value={selectedProjectId}
-              onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="px-4 py-2.5 rounded-xl bg-black border border-purple-400/40 text-xs font-mono font-bold text-white focus:outline-none focus:border-purple-400 cursor-pointer shadow-lg"
-            >
-              {projects.map((p) => (
-                <option key={p.id} value={p.id} className="bg-[#0c0d14] text-white">
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+            Mesa de Trabajo &amp; Cotizaciones de Clientes
+          </h2>
+          <p className="text-xs text-gray-400 font-mono">
+            Canaliza solicitudes entrantes, arma propuestas comerciales y envía demos interactivos a clientes.
+          </p>
         </div>
 
-        {/* Selected Project Card Snapshot */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
-          <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-1">
-            <span className="text-[10px] text-gray-400 block uppercase">Cliente Asignado</span>
-            <strong className="text-white block truncate">{activeProject.client}</strong>
-            <span className="text-[10px] text-emerald-400 block">{activeProject.status}</span>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-black/60 border border-[#FF3858]/30 space-y-1">
-            <span className="text-[10px] text-[#FF3858] block uppercase font-bold">🎨 Lead Diseño</span>
-            <strong className="text-white block truncate">{activeProject.leadDesigner}</strong>
-            <span className="text-[10px] text-gray-400 block">Figma &amp; UI Tokens</span>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-black/60 border border-[#00D1FF]/30 space-y-1">
-            <span className="text-[10px] text-[#00D1FF] block uppercase font-bold">⚡ Lead Dev</span>
-            <strong className="text-white block truncate">{activeProject.leadDev}</strong>
-            <span className="text-[10px] text-gray-400 block">WebSockets &amp; Cloud</span>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-black/60 border border-emerald-500/30 space-y-1">
-            <span className="text-[10px] text-emerald-400 block uppercase font-bold">💼 Lead Comercial</span>
-            <strong className="text-white block truncate">{activeProject.leadSales}</strong>
-            <span className="text-[10px] text-gray-400 block">Tabulador 20% Activo</span>
-          </div>
-        </div>
-      </div>
-
-      {/* View Switcher: Blog / Bitácora vs Chat de Equipo */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
-        <div className="flex gap-2">
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-2 bg-black/60 p-1.5 rounded-2xl border border-white/10 self-start sm:self-auto">
           <button
             type="button"
-            onClick={() => setActiveTab("blog")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold font-mono uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
-              activeTab === "blog"
-                ? "bg-purple-600/30 border border-purple-400 text-purple-200 shadow-[0_0_20px_rgba(168,85,247,0.3)]"
-                : "bg-white/[0.03] border border-white/10 text-gray-400 hover:text-white"
+            onClick={() => setActiveTab("leads")}
+            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === "leads"
+                ? "bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white shadow-lg"
+                : "text-gray-400 hover:text-white"
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
-            <span>📰 Bitácora de Avances &amp; Hitos ({projectPosts.length})</span>
+            <Briefcase className="w-3.5 h-3.5" />
+            <span>Leads &amp; Cotizaciones ({incomingLeads.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("chat")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold font-mono uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === "chat"
-                ? "bg-[#00D1FF]/20 border border-[#00D1FF] text-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.3)]"
-                : "bg-white/[0.03] border border-white/10 text-gray-400 hover:text-white"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "text-gray-400 hover:text-white"
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
-            <span>💬 Chat de Equipo en Vivo ({projectMessages.length})</span>
+            <span>Chat del Equipo</span>
           </button>
-        </div>
 
-        {activeTab === "blog" && (
           <button
             type="button"
-            onClick={() => setIsPosting(!isPosting)}
-            className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-[#00D1FF] text-white text-xs font-bold font-mono uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-105"
+            onClick={() => setActiveTab("blog")}
+            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === "blog"
+                ? "bg-white/20 text-white shadow-lg"
+                : "text-gray-400 hover:text-white"
+            }`}
           >
-            {isPosting ? "✕ Cancelar Publicación" : "＋ Publicar Entrada en Bitácora"}
+            <Layers className="w-3.5 h-3.5" />
+            <span>Entregables &amp; Figma</span>
           </button>
-        )}
+        </div>
       </div>
 
       {/* ======================================================== */}
-      {/* VIEW 1: BLOG & BITÁCORA DE AVANCES */}
+      {/* TAB 1: BANDEJA DE LEADS ENTRANTES & GENERADOR DE PROPUESTAS */}
       {/* ======================================================== */}
-      {activeTab === "blog" && (
+      {activeTab === "leads" && (
         <div className="space-y-6">
-          {/* New Post Creator Form Modal/Card */}
-          {isPosting && (
-            <form
-              onSubmit={handleCreatePost}
-              className="p-6 rounded-[28px] bg-gradient-to-r from-purple-950/40 via-black/90 to-black border border-purple-400/40 space-y-4 shadow-2xl"
-            >
-              <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                <h3 className="text-sm font-bold text-white uppercase font-mono">
-                  Nueva Entrada en la Bitácora de {activeProject.name}
-                </h3>
-                <span className="text-[10px] font-mono text-purple-300">
-                  Publicando como: <strong>{currentUserName}</strong>
-                </span>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {incomingLeads.map((lead) => {
+              const isUnassigned = lead.vendorCode === "SIN-ASESOR" || lead.vendorName.includes("Sin Asesor");
+              return (
+                <div
+                  key={lead.id}
+                  className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/40 transition-all shadow-xl text-left"
+                >
+                  <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-bold">
+                          {lead.id}
+                        </span>
+                        <span
+                          className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border font-bold ${
+                            isUnassigned
+                              ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                              : "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                          }`}
+                        >
+                          {isUnassigned ? "⚠️ Por Canalizar (CEO)" : "✓ Asesor Asignado"}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-black text-white">{lead.clientName}</h3>
+                      <p className="text-xs font-mono text-[#00D1FF]">{lead.clientCompany}</p>
+                    </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-                <div className="sm:col-span-2 space-y-1">
-                  <label className="text-gray-300 block">Título del Hito o Actualización *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Ej. 🎨 Entregable de Wireframes Fase 2 o ⚡ Despliegue de Base de Datos"
-                    value={newPostTitle}
-                    onChange={(e) => setNewPostTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white focus:outline-none focus:border-purple-400"
-                  />
-                </div>
+                    <div className="text-right text-[10px] font-mono text-gray-400">
+                      <span>{lead.date}</span>
+                    </div>
+                  </div>
 
-                <div className="space-y-1">
-                  <label className="text-gray-300 block">Categoría *</label>
-                  <select
-                    value={newPostCategory}
-                    onChange={(e) => setNewPostCategory(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white focus:outline-none focus:border-purple-400 cursor-pointer"
+                  {/* Project Specs */}
+                  <div className="space-y-2 text-xs font-mono">
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1">
+                      <span className="text-gray-400 block text-[10px] uppercase font-bold">Proyecto Solicitado:</span>
+                      <strong className="text-white text-sm block">{lead.projectName}</strong>
+                      <p className="text-gray-300 font-light leading-relaxed mt-1">"{lead.description}"</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
+                        <span className="text-gray-400 block text-[9px] uppercase">WhatsApp:</span>
+                        <a
+                          href={"https://wa.me/" + lead.clientPhone.replace(/[^0-9]/g, "")}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-emerald-400 font-bold hover:underline"
+                        >
+                          {lead.clientPhone}
+                        </a>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
+                        <span className="text-gray-400 block text-[9px] uppercase">Correo:</span>
+                        <span className="text-gray-200 truncate block">{lead.clientEmail}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Vendor Routing Dropdown for CEO / Socios */}
+                  <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/30 flex items-center justify-between gap-3 text-xs font-mono">
+                    <div>
+                      <span className="text-purple-300 text-[10px] uppercase block font-bold">Asesor a Cargo:</span>
+                      <span className="text-white font-bold">{lead.vendorName}</span>
+                    </div>
+
+                    {(userRole === "ceo" || userRole === "socio") && (
+                      <select
+                        value={lead.vendorName}
+                        onChange={(e) => handleAssignVendor(lead.id, e.target.value)}
+                        className="px-3 py-1.5 rounded-xl bg-black border border-purple-400 text-xs font-mono text-purple-200 focus:outline-none cursor-pointer"
+                      >
+                        <option value="Sin Asesor (Por Canalizar por Dirección)">Por Canalizar (Sin Asesor)</option>
+                        <option value="Carlos Mendoza">Asignar a Carlos Mendoza</option>
+                        <option value="Iván Castillo (CEO)">Atender por Iván Castillo (CEO)</option>
+                        <option value="Daniel Torre (Socio)">Atender por Daniel Torre</option>
+                        <option value="Jorge Pérez (Socio)">Atender por Jorge Pérez</option>
+                      </select>
+                    )}
+                  </div>
+
+                  {/* Action Button: Open Proposal Builder */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedLeadForProposal(lead);
+                      setCopiedProposal(false);
+                    }}
+                    className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer hover:scale-[1.02]"
                   >
-                    <option value="UI / UX">UI / UX (Diseño)</option>
-                    <option value="Arquitectura & Dev">Arquitectura &amp; Dev (Código)</option>
-                    <option value="Ventas & Alcance">Ventas &amp; Alcance (Comercial)</option>
-                    <option value="Finanzas & Auditoría">Finanzas &amp; Auditoría (Socios)</option>
-                  </select>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Armar Propuesta &amp; Enviar Demo Multiplataforma →</span>
+                  </button>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* MODAL / PANEL DE PROPUESTA CON 3 OPCIONES DE DEMO */}
+      {/* ======================================================== */}
+      {selectedLeadForProposal && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+          <div className="relative w-full max-w-3xl bg-[#07070E] border border-white/20 rounded-[32px] p-6 sm:p-8 space-y-6 shadow-2xl my-auto text-left max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 font-bold uppercase">
+                  Generador de Cotización Oficial
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-white uppercase mt-1">
+                  Propuesta para {selectedLeadForProposal.clientName}
+                </h3>
+                <p className="text-xs font-mono text-gray-400">{selectedLeadForProposal.clientCompany} • {selectedLeadForProposal.projectName}</p>
               </div>
 
-              <div className="space-y-1 text-xs font-mono">
-                <label className="text-gray-300 block">Descripción Detallada / Acuerdos del Equipo *</label>
-                <textarea
-                  rows={3}
-                  required
-                  placeholder="Describe los avances, decisiones tomadas, pantallas listas o cambios de infraestructura acordados..."
-                  value={newPostContent}
-                  onChange={(e) => setNewPostContent(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/20 text-white focus:outline-none focus:border-purple-400"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setIsPosting(false)}
-                  className="px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-xs font-mono text-gray-300"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-full bg-gradient-to-r from-purple-500 to-[#00D1FF] text-white text-xs font-bold font-mono uppercase tracking-wider cursor-pointer hover:scale-105 transition-all shadow-md"
-                >
-                  Publicar en Bitácora
-                </button>
-              </div>
-            </form>
-          )}
-
-          {/* Posts Feed */}
-          <div className="space-y-4">
-            {projectPosts.map((post) => (
-              <div
-                key={post.id}
-                className="p-6 rounded-[28px] bg-black/80 border border-white/15 hover:border-white/30 transition-all space-y-4 shadow-xl"
+              <button
+                type="button"
+                onClick={() => setSelectedLeadForProposal(null)}
+                className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer text-sm font-mono"
               >
-                {/* Post Author Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-9 h-9 rounded-2xl flex items-center justify-center text-sm font-bold border ${
-                        post.authorRole === "designer"
-                          ? "bg-[#FF3858]/20 border-[#FF3858] text-[#FF3858]"
-                          : post.authorRole === "dev"
-                          ? "bg-[#00D1FF]/20 border-[#00D1FF] text-[#00D1FF]"
-                          : post.authorRole === "sales"
-                          ? "bg-emerald-500/20 border-emerald-400 text-emerald-300"
-                          : "bg-purple-500/20 border-purple-400 text-purple-300"
+                ✕ Cerrar
+              </button>
+            </div>
+
+            {/* Step 1: Select Multiplatform Demo (3 Options) */}
+            <div className="space-y-3">
+              <label className="text-xs font-bold text-white uppercase font-mono block">
+                1. Selecciona el Demo Multiplataforma a Enviar al Cliente:
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {MULTIPLATFORM_DEMOS.map((demo) => {
+                  const isSelected = selectedDemoId === demo.id;
+                  return (
+                    <button
+                      key={demo.id}
+                      type="button"
+                      onClick={() => setSelectedDemoId(demo.id)}
+                      className={`p-4 rounded-2xl border text-left transition-all cursor-pointer space-y-2 ${
+                        isSelected
+                          ? "bg-gradient-to-b from-[#00D1FF]/20 to-black border-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.3)] scale-[1.02]"
+                          : "bg-black/60 border-white/10 text-gray-400 hover:border-white/30 hover:text-white"
                       }`}
                     >
-                      {post.authorRole === "designer"
-                        ? "🎨"
-                        : post.authorRole === "dev"
-                        ? "💻"
-                        : post.authorRole === "sales"
-                        ? "💼"
-                        : "👑"}
-                    </div>
-
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-bold text-white font-mono">{post.authorName}</h4>
-                        <span className="text-[10px] text-gray-400 font-mono">({post.authorTitle})</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-white/10 text-[#00D1FF]">
+                          {demo.badge}
+                        </span>
+                        {isSelected && <Check className="w-4 h-4 text-[#00D1FF]" />}
                       </div>
-                      <span className="text-[10px] text-gray-400 font-mono">{post.date}</span>
-                    </div>
-                  </div>
 
-                  <span
-                    className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold border self-start sm:self-auto ${
-                      post.category === "UI / UX"
-                        ? "bg-[#FF3858]/10 text-[#FF3858] border-[#FF3858]/30"
-                        : post.category === "Arquitectura & Dev"
-                        ? "bg-[#00D1FF]/10 text-[#00D1FF] border-[#00D1FF]/30"
-                        : post.category === "Ventas & Alcance"
-                        ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
-                        : "bg-purple-500/10 text-purple-300 border-purple-500/30"
-                    }`}
-                  >
-                    {post.category}
-                  </span>
-                </div>
+                      <h4 className="text-xs font-black text-white leading-tight">{demo.title}</h4>
+                      <p className="text-[10px] text-gray-300 font-light leading-relaxed">{demo.desc}</p>
 
-                {/* Post Content */}
-                <div className="space-y-2 text-xs sm:text-sm font-mono text-gray-200 leading-relaxed">
-                  <h3 className="text-base font-bold text-white">{post.title}</h3>
-                  <p className="text-gray-300 font-light">{post.content}</p>
-                </div>
-
-                {/* Attachment / Link */}
-                {post.attachment && (
-                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between text-xs font-mono">
-                    <span className="text-gray-400">
-                      📎 <strong>Recurso Adjunto:</strong> {post.attachment.label}
-                    </span>
-                    <span className="text-[#00D1FF] font-bold">Verificado ✓</span>
-                  </div>
-                )}
+                      <div className="pt-2 border-t border-white/10 text-[9px] font-mono text-[#00D1FF]">
+                        <strong>Demo Link:</strong> {demo.url.replace("https://", "")}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-            ))}
+            </div>
+
+            {/* Step 2: Commercial Pricing Model */}
+            <div className="space-y-3 pt-2">
+              <label className="text-xs font-bold text-white uppercase font-mono block">
+                2. Esquema de Inversión y Precios:
+              </label>
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setProposalPricingModel("renta")}
+                  className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                    proposalPricingModel === "renta"
+                      ? "bg-purple-600/30 border-purple-400 text-white shadow-lg font-bold"
+                      : "bg-black/50 border-white/10 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  <span className="text-xs font-bold block text-white">Renta Mensual SaaS</span>
+                  <span className="text-[10px] font-mono text-purple-300 block">Implementación + Mensualidad</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setProposalPricingModel("desarrollo")}
+                  className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
+                    proposalPricingModel === "desarrollo"
+                      ? "bg-[#00D1FF]/20 border-[#00D1FF] text-white shadow-lg font-bold"
+                      : "bg-black/50 border-white/10 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  <span className="text-xs font-bold block text-white">Desarrollo a Medida</span>
+                  <span className="text-[10px] font-mono text-[#00D1FF] block">Pago por Proyecto / Código Completo</span>
+                </button>
+              </div>
+
+              {/* Price Inputs */}
+              {proposalPricingModel === "renta" ? (
+                <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono">
+                  <div>
+                    <label className="text-gray-400 block text-[10px] uppercase">Implementación Inicial:</label>
+                    <input
+                      type="text"
+                      value={customImplementationCost}
+                      onChange={(e) => setCustomImplementationCost(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-black border border-white/20 text-white font-bold mt-1"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-gray-400 block text-[10px] uppercase">Mensualidad Operativa:</label>
+                    <input
+                      type="text"
+                      value={customMonthlyCost}
+                      onChange={(e) => setCustomMonthlyCost(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-black border border-white/20 text-emerald-400 font-bold mt-1"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono">
+                  <label className="text-gray-400 block text-[10px] uppercase">Presupuesto Total de Desarrollo:</label>
+                  <input
+                    type="text"
+                    value={customDevCost}
+                    onChange={(e) => setCustomDevCost(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-black border border-white/20 text-[#00D1FF] font-bold mt-1"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Step 3: Message Preview */}
+            <div className="space-y-2 pt-2">
+              <label className="text-xs font-bold text-gray-300 uppercase font-mono block">
+                3. Vista Previa del Mensaje Oficial para el Cliente:
+              </label>
+              <pre className="p-4 rounded-2xl bg-black/80 border border-white/15 text-[11px] font-mono text-gray-300 whitespace-pre-wrap max-h-48 overflow-y-auto leading-relaxed">
+                {getProposalFormattedMessage(selectedLeadForProposal)}
+              </pre>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => handleCopyProposal(selectedLeadForProposal)}
+                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {copiedProposal ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
+                <span>{copiedProposal ? "¡Propuesta Copiada!" : "Copiar para Correo"}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSendWhatsAppProposal(selectedLeadForProposal)}
+                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#3A86FF] hover:from-emerald-300 hover:to-[#00D1FF] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:scale-105 transition-all cursor-pointer"
+              >
+                <span>Enviar Propuesta por WhatsApp</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -586,7 +729,7 @@ export default function ProjectTeamFeedAndChat({
                 Mesa de Discusión en Vivo • {activeProject.name}
               </h3>
               <p className="text-xs text-gray-400 font-mono">
-                Canal exclusivo para coordinar entregables, resolver dudas y alinear expectativas entre diseñadores, devs, ventas y socios.
+                Coordinación en tiempo real entre Iván (CEO), Daniel/Jorge (Socios), Rodrigo (Dev) y Carlos (Ventas).
               </p>
             </div>
 
@@ -598,71 +741,17 @@ export default function ProjectTeamFeedAndChat({
             </div>
           </div>
 
-          {/* Quick Mention Suggestions */}
-          <div className="flex flex-wrap gap-2 text-xs font-mono">
-            <span className="text-[10px] text-gray-400 uppercase font-bold self-center">Menciones Rápidas:</span>
-            <button
-              type="button"
-              onClick={() => setChatText((prev) => prev + "@diseño ")}
-              className="px-2.5 py-1 rounded-full bg-[#FF3858]/10 text-[#FF3858] border border-[#FF3858]/30 hover:bg-[#FF3858]/20 transition-all cursor-pointer"
-            >
-              @diseño (Sofía)
-            </button>
-            <button
-              type="button"
-              onClick={() => setChatText((prev) => prev + "@dev ")}
-              className="px-2.5 py-1 rounded-full bg-[#00D1FF]/10 text-[#00D1FF] border border-[#00D1FF]/30 hover:bg-[#00D1FF]/20 transition-all cursor-pointer"
-            >
-              @dev (Iván)
-            </button>
-            <button
-              type="button"
-              onClick={() => setChatText((prev) => prev + "@ventas ")}
-              className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20 transition-all cursor-pointer"
-            >
-              @ventas
-            </button>
-            <button
-              type="button"
-              onClick={() => setChatText((prev) => prev + "@socio ")}
-              className="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30 hover:bg-purple-500/20 transition-all cursor-pointer"
-            >
-              @socio
-            </button>
-          </div>
-
           {/* Chat Messages Feed */}
           <div className="p-4 sm:p-6 rounded-2xl bg-black/60 border border-white/10 space-y-4 max-h-[460px] overflow-y-auto">
             {projectMessages.map((msg) => (
               <div key={msg.id} className="space-y-1">
                 <div className="flex items-center gap-2 text-[10px] font-mono text-gray-400">
-                  <span
-                    className={`font-bold ${
-                      msg.authorRole === "designer"
-                        ? "text-[#FF3858]"
-                        : msg.authorRole === "dev"
-                        ? "text-[#00D1FF]"
-                        : msg.authorRole === "sales"
-                        ? "text-emerald-400"
-                        : "text-purple-300"
-                    }`}
-                  >
-                    {msg.authorName}
-                  </span>
+                  <span className="font-bold text-[#00D1FF]">{msg.authorName}</span>
+                  <span className="text-gray-500">({msg.authorTitle})</span>
                   <span>• {msg.time}</span>
                 </div>
 
-                <div
-                  className={`p-3.5 rounded-2xl text-xs sm:text-sm font-mono max-w-2xl leading-relaxed border ${
-                    msg.authorRole === "designer"
-                      ? "bg-[#FF3858]/10 border-[#FF3858]/25 text-gray-200"
-                      : msg.authorRole === "dev"
-                      ? "bg-[#00D1FF]/10 border-[#00D1FF]/25 text-gray-200"
-                      : msg.authorRole === "sales"
-                      ? "bg-emerald-950/30 border-emerald-500/25 text-emerald-100"
-                      : "bg-purple-950/30 border-purple-500/25 text-purple-100"
-                  }`}
-                >
+                <div className="p-3.5 rounded-2xl text-xs sm:text-sm font-mono max-w-2xl leading-relaxed border bg-white/[0.03] border-white/15 text-gray-200">
                   {msg.text}
                 </div>
               </div>
@@ -675,18 +764,55 @@ export default function ProjectTeamFeedAndChat({
               type="text"
               value={chatText}
               onChange={(e) => setChatText(e.target.value)}
-              placeholder={`Escribe un mensaje para el equipo de ${activeProject.name}...`}
-              className="flex-1 px-4 py-3 rounded-2xl bg-black border border-white/20 text-white text-xs sm:text-sm font-mono placeholder:text-gray-500 focus:outline-none focus:border-purple-400 shadow-inner"
+              placeholder={"Escribe un mensaje para el equipo..."}
+              className="flex-1 px-4 py-3 rounded-2xl bg-black border border-white/20 text-white text-xs sm:text-sm font-mono placeholder:text-gray-500 focus:outline-none focus:border-purple-400"
             />
 
             <button
               type="submit"
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-[#00D1FF] hover:from-purple-600 hover:to-[#00E5FF] text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:scale-105 transition-all cursor-pointer"
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-[#00D1FF] hover:from-purple-600 hover:to-[#00E5FF] text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer"
             >
               <span>Enviar</span>
               <Send className="w-4 h-4" />
             </button>
           </form>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* VIEW 3: ENTREGABLES, COMMITS & FIGMA */}
+      {/* ======================================================== */}
+      {activeTab === "blog" && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {posts.map((post) => (
+              <div
+                key={post.id}
+                className="p-6 rounded-[28px] bg-black/80 border border-white/15 space-y-4 hover:border-white/30 transition-all text-left"
+              >
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div>
+                    <span className="text-xs font-bold text-white block">{post.authorName}</span>
+                    <span className="text-[10px] font-mono text-gray-400">{post.authorTitle}</span>
+                  </div>
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-white/10 text-gray-300">
+                    {post.category}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <h3 className="text-base font-bold text-white">{post.title}</h3>
+                  <p className="text-xs text-gray-300 font-mono leading-relaxed">{post.content}</p>
+                </div>
+
+                {post.attachment && (
+                  <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-xs font-mono text-gray-400">
+                    📎 Recurso: <strong className="text-[#00D1FF]">{post.attachment.label}</strong>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

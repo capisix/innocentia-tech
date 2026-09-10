@@ -311,6 +311,33 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
 🔒 *Proyecto y cliente formalmente vinculados en Innocentia Tech.*
     `.trim();
 
+    // Store lead for team chat & proposal system
+    try {
+      if (typeof window !== "undefined") {
+        const stored = JSON.parse(localStorage.getItem("innocentia_incoming_leads") || "[]");
+        const newLeadItem = {
+          id: folio,
+          clientName,
+          clientCompany,
+          clientPhone,
+          clientEmail,
+          vendorCode: vendorCode || "SIN-ASESOR",
+          vendorName: vendorName || "Sin Asesor (Por Canalizar por Dirección)",
+          projectName,
+          projectType,
+          budgetRange,
+          timeline,
+          description: projectDescription,
+          date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
+          status: "Nueva Solicitud",
+        };
+        localStorage.setItem("innocentia_incoming_leads", JSON.stringify([newLeadItem, ...stored]));
+        window.dispatchEvent(new Event("innocentia_lead_created"));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
     if (onProjectCreated) {
       onProjectCreated({
         folio,
