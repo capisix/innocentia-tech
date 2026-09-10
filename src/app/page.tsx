@@ -113,15 +113,7 @@ function HomeContent() {
       {/* Footer */}
       <Footer />
 
-      {/* Floating Chatbot Widget ("¿Necesitas ayuda?" con soporte Maximizado) */}
-      {introFinished && (
-        <FloatingChatWidget
-          onOpenProjectModal={openProjectModal}
-          isOpenExternal={isChatOpen}
-          isMaximizedExternal={isChatMaximized}
-          onCloseExternal={closeChat}
-        />
-      )}
+
 
       {/* Ventana Flotante de Creación de Proyecto (Se abre como modal y se cierra al terminar) */}
       <ProjectCreationModal

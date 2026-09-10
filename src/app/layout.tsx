@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import FloatingChatWidget from "../components/common/FloatingChatWidget";
 
 export const metadata: Metadata = {
   title: "Innocentia Tech • Laboratorio de Software & IA",
@@ -114,8 +115,9 @@ export default function RootLayout({
         />
         <link rel="stylesheet" href="/tailwind.css" />
       </head>
-      <body className="bg-[#040407] text-[#F3F4F6] antialiased selection:bg-[#00E5FF]/30 selection:text-white min-h-screen">
+      <body className="bg-[#040407] text-[#F3F4F6] antialiased selection:bg-[#00E5FF]/30 selection:text-white min-h-screen relative">
         {children}
+        <FloatingChatWidget />
       </body>
     </html>
   );
