@@ -45,6 +45,7 @@ export default function InternalPricingMatrix({
   const [calcClientName, setCalcClientName] = useState("");
   const [copiedQuote, setCopiedQuote] = useState(false);
   const [preloadedLeadNotice, setPreloadedLeadNotice] = useState<string | null>(null);
+  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
 
   // Auto-load preloaded lead from localStorage if coming from Mesa de Trabajo
   useEffect(() => {
@@ -526,6 +527,66 @@ export default function InternalPricingMatrix({
       {/* TAB 4: CALCULADORA DE COTIZACIÓN INTERACTIVA (CON EDICIÓN DE PRECIO Y EXTRAS) */}
       {activeTab === "calculadora" && (
         <div className="space-y-4">
+          {/* Recent Form Lead Quick-Banner */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black/80 to-[#00D1FF]/10 border border-[#00D1FF]/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center flex-shrink-0 text-lg">
+                📋
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 font-bold">
+                    SOLICITUD RECIENTE • PROJ-592160
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-400">
+                    9 Sep 2026
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-white mt-0.5">
+                  Daniel Torre de Haro • <span className="text-gray-300">Pro Acabados</span>
+                </h4>
+                <p className="text-[11px] font-mono text-gray-400">
+                  App de Pedidos y Entregas • Asesor: Carlos Mendoza (VEN-CARLOS-202)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 self-stretch sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setIsLeadModalOpen(true)}
+                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <span>👁️ Ver Ficha Oficial</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCalcClientName("Daniel Torre de Haro (Pro Acabados)");
+                  setCalcModalidad("proyecto");
+                  setCalcTier("mvp");
+                  setCalcDiseno("personalizado");
+                  setSelectedExtras({
+                    whatsapp_bot: true,
+                    stripe_payments: true,
+                    cloud_infra: false,
+                    pwa_mobile: false,
+                    audit_reports: false,
+                    support_247: false,
+                    multi_language: false,
+                    domain_ssl: false,
+                  });
+                  setPreloadedLeadNotice("✓ Requerimientos de Daniel Torre (Pro Acabados) cargados en la calculadora.");
+                }}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] hover:scale-105 text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>⚡ Cargar en Cotizador</span>
+              </button>
+            </div>
+          </div>
+
           {preloadedLeadNotice && (
             <div className="p-3.5 rounded-2xl bg-[#00D1FF]/15 border border-[#00D1FF]/40 text-[#00D1FF] text-xs font-mono font-bold flex items-center justify-between shadow-lg animate-in fade-in">
               <div className="flex items-center gap-2">
@@ -1026,6 +1087,132 @@ export default function InternalPricingMatrix({
             <p className="text-gray-400">
               El soporte incluye mantenimiento preventivo, corrección de bugs y monitoreo de servidores. Nuevos módulos o rediseños completos se cotizan por sprint independiente.
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Lead Details Modal for PROJ-592160 */}
+      {isLeadModalOpen && (
+        <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
+          <div className="relative w-full max-w-2xl bg-[#07070E] border border-white/20 rounded-[32px] p-6 sm:p-8 space-y-5 my-auto text-left shadow-[0_0_80px_rgba(0,209,255,0.2)]">
+            <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+              <div>
+                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 font-bold mb-1">
+                  <span>✓ FORMULARIO ENVIADO & VINCULADO</span>
+                </div>
+                <h3 className="text-lg font-black text-white uppercase">
+                  Ficha Oficial de Proyecto • Folio: PROJ-592160
+                </h3>
+                <p className="text-xs font-mono text-gray-400">
+                  ID Cliente: CLI-72746 • Fecha: 9 de Septiembre de 2026
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsLeadModalOpen(false)}
+                className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1 text-xs font-mono">
+              {/* Cliente & Asesor */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                <div>
+                  <span className="text-[10px] text-gray-400 uppercase block font-bold">Cliente Registrado:</span>
+                  <p className="text-sm font-bold text-white mt-0.5">Daniel Torre de Haro</p>
+                  <p className="text-gray-300">Empresa: <strong>Pro Acabados</strong></p>
+                  <p className="text-[#00D1FF]">📱 WhatsApp: 9902302124</p>
+                  <p className="text-gray-400">✉️ pro.acabados.mx@gmail.com</p>
+                  <p className="text-gray-400">📍 Mérida / Yucatán / México</p>
+                </div>
+                <div>
+                  <span className="text-[10px] text-gray-400 uppercase block font-bold">Asesor Comercial Vinculado:</span>
+                  <p className="text-sm font-bold text-amber-300 mt-0.5">Carlos Mendoza</p>
+                  <p className="text-gray-300">Código: <strong>VEN-CARLOS-202</strong></p>
+                  <p className="text-gray-400">Atribución: Bolsa 20% Máx (24 Meses)</p>
+                  <p className="text-emerald-400 mt-2">Status: 🟢 Nueva Solicitud</p>
+                </div>
+              </div>
+
+              {/* Proyecto & Requerimientos */}
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+                <span className="text-[10px] text-gray-400 uppercase block font-bold">Detalles del Proyecto:</span>
+                <p className="text-sm font-bold text-white">App de Pedidos y entregas de producto</p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <span className="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px]">
+                    Plataforma Web / SaaS
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
+                    Presupuesto: $50,000 - $150,000 MXN
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/30 text-[10px]">
+                    Plazo: 1 a 3 meses (Completo)
+                  </span>
+                </div>
+              </div>
+
+              {/* Módulos Solicitados */}
+              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
+                <span className="text-[10px] text-gray-400 uppercase block font-bold">Módulos & Alcance Solicitado:</span>
+                <ul className="space-y-1 text-gray-300">
+                  <li>✓ 🎨 Diseño UI/UX interactivo de alta fidelidad en Figma (Sofía)</li>
+                  <li>✓ 🎬 Microanimaciones e interfaz fluida a 60fps</li>
+                  <li>✓ 🔐 Autenticación y base de datos PostgreSQL cifrada</li>
+                  <li>✓ 💳 Pasarela de pagos en línea (Stripe / MercadoPago)</li>
+                  <li>✓ 📍 Rastreo GPS en vivo y WebSockets en tiempo real</li>
+                  <li>✓ 🤖 Integración de IA conversacional (OpenAI / Claude)</li>
+                  <li>✓ 📲 Notificaciones automáticas por WhatsApp API</li>
+                  <li>✓ 📊 Panel administrativo con métricas y exportación de datos</li>
+                </ul>
+              </div>
+
+              {/* Descripción Textual */}
+              <div className="p-4 rounded-2xl bg-black/60 border border-white/15 space-y-1">
+                <span className="text-[10px] text-gray-400 uppercase block font-bold">Descripción del Cliente:</span>
+                <p className="text-gray-200 italic">
+                  "Atención al cliente, manejo de cotizaciones y formulario de pedidos, cobro de pedidos, reparto de comisiones."
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/10">
+              <a
+                href="https://wa.me/529902302124?text=Hola%20Daniel,%20recibimos%20tu%20solicitud%20para%20el%20proyecto%20de%20App%20de%20Pedidos%20en%20Innocentia%20Tech."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-2"
+              >
+                <span>💬 Abrir WhatsApp con Daniel</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCalcClientName("Daniel Torre de Haro (Pro Acabados)");
+                  setCalcModalidad("proyecto");
+                  setCalcTier("mvp");
+                  setCalcDiseno("personalizado");
+                  setSelectedExtras({
+                    whatsapp_bot: true,
+                    stripe_payments: true,
+                    cloud_infra: false,
+                    pwa_mobile: false,
+                    audit_reports: false,
+                    support_247: false,
+                    multi_language: false,
+                    domain_ssl: false,
+                  });
+                  setPreloadedLeadNotice("✓ Requerimientos de Daniel Torre (Pro Acabados) cargados en la calculadora.");
+                  setIsLeadModalOpen(false);
+                }}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white text-xs font-mono font-bold flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Cargar en Cotizador & Calcular</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

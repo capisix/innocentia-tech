@@ -352,6 +352,24 @@ function PortalMainContent() {
       targetDate: "10 de Agosto de 2026",
       unreadAlerts: 0,
     },
+    {
+      id: "PRJ-05",
+      name: "Pro Acabados - App de Pedidos y Entregas",
+      client: "Daniel Torre de Haro",
+      clientEmail: "pro.acabados.mx@gmail.com",
+      sellerId: "usr_sales_01",
+      sellerName: "Carlos Mendoza (VEN-CARLOS-202)",
+      devLead: "Por Asignar (CEO)",
+      uxLead: "Sofía (Innocentia Design)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "Por Iniciar",
+      progress: 5,
+      currentSprint: "Fase 0: Levantamiento de Requerimientos & Cotización Formal",
+      budget: 142000,
+      paidAmount: 0,
+      targetDate: "30 de Noviembre de 2026",
+      unreadAlerts: 1,
+    },
   ]);
 
   // Audit Logs State con Metadata de Estados de Pago y Fechas
@@ -1149,6 +1167,16 @@ function PortalMainContent() {
 
   // Seller Leads & Linked Form System
   const [sellerLeads, setSellerLeads] = useState<SellerLead[]>([
+    {
+      id: "PROJ-592160",
+      clientName: "Daniel Torre de Haro",
+      company: "Pro Acabados",
+      phone: "9902302124",
+      status: "Formulario Enviado",
+      date: "Hoy, Reciente (9 Sep 2026)",
+      estimatedBudget: "$50,000 - $150,000 MXN",
+      hasNewNotification: true,
+    },
     {
       id: "LEAD-101",
       clientName: "Dra. Mariana Valdés",

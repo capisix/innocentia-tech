@@ -162,6 +162,23 @@ export default function ProjectTeamFeedAndChat({
   // Incoming Leads State (populated from localStorage or default mocks)
   const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
     {
+      id: "PROJ-592160",
+      clientName: "Daniel Torre de Haro",
+      clientCompany: "Pro Acabados",
+      clientPhone: "9902302124",
+      clientEmail: "pro.acabados.mx@gmail.com",
+      vendorCode: "VEN-CARLOS-202",
+      vendorName: "Carlos Mendoza",
+      projectName: "App de Pedidos y entregas de producto",
+      projectType: "web_platform",
+      budgetRange: "50k_150k",
+      timeline: "standard",
+      description: "Atención al cliente, manejo de cotizaciones y formulario de pedidos, cobro de pedidos, reparto de comisiones.",
+      date: "Hoy, Reciente (9 Sep 2026)",
+      status: "Nueva Solicitud",
+      assignedVendor: "Carlos Mendoza",
+    },
+    {
       id: "PROJ-894120",
       clientName: "Lic. Andrea Morales",
       clientCompany: "Fintech Seguros MX",
