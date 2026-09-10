@@ -1,27 +1,61 @@
+export interface ProposalQuoteItem {
+  concept: string;
+  amount: number;
+  highlight?: boolean;
+}
+
+export interface ProposalScopeItem {
+  number: string;
+  title: string;
+}
+
 export interface ProjectPdfData {
   folio: string;
+  clientId?: string;
   projectName: string;
+  clientCompany?: string;
+  subtitle?: string;
+  modalityTag?: string;
   clientName: string;
-  clientCompany: string;
-  clientPhone: string;
   clientEmail: string;
+  clientPhone: string;
+  clientCity?: string;
+  date?: string;
+
+  // Breakdown
+  quoteItems?: ProposalQuoteItem[];
+  subtotal?: number;
+  total?: number;
+  currency?: string;
+  ivaNote?: string;
+
+  // Scope
+  description?: string;
+  scopeItems?: ProposalScopeItem[];
+  scopeValidationText?: string;
+  agreedConditions?: string[];
+
+  // Vendor & QR
   vendorName: string;
   vendorCode?: string;
+  declaredBudget?: string;
+  budgetNotice?: string;
+  qrUrl?: string;
+
+  // Legacy fallback compatibility
   projectType?: string[];
   designNeeds?: string[];
   techFeatures?: string[];
   budgetRange?: string;
   timeline?: string;
-  description?: string;
-  date?: string;
 }
 
 export function generateProjectPdf(data: ProjectPdfData) {
   if (typeof window === "undefined") return;
 
-  const printWindow = window.open("", "_blank", "width=850,height=1000");
+  const printWindow = window.open("", "_blank", "width=900,height=1050");
   if (!printWindow) {
-    alert("Por favor habilita las ventanas emergentes (popups) para generar el PDF.");
+    alert("Por favor habilita las ventanas emergentes (popups) para abrir la propuesta oficial en PDF.");
     return;
   }
 
@@ -31,219 +65,487 @@ export function generateProjectPdf(data: ProjectPdfData) {
     year: "numeric",
   });
 
-  const projectTypesList = data.projectType && data.projectType.length > 0
-    ? data.projectType.join(", ")
-    : "Solución Integral";
+  const clientId = data.clientId || "CLI-" + Math.floor(10000 + Math.random() * 90000);
+  const company = data.clientCompany || data.projectName;
+  const subtitle = data.subtitle || data.description || "App de pedidos y entregas de producto";
+  const modality = data.modalityTag || "Desarrollo por proyecto / MVP";
+  const city = data.clientCity || "Mérida, Yucatán, México";
+  const vendor = data.vendorName || "Carlos Mendoza";
+  const vendorCode = data.vendorCode || "VEN-CARLOS-202";
 
-  const designList = data.designNeeds && data.designNeeds.length > 0
-    ? data.designNeeds.map(d => `<li>✓ ${d}</li>`).join("")
-    : "<li>✓ Diseño UX/UI con arquitectura visual 60 FPS</li>";
+  // Build items list
+  const defaultItems: ProposalQuoteItem[] = [
+    { concept: "Base de software", amount: 120000 },
+    { concept: "Diseño UI/UX personalizado", amount: 22000, highlight: true },
+    { concept: "Chatbot IA + WhatsApp Business", amount: 18500 },
+    { concept: "Pasarela Stripe / SPEI", amount: 12000 },
+  ];
 
-  const techList = data.techFeatures && data.techFeatures.length > 0
-    ? data.techFeatures.map(t => `<li>✓ ${t}</li>`).join("")
-    : "<li>✓ Arquitectura de software moderna y backend escalable</li>";
+  const items = (data.quoteItems && data.quoteItems.length > 0) ? data.quoteItems : defaultItems;
+  const subtotal = data.subtotal || items.reduce((sum, item) => sum + item.amount, 0);
+  const total = data.total || subtotal;
 
-  const budgetLabel = data.budgetRange || "Por definir en cotización técnica";
-  const timelineLabel = data.timeline || "Estándar (1 a 3 meses)";
+  // Build scope items
+  const defaultScope: ProposalScopeItem[] = [
+    { number: "01", title: "Diseño UI/UX de alta fidelidad y microanimaciones." },
+    { number: "02", title: "Autenticación y base de datos PostgreSQL." },
+    { number: "03", title: "Pagos en línea y seguimiento GPS en tiempo real." },
+    { number: "04", title: "IA conversacional y notificaciones por WhatsApp." },
+    { number: "05", title: "Panel administrativo, métricas y exportación de datos." },
+  ];
+
+  let scopeList = (data.scopeItems && data.scopeItems.length > 0) ? data.scopeItems : defaultScope;
+  if ((!data.scopeItems || data.scopeItems.length === 0) && (data.designNeeds || data.techFeatures)) {
+    const combined = [...(data.designNeeds || []), ...(data.techFeatures || [])];
+    if (combined.length > 0) {
+      scopeList = combined.map((item, idx) => ({
+        number: (idx + 1).toString().padStart(2, "0"),
+        title: item.replace(/^✓\s*/, ""),
+      }));
+    }
+  }
+
+  const validationText = data.scopeValidationText ||
+    "La cotización identifica los módulos acordados en la etapa de levantamiento. Se debe confirmar la cobertura de funciones específicas antes del cierre definitivo de alcance.";
+
+  const defaultConditions = [
+    `Plazo solicitado: ${data.timeline || "1 a 3 meses"}; calendario de entrega por confirmar.`,
+    "Definir anticipo, hitos de pago y criterios de aceptación.",
+    "Precisar soporte, garantía, licencias y entrega de código.",
+    "Detallar hosting y consumos de IA, WhatsApp y pasarela.",
+    "Acordar vigencia y tratamiento de cambios de alcance.",
+  ];
+  const conditions = (data.agreedConditions && data.agreedConditions.length > 0) ? data.agreedConditions : defaultConditions;
+
+  const declaredBudget = data.declaredBudget || data.budgetRange || "$50,000 a $150,000 MXN";
+  const budgetNotice = data.budgetNotice || (total > 150000 ? `La estimación se adapta a la complejidad de módulos requeridos (${declaredBudget}).` : undefined);
+
+  // SVG QR Code pointing to online proposal verification
+  const qrCodeSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="qr-svg">
+      <rect width="100" height="100" fill="#FFFFFF" rx="8" />
+      <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M20,20 h10 v10 h-10 z" fill="#000000" />
+      <path d="M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M70,20 h10 v10 h-10 z" fill="#000000" />
+      <path d="M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M20,70 h10 v10 h-10 z" fill="#000000" />
+      <rect x="45" y="10" width="5" height="10" fill="#000000" />
+      <rect x="45" y="25" width="5" height="15" fill="#000000" />
+      <rect x="10" y="45" width="10" height="5" fill="#000000" />
+      <rect x="25" y="45" width="15" height="5" fill="#000000" />
+      <rect x="45" y="45" width="10" height="10" fill="#000000" />
+      <rect x="60" y="45" width="15" height="5" fill="#000000" />
+      <rect x="80" y="45" width="10" height="5" fill="#000000" />
+      <rect x="45" y="60" width="5" height="15" fill="#000000" />
+      <rect x="45" y="80" width="5" height="10" fill="#000000" />
+      <rect x="60" y="60" width="10" height="10" fill="#000000" />
+      <rect x="75" y="60" width="15" height="10" fill="#000000" />
+      <rect x="60" y="75" width="15" height="15" fill="#000000" />
+      <rect x="80" y="75" width="10" height="15" fill="#000000" />
+    </svg>
+  `;
 
   const htmlContent = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Ficha Oficial de Proyecto • ${data.folio} • Innocentia Tech</title>
+  <title>Propuesta Comercial • ${data.folio} • Innocentia Tech</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@600;700&display=swap');
-    
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #111827;
-      background: #FFFFFF;
-      padding: 36px 40px;
-      line-height: 1.5;
+      background-color: #06070B;
+      color: #E2E8F0;
+      font-family: 'Inter', -apple-system, sans-serif;
       font-size: 13px;
+      line-height: 1.5;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
+
+    /* Print Controls Bar */
+    .controls-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #0B0D14;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 9999;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    .controls-bar button, .controls-bar a {
+      background: linear-gradient(135deg, #FF3858, #00D1FF);
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 20px rgba(0,209,255,0.3);
+    }
+    .controls-bar .btn-sec {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #E2E8F0;
+      box-shadow: none;
+    }
+
     @page {
-      size: A4;
-      margin: 12mm 15mm;
+      size: A4 portrait;
+      margin: 0;
     }
+
     @media print {
-      body {
-        padding: 0;
-      }
-      .no-print {
+      .controls-bar {
         display: none !important;
       }
+      body {
+        background: #08090E !important;
+      }
+      .page-container {
+        padding-top: 0 !important;
+      }
+      .page {
+        margin: 0 !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+      }
     }
-    
+
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 70px;
+      padding-bottom: 40px;
+      gap: 30px;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      height: 297mm;
+      background: #08090E;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(255,56,88,0.06) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(0,209,255,0.06) 0%, transparent 40%),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 28px 28px, 28px 28px;
+      padding: 24mm 24mm;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Ambient Subtle Constellation Lines */
+    .page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(0,209,255,0.08), transparent 70%);
+      pointer-events: none;
+    }
+
     /* Header */
-    .header {
+    .doc-header {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .brand-group {
+      display: flex;
       align-items: center;
-      border-bottom: 2px solid #00D1FF;
-      padding-bottom: 18px;
-      margin-bottom: 22px;
+      gap: 12px;
     }
-    .header-logo img {
-      height: 46px;
-      width: auto;
-      object-fit: contain;
-    }
-    .header-info {
-      text-align: right;
-      font-size: 11px;
-      color: #4B5563;
-    }
-    .header-info strong {
-      color: #040407;
-      font-size: 13px;
-      display: block;
+    .brand-logo-text {
       font-family: 'Space Grotesk', sans-serif;
-    }
-    
-    /* Title Banner */
-    .folio-banner {
-      background: #090A10;
-      color: #FFFFFF;
-      border-radius: 12px;
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 22px;
-      border-left: 5px solid #00D1FF;
-    }
-    .folio-title h1 {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 900;
-      font-family: 'Space Grotesk', sans-serif;
-      letter-spacing: -0.5px;
-      text-transform: uppercase;
+      letter-spacing: 2px;
       color: #FFFFFF;
     }
-    .folio-title p {
-      font-size: 11px;
-      color: #9CA3AF;
-      margin-top: 2px;
+    .brand-logo-text span.accent-red { color: #FF3858; }
+    .brand-logo-text span.accent-cyan { color: #00D1FF; }
+
+    .header-meta {
+      text-align: right;
     }
-    .folio-badge {
-      background: rgba(0, 209, 255, 0.15);
-      border: 1px solid #00D1FF;
-      color: #00D1FF;
+    .meta-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
       font-weight: 700;
-      font-size: 14px;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: monospace;
-    }
-    
-    /* Grid sections */
-    .section-title {
-      font-size: 12px;
-      font-weight: 800;
+      color: #00D1FF;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: #1F2937;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .meta-folio {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
       letter-spacing: 0.5px;
-      border-bottom: 1px solid #E5E7EB;
-      padding-bottom: 4px;
-      margin-bottom: 10px;
+    }
+
+    /* Titles */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 800;
+      color: #00D1FF;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    
-    .grid-2 {
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00D1FF;
+    }
+
+    .project-main-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.2;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+    .project-sub-title {
+      font-size: 13px;
+      color: #94A3B8;
+      margin-bottom: 6px;
+    }
+    .project-modality {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #64748B;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    /* 2-Column Info Card */
+    .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .info-col-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 800;
+      color: #64748B;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+    .info-col-name {
+      font-weight: 700;
+      color: #FFFFFF;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+    .info-col-item {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-bottom: 2px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Investment Breakdown Table */
+    .breakdown-table {
+      width: 100%;
       margin-bottom: 20px;
     }
-    
-    .card {
-      background: #F9FAFB;
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
-      padding: 12px 16px;
-    }
-    
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      font-size: 12px;
-      border-bottom: 1px dashed #E5E7EB;
-    }
-    .data-row:last-child {
-      border-bottom: none;
-    }
-    .data-label {
-      color: #6B7280;
-      font-weight: 500;
-    }
-    .data-value {
-      font-weight: 600;
-      color: #111827;
-      text-align: right;
-    }
-    
-    .badge-tag {
-      display: inline-block;
-      background: #EEF2F6;
-      color: #1E293B;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 6px;
-      border: 1px solid #CBD5E1;
-    }
-    
-    /* Features list */
-    .features-list {
-      list-style: none;
-      padding: 0;
-    }
-    .features-list li {
-      font-size: 11.5px;
-      padding: 3px 0;
-      color: #374151;
-    }
-    
-    .desc-box {
-      background: #F9FAFB;
-      border: 1px solid #E5E7EB;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 12px;
-      color: #374151;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      white-space: pre-wrap;
-    }
-    
-    /* Footer */
-    .footer {
-      margin-top: 28px;
-      border-top: 1px solid #E5E7EB;
-      padding-top: 16px;
+    .breakdown-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10.5px;
-      color: #6B7280;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 12.5px;
     }
-    .footer-stamp {
-      background: #F0FDF4;
-      border: 1px solid #86EFAC;
-      color: #166534;
-      padding: 4px 10px;
-      border-radius: 6px;
+    .breakdown-row.subtotal-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: none;
+      padding-top: 12px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+    .item-name {
+      color: #CBD5E1;
+      font-weight: 500;
+    }
+    .item-price {
+      font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
+      color: #FFFFFF;
+    }
+    .item-price.highlight {
+      color: #00D1FF;
+    }
+
+    /* Grand Total Card */
+    .total-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      box-shadow: inset 0 0 30px rgba(0, 209, 255, 0.03);
+    }
+    .total-label-wrap {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .total-label-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .total-label-curr {
+      font-size: 11px;
+      color: #64748B;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .total-amount-large {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 34px;
+      font-weight: 900;
+      color: #10B981;
+      letter-spacing: -1px;
+      text-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
+    }
+
+    .disclaimer-text {
+      font-size: 10.5px;
+      color: #64748B;
+      line-height: 1.45;
+      margin-bottom: 20px;
+    }
+
+    /* Page Footer */
+    .doc-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: #64748B;
+    }
+    .doc-footer strong {
+      color: #94A3B8;
+    }
+    .footer-right {
+      text-align: right;
+    }
+
+    /* Page 2 Specific Styles */
+    .scope-desc {
+      font-size: 12.5px;
+      color: #94A3B8;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .scope-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .scope-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 12px;
+      color: #E2E8F0;
+    }
+    .scope-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #00D1FF;
+      background: rgba(0,209,255,0.1);
+      border: 1px solid rgba(0,209,255,0.25);
+      border-radius: 6px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+
+    .card-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+    }
+    .card-box-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #F59E0B;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .card-box-text {
+      font-size: 11px;
+      color: #94A3B8;
+      line-height: 1.45;
+    }
+
+    .conditions-list {
+      list-style: none;
       text-transform: uppercase;
       font-size: 10px;
     }

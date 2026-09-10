@@ -18,7 +18,8 @@ import {
   Check,
   Building2,
 } from "../../lib/icons";
-import { generateProjectPdf } from "../../lib/generateProjectPdf";
+import { generateProjectPdf, ProjectPdfData } from "../../lib/generateProjectPdf";
+import { ProposalDispatchModal } from "./ProposalDispatchModal";
 
 export interface IncomingLead {
   id: string;
@@ -257,8 +258,37 @@ export default function ProjectTeamFeedAndChat({
   const [customMonthlyCost, setCustomMonthlyCost] = useState<string>("$3,800 MXN / mes");
   const [customDevCost, setCustomDevCost] = useState<string>("$120,000 MXN");
   const [copiedProposal, setCopiedProposal] = useState(false);
+  const [dispatchLeadData, setDispatchLeadData] = useState<ProjectPdfData | null>(null);
+  const [isDispatchModalOpen, setIsDispatchModalOpen] = useState(false);
 
   const selectedDemo = MULTIPLATFORM_DEMOS.find((d) => d.id === selectedDemoId) || MULTIPLATFORM_DEMOS[0];
+
+  // Helper to open official Proposal Dispatch Modal
+  const handleOpenDispatchForLead = (lead: IncomingLead) => {
+    const isProAcabados = lead.id === "PROJ-592160" || lead.clientCompany?.toLowerCase().includes("pro acabados");
+    const data: ProjectPdfData = {
+      folio: lead.id,
+      clientId: isProAcabados ? "CLI-72746" : undefined,
+      projectName: lead.projectName,
+      clientCompany: lead.clientCompany,
+      subtitle: lead.description || "App de pedidos y entregas de producto",
+      modalityTag: "Desarrollo por Proyecto / MVP a Medida",
+      clientName: lead.clientName,
+      clientEmail: lead.clientEmail,
+      clientPhone: lead.clientPhone,
+      clientCity: "Mérida, Yucatán, México",
+      date: lead.date,
+      total: isProAcabados ? 172500 : 120000,
+      subtotal: isProAcabados ? 172500 : 120000,
+      vendorName: lead.vendorName,
+      vendorCode: lead.vendorCode,
+      declaredBudget: lead.budgetRange,
+      timeline: lead.timeline || "1 a 3 meses",
+      description: lead.description,
+    };
+    setDispatchLeadData(data);
+    setIsDispatchModalOpen(true);
+  };
 
   // Helper to load lead into quotation calculator
   const handleLoadInCalculator = (lead: IncomingLead) => {
@@ -866,22 +896,35 @@ ${pricingText}
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => {
+                  const leadToDispatch = selectedLeadForProposal;
+                  setSelectedLeadForProposal(null);
+                  handleOpenDispatchForLead(leadToDispatch);
+                }}
+                className="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white font-mono font-black text-xs uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,56,88,0.3)] hover:scale-105 transition-all cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>🚀 Despachar Propuesta</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => handleCopyProposal(selectedLeadForProposal)}
-                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 {copiedProposal ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
-                <span>{copiedProposal ? "¡Propuesta Copiada!" : "Copiar para Correo"}</span>
+                <span>{copiedProposal ? "¡Copiada!" : "Copiar Texto"}</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleSendWhatsAppProposal(selectedLeadForProposal)}
-                className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#3A86FF] hover:from-emerald-300 hover:to-[#00D1FF] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:scale-105 transition-all cursor-pointer"
+                className="w-full px-4 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:scale-105 transition-all cursor-pointer"
               >
-                <span>Enviar Propuesta por WhatsApp</span>
+                <span>WhatsApp</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -1020,26 +1063,15 @@ ${pricingText}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/10">
               <button
                 type="button"
-                onClick={() =>
-                  generateProjectPdf({
-                    folio: selectedLeadForAnswers.id,
-                    projectName: selectedLeadForAnswers.projectName,
-                    clientName: selectedLeadForAnswers.clientName,
-                    clientCompany: selectedLeadForAnswers.clientCompany,
-                    clientPhone: selectedLeadForAnswers.clientPhone,
-                    clientEmail: selectedLeadForAnswers.clientEmail,
-                    vendorName: selectedLeadForAnswers.vendorName,
-                    vendorCode: selectedLeadForAnswers.vendorCode,
-                    budgetRange: selectedLeadForAnswers.budgetRange,
-                    timeline: selectedLeadForAnswers.timeline,
-                    description: selectedLeadForAnswers.description,
-                    date: selectedLeadForAnswers.date,
-                  })
-                }
-                className="py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
+                onClick={() => {
+                  const leadToDispatch = selectedLeadForAnswers;
+                  setSelectedLeadForAnswers(null);
+                  handleOpenDispatchForLead(leadToDispatch);
+                }}
+                className="py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white font-mono font-black text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-[0_0_20px_rgba(255,56,88,0.3)] hover:scale-105"
               >
-                <FileText className="w-4 h-4 text-[#00D1FF]" />
-                <span>📥 Descargar PDF</span>
+                <Sparkles className="w-4 h-4" />
+                <span>🚀 Despachar Propuesta</span>
               </button>
 
               <button
@@ -1056,16 +1088,27 @@ ${pricingText}
 
               <button
                 type="button"
-                onClick={() => {
-                  const leadToQuote = selectedLeadForAnswers;
-                  setSelectedLeadForAnswers(null);
-                  setSelectedLeadForProposal(leadToQuote);
-                  setCopiedProposal(false);
-                }}
-                className="py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white font-mono font-black text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-[0_0_20px_rgba(255,56,88,0.3)] hover:scale-[1.02]"
+                onClick={() =>
+                  generateProjectPdf({
+                    folio: selectedLeadForAnswers.id,
+                    projectName: selectedLeadForAnswers.projectName,
+                    clientName: selectedLeadForAnswers.clientName,
+                    clientCompany: selectedLeadForAnswers.clientCompany,
+                    clientPhone: selectedLeadForAnswers.clientPhone,
+                    clientEmail: selectedLeadForAnswers.clientEmail,
+                    vendorName: selectedLeadForAnswers.vendorName,
+                    vendorCode: selectedLeadForAnswers.vendorCode,
+                    budgetRange: selectedLeadForAnswers.budgetRange,
+                    timeline: selectedLeadForAnswers.timeline,
+                    description: selectedLeadForAnswers.description,
+                    date: selectedLeadForAnswers.date,
+                    total: selectedLeadForAnswers.id === "PROJ-592160" ? 172500 : 120000,
+                  })
+                }
+                className="py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs uppercase flex items-center justify-center gap-2 cursor-pointer transition-all shadow-md"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Armar Propuesta →</span>
+                <FileText className="w-4 h-4 text-[#00D1FF]" />
+                <span>📥 Descargar PDF</span>
               </button>
             </div>
           </div>
@@ -1168,6 +1211,15 @@ ${pricingText}
             ))}
           </div>
         </div>
+      )}
+
+      {/* Global Proposal Dispatch Modal (WhatsApp / Email / PDF / Link) */}
+      {dispatchLeadData && (
+        <ProposalDispatchModal
+          isOpen={isDispatchModalOpen}
+          onClose={() => setIsDispatchModalOpen(false)}
+          proposalData={dispatchLeadData}
+        />
       )}
     </div>
   );

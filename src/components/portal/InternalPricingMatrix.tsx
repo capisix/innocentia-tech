@@ -20,10 +20,11 @@ import {
   RotateCcw,
   Bot,
   CreditCard,
-  Cloud,
   Shield,
   FileText,
 } from "../../lib/icons";
+import { ProposalDispatchModal } from "./ProposalDispatchModal";
+import { ProjectPdfData } from "../../lib/generateProjectPdf";
 
 interface CustomExtra {
   id: string;
@@ -46,6 +47,8 @@ export default function InternalPricingMatrix({
   const [copiedQuote, setCopiedQuote] = useState(false);
   const [preloadedLeadNotice, setPreloadedLeadNotice] = useState<string | null>(null);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
+  const [isDispatchModalOpen, setIsDispatchModalOpen] = useState(false);
+  const [dispatchProposalData, setDispatchProposalData] = useState<ProjectPdfData | null>(null);
 
   // Auto-load preloaded lead from localStorage if coming from Mesa de Trabajo
   useEffect(() => {
@@ -309,6 +312,80 @@ export default function InternalPricingMatrix({
       setCopiedQuote(true);
       setTimeout(() => setCopiedQuote(false), 3500);
     }
+  };
+
+  const handleOpenDispatchModal = (leadOverride?: Partial<ProjectPdfData>) => {
+    // Construct line items
+    const quoteItems = [
+      {
+        concept: `Base de Software (${calcModalidad === "renta" ? "SaaS" : "Proyecto"} • ${calcTier.toUpperCase()})`,
+        amount: basePrice,
+      },
+      ...(disenoExtra > 0
+        ? [
+            {
+              concept: `Diseño UI/UX (${calcDiseno === "personalizado" ? "Personalizado Figma" : "Experiencia Avanzada 60FPS"})`,
+              amount: disenoExtra,
+              highlight: true,
+            },
+          ]
+        : []),
+      ...presetCatalog
+        .filter((e) => selectedExtras[e.id])
+        .map((e) => ({ concept: e.name, amount: e.price })),
+      ...customExtrasList.map((e) => ({ concept: e.name, amount: e.price })),
+    ];
+
+    const scopeItems = [
+      { number: "01", title: `Arquitectura de software ${calcTier.toUpperCase()} en Next.js & PostgreSQL.` },
+      { number: "02", title: `Diseño UI/UX de alta fidelidad (${calcDiseno}) y componentes responsivos.` },
+      ...(selectedExtras.whatsapp_bot
+        ? [{ number: "03", title: "Chatbot IA conversacional + API WhatsApp Business Oficial." }]
+        : []),
+      ...(selectedExtras.stripe_payments
+        ? [{ number: "04", title: "Pasarela de pagos en línea Stripe / SPEI con webhooks seguros." }]
+        : []),
+      ...(selectedExtras.cloud_infra
+        ? [{ number: "05", title: "Despliegue en Servidor Cloud AWS / Vercel con CDN ultra-rápida." }]
+        : []),
+      ...(selectedExtras.pwa_mobile
+        ? [{ number: "06", title: "Aplicación Móvil Progresiva PWA para iOS y Android." }]
+        : []),
+      { number: "07", title: "Panel administrativo con métricas en tiempo real y exportación de datos." },
+    ];
+
+    const parsedClientName = calcClientName.includes("(")
+      ? calcClientName.split("(")[0].trim()
+      : (calcClientName || "Daniel Torre de Haro");
+    const parsedCompany = calcClientName.includes("(")
+      ? calcClientName.split("(")[1].replace(")", "").trim()
+      : "Pro Acabados";
+
+    const data: ProjectPdfData = {
+      folio: leadOverride?.folio || "PROJ-592160",
+      clientId: leadOverride?.clientId || "CLI-72746",
+      projectName: leadOverride?.projectName || (calcClientName ? `App de Pedidos • ${parsedCompany}` : "App de Pedidos y Entregas"),
+      clientCompany: leadOverride?.clientCompany || parsedCompany,
+      subtitle: leadOverride?.subtitle || "App de pedidos y entregas de producto",
+      modalityTag: calcModalidad === "renta" ? "Modalidad SaaS / Renta Mensual" : "Desarrollo por Proyecto / MVP a Medida",
+      clientName: leadOverride?.clientName || parsedClientName,
+      clientEmail: leadOverride?.clientEmail || "pro.acabados.mx@gmail.com",
+      clientPhone: leadOverride?.clientPhone || "9902302124",
+      clientCity: leadOverride?.clientCity || "Mérida, Yucatán, México",
+      date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }),
+      quoteItems: quoteItems,
+      subtotal: subtotalInvestment,
+      total: finalTotal,
+      currency: "MXN",
+      scopeItems: scopeItems,
+      vendorName: leadOverride?.vendorName || "Carlos Mendoza",
+      vendorCode: leadOverride?.vendorCode || "VEN-CARLOS-202",
+      declaredBudget: leadOverride?.declaredBudget || "$50,000 - $150,000 MXN",
+      timeline: leadOverride?.timeline || "1 a 3 meses",
+    };
+
+    setDispatchProposalData(data);
+    setIsDispatchModalOpen(true);
   };
 
   return (
@@ -1040,18 +1117,28 @@ export default function InternalPricingMatrix({
               </div>
             </div>
 
-            {/* Action Button: Copy Formal Proposal */}
-            <div className="pt-4 border-t border-white/10 space-y-2">
+            {/* Action Buttons: Dispatch Proposal & Copy */}
+            <div className="pt-4 border-t border-white/10 space-y-2.5">
+              <button
+                type="button"
+                onClick={() => handleOpenDispatchModal()}
+                className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] text-white font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shadow-[0_0_30px_rgba(0,209,255,0.4)]"
+              >
+                <Sparkles className="w-4 h-4 text-[#00D1FF]" />
+                <span>🚀 Guardar & Despachar Propuesta (Whats / Email / PDF)</span>
+              </button>
+
               <button
                 type="button"
                 onClick={handleCopyQuote}
-                className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] text-white font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-95 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shadow-[0_0_25px_rgba(255,56,88,0.3)]"
+                className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                {copiedQuote ? <Check className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
-                <span>{copiedQuote ? "¡Propuesta Copiada al Portapapeles!" : "Copiar Propuesta para Cliente"}</span>
+                {copiedQuote ? <Check className="w-4 h-4 text-emerald-400" /> : <TrendingUp className="w-4 h-4" />}
+                <span>{copiedQuote ? "¡Texto Copiado al Portapapeles!" : "Copiar Texto Rápido"}</span>
               </button>
+
               <span className="text-[10px] font-mono text-gray-400 text-center block">
-                Formato listo para pegar directamente en WhatsApp, Email o Propuesta Comercial.
+                Envía por WhatsApp directo, Correo con membrete, PDF Dark Luxury de 2 páginas o Copia el Enlace.
               </span>
             </div>
           </div>
@@ -1177,15 +1264,37 @@ export default function InternalPricingMatrix({
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-white/10">
               <a
                 href="https://wa.me/529902302124?text=Hola%20Daniel,%20recibimos%20tu%20solicitud%20para%20el%20proyecto%20de%20App%20de%20Pedidos%20en%20Innocentia%20Tech."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-2"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all"
               >
-                <span>💬 Abrir WhatsApp con Daniel</span>
+                <span>💬 WhatsApp</span>
               </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  handleOpenDispatchModal({
+                    folio: "PROJ-592160",
+                    clientId: "CLI-72746",
+                    projectName: "App de Pedidos y Entregas",
+                    clientCompany: "Pro Acabados",
+                    clientName: "Daniel Torre de Haro",
+                    clientEmail: "pro.acabados.mx@gmail.com",
+                    clientPhone: "9902302124",
+                    vendorName: "Carlos Mendoza",
+                    vendorCode: "VEN-CARLOS-202",
+                  });
+                  setIsLeadModalOpen(false);
+                }}
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#00D1FF]/20 hover:bg-[#00D1FF]/30 border border-[#00D1FF]/40 text-[#00D1FF] text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>🚀 Despachar PDF</span>
+              </button>
 
               <button
                 type="button"
@@ -1207,14 +1316,23 @@ export default function InternalPricingMatrix({
                   setPreloadedLeadNotice("✓ Requerimientos de Daniel Torre (Pro Acabados) cargados en la calculadora.");
                   setIsLeadModalOpen(false);
                 }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white text-xs font-mono font-bold flex items-center justify-center gap-2"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Cargar en Cotizador & Calcular</span>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Calcular</span>
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Global Proposal Dispatch Modal (WhatsApp / Email / PDF / Link) */}
+      {dispatchProposalData && (
+        <ProposalDispatchModal
+          isOpen={isDispatchModalOpen}
+          onClose={() => setIsDispatchModalOpen(false)}
+          proposalData={dispatchProposalData}
+        />
       )}
     </div>
   );
