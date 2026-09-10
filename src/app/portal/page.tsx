@@ -8,6 +8,7 @@ import VendorContractModal from "../../components/portal/VendorContractModal";
 import ProjectTeamFeedAndChat from "../../components/portal/ProjectTeamFeedAndChat";
 import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
 import AuthLoginModal, { RoleType, ROLE_PRESETS, USER_ACCOUNTS, UserAccount } from "../../components/portal/AuthLoginModal";
+import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix";
 import {
   Sparkles,
   ArrowRight,
@@ -212,11 +213,11 @@ function PortalMainContent() {
   const currentPreset = ROLE_PRESETS.find((p) => p.role === activeRole) || ROLE_PRESETS[0];
 
   // Tab States per Role
-  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "auditoria" | "chat">("proyectos");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "auditoria" | "servidores" | "proyectos" | "chat">("finanzas");
+  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "auditoria" | "tabulador" | "chat">("proyectos");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "chat">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
-  const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "chat">("mis_proyectos");
-  const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "comisiones" | "chat">("leads_formulario");
+  const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
+  const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
 
   // Filters for Audit Log
   const [auditFilterAccount, setAuditFilterAccount] = useState<string>("all");
@@ -1175,6 +1176,18 @@ function PortalMainContent() {
               </button>
 
               <button
+                onClick={() => setCeoTab("tabulador")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  ceoTab === "tabulador"
+                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <DollarSign className="w-4 h-4" />
+                <span>Tabulador y Cotizador Base</span>
+              </button>
+
+              <button
                 onClick={() => setCeoTab("chat")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   ceoTab === "chat"
@@ -1453,6 +1466,10 @@ function PortalMainContent() {
             )}
 
             {/* CEO Tab 5: Chats */}
+            {ceoTab === "tabulador" && (
+              <InternalPricingMatrix userRole="ceo" userName={activeUser.name} />
+            )}
+
             {ceoTab === "chat" && (
               <ProjectTeamFeedAndChat userRole="socio" userName={activeUser.name} />
             )}
@@ -1512,6 +1529,18 @@ function PortalMainContent() {
               >
                 <Briefcase className="w-4 h-4" />
                 <span>Proyectos & Asignaciones</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerTab("tabulador")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  partnerTab === "tabulador"
+                    ? "bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <DollarSign className="w-4 h-4" />
+                <span>Tabulador y Cotizador Base</span>
               </button>
 
               <button
@@ -1819,6 +1848,10 @@ function PortalMainContent() {
             )}
 
             {/* Partner Tab 5: Chats */}
+            {partnerTab === "tabulador" && (
+              <InternalPricingMatrix userRole="socio" userName={activeUser.name} />
+            )}
+
             {partnerTab === "chat" && (
               <ProjectTeamFeedAndChat userRole="socio" userName={activeUser.name} />
             )}
@@ -1953,6 +1986,18 @@ function PortalMainContent() {
               </button>
 
               <button
+                onClick={() => setDevTab("tabulador")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  devTab === "tabulador"
+                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <DollarSign className="w-4 h-4" />
+                <span>Tabulador de Precios</span>
+              </button>
+
+              <button
                 onClick={() => setDevTab("chat")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   devTab === "chat"
@@ -1981,6 +2026,10 @@ function PortalMainContent() {
               </div>
             )}
 
+            {devTab === "tabulador" && (
+              <InternalPricingMatrix userRole="dev" userName={activeUser.name} />
+            )}
+
             {devTab === "chat" && (
               <ProjectTeamFeedAndChat userRole="dev" userName={activeUser.name} />
             )}
@@ -2003,6 +2052,18 @@ function PortalMainContent() {
               >
                 <Link2 className="w-4 h-4" />
                 <span>Link de Vendedor & Leads</span>
+              </button>
+
+              <button
+                onClick={() => setAdvisorTab("tabulador")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  advisorTab === "tabulador"
+                    ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <DollarSign className="w-4 h-4" />
+                <span>Tabulador y Cotizador Base</span>
               </button>
 
               <button
@@ -2078,6 +2139,10 @@ function PortalMainContent() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {advisorTab === "tabulador" && (
+              <InternalPricingMatrix userRole="asesor" userName={activeUser.name} />
             )}
 
             {advisorTab === "comisiones" && (
