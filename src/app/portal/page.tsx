@@ -41,6 +41,8 @@ import {
   Check,
   Plus,
   Share2,
+  Key,
+  Flame,
 } from "../../lib/icons";
 
 interface FinanceRecord {
@@ -53,6 +55,20 @@ interface FinanceRecord {
   status: "pagado" | "pendiente" | "recurrente";
   dueDate?: string;
   provider?: string;
+  sourceAccount: string;
+  registeredBy: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  action: "INGRESO" | "GASTO" | "EDICION" | "ELIMINACION" | "ASIGNACION_TECNICO" | "CAMBIO_ESTADO";
+  authorName: string;
+  authorRole: string;
+  sourceAccount?: string;
+  target: string;
+  amount?: number;
+  details: string;
 }
 
 interface ServerService {
@@ -65,6 +81,7 @@ interface ServerService {
   daysRemaining: number;
   status: "optimo" | "proximo_a_vencer" | "critico";
   autoDebit: boolean;
+  paymentAccount: string;
 }
 
 interface AssignedProject {
@@ -101,7 +118,7 @@ function PortalMainContent() {
   const searchParams = useSearchParams();
   const urlRole = searchParams.get("role") as RoleType | null;
 
-    // Active Role & User State
+  // Active Role & User State
   const [activeRole, setActiveRole] = useState<RoleType>("ceo");
   const [activeUser, setActiveUser] = useState<UserAccount>(USER_ACCOUNTS.ivan_ceo);
   const [authenticatedUserId, setAuthenticatedUserId] = useState<string | null>(null);
@@ -110,7 +127,7 @@ function PortalMainContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
-    // Initialize from URL or LocalStorage and check Auth Status
+  // Initialize from URL or LocalStorage and check Auth Status
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedAuthUserId = localStorage.getItem("innocentia_auth_user_id");
@@ -204,11 +221,15 @@ function PortalMainContent() {
   const currentPreset = ROLE_PRESETS.find((p) => p.role === activeRole) || ROLE_PRESETS[0];
 
   // Tab States per Role
-  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "chat" | "alertas">("proyectos");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "proyectos" | "servidores" | "gastos" | "chat">("finanzas");
+  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "auditoria" | "chat">("proyectos");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "auditoria" | "servidores" | "proyectos" | "chat">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "comisiones" | "chat">("leads_formulario");
+
+  // Filters for Audit Log
+  const [auditFilterAccount, setAuditFilterAccount] = useState<string>("all");
+  const [auditFilterAuthor, setAuditFilterAuthor] = useState<string>("all");
 
   // ==========================================
   // SHARED DATABASE MOCK STATE
@@ -218,55 +239,55 @@ function PortalMainContent() {
   const [projects, setProjects] = useState<AssignedProject[]>([
     {
       id: "PRJ-01",
-      name: "Clínica Médica AI - Portal de Diagnósticos",
+      name: "Clínica Médica AI - Sistema de Triaje y Citas",
       client: "Dra. Mariana Valdés",
       clientEmail: "mariana@clinicamedica.ai",
       sellerId: "usr_sales_01",
       sellerName: "Carlos Mendoza",
       devLead: "Ing. Rodrigo Pacheco",
       uxLead: "Sofía (Innocentia Design)",
-      devopsLead: "Iván (Innocentia Tech)",
+      devopsLead: "Iván Castillo (CEO)",
       status: "En Desarrollo",
-      progress: 78,
-      currentSprint: "Sprint 3: Módulo de IA y Visor DICOM",
+      progress: 68,
+      currentSprint: "Sprint 4: Integración de Motor de Diagnóstico LLM y Citas por WhatsApp",
       budget: 185000,
       paidAmount: 120000,
-      targetDate: "28 de Septiembre de 2026",
-      unreadAlerts: 2,
-    },
-    {
-      id: "PRJ-02",
-      name: "Gourmet Express - App Móvil Multi-Restaurante",
-      client: "Lic. Roberto Garza",
-      clientEmail: "roberto@gourmetexpress.mx",
-      sellerId: "usr_sales_01",
-      sellerName: "Carlos Mendoza",
-      devLead: "Iván (Software Architect)",
-      uxLead: "Sofía (Innocentia Design)",
-      devopsLead: "Ing. Rodrigo Pacheco",
-      status: "En Desarrollo",
-      progress: 65,
-      currentSprint: "Sprint 4: Pasarela Stripe & GPS en Vivo",
-      budget: 240000,
-      paidAmount: 160000,
       targetDate: "15 de Octubre de 2026",
       unreadAlerts: 1,
     },
     {
+      id: "PRJ-02",
+      name: "Gourmet Express - App Móvil y Ruteo Inteligente",
+      client: "Lic. Roberto Garza",
+      clientEmail: "roberto@gourmetexpress.mx",
+      sellerId: "usr_sales_01",
+      sellerName: "Carlos Mendoza",
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design)",
+      devopsLead: "Ing. Rodrigo Pacheco",
+      status: "En Desarrollo",
+      progress: 42,
+      currentSprint: "Sprint 2: Algoritmo de Reparto en Tiempo Real con WebSockets",
+      budget: 240000,
+      paidAmount: 140000,
+      targetDate: "28 de Noviembre de 2026",
+      unreadAlerts: 0,
+    },
+    {
       id: "PRJ-03",
-      name: "LogisTrack ERP - Cadena de Suministro",
-      client: "Ing. Fernando Castro",
-      clientEmail: "fcastro@logistrack.com",
-      sellerId: "usr_sales_02",
-      sellerName: "Elena Ramos",
-      devLead: "Sin Asignar",
+      name: "Fintech Seguros MX - Portal de Cotizaciones B2B",
+      client: "Lic. Andrea Morales",
+      clientEmail: "andrea@fintechseguros.mx",
+      sellerId: "usr_sales_01",
+      sellerName: "Carlos Mendoza",
+      devLead: "Por Asignar (CEO)",
       uxLead: "Sofía (Innocentia Design)",
       status: "Por Iniciar",
-      progress: 15,
-      currentSprint: "Sprint 1: Arquitectura de Base de Datos",
-      budget: 310000,
-      paidAmount: 93000,
-      targetDate: "20 de Noviembre de 2026",
+      progress: 10,
+      currentSprint: "Fase 0: Levantamiento de Requerimientos y Arquitectura de Datos",
+      budget: 150000,
+      paidAmount: 50000,
+      targetDate: "15 de Diciembre de 2026",
       unreadAlerts: 3,
     },
     {
@@ -288,6 +309,75 @@ function PortalMainContent() {
     },
   ]);
 
+  // Audit Logs State
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([
+    {
+      id: "LOG-101",
+      timestamp: "09 Sep 2026, 18:35",
+      action: "INGRESO",
+      authorName: "Iván Castillo",
+      authorRole: "CEO / Director General",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      target: "Clínica Médica AI - Anticipo Fase 2",
+      amount: 120000,
+      details: "Recepción de anticipo 60% vía transferencia SPEI validado por Dirección General.",
+    },
+    {
+      id: "LOG-102",
+      timestamp: "09 Sep 2026, 15:20",
+      action: "GASTO",
+      authorName: "Daniel Torre",
+      authorRole: "Socio Operaciones",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      target: "AWS Cloud Infrastructure",
+      amount: 14500,
+      details: "Pago programado de servidores ECS y base de datos relacional Aurora.",
+    },
+    {
+      id: "LOG-103",
+      timestamp: "08 Sep 2026, 12:45",
+      action: "ASIGNACION_TECNICO",
+      authorName: "Iván Castillo",
+      authorRole: "CEO / Director General",
+      sourceAccount: "Gestión Operativa Core",
+      target: "Clínica Médica AI",
+      details: "Asignación de Ing. Rodrigo Pacheco (Tech Lead) y Sofía (UX Lead) para entrega de Sprint 4.",
+    },
+    {
+      id: "LOG-104",
+      timestamp: "07 Sep 2026, 11:10",
+      action: "INGRESO",
+      authorName: "Jorge Pérez",
+      authorRole: "Socio Estrategia",
+      sourceAccount: "BBVA Operativa & Nómina",
+      target: "Gourmet Express - Sprint 3",
+      amount: 80000,
+      details: "Liquidación de Sprint 3 por cliente Roberto Garza validado en conciliación.",
+    },
+    {
+      id: "LOG-105",
+      timestamp: "06 Sep 2026, 17:00",
+      action: "GASTO",
+      authorName: "Daniel Torre",
+      authorRole: "Socio Operaciones",
+      sourceAccount: "Stripe Gateway / Tarjeta",
+      target: "Vercel Enterprise & Cloudflare DNS",
+      amount: 6200,
+      details: "Renovación mensual de cluster edge y protección contra ataques DDoS.",
+    },
+    {
+      id: "LOG-106",
+      timestamp: "05 Sep 2026, 14:30",
+      action: "GASTO",
+      authorName: "Iván Castillo",
+      authorRole: "CEO / Director General",
+      sourceAccount: "BBVA Operativa & Nómina",
+      target: "Comisión Venta - Carlos Mendoza",
+      amount: 22200,
+      details: "Aprobación y dispersión de comisión de venta por cierre de Clínica Médica AI.",
+    },
+  ]);
+
   // CEO Project Assignment Modal State
   const [selectedProjectForAssign, setSelectedProjectForAssign] = useState<AssignedProject | null>(null);
   const [assignDevLead, setAssignDevLead] = useState("");
@@ -299,7 +389,7 @@ function PortalMainContent() {
     setSelectedProjectForAssign(proj);
     setAssignDevLead(proj.devLead);
     setAssignUxLead(proj.uxLead);
-    setAssignDevopsLead(proj.devopsLead || "Iván (Innocentia Tech)");
+    setAssignDevopsLead(proj.devopsLead || "Iván Castillo (CEO)");
     setAssignStatus(proj.status);
   };
 
@@ -318,6 +408,20 @@ function PortalMainContent() {
           : p
       )
     );
+
+    // Add to Audit Log
+    const newLog: AuditLogEntry = {
+      id: "LOG-" + Date.now().toString().slice(-4),
+      timestamp: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+      action: "ASIGNACION_TECNICO",
+      authorName: activeUser.name,
+      authorRole: activeUser.roleTitle,
+      sourceAccount: "Panel de Dirección",
+      target: selectedProjectForAssign.name,
+      details: `Reasignación técnica: Dev Lead (${assignDevLead}), UX Lead (${assignUxLead}), DevOps (${assignDevopsLead || 'N/A'}), Estado: ${assignStatus}.`,
+    };
+    setAuditLogs((prev) => [newLog, ...prev]);
+
     setSelectedProjectForAssign(null);
   };
 
@@ -331,6 +435,8 @@ function PortalMainContent() {
       amount: 120000,
       date: "01 de Septiembre de 2026",
       status: "pagado",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      registeredBy: "Iván Castillo (CEO)",
     },
     {
       id: "FIN-02",
@@ -340,6 +446,8 @@ function PortalMainContent() {
       amount: 80000,
       date: "05 de Septiembre de 2026",
       status: "pagado",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Jorge Pérez (Socio)",
     },
     {
       id: "FIN-03",
@@ -351,6 +459,8 @@ function PortalMainContent() {
       status: "recurrente",
       dueDate: "15 de Septiembre de 2026",
       provider: "Amazon Web Services",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      registeredBy: "Daniel Torre (Socio)",
     },
     {
       id: "FIN-04",
@@ -362,6 +472,8 @@ function PortalMainContent() {
       status: "recurrente",
       dueDate: "20 de Septiembre de 2026",
       provider: "Vercel Inc.",
+      sourceAccount: "Stripe Gateway / Tarjeta",
+      registeredBy: "Daniel Torre (Socio)",
     },
     {
       id: "FIN-05",
@@ -371,6 +483,8 @@ function PortalMainContent() {
       amount: 22200,
       date: "03 de Septiembre de 2026",
       status: "pagado",
+      sourceAccount: "BBVA Operativa & Nómina",
+      registeredBy: "Iván Castillo (CEO)",
     },
     {
       id: "FIN-06",
@@ -382,6 +496,8 @@ function PortalMainContent() {
       status: "recurrente",
       dueDate: "30 de Septiembre de 2026",
       provider: "OpenAI LLC",
+      sourceAccount: "Santander Corporativa (Innocentia Tech)",
+      registeredBy: "Jorge Pérez (Socio)",
     },
   ]);
 
@@ -393,6 +509,7 @@ function PortalMainContent() {
   const [finAmount, setFinAmount] = useState<number>(5000);
   const [finDueDate, setFinDueDate] = useState("30 de Septiembre de 2026");
   const [finProvider, setFinProvider] = useState("");
+  const [finSourceAccount, setFinSourceAccount] = useState("Santander Corporativa (Innocentia Tech)");
 
   const handleAddFinanceRecord = (e: React.FormEvent) => {
     e.preventDefault();
@@ -408,15 +525,47 @@ function PortalMainContent() {
       status: finType === "ingreso" ? "pagado" : "recurrente",
       dueDate: finDueDate,
       provider: finProvider || undefined,
+      sourceAccount: finSourceAccount,
+      registeredBy: `${activeUser.name} (${activeUser.role === 'ceo' ? 'CEO' : 'Socio'})`,
     };
 
     setFinanceRecords((prev) => [newRec, ...prev]);
+
+    // Push into Audit Log
+    const newLog: AuditLogEntry = {
+      id: "LOG-" + Date.now().toString().slice(-4),
+      timestamp: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+      action: finType === "ingreso" ? "INGRESO" : "GASTO",
+      authorName: activeUser.name,
+      authorRole: activeUser.roleTitle,
+      sourceAccount: finSourceAccount,
+      target: finConcept,
+      amount: Number(finAmount),
+      details: `Registro de ${finType} en categoría "${finCategory}" cargado a cuenta "${finSourceAccount}".`,
+    };
+    setAuditLogs((prev) => [newLog, ...prev]);
+
     setIsFinanceModalOpen(false);
     setFinConcept("");
     setFinAmount(5000);
   };
 
   const handleDeleteFinanceRecord = (id: string) => {
+    const itemToDelete = financeRecords.find((r) => r.id === id);
+    if (itemToDelete) {
+      const newLog: AuditLogEntry = {
+        id: "LOG-" + Date.now().toString().slice(-4),
+        timestamp: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+        action: "ELIMINACION",
+        authorName: activeUser.name,
+        authorRole: activeUser.roleTitle,
+        sourceAccount: itemToDelete.sourceAccount,
+        target: itemToDelete.concept,
+        amount: itemToDelete.amount,
+        details: `Eliminación de registro financiero "${itemToDelete.concept}" ($${itemToDelete.amount.toLocaleString()} MXN).`,
+      };
+      setAuditLogs((prev) => [newLog, ...prev]);
+    }
     setFinanceRecords((prev) => prev.filter((r) => r.id !== id));
   };
 
@@ -432,28 +581,31 @@ function PortalMainContent() {
       daysRemaining: 6,
       status: "proximo_a_vencer",
       autoDebit: true,
+      paymentAccount: "Santander Corporativa (Innocentia Tech)",
     },
     {
       id: "SRV-02",
-      name: "innocentia.tech & Subdominios SSL",
-      type: "Dominio",
-      provider: "Namecheap / Cloudflare Enterprise",
-      costMonthly: 1200,
-      renewalDate: "14 de Diciembre de 2026",
-      daysRemaining: 96,
-      status: "optimo",
-      autoDebit: true,
-    },
-    {
-      id: "SRV-03",
-      name: "Vercel Edge Network Next.js 15",
+      name: "Vercel Enterprise Edge Hosting & CDN",
       type: "Hosting",
-      provider: "Vercel Enterprise",
-      costMonthly: 6200,
+      provider: "Vercel Inc.",
+      costMonthly: 4200,
       renewalDate: "20 de Septiembre de 2026",
       daysRemaining: 11,
       status: "optimo",
       autoDebit: true,
+      paymentAccount: "Stripe Gateway / Tarjeta",
+    },
+    {
+      id: "SRV-03",
+      name: "Dominios Globales (.tech / .com / .mx)",
+      type: "Dominio",
+      provider: "Cloudflare Registrar",
+      costMonthly: 2000,
+      renewalDate: "05 de Octubre de 2026",
+      daysRemaining: 26,
+      status: "optimo",
+      autoDebit: true,
+      paymentAccount: "Santander Corporativa (Innocentia Tech)",
     },
     {
       id: "SRV-04",
@@ -465,6 +617,7 @@ function PortalMainContent() {
       daysRemaining: 21,
       status: "optimo",
       autoDebit: true,
+      paymentAccount: "Santander Corporativa (Innocentia Tech)",
     },
     {
       id: "SRV-05",
@@ -476,6 +629,7 @@ function PortalMainContent() {
       daysRemaining: 1,
       status: "critico",
       autoDebit: false,
+      paymentAccount: "BBVA Operativa & Nómina",
     },
   ]);
 
@@ -528,6 +682,13 @@ function PortalMainContent() {
   const totalIncome = financeRecords.filter((r) => r.type === "ingreso").reduce((sum, r) => sum + r.amount, 0);
   const totalExpenses = financeRecords.filter((r) => r.type === "gasto" || r.type === "servicio").reduce((sum, r) => sum + r.amount, 0);
   const netProfit = totalIncome - totalExpenses;
+
+  // Filtered Audit Logs
+  const filteredAuditLogs = auditLogs.filter((log) => {
+    if (auditFilterAccount !== "all" && log.sourceAccount !== auditFilterAccount) return false;
+    if (auditFilterAuthor !== "all" && log.authorName !== auditFilterAuthor) return false;
+    return true;
+  });
 
   return (
     <main className="relative min-h-screen bg-[#040407] text-[#F3F4F6] overflow-x-hidden selection:bg-[#00E5FF]/30 selection:text-white pb-24">
@@ -813,11 +974,11 @@ function PortalMainContent() {
 
               <button
                 type="button"
-                onClick={() => setIsAuthModalOpen(true)}
-                className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white transition-all flex items-center gap-2 cursor-pointer"
+                onClick={handleLogout}
+                className="px-4 py-2.5 rounded-2xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-xs font-bold text-red-300 transition-all flex items-center gap-2 cursor-pointer"
               >
-                <LogOut className="w-4 h-4 text-gray-400" />
-                <span>Cambiar Rol</span>
+                <LogOut className="w-4 h-4 text-red-400" />
+                <span>Cerrar Sesión</span>
               </button>
             </div>
           </div>
@@ -827,7 +988,7 @@ function PortalMainContent() {
         {/* VIEW 1: CEO (DIRECTOR GENERAL / SUPER ADMIN) */}
         {/* ========================================================================= */}
         {activeRole === "ceo" && (
-          <div className="space-y-8 animate-in fade-in duration-300">
+          <div className="space-y-8 animate-in fade-in duration-300 text-left">
             {/* Sub-tabs for CEO */}
             <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-none">
               <button
@@ -850,7 +1011,7 @@ function PortalMainContent() {
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
-                <Crown className="w-4 h-4 text-amber-300" />
+                <Crown className="w-4 h-4 text-amber-500" />
                 <span>Designación de Técnicos</span>
               </button>
 
@@ -864,6 +1025,18 @@ function PortalMainContent() {
               >
                 <DollarSign className="w-4 h-4" />
                 <span>Supervisión Financiera Global</span>
+              </button>
+
+              <button
+                onClick={() => setCeoTab("auditoria")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  ceoTab === "auditoria"
+                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <Clock className="w-4 h-4" />
+                <span>Bitácora de Auditoría ({auditLogs.length})</span>
               </button>
 
               <button
@@ -881,7 +1054,7 @@ function PortalMainContent() {
 
             {/* CEO Tab 1: Proyectos Globales */}
             {ceoTab === "proyectos" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {projects.map((proj) => (
                   <div
                     key={proj.id}
@@ -949,8 +1122,8 @@ function PortalMainContent() {
                         onClick={() => openAssignModal(proj)}
                         className="px-4 py-2 rounded-xl bg-white/10 hover:bg-[#00D1FF] hover:text-black border border-white/20 text-xs font-bold text-white transition-all cursor-pointer flex items-center gap-1.5"
                       >
-                        <Edit3 className="w-3.5 h-3.5" />
-                        <span>Reasignar Equipo</span>
+                        <Crown className="w-3.5 h-3.5" />
+                        <span>Designar Técnicos</span>
                       </button>
                     </div>
                   </div>
@@ -960,54 +1133,51 @@ function PortalMainContent() {
 
             {/* CEO Tab 2: Designación de Técnicos */}
             {ceoTab === "asignacion" && (
-              <div className="p-8 rounded-[32px] bg-[#07070E] border border-white/15 text-left space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                  <div>
-                    <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                      <Crown className="w-5 h-5 text-amber-400" />
-                      <span>Mesa Directiva: Asignación de Roles por Proyecto</span>
-                    </h2>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Como CEO, puedes definir los líderes de arquitectura, ingeniería y diseño asignados a cada cliente.
-                    </p>
-                  </div>
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
+                <div className="border-b border-white/10 pb-4">
+                  <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-amber-400" />
+                    <span>Panel de Designación Técnica (CEO Exclusivo)</span>
+                  </h2>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Como Director General, asigna y reasigna los ingenieros, diseñadores y DevOps a cada proyecto en desarrollo.
+                  </p>
                 </div>
 
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-mono">
                     <thead>
                       <tr className="border-b border-white/15 text-gray-400 uppercase">
-                        <th className="py-3 px-4">Proyecto</th>
-                        <th className="py-3 px-4">Cliente</th>
-                        <th className="py-3 px-4">Tech Lead</th>
-                        <th className="py-3 px-4">UX Lead</th>
-                        <th className="py-3 px-4">Status</th>
-                        <th className="py-3 px-4 text-right">Acción</th>
+                        <th className="py-3 px-3">Proyecto</th>
+                        <th className="py-3 px-3">Dev Lead</th>
+                        <th className="py-3 px-3">UX / Diseñador</th>
+                        <th className="py-3 px-3">DevOps / Cloud</th>
+                        <th className="py-3 px-3">Estado</th>
+                        <th className="py-3 px-3 text-right">Acción</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/10">
-                      {projects.map((p) => (
-                        <tr key={p.id} className="hover:bg-white/[0.02]">
-                          <td className="py-4 px-4 font-bold text-white">{p.name}</td>
-                          <td className="py-4 px-4 text-gray-300">{p.client}</td>
-                          <td className="py-4 px-4">
-                            <span className="px-2.5 py-1 rounded-full bg-[#00D1FF]/10 text-[#00D1FF] border border-[#00D1FF]/30 font-bold">
-                              {p.devLead}
+                      {projects.map((proj) => (
+                        <tr key={proj.id} className="hover:bg-white/[0.02]">
+                          <td className="py-3.5 px-3">
+                            <span className="font-bold text-white block">{proj.name}</span>
+                            <span className="text-[10px] text-gray-400">{proj.client}</span>
+                          </td>
+                          <td className="py-3.5 px-3 text-[#00D1FF] font-bold">{proj.devLead}</td>
+                          <td className="py-3.5 px-3 text-purple-400 font-bold">{proj.uxLead}</td>
+                          <td className="py-3.5 px-3 text-emerald-400 font-bold">{proj.devopsLead || "Iván Castillo (CEO)"}</td>
+                          <td className="py-3.5 px-3">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-white/10 border border-white/15 text-gray-300">
+                              {proj.status}
                             </span>
                           </td>
-                          <td className="py-4 px-4">
-                            <span className="px-2.5 py-1 rounded-full bg-[#FF3858]/10 text-[#FF3858] border border-[#FF3858]/30 font-bold">
-                              {p.uxLead}
-                            </span>
-                          </td>
-                          <td className="py-4 px-4 text-gray-400">{p.status}</td>
-                          <td className="py-4 px-4 text-right">
+                          <td className="py-3.5 px-3 text-right">
                             <button
                               type="button"
-                              onClick={() => openAssignModal(p)}
-                              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#00D1FF] hover:text-black text-xs font-bold text-white transition-all cursor-pointer"
+                              onClick={() => openAssignModal(proj)}
+                              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer"
                             >
-                              Designar
+                              Modificar
                             </button>
                           </td>
                         </tr>
@@ -1018,36 +1188,35 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* CEO Tab 3: Finanzas Ejecutivas */}
+            {/* CEO Tab 3: Supervisión Financiera */}
             {ceoTab === "finanzas" && (
-              <div className="space-y-6 text-left">
+              <div className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                   <div className="p-6 rounded-[24px] bg-[#07070E] border border-white/15">
-                    <span className="text-xs font-mono text-gray-400 block uppercase">Ingresos Facturados</span>
-                    <span className="text-2xl font-black text-emerald-400 mt-1 block">${totalIncome.toLocaleString()} MXN</span>
-                    <span className="text-[10px] text-gray-400 font-mono mt-1 block">Cobros a clientes en sprints</span>
+                    <span className="text-xs font-mono text-gray-400 uppercase">Ingresos Facturados</span>
+                    <h3 className="text-2xl font-black text-emerald-400 mt-1">${totalIncome.toLocaleString()} MXN</h3>
                   </div>
                   <div className="p-6 rounded-[24px] bg-[#07070E] border border-white/15">
-                    <span className="text-xs font-mono text-gray-400 block uppercase">Egresos & Servidores</span>
-                    <span className="text-2xl font-black text-rose-400 mt-1 block">${totalExpenses.toLocaleString()} MXN</span>
-                    <span className="text-[10px] text-gray-400 font-mono mt-1 block">Infraestructura, APIs & Comisiones</span>
+                    <span className="text-xs font-mono text-gray-400 uppercase">Costos de Operación</span>
+                    <h3 className="text-2xl font-black text-rose-400 mt-1">${totalExpenses.toLocaleString()} MXN</h3>
                   </div>
                   <div className="p-6 rounded-[24px] bg-[#07070E] border border-white/15">
-                    <span className="text-xs font-mono text-gray-400 block uppercase">Utilidad Neta</span>
-                    <span className="text-2xl font-black text-[#00D1FF] mt-1 block">${netProfit.toLocaleString()} MXN</span>
-                    <span className="text-[10px] text-emerald-400 font-mono mt-1 block">Margen de rentabilidad: 74%</span>
+                    <span className="text-xs font-mono text-gray-400 uppercase">Utilidad Líquida</span>
+                    <h3 className="text-2xl font-black text-[#00D1FF] mt-1">${netProfit.toLocaleString()} MXN</h3>
                   </div>
                 </div>
 
-                {/* Movements List */}
-                <div className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
-                  <h3 className="text-base font-black text-white uppercase">Historial de Movimientos</h3>
-                  <div className="space-y-2">
+                {/* Finance Table with Accounts */}
+                <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-4">
+                  <h3 className="text-lg font-black text-white uppercase">Movimientos Registrados</h3>
+                  <div className="divide-y divide-white/10">
                     {financeRecords.map((r) => (
-                      <div key={r.id} className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
+                      <div key={r.id} className="py-3.5 flex items-center justify-between gap-4">
                         <div>
-                          <span className="text-xs font-bold text-white block">{r.concept}</span>
-                          <span className="text-[10px] font-mono text-gray-400">{r.category} • {r.date}</span>
+                          <span className="text-sm font-bold text-white block">{r.concept}</span>
+                          <span className="text-[11px] font-mono text-gray-400">
+                            {r.category} • <strong className="text-gray-300">{r.sourceAccount}</strong> • Registrado por: <strong className="text-[#00D1FF]">{r.registeredBy}</strong>
+                          </span>
                         </div>
                         <span className={`text-sm font-black font-mono ${r.type === "ingreso" ? "text-emerald-400" : "text-rose-400"}`}>
                           {r.type === "ingreso" ? "+" : "-"}${r.amount.toLocaleString()} MXN
@@ -1059,15 +1228,104 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* CEO Tab 4: Chats */}
+            {/* CEO Tab 4: Bitácora de Auditoría */}
+            {ceoTab === "auditoria" && (
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <div>
+                    <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                      <Clock className="w-5 h-5 text-[#00D1FF]" />
+                      <span>Bitácora de Auditoría & Registro de Movimientos</span>
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Registro inmutable de transacciones, cuentas de origen, fechas y socios responsables.
+                    </p>
+                  </div>
+
+                  {/* Filters */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <select
+                      value={auditFilterAccount}
+                      onChange={(e) => setAuditFilterAccount(e.target.value)}
+                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                    >
+                      <option value="all">Todas las Cuentas</option>
+                      <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa</option>
+                      <option value="BBVA Operativa & Nómina">BBVA Operativa</option>
+                      <option value="Stripe Gateway / Tarjeta">Stripe Gateway</option>
+                    </select>
+
+                    <select
+                      value={auditFilterAuthor}
+                      onChange={(e) => setAuditFilterAuthor(e.target.value)}
+                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                    >
+                      <option value="all">Todos los Autores</option>
+                      <option value="Iván Castillo">Iván Castillo (CEO)</option>
+                      <option value="Daniel Torre">Daniel Torre (Socio)</option>
+                      <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Audit Feed List */}
+                <div className="space-y-3">
+                  {filteredAuditLogs.map((log) => (
+                    <div
+                      key={log.id}
+                      className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span
+                            className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                              log.action === "INGRESO"
+                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                : log.action === "GASTO"
+                                ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
+                                : log.action === "ASIGNACION_TECNICO"
+                                ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                : "bg-purple-500/20 text-purple-400 border-purple-500/40"
+                            }`}
+                          >
+                            {log.action}
+                          </span>
+                          <span className="text-[10px] font-mono text-gray-400">{log.timestamp}</span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
+                            💳 {log.sourceAccount}
+                          </span>
+                        </div>
+                        <h4 className="text-xs font-bold text-white mt-1">{log.details}</h4>
+                        <span className="text-[10px] font-mono text-gray-400 block">
+                          Objetivo: <strong className="text-gray-200">{log.target}</strong>
+                        </span>
+                      </div>
+
+                      <div className="text-left md:text-right flex-shrink-0">
+                        {log.amount && (
+                          <span className={`text-sm font-black font-mono block ${log.action === "INGRESO" ? "text-emerald-400" : "text-rose-400"}`}>
+                            {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
+                          </span>
+                        )}
+                        <span className="text-[10px] font-mono text-[#00D1FF] block mt-0.5">
+                          👤 {log.authorName} ({log.authorRole})
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CEO Tab 5: Chats */}
             {ceoTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="socio" userName={currentPreset.defaultUser.name} />
+              <ProjectTeamFeedAndChat userRole="socio" userName={activeUser.name} />
             )}
           </div>
         )}
 
         {/* ========================================================================= */}
-        {/* VIEW 2: SOCIO / CO-FUNDADOR (FINANZAS, SERVIDORES & PROYECTOS) */}
+        {/* VIEW 2: SOCIO / CO-FUNDADOR (FINANZAS, AUDITORÍA & SERVIDORES) */}
         {/* ========================================================================= */}
         {activeRole === "socio" && (
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
@@ -1083,6 +1341,18 @@ function PortalMainContent() {
               >
                 <DollarSign className="w-4 h-4" />
                 <span>Zona de Finanzas & Gastos</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerTab("auditoria")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  partnerTab === "auditoria"
+                    ? "bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <Clock className="w-4 h-4" />
+                <span>Auditoría & Cuentas ({auditLogs.length})</span>
               </button>
 
               <button
@@ -1151,10 +1421,10 @@ function PortalMainContent() {
                     <div>
                       <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-emerald-400" />
-                        <span>Libro Contable de Movimientos</span>
+                        <span>Libro Contable con Cuentas de Origen</span>
                       </h2>
                       <p className="text-xs text-gray-400 mt-0.5">
-                        Agrega, edita y gestiona gastos de nómina, infraestructura y cobros de clientes.
+                        Registro y trazabilidad de ingresos, gastos, cuenta de origen y socio responsable.
                       </p>
                     </div>
 
@@ -1164,7 +1434,7 @@ function PortalMainContent() {
                       className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 to-[#00D1FF] text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 transition-all shadow-lg cursor-pointer"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>Agregar Movimiento</span>
+                      <span>Registrar Movimiento</span>
                     </button>
                   </div>
 
@@ -1174,7 +1444,8 @@ function PortalMainContent() {
                         <tr className="border-b border-white/15 text-gray-400 uppercase">
                           <th className="py-3 px-3">Tipo</th>
                           <th className="py-3 px-3">Concepto</th>
-                          <th className="py-3 px-3">Categoría</th>
+                          <th className="py-3 px-3">Cuenta de Origen</th>
+                          <th className="py-3 px-3">Registrado Por</th>
                           <th className="py-3 px-3">Fecha / Corte</th>
                           <th className="py-3 px-3 text-right">Monto</th>
                           <th className="py-3 px-3 text-center">Acciones</th>
@@ -1195,7 +1466,12 @@ function PortalMainContent() {
                               </span>
                             </td>
                             <td className="py-3 px-3 font-bold text-white">{r.concept}</td>
-                            <td className="py-3 px-3 text-gray-400">{r.category}</td>
+                            <td className="py-3 px-3">
+                              <span className="px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 font-mono text-[10px]">
+                                {r.sourceAccount}
+                              </span>
+                            </td>
+                            <td className="py-3 px-3 text-purple-300 font-bold">{r.registeredBy}</td>
                             <td className="py-3 px-3 text-gray-300">{r.dueDate || r.date}</td>
                             <td className={`py-3 px-3 text-right font-black ${r.type === "ingreso" ? "text-emerald-400" : "text-rose-400"}`}>
                               {r.type === "ingreso" ? "+" : "-"}${r.amount.toLocaleString()} MXN
@@ -1219,7 +1495,93 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* Partner Tab 2: Monitor de Servidores y Caducidades */}
+            {/* Partner Tab 2: Auditoría y Cuentas */}
+            {partnerTab === "auditoria" && (
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <div>
+                    <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                      <Clock className="w-5 h-5 text-purple-400" />
+                      <span>Auditoría de Movimientos & Trazabilidad de Cuentas</span>
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Consulta cada acción, fecha, banco de procedencia y socio responsable de cada registro.
+                    </p>
+                  </div>
+
+                  {/* Filters */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <select
+                      value={auditFilterAccount}
+                      onChange={(e) => setAuditFilterAccount(e.target.value)}
+                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                    >
+                      <option value="all">Todas las Cuentas</option>
+                      <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa</option>
+                      <option value="BBVA Operativa & Nómina">BBVA Operativa</option>
+                      <option value="Stripe Gateway / Tarjeta">Stripe Gateway</option>
+                    </select>
+
+                    <select
+                      value={auditFilterAuthor}
+                      onChange={(e) => setAuditFilterAuthor(e.target.value)}
+                      className="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-gray-300 font-mono focus:outline-none"
+                    >
+                      <option value="all">Todos los Socios</option>
+                      <option value="Iván Castillo">Iván Castillo (CEO)</option>
+                      <option value="Daniel Torre">Daniel Torre (Socio)</option>
+                      <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {filteredAuditLogs.map((log) => (
+                    <div
+                      key={log.id}
+                      className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-white/20 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span
+                            className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+                              log.action === "INGRESO"
+                                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                : log.action === "GASTO"
+                                ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
+                                : "bg-purple-500/20 text-purple-400 border-purple-500/40"
+                            }`}
+                          >
+                            {log.action}
+                          </span>
+                          <span className="text-[10px] font-mono text-gray-400">{log.timestamp}</span>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-300">
+                            🏦 {log.sourceAccount}
+                          </span>
+                        </div>
+                        <h4 className="text-xs font-bold text-white mt-1">{log.details}</h4>
+                        <span className="text-[10px] font-mono text-gray-400 block">
+                          Concepto: <strong className="text-gray-200">{log.target}</strong>
+                        </span>
+                      </div>
+
+                      <div className="text-left md:text-right flex-shrink-0">
+                        {log.amount && (
+                          <span className={`text-sm font-black font-mono block ${log.action === "INGRESO" ? "text-emerald-400" : "text-rose-400"}`}>
+                            {log.action === "INGRESO" ? "+" : "-"}${log.amount.toLocaleString()} MXN
+                          </span>
+                        )}
+                        <span className="text-[10px] font-mono text-purple-300 block mt-0.5">
+                          ✍️ Registrado por: <strong>{log.authorName}</strong>
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Partner Tab 3: Monitor de Servidores y Caducidades */}
             {partnerTab === "servidores" && (
               <div className="space-y-6">
                 <div className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
@@ -1230,7 +1592,7 @@ function PortalMainContent() {
                         <span>Vigencia de Servidores, Hosting & Dominios</span>
                       </h2>
                       <p className="text-xs text-gray-400 mt-0.5">
-                        Monitoreo activo de cortes automáticos y fechas de renovación de infraestructura cloud.
+                        Monitoreo activo de cortes automáticos, cuentas de cargo y fechas de renovación de infraestructura cloud.
                       </p>
                     </div>
                   </div>
@@ -1248,36 +1610,42 @@ function PortalMainContent() {
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/10 text-gray-300">
-                            {srv.type}
-                          </span>
+                          <span className="text-[10px] font-mono font-bold text-gray-400">{srv.type}</span>
                           <span
-                            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                            className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border ${
                               srv.status === "critico"
-                                ? "bg-rose-500/20 text-rose-300 animate-pulse"
+                                ? "bg-rose-500/20 text-rose-400 border-rose-500/40 animate-pulse"
                                 : srv.status === "proximo_a_vencer"
-                                ? "bg-amber-500/20 text-amber-300"
-                                : "bg-emerald-500/20 text-emerald-300"
+                                ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                : "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
                             }`}
                           >
-                            {srv.daysRemaining} días restantes
+                            {srv.status === "critico" ? "⚠️ CRÍTICO" : srv.status === "proximo_a_vencer" ? "PRÓXIMO A VENCER" : "ÓPTIMO"}
                           </span>
                         </div>
 
-                        <h3 className="text-sm font-bold text-white">{srv.name}</h3>
-                        <p className="text-xs text-gray-400 mt-1 font-mono">{srv.provider}</p>
+                        <h3 className="text-sm font-black text-white">{srv.name}</h3>
+                        <p className="text-xs text-gray-400 mt-0.5">{srv.provider}</p>
 
-                        <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-                          <span className="text-gray-400">Corte: {srv.renewalDate}</span>
-                          <span className="text-white font-bold">${srv.costMonthly.toLocaleString()} /mes</span>
-                        </div>
-
-                        <div className="mt-3 flex items-center justify-between text-[11px] font-mono">
-                          <span className="text-gray-400 flex items-center gap-1">
-                            <CreditCard className="w-3.5 h-3.5 text-purple-400" />
-                            {srv.autoDebit ? "Débito Automático" : "Pago Manual"}
-                          </span>
-                          <span className="text-[#00D1FF] font-bold">Activo 99.9%</span>
+                        <div className="mt-4 pt-3 border-t border-white/10 space-y-1.5 text-xs font-mono">
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Renovación:</span>
+                            <span className="text-white font-bold">{srv.renewalDate}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Cuenta de Cargo:</span>
+                            <span className="text-purple-300 font-bold">{srv.paymentAccount}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Costo Mensual:</span>
+                            <span className="text-emerald-400 font-bold">${srv.costMonthly.toLocaleString()} MXN</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Días Restantes:</span>
+                            <span className={`font-bold ${srv.daysRemaining <= 3 ? "text-rose-400 animate-pulse" : "text-white"}`}>
+                              {srv.daysRemaining} días
+                            </span>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -1286,40 +1654,48 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* Partner Tab 3: Proyectos */}
+            {/* Partner Tab 4: Proyectos */}
             {partnerTab === "proyectos" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {projects.map((proj) => (
-                  <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-3">
-                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold">{proj.id}</span>
-                    <h3 className="text-lg font-black text-white">{proj.name}</h3>
-                    <p className="text-xs text-gray-400">Cliente: {proj.client}</p>
-                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-purple-500 to-[#00D1FF]" style={{ width: `${proj.progress}%` }} />
+                  <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="text-[10px] font-mono text-purple-400 font-bold">{proj.id}</span>
+                        <h3 className="text-lg font-black text-white">{proj.name}</h3>
+                        <p className="text-xs text-gray-400">Cliente: {proj.client}</p>
+                      </div>
+                      <span className="text-xs font-mono font-bold text-emerald-400">${proj.budget.toLocaleString()} MXN</span>
                     </div>
-                    <div className="flex justify-between text-xs font-mono pt-2 text-gray-300">
-                      <span>Tech Lead: {proj.devLead}</span>
-                      <span className="text-emerald-400 font-bold">${proj.budget.toLocaleString()} MXN</span>
+
+                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Tech Lead:</span>
+                        <span className="text-white font-bold">{proj.devLead}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Diseño:</span>
+                        <span className="text-white font-bold">{proj.uxLead}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* Partner Tab 4: Chats */}
+            {/* Partner Tab 5: Chats */}
             {partnerTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="socio" userName={currentPreset.defaultUser.name} />
+              <ProjectTeamFeedAndChat userRole="socio" userName={activeUser.name} />
             )}
           </div>
         )}
 
         {/* ========================================================================= */}
-        {/* VIEW 3: CLIENTE (PROYECTOS EN VIVO, FINANZAS & CHAT TÉCNICO) */}
+        {/* VIEW 3: CLIENTE / USUARIO FINAL */}
         {/* ========================================================================= */}
         {activeRole === "usuario" && (
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
-            {/* Sub-tabs for Client */}
-            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
               <button
                 onClick={() => setClientTab("proyectos")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
@@ -1340,8 +1716,8 @@ function PortalMainContent() {
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
-                <DollarSign className="w-4 h-4" />
-                <span>Mis Finanzas & Pagos</span>
+                <CreditCard className="w-4 h-4" />
+                <span>Estado de Pagos & Facturación</span>
               </button>
 
               <button
@@ -1357,121 +1733,68 @@ function PortalMainContent() {
               </button>
             </div>
 
-            {/* Client Tab 1: Live Project Status */}
             {clientTab === "proyectos" && (
               <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                   <div>
-                    <span className="text-xs font-mono text-[#00D1FF] font-bold uppercase">PRJ-01 • ACTIVO</span>
-                    <h2 className="text-2xl font-black text-white mt-1">Clínica Médica AI - Portal de Diagnósticos</h2>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Fecha estimada de entrega final: <strong className="text-white">28 de Septiembre de 2026</strong>
-                    </p>
+                    <span className="text-xs font-mono text-emerald-400 font-bold">PROYECTO PRINCIPAL #PRJ-01</span>
+                    <h2 className="text-2xl font-black text-white mt-1">Clínica Médica AI - Sistema de Triaje</h2>
+                    <p className="text-xs text-gray-400">Titular: Dra. Mariana Valdés • Clínica Médica AI</p>
                   </div>
-                  <div className="text-right">
-                    <span className="text-3xl font-black text-emerald-400">78%</span>
-                    <span className="text-xs font-mono text-gray-400 block">Avance Global</span>
+                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-mono font-bold">
+                    68% Completado
+                  </span>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="space-y-2">
+                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-emerald-400 to-[#00D1FF] rounded-full" style={{ width: "68%" }} />
+                  </div>
+                  <div className="flex justify-between text-xs font-mono text-gray-400">
+                    <span>Sprint Actual: Diagnóstico LLM & Triaje</span>
+                    <span className="text-white font-bold">Entrega estimada: 15 de Octubre 2026</span>
                   </div>
                 </div>
 
-                {/* Phased Breakdown */}
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2">
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-gray-300 font-bold">1. Prototipado UX/UI</span>
-                      <span className="text-emerald-400">100%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-400 rounded-full w-full" />
-                    </div>
-                    <span className="text-[10px] text-gray-400 block font-mono">Lead: Sofía (Diseño)</span>
+                {/* Assigned Team */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[10px] font-mono text-gray-400 block uppercase">Ingeniero Tech Lead Asignado:</span>
+                    <span className="text-sm font-bold text-white block mt-1">Ing. Rodrigo Pacheco</span>
+                    <span className="text-xs font-mono text-[#00D1FF]">rodrigo.dev@innocentia.tech</span>
                   </div>
-
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-gray-300 font-bold">2. Arquitectura & DB</span>
-                      <span className="text-emerald-400">100%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-400 rounded-full w-full" />
-                    </div>
-                    <span className="text-[10px] text-gray-400 block font-mono">Lead: Iván (Tech)</span>
+                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                    <span className="text-[10px] font-mono text-gray-400 block uppercase">Líder de Diseño UI/UX:</span>
+                    <span className="text-sm font-bold text-white block mt-1">Sofía (Innocentia Design Lead)</span>
+                    <span className="text-xs font-mono text-purple-400">sofia.design@innocentia.tech</span>
                   </div>
-
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-gray-300 font-bold">3. Módulo de IA</span>
-                      <span className="text-[#00D1FF]">75%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-[#00D1FF] rounded-full w-[75%]" />
-                    </div>
-                    <span className="text-[10px] text-gray-400 block font-mono">Lead: Rodrigo Pacheco</span>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-                    <div className="flex justify-between text-xs font-mono">
-                      <span className="text-gray-300 font-bold">4. Pruebas QA & App</span>
-                      <span className="text-amber-400">40%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-amber-400 rounded-full w-[40%]" />
-                    </div>
-                    <span className="text-[10px] text-gray-400 block font-mono">En curso</span>
-                  </div>
-                </div>
-
-                {/* Assigned Tech Leads Contact */}
-                <div className="p-5 rounded-2xl bg-black/60 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold font-mono">
-                      DEV
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-white block">Equipo de Desarrollo Asignado</span>
-                      <span className="text-[11px] text-gray-400 font-mono">Ing. Rodrigo Pacheco (Tech Lead) • Sofía (Design Lead)</span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setClientTab("chat")}
-                    className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs uppercase flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Abrir Chat con el Equipo</span>
-                  </button>
                 </div>
               </div>
             )}
 
-            {/* Client Tab 2: Finanzas del Cliente */}
             {clientTab === "finanzas" && (
               <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-emerald-400" />
-                  <span>Estado de Cuenta de mi Proyecto</span>
-                </h2>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                  <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 uppercase block">Costo Total Contratado</span>
-                    <span className="text-2xl font-black text-white mt-1 block">$185,000 MXN</span>
+                <h3 className="text-lg font-black text-white uppercase">Resumen de Pagos del Proyecto</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <span className="text-xs font-mono text-gray-400 block">Total Cotizado</span>
+                    <span className="text-xl font-black text-white mt-1 block">$185,000 MXN</span>
                   </div>
-                  <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 uppercase block">Total Pagado</span>
-                    <span className="text-2xl font-black text-emerald-400 mt-1 block">$120,000 MXN</span>
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <span className="text-xs font-mono text-gray-400 block">Monto Pagado</span>
+                    <span className="text-xl font-black text-emerald-400 mt-1 block">$120,000 MXN</span>
                   </div>
-                  <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 uppercase block">Saldo Pendiente (Fase Final)</span>
-                    <span className="text-2xl font-black text-amber-400 mt-1 block">$65,000 MXN</span>
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <span className="text-xs font-mono text-gray-400 block">Saldo Pendiente</span>
+                    <span className="text-xl font-black text-amber-400 mt-1 block">$65,000 MXN</span>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Client Tab 3: Chat */}
             {clientTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="usuario" userName={currentPreset.defaultUser.name} />
+              <ProjectTeamFeedAndChat userRole="cliente" userName={activeUser.name} />
             )}
           </div>
         )}
@@ -1481,8 +1804,7 @@ function PortalMainContent() {
         {/* ========================================================================= */}
         {activeRole === "dev" && (
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
-            {/* Sub-tabs for Dev */}
-            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
               <button
                 onClick={() => setDevTab("mis_proyectos")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
@@ -1492,19 +1814,7 @@ function PortalMainContent() {
                 }`}
               >
                 <Terminal className="w-4 h-4" />
-                <span>Mis Proyectos Asignados</span>
-              </button>
-
-              <button
-                onClick={() => setDevTab("sprints")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
-                  devTab === "sprints"
-                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
-                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
-                }`}
-              >
-                <Layers className="w-4 h-4" />
-                <span>Sprints & Backlog</span>
+                <span>Mis Proyectos Asignados por CEO</span>
               </button>
 
               <button
@@ -1516,66 +1826,38 @@ function PortalMainContent() {
                 }`}
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Chat Técnico del Proyecto</span>
+                <span>Chat Técnico de Ingeniería</span>
               </button>
             </div>
 
-            {/* Dev Projects View */}
             {devTab === "mis_proyectos" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects
-                  .filter((p) => p.devLead.includes("Rodrigo") || p.devopsLead?.includes("Rodrigo"))
-                  .map((proj) => (
-                    <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-[#00D1FF]/30 space-y-4 shadow-xl">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <span className="text-[10px] font-mono text-[#00D1FF] font-bold">{proj.id}</span>
-                          <h3 className="text-lg font-black text-white">{proj.name}</h3>
-                          <p className="text-xs text-gray-400">Cliente: {proj.client}</p>
-                        </div>
-                        <span className="px-3 py-1 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] text-[10px] font-mono font-bold">
-                          Tu Rol: Tech Lead
-                        </span>
-                      </div>
-
-                      <div className="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-2">
-                        <span className="text-xs font-bold text-gray-200 block">{proj.currentSprint}</span>
-                        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-purple-500 to-[#00D1FF]" style={{ width: `${proj.progress}%` }} />
-                        </div>
-                        <div className="flex justify-between text-[10px] font-mono text-gray-400">
-                          <span>Entrega: {proj.targetDate}</span>
-                          <span>Avance: {proj.progress}%</span>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setDevTab("chat")}
-                        className="w-full py-2.5 rounded-xl bg-white/10 hover:bg-[#00D1FF] hover:text-black font-bold text-xs uppercase transition-all cursor-pointer flex items-center justify-center gap-2"
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                        <span>Abrir Chat con el Cliente</span>
-                      </button>
+                {projects.filter((p) => p.devLead.includes("Rodrigo")).map((proj) => (
+                  <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
+                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold">{proj.id}</span>
+                    <h3 className="text-lg font-black text-white">{proj.name}</h3>
+                    <p className="text-xs text-gray-400">Cliente: {proj.client}</p>
+                    <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-xs font-mono">
+                      <span className="text-gray-400">Sprint Activo: </span>
+                      <strong className="text-[#00D1FF]">{proj.currentSprint}</strong>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* Dev Chat */}
             {devTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="dev" userName={currentPreset.defaultUser.name} />
+              <ProjectTeamFeedAndChat userRole="dev" userName={activeUser.name} />
             )}
           </div>
         )}
 
         {/* ========================================================================= */}
-        {/* VIEW 5: VENDEDOR / ASESOR COMERCIAL (CLIENTES VINCULADOS & ENLACE DE FORMULARIO) */}
+        {/* VIEW 5: VENDEDOR / ASESOR COMERCIAL */}
         {/* ========================================================================= */}
         {activeRole === "asesor" && (
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
-            {/* Sub-tabs for Seller */}
-            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
               <button
                 onClick={() => setAdvisorTab("leads_formulario")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
@@ -1585,19 +1867,7 @@ function PortalMainContent() {
                 }`}
               >
                 <Link2 className="w-4 h-4" />
-                <span>Formulario de Clientes Vinculados</span>
-              </button>
-
-              <button
-                onClick={() => setAdvisorTab("status_proyectos")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
-                  advisorTab === "status_proyectos"
-                    ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
-                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
-                }`}
-              >
-                <Briefcase className="w-4 h-4" />
-                <span>Status de Proyectos Vendidos</span>
+                <span>Link de Vendedor & Leads</span>
               </button>
 
               <button
@@ -1609,7 +1879,7 @@ function PortalMainContent() {
                 }`}
               >
                 <DollarSign className="w-4 h-4" />
-                <span>Mis Comisiones & Ganancias</span>
+                <span>Mis Comisiones</span>
               </button>
 
               <button
@@ -1621,226 +1891,163 @@ function PortalMainContent() {
                 }`}
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Chat con Clientes y Técnicos</span>
+                <span>Chat Comercial</span>
               </button>
             </div>
 
-            {/* Seller Tab 1: Form Link Generator & Linked Leads */}
             {advisorTab === "leads_formulario" && (
               <div className="space-y-6">
-                {/* Referral Link Box */}
-                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-[#FF3858]/15 via-purple-900/10 to-transparent border border-[#FF3858]/30 backdrop-blur-2xl shadow-2xl space-y-4">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div>
-                      <span className="text-[10px] font-mono text-[#FF3858] uppercase font-bold tracking-wider">
-                        ENLACE PERSONALIZADO DE VENDEDOR
-                      </span>
-                      <h2 className="text-xl font-black text-white mt-0.5">
-                        Envía este formulario a tus clientes
-                      </h2>
-                      <p className="text-xs text-gray-300 mt-1">
-                        Cualquier proyecto que tu cliente registre a través de este enlace quedará automáticamente vinculado a tu ID (<strong>VEND_CARLOS</strong>) y recibirás una notificación al instante.
-                      </p>
-                    </div>
+                {/* Referral Link Generator */}
+                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-[#FF3858]/10 via-[#00D1FF]/10 to-transparent border border-white/20 space-y-4">
+                  <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                    <Share2 className="w-5 h-5 text-[#FF3858]" />
+                    <span>Tu Enlace Exclusivo para Cotización de Clientes</span>
+                  </h3>
+                  <p className="text-xs text-gray-300">
+                    Envía este link a tus prospectos. Cuando un cliente llena el formulario, el proyecto queda registrado automáticamente a tu nombre y recibes alertas al instante.
+                  </p>
 
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="text"
+                      readOnly
+                      value={vendorReferralLink}
+                      className="flex-1 px-4 py-3 bg-black/60 border border-white/15 rounded-2xl text-xs font-mono text-white focus:outline-none"
+                    />
                     <button
                       type="button"
                       onClick={handleCopyVendorLink}
-                      className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_25px_rgba(255,56,88,0.4)] hover:scale-105 transition-all cursor-pointer whitespace-nowrap"
+                      className="px-5 py-3 rounded-2xl bg-[#FF3858] hover:bg-[#FF4D6D] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer"
                     >
-                      {copiedLink ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-                      <span>{copiedLink ? "¡Enlace Copiado!" : "Copiar Enlace para Cliente"}</span>
+                      {copiedLink ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+                      <span>{copiedLink ? "¡Copiado!" : "Copiar Enlace"}</span>
                     </button>
                   </div>
-
-                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/10 flex items-center justify-between font-mono text-xs text-gray-300">
-                    <span className="truncate">{vendorReferralLink}</span>
-                    <span className="text-[10px] text-emerald-400 uppercase font-bold ml-2">Vinculación Activa</span>
-                  </div>
                 </div>
 
-                {/* Linked Leads Table */}
-                <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-4">
-                  <h3 className="text-base font-black text-white uppercase flex items-center gap-2">
-                    <Users className="w-5 h-5 text-[#FF3858]" />
-                    <span>Mis Clientes & Solicitudes Recibidas</span>
-                  </h3>
-
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs font-mono">
-                      <thead>
-                        <tr className="border-b border-white/15 text-gray-400 uppercase">
-                          <th className="py-3 px-3">Cliente</th>
-                          <th className="py-3 px-3">Empresa</th>
-                          <th className="py-3 px-3">Presupuesto</th>
-                          <th className="py-3 px-3">Estado</th>
-                          <th className="py-3 px-3">Avisos</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/10">
-                        {sellerLeads.map((lead) => (
-                          <tr key={lead.id} className="hover:bg-white/[0.02]">
-                            <td className="py-4 px-3 font-bold text-white">{lead.clientName}</td>
-                            <td className="py-4 px-3 text-gray-300">{lead.company}</td>
-                            <td className="py-4 px-3 text-emerald-400 font-bold">{lead.estimatedBudget}</td>
-                            <td className="py-4 px-3">
-                              <span className="px-2.5 py-1 rounded-full bg-white/10 text-gray-200 text-[10px] font-bold">
-                                {lead.status}
-                              </span>
-                            </td>
-                            <td className="py-4 px-3">
-                              {lead.hasNewNotification ? (
-                                <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 font-bold animate-pulse">
-                                  <Bell className="w-3.5 h-3.5" />
-                                  <span>Nueva solicitud</span>
-                                </span>
-                              ) : (
-                                <span className="text-[10px] text-gray-500">Sin cambios</span>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {/* Leads Table */}
+                <div className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
+                  <h3 className="text-base font-black text-white uppercase">Clientes que han llenado tu formulario</h3>
+                  <div className="divide-y divide-white/10">
+                    {sellerLeads.map((lead) => (
+                      <div key={lead.id} className="py-3 flex items-center justify-between gap-4">
+                        <div>
+                          <span className="text-sm font-bold text-white block">{lead.clientName} ({lead.company})</span>
+                          <span className="text-xs font-mono text-gray-400">{lead.phone} • {lead.date}</span>
+                        </div>
+                        <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white/10 border border-white/15 text-gray-300">
+                          {lead.status}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Seller Tab 2: Status Proyectos */}
-            {advisorTab === "status_proyectos" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.map((proj) => (
-                  <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <span className="text-[10px] font-mono text-[#FF3858] font-bold">{proj.id}</span>
-                        <h3 className="text-lg font-black text-white">{proj.name}</h3>
-                        <p className="text-xs text-gray-400">Cliente: {proj.client}</p>
-                      </div>
-                      <span className="text-xs font-mono font-bold text-emerald-400">
-                        Comisión: ${(proj.budget * 0.12).toLocaleString()} MXN
-                      </span>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between text-xs font-mono">
-                        <span className="text-gray-400">Avance de Desarrollo</span>
-                        <span className="text-white font-bold">{proj.progress}%</span>
-                      </div>
-                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-[#FF3858] to-[#00D1FF]" style={{ width: `${proj.progress}%` }} />
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono flex justify-between text-gray-300">
-                      <span>Tech Lead: {proj.devLead}</span>
-                      <span>UX Lead: {proj.uxLead}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Seller Tab 3: Comisiones */}
             {advisorTab === "comisiones" && (
-              <div className="p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-emerald-400" />
-                  <span>Tabulador de Comisiones Comerciales</span>
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                  <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 uppercase block">Comisiones Ganadas</span>
-                    <span className="text-2xl font-black text-emerald-400 mt-1 block">$64,200 MXN</span>
-                  </div>
-                  <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 uppercase block">Comisiones por Cobrar</span>
-                    <span className="text-2xl font-black text-amber-400 mt-1 block">$37,200 MXN</span>
-                  </div>
-                  <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 uppercase block">Proyectos Cerrados</span>
-                    <span className="text-2xl font-black text-white mt-1 block">4 Proyectos</span>
-                  </div>
-                </div>
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-4">
+                <h3 className="text-xl font-black text-white uppercase">Tabulador de Comisiones Acumuladas</h3>
+                <span className="text-3xl font-black text-[#FF3858] block">$64,200 MXN</span>
+                <p className="text-xs text-gray-400 font-mono">
+                  Comisiones calculadas al 12% por proyectos cerrados y facturados en Innocentia Tech.
+                </p>
               </div>
             )}
 
-            {/* Seller Tab 4: Chat */}
             {advisorTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="asesor" userName={currentPreset.defaultUser.name} />
+              <ProjectTeamFeedAndChat userRole="asesor" userName={activeUser.name} />
             )}
           </div>
         )}
       </div>
+      )}
 
       {/* ========================================================================= */}
-      {/* MODAL 1: CEO ASSIGNMENT MODAL (DESIGNAR TÉCNICOS) */}
+      {/* MODAL: CEO PROJECT ASSIGNMENT */}
       {/* ========================================================================= */}
       {selectedProjectForAssign && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 text-left">
-          <div className="w-full max-w-lg rounded-[32px] bg-[#07070E] border border-white/20 p-6 sm:p-8 space-y-6 shadow-2xl relative animate-in fade-in duration-200">
-            <div>
-              <span className="text-xs font-mono text-amber-400 uppercase font-bold">MESA DIRECTIVA CEO</span>
-              <h3 className="text-xl font-black text-white mt-1">Designar Técnicos y Líderes</h3>
-              <p className="text-xs text-gray-400 mt-0.5">{selectedProjectForAssign.name}</p>
-            </div>
-
-            <div className="space-y-4 font-mono text-xs">
+        <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="w-full max-w-xl bg-[#07070E] border border-amber-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl text-left space-y-5">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <label className="text-gray-300 block mb-1.5 font-bold">Líder de Desarrollo (Tech Lead):</label>
-                <select
-                  value={assignDevLead}
-                  onChange={(e) => setAssignDevLead(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
-                >
-                  <option value="Ing. Rodrigo Pacheco" className="bg-black">Ing. Rodrigo Pacheco (Senior Fullstack & AI)</option>
-                  <option value="Iván (Software Architect)" className="bg-black">Iván (Innocentia Software Architect)</option>
-                  <option value="Ing. Manuel Domínguez" className="bg-black">Ing. Manuel Domínguez (Backend Senior)</option>
-                  <option value="Sin Asignar" className="bg-black">Sin Asignar</option>
-                </select>
+                <span className="text-[10px] font-mono text-amber-400 font-bold uppercase">Designación Oficial CEO</span>
+                <h3 className="text-lg font-black text-white">{selectedProjectForAssign.name}</h3>
               </div>
-
-              <div>
-                <label className="text-gray-300 block mb-1.5 font-bold">Líder de Diseño (UX/UI Lead):</label>
-                <select
-                  value={assignUxLead}
-                  onChange={(e) => setAssignUxLead(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
-                >
-                  <option value="Sofía (Innocentia Design)" className="bg-black">Sofía (Lead UX/UI & Branding)</option>
-                  <option value="Lic. Ana Karenina" className="bg-black">Lic. Ana Karenina (Product Designer)</option>
-                  <option value="Sin Asignar" className="bg-black">Sin Asignar</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-gray-300 block mb-1.5 font-bold">Estado del Proyecto:</label>
-                <select
-                  value={assignStatus}
-                  onChange={(e) => setAssignStatus(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
-                >
-                  <option value="En Desarrollo" className="bg-black">En Desarrollo</option>
-                  <option value="Por Iniciar" className="bg-black">Por Iniciar</option>
-                  <option value="En Revisión" className="bg-black">En Revisión</option>
-                  <option value="Completado" className="bg-black">Completado</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
               <button
                 type="button"
                 onClick={() => setSelectedProjectForAssign(null)}
-                className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+                className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs font-mono">
+              <div>
+                <label className="block text-gray-400 mb-1">Ingeniero Dev Lead:</label>
+                <select
+                  value={assignDevLead}
+                  onChange={(e) => setAssignDevLead(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                >
+                  <option value="Ing. Rodrigo Pacheco">Ing. Rodrigo Pacheco (Senior Fullstack & AI)</option>
+                  <option value="Ing. Manuel Torres">Ing. Manuel Torres (Backend & Microservices)</option>
+                  <option value="Ing. Andrea Rivas">Ing. Andrea Rivas (Frontend React/Next.js)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1">Líder de UX / Diseño Visual:</label>
+                <select
+                  value={assignUxLead}
+                  onChange={(e) => setAssignUxLead(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                >
+                  <option value="Sofía (Innocentia Design Lead)">Sofía (Innocentia Design Lead)</option>
+                  <option value="Lic. Valeria Gómez">Lic. Valeria Gómez (Branding & Motion UI)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1">DevOps & Arquitectura Cloud:</label>
+                <select
+                  value={assignDevopsLead}
+                  onChange={(e) => setAssignDevopsLead(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                >
+                  <option value="Iván Castillo (CEO)">Iván Castillo (CEO / Super Admin)</option>
+                  <option value="Ing. Rodrigo Pacheco">Ing. Rodrigo Pacheco (Fullstack)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 mb-1">Estado del Proyecto:</label>
+                <select
+                  value={assignStatus}
+                  onChange={(e) => setAssignStatus(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                >
+                  <option value="En Desarrollo">En Desarrollo</option>
+                  <option value="Por Iniciar">Por Iniciar</option>
+                  <option value="En Revisión">En Revisión</option>
+                  <option value="Completado">Completado</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setSelectedProjectForAssign(null)}
+                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-mono"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleSaveAssignment}
-                className="px-6 py-2.5 rounded-xl bg-[#00D1FF] text-black font-black text-xs uppercase tracking-wider hover:bg-[#33DDFF] transition-all cursor-pointer shadow-lg"
+                className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-black uppercase tracking-wider shadow-lg"
               >
                 Guardar Designación
               </button>
@@ -1850,118 +2057,155 @@ function PortalMainContent() {
       )}
 
       {/* ========================================================================= */}
-      {/* MODAL 2: ADD FINANCE RECORD MODAL (SOCIO / FINANZAS) */}
+      {/* MODAL: ADD FINANCE MOVEMENT (SOCIO / CEO) */}
       {/* ========================================================================= */}
       {isFinanceModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 text-left">
+        <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
           <form
             onSubmit={handleAddFinanceRecord}
-            className="w-full max-w-lg rounded-[32px] bg-[#07070E] border border-white/20 p-6 sm:p-8 space-y-5 shadow-2xl relative animate-in fade-in duration-200"
+            className="w-full max-w-lg bg-[#07070E] border border-purple-500/30 rounded-[32px] p-6 sm:p-8 shadow-2xl text-left space-y-4"
           >
-            <div>
-              <span className="text-xs font-mono text-purple-400 uppercase font-bold">ZONA DE FINANZAS</span>
-              <h3 className="text-xl font-black text-white mt-1">Registrar Movimiento Financiero</h3>
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <span className="text-[10px] font-mono text-purple-400 font-bold uppercase">Libro Contable</span>
+                <h3 className="text-lg font-black text-white">Nuevo Registro de Movimiento</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsFinanceModalOpen(false)}
+                className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="space-y-3.5 font-mono text-xs">
-              <div className="flex gap-2">
+            <div className="space-y-3 text-xs font-mono">
+              <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => setFinType("gasto")}
-                  className={`flex-1 py-2 rounded-xl font-bold uppercase transition-all ${
-                    finType === "gasto" ? "bg-rose-500 text-white" : "bg-white/5 text-gray-400"
+                  className={`py-2 rounded-xl border text-center font-bold uppercase ${
+                    finType === "gasto" ? "bg-rose-500/20 text-rose-400 border-rose-500" : "bg-white/5 text-gray-400 border-white/10"
                   }`}
                 >
-                  Gasto / Egreso
+                  Gasto
                 </button>
                 <button
                   type="button"
                   onClick={() => setFinType("ingreso")}
-                  className={`flex-1 py-2 rounded-xl font-bold uppercase transition-all ${
-                    finType === "ingreso" ? "bg-emerald-500 text-black" : "bg-white/5 text-gray-400"
+                  className={`py-2 rounded-xl border text-center font-bold uppercase ${
+                    finType === "ingreso" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500" : "bg-white/5 text-gray-400 border-white/10"
                   }`}
                 >
-                  Ingreso Proyecto
+                  Ingreso
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFinType("servicio")}
+                  className={`py-2 rounded-xl border text-center font-bold uppercase ${
+                    finType === "servicio" ? "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]" : "bg-white/5 text-gray-400 border-white/10"
+                  }`}
+                >
+                  Servicio
                 </button>
               </div>
 
               <div>
-                <label className="text-gray-300 block mb-1">Concepto o Descripción:</label>
+                <label className="block text-gray-400 mb-1">Concepto del Movimiento:</label>
                 <input
                   type="text"
-                  required
-                  placeholder="Ej. Servidor AWS, Pago Sprint Cliente..."
                   value={finConcept}
                   onChange={(e) => setFinConcept(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
+                  placeholder="ej: Pago de Servidor Cloud AWS"
+                  required
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-gray-300 block mb-1">Categoría:</label>
+                  <label className="block text-gray-400 mb-1">Monto (MXN):</label>
+                  <input
+                    type="number"
+                    value={finAmount}
+                    onChange={(e) => setFinAmount(Number(e.target.value))}
+                    required
+                    min={1}
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-1">Categoría:</label>
                   <select
                     value={finCategory}
                     onChange={(e) => setFinCategory(e.target.value)}
-                    className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
                   >
-                    <option value="Servidores & Hosting" className="bg-black">Servidores & Hosting</option>
-                    <option value="Proyectos Software" className="bg-black">Proyectos Software</option>
-                    <option value="Nóminas & Técnicos" className="bg-black">Nóminas & Técnicos</option>
-                    <option value="Comisiones Asesores" className="bg-black">Comisiones Asesores</option>
-                    <option value="IA & LLM APIs" className="bg-black">IA & LLM APIs</option>
+                    <option value="Servidores & Hosting">Servidores & Hosting</option>
+                    <option value="Proyectos Software">Proyectos Software</option>
+                    <option value="Comisiones Asesores">Comisiones Asesores</option>
+                    <option value="Nómina & Honorarios">Nómina & Honorarios</option>
+                    <option value="IA & LLM APIs">IA & LLM APIs</option>
                   </select>
-                </div>
-                <div>
-                  <label className="text-gray-300 block mb-1">Monto ($ MXN):</label>
-                  <input
-                    type="number"
-                    required
-                    min="1"
-                    value={finAmount}
-                    onChange={(e) => setFinAmount(Number(e.target.value))}
-                    className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
-                  />
                 </div>
               </div>
 
               <div>
-                <label className="text-gray-300 block mb-1">Fecha de Corte o Vencimiento:</label>
-                <input
-                  type="text"
-                  placeholder="Ej. 15 de Octubre de 2026"
-                  value={finDueDate}
-                  onChange={(e) => setFinDueDate(e.target.value)}
-                  className="w-full p-3 rounded-xl bg-white/5 border border-white/15 text-white focus:border-[#00D1FF] outline-none"
-                />
+                <label className="block text-gray-400 mb-1">Cuenta de Origen / Destino:</label>
+                <select
+                  value={finSourceAccount}
+                  onChange={(e) => setFinSourceAccount(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold"
+                >
+                  <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa (Innocentia Tech)</option>
+                  <option value="BBVA Operativa & Nómina">BBVA Operativa & Nómina</option>
+                  <option value="Stripe Gateway / Tarjeta">Stripe Gateway / Tarjeta</option>
+                  <option value="Transferencia SPEI Directa">Transferencia SPEI Directa</option>
+                  <option value="PayPal Business Internacional">PayPal Business Internacional</option>
+                  <option value="Caja Chica Efectivo">Caja Chica Efectivo</option>
+                </select>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-[11px] text-gray-300">
+                <span>Registrado por: <strong>{activeUser.name}</strong> ({activeUser.roleTitle})</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
               <button
                 type="button"
                 onClick={() => setIsFinanceModalOpen(false)}
-                className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-mono"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-[#00D1FF] text-white font-black text-xs uppercase tracking-wider hover:scale-105 transition-all cursor-pointer shadow-lg"
+                className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-black uppercase tracking-wider shadow-lg"
               >
-                Guardar Movimiento
+                Guardar en Libro
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Role Selection Modal */}
+      {/* Fast Action Floating Widget / Quick Help */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <Link
+          href="/faq"
+          className="px-4 py-3 rounded-full bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] hover:scale-105 transition-all"
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>Ayuda & IA en Vivo</span>
+        </Link>
+      </div>
+
       <AuthLoginModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        onSelectRole={(r) => {
-          handleRoleChange(r);
+        onSelectRole={(role, user) => {
+          handleRoleChange(role, user);
           setIsAuthModalOpen(false);
         }}
       />
@@ -1971,7 +2215,7 @@ function PortalMainContent() {
 
 export default function PortalPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#040407] flex items-center justify-center text-white">Cargando Portal...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#040407] text-white flex items-center justify-center font-mono text-sm">Cargando Portal de Control...</div>}>
       <PortalMainContent />
     </Suspense>
   );
