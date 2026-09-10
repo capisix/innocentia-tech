@@ -46,7 +46,7 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
   ivan_ceo: {
     id: "usr_ceo_ivan",
     name: "Iván Castillo",
-    email: "ivan.castillo@innocentia.tech",
+    email: "ceo.ivan@innocentia.tech",
     role: "ceo",
     roleTitle: "Director General & CEO",
     company: "Innocentia Tech Core",
