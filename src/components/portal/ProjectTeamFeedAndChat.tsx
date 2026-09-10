@@ -334,32 +334,36 @@ export default function ProjectTeamFeedAndChat({
   // Generate Formal Proposal Message
   const getProposalFormattedMessage = (lead: IncomingLead) => {
     const isRenta = proposalPricingModel === "renta";
-    return [
-      "🚀 *PROPUESTA DE COTIZACIÓN FORMAL • INNOCENTIA TECH*",
-      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-      "Estimado/a *" + lead.clientName + "* (" + lead.clientCompany + "),",
-      "Es un gusto saludarte. En *Innocentia Tech* revisamos tu solicitud para el proyecto *\"" + lead.projectName + "\"* y hemos preparado la siguiente propuesta técnica y comercial:",
-      "📌 *SOLUCIÓN PROPUESTA:*",
-      "• *Modelo:* " + selectedDemo.title + " (" + selectedDemo.category + ")",
-      "• *Alcance:* " + selectedDemo.desc,
-      "",
-      "💎 *DEMO EN VIVO MULTIPLATAFORMA:*",
-      "Puedes probar la experiencia interactiva, navegación fluida a 60 FPS y arquitectura táctil directamente en este enlace:",
-      "👉 " + selectedDemo.url,
-      "",
-      "📊 *ESQUEMA DE INVERSIÓN SUGERIDO:*",
-      isRenta
-        ? "• *Modalidad:* Renta Mensual SaaS (Incluye Infraestructura & Mantenimiento Continuo)\n• *Implementación & Personalización Inicial:* " + customImplementationCost + "\n• *Mensualidad Operativa:* " + customMonthlyCost + " (Hosting, actualizaciones, seguridad y soporte)"
-        : "• *Modalidad:* Desarrollo a Medida (Propiedad Total de Código)\n• *Inversión Total de Desarrollo:* " + customDevCost + " (Pagos por Sprints contra entregables validados)",
-      "",
-      "👤 *TU ASESOR ASIGNADO:*",
-      "• *Nombre:* " + lead.vendorName,
-      "• *Canal Oficial:* +52 960 177 1556 • contacto@innocentia.tech",
-      "",
-      "¿Cuándo te vendría bien agendar una videollamada breve de 15 minutos para mostrarte el prototipo en vivo y afinar detalles?",
-      "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-      "*Innocentia Tech Core* • Mérida, Yucatán, México."
-    ].join("\n");
+    const pricingText = isRenta
+      ? `• *Modalidad:* Renta Mensual SaaS (Incluye Infraestructura & Mantenimiento Continuo)\n• *Implementación Inicial:* ${customImplementationCost}\n• *Mensualidad Operativa:* ${customMonthlyCost} (Hosting, actualizaciones y soporte)`
+      : `• *Modalidad:* Desarrollo a Medida (Propiedad Total de Código)\n• *Inversión Total de Desarrollo:* ${customDevCost} (Pagos por Sprints contra entregables)`;
+
+    return `
+🚀 *PROPUESTA DE COTIZACIÓN FORMAL • INNOCENTIA TECH*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Estimado/a *${lead.clientName}* (${lead.clientCompany}),
+
+Es un gusto saludarte. En *Innocentia Tech* revisamos tu solicitud para el proyecto *"${lead.projectName}"* y hemos preparado la siguiente propuesta técnica y comercial:
+
+📌 *SOLUCIÓN PROPUESTA:*
+• *Modelo:* ${selectedDemo.title} (${selectedDemo.category})
+• *Alcance:* ${selectedDemo.desc}
+
+💎 *DEMO EN VIVO MULTIPLATAFORMA:*
+Puedes probar la experiencia interactiva, navegación fluida a 60 FPS y arquitectura táctil directamente en este enlace:
+👉 ${selectedDemo.url}
+
+📊 *ESQUEMA DE INVERSIÓN SUGERIDO:*
+${pricingText}
+
+👤 *TU ASESOR ASIGNADO:*
+• *Nombre:* ${lead.vendorName}
+• *Canal Oficial:* +52 960 177 1556 • contacto@innocentia.tech
+
+¿Cuándo te vendría bien agendar una videollamada breve de 15 minutos para mostrarte el prototipo en vivo y afinar detalles?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*Innocentia Tech Core* • Mérida, Yucatán, México.
+    `.trim();
   };
 
   const handleCopyProposal = (lead: IncomingLead) => {
