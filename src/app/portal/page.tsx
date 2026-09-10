@@ -46,6 +46,7 @@ import {
   Share2,
   Key,
   Flame,
+  RotateCcw,
 } from "../../lib/icons";
 
 export type FinanceSection = "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo";
