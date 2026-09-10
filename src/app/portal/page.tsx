@@ -7,7 +7,7 @@ import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import VendorContractModal from "../../components/portal/VendorContractModal";
 import ProjectTeamFeedAndChat from "../../components/portal/ProjectTeamFeedAndChat";
 import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
-import AuthLoginModal, { RoleType, ROLE_PRESETS } from "../../components/portal/AuthLoginModal";
+import AuthLoginModal, { RoleType, ROLE_PRESETS, USER_ACCOUNTS, UserAccount } from "../../components/portal/AuthLoginModal";
 import {
   Sparkles,
   ArrowRight,
@@ -101,27 +101,57 @@ function PortalMainContent() {
   const searchParams = useSearchParams();
   const urlRole = searchParams.get("role") as RoleType | null;
 
-  // Active Role State
+  // Active Role & User State
   const [activeRole, setActiveRole] = useState<RoleType>("ceo");
+  const [activeUser, setActiveUser] = useState<UserAccount>(USER_ACCOUNTS.ivan_ceo);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Initialize from URL or LocalStorage
   useEffect(() => {
-    if (urlRole && ["ceo", "socio", "usuario", "dev", "asesor"].includes(urlRole)) {
-      setActiveRole(urlRole);
-    } else if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("innocentia_active_role") as RoleType | null;
-      if (saved && ["ceo", "socio", "usuario", "dev", "asesor"].includes(saved)) {
-        setActiveRole(saved);
+    const urlUserId = searchParams.get("userId");
+    if (urlUserId) {
+      const foundUser = Object.values(USER_ACCOUNTS).find((u) => u.id === urlUserId);
+      if (foundUser) {
+        setActiveUser(foundUser);
+        setActiveRole(foundUser.role);
+        return;
       }
     }
-  }, [urlRole]);
 
-  const handleRoleChange = (newRole: RoleType) => {
+    if (urlRole && ["ceo", "socio", "usuario", "dev", "asesor"].includes(urlRole)) {
+      setActiveRole(urlRole);
+      const preset = ROLE_PRESETS.find((p) => p.role === urlRole);
+      if (preset) setActiveUser(preset.defaultUser);
+    } else if (typeof window !== "undefined") {
+      const savedRole = localStorage.getItem("innocentia_active_role") as RoleType | null;
+      const savedUserStr = localStorage.getItem("innocentia_active_user");
+      if (savedUserStr) {
+        try {
+          const parsed = JSON.parse(savedUserStr);
+          setActiveUser(parsed);
+          setActiveRole(parsed.role);
+          return;
+        } catch (e) {
+          // fallback
+        }
+      }
+      if (savedRole && ["ceo", "socio", "usuario", "dev", "asesor"].includes(savedRole)) {
+        setActiveRole(savedRole);
+        const preset = ROLE_PRESETS.find((p) => p.role === savedRole);
+        if (preset) setActiveUser(preset.defaultUser);
+      }
+    }
+  }, [urlRole, searchParams]);
+
+  const handleRoleChange = (newRole: RoleType, specificUser?: UserAccount) => {
     setActiveRole(newRole);
+    const preset = ROLE_PRESETS.find((p) => p.role === newRole);
+    const userToSet = specificUser || preset?.defaultUser || USER_ACCOUNTS.ivan_ceo;
+    setActiveUser(userToSet);
     if (typeof window !== "undefined") {
       localStorage.setItem("innocentia_active_role", newRole);
+      localStorage.setItem("innocentia_active_user", JSON.stringify(userToSet));
     }
   };
 
@@ -533,7 +563,7 @@ function PortalMainContent() {
                 </div>
               </div>
               <div>
-                <div className="flex items-center gap-2.5 mb-1">
+                <div className="flex items-center gap-2.5 mb-1 flex-wrap">
                   <span className={`text-[10px] font-mono px-3 py-0.5 rounded-full border ${currentPreset.badgeColor}`}>
                     {currentPreset.badge.toUpperCase()}
                   </span>
@@ -541,12 +571,39 @@ function PortalMainContent() {
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     AUTENTICADO
                   </span>
+                  {activeRole === "socio" && (
+                    <div className="flex items-center gap-1 ml-2 bg-purple-900/30 p-1 rounded-xl border border-purple-500/30 text-[10px] font-mono">
+                      <span className="text-purple-300 px-1 hidden sm:inline">Socio:</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRoleChange("socio", USER_ACCOUNTS.daniel_socio)}
+                        className={`px-2 py-0.5 rounded-lg transition-all cursor-pointer ${
+                          activeUser.id === USER_ACCOUNTS.daniel_socio.id
+                            ? "bg-purple-600 text-white font-bold shadow-md"
+                            : "text-purple-300 hover:text-white"
+                        }`}
+                      >
+                        Daniel Torre
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRoleChange("socio", USER_ACCOUNTS.jorge_socio)}
+                        className={`px-2 py-0.5 rounded-lg transition-all cursor-pointer ${
+                          activeUser.id === USER_ACCOUNTS.jorge_socio.id
+                            ? "bg-purple-600 text-white font-bold shadow-md"
+                            : "text-purple-300 hover:text-white"
+                        }`}
+                      >
+                        Jorge Pérez
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight">
-                  {currentPreset.defaultUser.name}
+                  {activeUser.name}
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-400 font-mono mt-0.5">
-                  {currentPreset.defaultUser.roleTitle} • {currentPreset.defaultUser.email}
+                  {activeUser.roleTitle} • {activeUser.email}
                 </p>
               </div>
             </div>
