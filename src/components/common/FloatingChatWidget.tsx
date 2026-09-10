@@ -411,7 +411,33 @@ export default function FloatingChatWidget({
                         </span>
                       </div>
                     )}
-                    <p>{msg.text}</p>
+                    <div className="space-y-2 whitespace-pre-line">
+                      <p>{msg.text}</p>
+                      
+                      {msg.sender !== "user" && msg.text.includes("#onboarding") && (
+                        <div className="pt-2">
+                          <a
+                            href="/#onboarding"
+                            onClick={(e) => {
+                              if (typeof window !== "undefined") {
+                                if (window.location.pathname === "/" || window.location.pathname === "") {
+                                  const el = document.getElementById("onboarding");
+                                  if (el) {
+                                    e.preventDefault();
+                                    el.scrollIntoView({ behavior: "smooth" });
+                                  }
+                                }
+                              }
+                            }}
+                            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#FF3858] via-[#8A2BE2] to-[#00D1FF] text-white font-bold text-xs shadow-[0_0_15px_rgba(0,209,255,0.35)] hover:shadow-[0_0_25px_rgba(255,56,88,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/20 group"
+                          >
+                            <span className="text-sm">🚀</span>
+                            <span>Registrar Proyecto & Llenar Formulario</span>
+                            <span className="group-hover:translate-x-1 transition-transform">→</span>
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
