@@ -18,6 +18,7 @@ import {
   Palette,
   Layers,
 } from "../../lib/icons";
+import { getIntelligentHumanReply } from "../../lib/conversationalAI";
 
 interface FAQItem {
   id: string;
@@ -630,60 +631,21 @@ export default function FAQPage() {
           }, idx * 400);
         });
       } else {
-        // Fallback intelligent routing
-        const isDesign =
-          lower.includes("diseñ") ||
-          lower.includes("color") ||
-          lower.includes("logo") ||
-          lower.includes("marca") ||
-          lower.includes("ux");
-        const isTech =
-          lower.includes("costo") ||
-          lower.includes("tiempo") ||
-          lower.includes("precio") ||
-          lower.includes("app") ||
-          lower.includes("web") ||
-          lower.includes("bd");
+        // Dynamic Human-like Conversational Engine
+        const reply = getIntelligentHumanReply(query);
+        const isSofia = reply.type === "sofia";
+        const isIvan = reply.type === "ivan";
 
-        if (isDesign) {
-          setTerminalHistory((prev) => [
-            ...prev,
-            {
-              id: `sofia-reply-${Date.now()}`,
-              type: "sofia",
-              senderName: "SOFÍA (UX/ARTE)",
-              content:
-                "Comprendo tu inquietud de diseño. En Innocentia creamos prototipos interactivos en Figma con paletas cromáticas memorables y microinteracciones a 60fps. Puedes tocar en 'Crear Proyecto' para comenzar a explorar tu identidad.",
-              time: new Date().toTimeString().split(" ")[0],
-            },
-          ]);
-        } else if (isTech) {
-          setTerminalHistory((prev) => [
-            ...prev,
-            {
-              id: `ivan-reply-${Date.now()}`,
-              type: "ivan",
-              senderName: "IVÁN (TECH/CODE)",
-              content:
-                "Desde la perspectiva de ingeniería: estructuramos arquitecturas escalables con Next.js 15, PostgreSQL cifrado y despliegues en la nube. Te recomiendo generar un Blueprint con el creador de proyectos para cotizar con precisión.",
-              time: new Date().toTimeString().split(" ")[0],
-            },
-          ]);
-        } else {
-          setTerminalHistory((prev) => [
-            ...prev,
-            {
-              id: `dual-reply-${Date.now()}`,
-              type: "system",
-              senderName: "SOFÍA & IVÁN DUAL_CORE",
-              content: [
-                "Recibido. En Innocentia transformamos ideas complejas en experiencias tecnológicas viables.",
-                "Escribe palabras clave como: 'costos', 'mvp', 'diseño', 'viabilidad', 'ia', 'etapas' o selecciona una pregunta del índice.",
-              ],
-              time: new Date().toTimeString().split(" ")[0],
-            },
-          ]);
-        }
+        setTerminalHistory((prev) => [
+          ...prev,
+          {
+            id: `reply-${Date.now()}`,
+            type: reply.type as any,
+            senderName: isSofia ? "SOFÍA (UX/ARTE)" : isIvan ? "IVÁN (TECH/CODE)" : "SOFÍA & IVÁN DUAL_CORE",
+            content: reply.text.length === 1 ? reply.text[0] : reply.text,
+            time: new Date().toTimeString().split(" ")[0],
+          },
+        ]);
         setIsTerminalBusy(false);
       }
     }, 600);

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Send, Sparkles, Maximize2, Minimize2, ArrowRight } from "../../lib/icons";
 import Image from "next/image";
+import { getIntelligentHumanReply } from "../../lib/conversationalAI";
 
 interface FloatingChatWidgetProps {
   onOpenProjectModal?: () => void;
@@ -166,52 +167,48 @@ export default function FloatingChatWidget({
     setInputValue("");
 
     // Simulate AI dual intelligence response
-    const lower = text.toLowerCase();
-    let respondingPersona: "sofia" | "ivan" | "both" = "both";
-    if (lower.includes("diseñ") || lower.includes("marca") || lower.includes("ux") || lower.includes("arte")) {
-      respondingPersona = "sofia";
-    } else if (lower.includes("app") || lower.includes("código") || lower.includes("api") || lower.includes("base de datos") || lower.includes("backend")) {
-      respondingPersona = "ivan";
-    }
+    const reply = getIntelligentHumanReply(text);
+    const persona = reply.type === "sofia" ? "sofia" : reply.type === "ivan" ? "ivan" : "both";
 
-    setIsTyping(respondingPersona);
+    setIsTyping(persona);
 
     setTimeout(() => {
       setIsTyping(null);
-      if (respondingPersona === "sofia") {
+      if (reply.type === "sofia") {
         setMessages((prev) => [
           ...prev,
           {
             id: (Date.now() + 1).toString(),
             sender: "sofia",
-            text: "¡Me encanta esa visión visual! Diseñaremos un sistema de diseño con micro-interacciones, tipografía memorable y una paleta cromática con identidad única.",
+            text: reply.text.join("\n\n"),
           },
         ]);
-      } else if (respondingPersona === "ivan") {
+      } else if (reply.type === "ivan") {
         setMessages((prev) => [
           ...prev,
           {
             id: (Date.now() + 1).toString(),
             sender: "ivan",
-            text: "Esa arquitectura es sólida. Propongo construirla con Next.js 15, PostgreSQL, endpoints en Server Actions y un pipeline CI/CD de alto rendimiento.",
+            text: reply.text.join("\n\n"),
           },
         ]);
       } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: (Date.now() + 1).toString(),
-            sender: "sofia",
-            text: "Primero definiremos el flujo del usuario y el prototipo interactivo para validar la experiencia con tu audiencia.",
-          },
-          {
-            id: (Date.now() + 2).toString(),
-            sender: "ivan",
-            text: "Y de inmediato yo comenzaré con la infraestructura en la nube, seguridad y bases de datos para entregar en sprints rápidos.",
-          },
-        ]);
+        // Dual sequence
+        reply.text.forEach((t, idx) => {
+          setTimeout(() => {
+            const isIvan = t.startsWith("IVÁN:") || idx === 1;
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: (Date.now() + idx + 1).toString(),
+                sender: isIvan ? "ivan" : "sofia",
+                text: t.replace(/^SOFÍA:\s*/, "").replace(/^IVÁN:\s*/, ""),
+              },
+            ]);
+          }, idx * 400);
+        });
       }
-    }, 1200);
+    }, 800);
   };
 
   return (
