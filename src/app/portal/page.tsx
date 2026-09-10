@@ -236,7 +236,9 @@ function PortalMainContent() {
     }
   };
 
-  const currentPreset = ROLE_PRESETS.find((p) => p.role === activeRole) || ROLE_PRESETS[0];
+  const safeActiveUser: UserAccount = activeUser || USER_ACCOUNTS.ivan_ceo;
+  const currentPreset = ROLE_PRESETS.find((p) => p.role === (safeActiveUser?.role || activeRole)) || ROLE_PRESETS[0];
+  const PresetIcon = currentPreset?.icon || Crown;
 
   // Tab States per Role
   const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "auditoria" | "tabulador" | "chat">("proyectos");
@@ -1442,7 +1444,7 @@ function PortalMainContent() {
             <div className="flex items-center gap-4 sm:gap-5">
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 shadow-[0_0_30px_rgba(255,56,88,0.3)] flex-shrink-0">
                 <div className="w-full h-full bg-[#07070E] rounded-[14px] flex items-center justify-center">
-                  <currentPreset.icon className="w-8 h-8 text-[#00D1FF]" />
+                  <PresetIcon className="w-8 h-8 text-[#00D1FF]" />
                 </div>
               </div>
               <div>
