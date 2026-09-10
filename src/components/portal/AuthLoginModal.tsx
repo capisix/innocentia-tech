@@ -108,7 +108,7 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
 export const ROLE_PRESETS: RolePreset[] = [
   {
     role: "ceo",
-    title: "CEO / Director General",
+    title: "CEO / Dirección General",
     badge: "Super Admin",
     badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
     description: "Control maestro: Designación de técnicos a proyectos, métricas globales, aprobaciones y finanzas ejecutivas.",
@@ -219,32 +219,40 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
   const handleSelectSpecificUser = (userKey: string) => {
     setSelectedUserKey(userKey);
     setAuthError(null);
+    setInputPassword("");
     const user = USER_ACCOUNTS[userKey];
     if (user) {
       setSelectedRole(user.role);
     }
   };
 
-  const handleDirectLogin = (userToLogin: UserAccount = activeUser) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("innocentia_active_role", userToLogin.role);
-      localStorage.setItem("innocentia_active_user", JSON.stringify(userToLogin));
-    }
-    if (onSelectRole) {
-      onSelectRole(userToLogin.role, userToLogin);
-    } else {
-      window.location.href = `/portal?role=${userToLogin.role}&userId=${userToLogin.id}`;
-    }
-  };
-
-  const handlePasswordSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAuthenticate = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setAuthError(null);
 
-    if (inputPassword.trim() === activeUser.password) {
-      handleDirectLogin(activeUser);
+    // Strict Password Validation
+    if (!inputPassword.trim()) {
+      setAuthError("Por favor, ingresa tu contraseña de seguridad para acceder.");
+      return;
+    }
+
+    if (inputPassword.trim() !== activeUser.password) {
+      setAuthError("Contraseña incorrecta. Acceso restringido por seguridad.");
+      return;
+    }
+
+    // Success: save authenticated state
+    if (typeof window !== "undefined") {
+      localStorage.setItem("innocentia_active_role", activeUser.role);
+      localStorage.setItem("innocentia_active_user", JSON.stringify(activeUser));
+      localStorage.setItem("innocentia_auth_token", "AUTH_" + activeUser.id + "_" + Date.now());
+      localStorage.setItem("innocentia_auth_user_id", activeUser.id);
+    }
+
+    if (onSelectRole) {
+      onSelectRole(activeUser.role, activeUser);
     } else {
-      setAuthError("Contraseña incorrecta. Verifica tus credenciales.");
+      window.location.href = `/portal?role=${activeUser.role}&userId=${activeUser.id}`;
     }
   };
 
@@ -265,10 +273,10 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
               </div>
               <div>
                 <h3 className="text-base font-black text-white uppercase tracking-wider">
-                  Acceso al Portal
+                  Acceso Seguro
                 </h3>
                 <p className="text-[11px] font-mono text-gray-400">
-                  Selecciona tu cuenta o nivel
+                  Autenticación de Usuarios
                 </p>
               </div>
             </div>
@@ -318,12 +326,12 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           </div>
 
           <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-400 font-mono">
-            <span>Seguridad SSL 256-bit</span>
+            <span>Encriptación SSL 256-bit</span>
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
           </div>
         </div>
 
-        {/* Right Column: User Selection, Credentials & Login */}
+        {/* Right Column: User Selection, Credentials & Strict Password Validation */}
         <div className="w-full md:w-7/12 p-6 sm:p-8 flex flex-col justify-between relative">
           {/* Close Button */}
           <button
@@ -337,7 +345,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-gray-300 mb-3">
               <Sparkles className="w-3.5 h-3.5 text-[#00D1FF] animate-pulse" />
-              <span>NIVEL: {activePreset.badge.toUpperCase()}</span>
+              <span>NIVEL REQUERIDO: {activePreset.badge.toUpperCase()}</span>
             </div>
 
             <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2.5">
@@ -346,9 +354,9 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
 
             {/* If there are multiple users (Socios: Daniel Torre & Jorge Pérez), show selector buttons */}
             {activePreset.users.length > 1 && (
-              <div className="mt-4 p-3 rounded-2xl bg-purple-950/30 border border-purple-500/40">
+              <div className="mt-4 p-3.5 rounded-2xl bg-purple-950/30 border border-purple-500/40">
                 <span className="text-[10px] font-mono text-purple-300 uppercase tracking-wider block font-bold mb-2">
-                  Seleccionar Socio:
+                  Selecciona la cuenta de Socio a autenticar:
                 </span>
                 <div className="grid grid-cols-2 gap-2">
                   {activePreset.users.map((u) => {
@@ -359,14 +367,14 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
                         key={u.id}
                         type="button"
                         onClick={() => handleSelectSpecificUser(uKey)}
-                        className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                        className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                           isSelected
                             ? "bg-purple-600/40 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)] text-white"
                             : "bg-black/50 border-white/10 text-gray-400 hover:border-white/30 hover:text-white"
                         }`}
                       >
-                        <div className="flex items-center gap-2">
-                          <span className="w-7 h-7 rounded-full bg-purple-500/30 text-purple-200 text-[11px] font-mono flex items-center justify-center font-bold">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-8 h-8 rounded-full bg-purple-500/30 text-purple-200 text-xs font-mono flex items-center justify-center font-bold">
                             {u.avatarLetter}
                           </span>
                           <div className="truncate">
@@ -386,35 +394,27 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono text-gray-400 uppercase tracking-wider block">
-                    Perfil Seleccionado:
+                    Cuenta Seleccionada:
                   </span>
                   <span className="text-base font-black text-white">{activeUser.name}</span>
                   <span className="text-xs font-mono text-gray-300 block">{activeUser.email}</span>
                   <span className="text-[10px] font-mono text-[#00D1FF] block mt-0.5">{activeUser.roleTitle}</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-                    Credencial Lista
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center gap-1">
+                    <Lock className="w-3 h-3" />
+                    <span>Requiere Clave</span>
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Interactive Password Form */}
-            <form onSubmit={handlePasswordSubmit} className="mt-4 space-y-3">
+            {/* Interactive Mandatory Password Form */}
+            <form onSubmit={handleAuthenticate} className="mt-4 space-y-3">
               <div>
-                <label className="block text-[11px] font-mono text-gray-400 mb-1.5 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5">
-                    <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
-                    Contraseña de Acceso:
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setInputPassword(activeUser.password || "")}
-                    className="text-[10px] text-[#00D1FF] hover:underline cursor-pointer"
-                  >
-                    Auto-completar clave
-                  </button>
+                <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  <span>Contraseña de Seguridad Requerida:</span>
                 </label>
                 <div className="relative">
                   <input
@@ -424,15 +424,16 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
                       setInputPassword(e.target.value);
                       if (authError) setAuthError(null);
                     }}
-                    placeholder={`Ingresa contraseña (ej: ${activeUser.password})`}
-                    className="w-full px-4 py-2.5 bg-black/60 border border-white/15 rounded-xl text-white text-xs font-mono focus:border-[#00D1FF] focus:outline-none transition-colors"
+                    placeholder="Escribe tu contraseña de acceso"
+                    className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
+                    autoFocus
                   />
                 </div>
               </div>
 
               {authError && (
-                <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-center gap-2.5 animate-in shake">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
                   <span>{authError}</span>
                 </div>
               )}
@@ -440,20 +441,20 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-6 pt-4 border-t border-white/10 space-y-2.5">
+          <div className="mt-6 pt-4 border-t border-white/10 space-y-3">
             <button
               type="button"
-              onClick={() => handleDirectLogin(activeUser)}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.4)] hover:scale-[1.02] cursor-pointer"
+              onClick={() => handleAuthenticate()}
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.4)] hover:scale-[1.02] cursor-pointer"
             >
-              <span>Ingresar como {activeUser.name}</span>
+              <Lock className="w-4 h-4" />
+              <span>Validar Contraseña y Entrar</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center justify-between text-[10px] text-gray-400 font-mono">
-              <span>Contraseña asignada: <strong className="text-white bg-white/10 px-1.5 py-0.5 rounded">{activeUser.password}</strong></span>
-              <span>Nivel: {activePreset.badge}</span>
-            </div>
+            <p className="text-[10px] text-center text-gray-400 font-mono">
+              El acceso a balances financieros, proyectos ejecutivos y asignación de técnicos está estrictamente protegido.
+            </p>
           </div>
         </div>
       </div>

@@ -101,14 +101,24 @@ function PortalMainContent() {
   const searchParams = useSearchParams();
   const urlRole = searchParams.get("role") as RoleType | null;
 
-  // Active Role & User State
+    // Active Role & User State
   const [activeRole, setActiveRole] = useState<RoleType>("ceo");
   const [activeUser, setActiveUser] = useState<UserAccount>(USER_ACCOUNTS.ivan_ceo);
+  const [authenticatedUserId, setAuthenticatedUserId] = useState<string | null>(null);
+  const [gatePasswordInput, setGatePasswordInput] = useState<string>("");
+  const [gateAuthError, setGateAuthError] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
-  // Initialize from URL or LocalStorage
+    // Initialize from URL or LocalStorage and check Auth Status
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedAuthUserId = localStorage.getItem("innocentia_auth_user_id");
+      if (savedAuthUserId) {
+        setAuthenticatedUserId(savedAuthUserId);
+      }
+    }
+
     const urlUserId = searchParams.get("userId");
     if (urlUserId) {
       const foundUser = Object.values(USER_ACCOUNTS).find((u) => u.id === urlUserId);
@@ -149,9 +159,45 @@ function PortalMainContent() {
     const preset = ROLE_PRESETS.find((p) => p.role === newRole);
     const userToSet = specificUser || preset?.defaultUser || USER_ACCOUNTS.ivan_ceo;
     setActiveUser(userToSet);
+    setGateAuthError(null);
+    setGatePasswordInput("");
     if (typeof window !== "undefined") {
       localStorage.setItem("innocentia_active_role", newRole);
       localStorage.setItem("innocentia_active_user", JSON.stringify(userToSet));
+    }
+  };
+
+  const handleUnlockGate = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setGateAuthError(null);
+
+    if (!gatePasswordInput.trim()) {
+      setGateAuthError("Ingresa tu contraseña para acceder a este entorno.");
+      return;
+    }
+
+    if (gatePasswordInput.trim() !== activeUser.password) {
+      setGateAuthError("Contraseña incorrecta. Acceso denegado.");
+      return;
+    }
+
+    // Success
+    setAuthenticatedUserId(activeUser.id);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("innocentia_auth_user_id", activeUser.id);
+      localStorage.setItem("innocentia_auth_token", "AUTH_" + activeUser.id + "_" + Date.now());
+      localStorage.setItem("innocentia_active_role", activeUser.role);
+      localStorage.setItem("innocentia_active_user", JSON.stringify(activeUser));
+    }
+  };
+
+  const handleLogout = () => {
+    setAuthenticatedUserId(null);
+    setGatePasswordInput("");
+    setGateAuthError(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("innocentia_auth_user_id");
+      localStorage.removeItem("innocentia_auth_token");
     }
   };
 
@@ -543,13 +589,146 @@ function PortalMainContent() {
             >
               <Lock className="w-3.5 h-3.5" />
             </button>
+
+            {authenticatedUserId === activeUser.id && (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 hover:text-red-300 text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer ml-1"
+                title="Cerrar Sesión Segura"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Cerrar Sesión</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
 
       {/* ========================================================================= */}
-      {/* MAIN CONTAINER CONTENT */}
+      {/* SECURITY LOCK GATE (IF NOT AUTHENTICATED) */}
       {/* ========================================================================= */}
+      {authenticatedUserId !== activeUser.id ? (
+        <div className="max-w-xl mx-auto px-4 py-16 sm:py-24 relative z-20 text-center animate-in fade-in duration-300">
+          <div className="p-8 sm:p-10 rounded-[36px] bg-[#07070E]/95 border border-white/20 backdrop-blur-2xl shadow-[0_0_80px_rgba(0,209,255,0.15)] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#FF3858]/20 via-[#00D1FF]/10 to-transparent blur-3xl pointer-events-none" />
+
+            {/* Lock Shield Icon */}
+            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 shadow-[0_0_35px_rgba(0,209,255,0.3)] mb-6 flex items-center justify-center">
+              <div className="w-full h-full bg-[#07070E] rounded-[22px] flex items-center justify-center">
+                <Lock className="w-8 h-8 sm:w-10 sm:h-10 text-[#00D1FF] animate-pulse" />
+              </div>
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-gray-300 mb-3">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>ENTORNO PROTEGIDO CON CONTRASEÑA</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+              Acceso Restringido
+            </h2>
+            <p className="text-xs text-gray-400 font-mono mt-1.5 max-w-sm mx-auto">
+              Ingresa tu contraseña para acceder a los balances, proyectos y métricas confidenciales.
+            </p>
+
+            {/* Selected User Badge */}
+            <div className="mt-6 p-4 rounded-2xl bg-white/[0.04] border border-white/10 text-left">
+              <span className="text-[9px] font-mono text-gray-400 uppercase tracking-wider block">
+                Cuenta a autenticar:
+              </span>
+              <div className="flex items-center justify-between mt-1">
+                <div>
+                  <h3 className="text-sm font-black text-white">{activeUser.name}</h3>
+                  <span className="text-xs font-mono text-[#00D1FF] block">{activeUser.roleTitle}</span>
+                </div>
+                <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/15">
+                  {currentPreset.badge}
+                </span>
+              </div>
+            </div>
+
+            {/* If Socio, allow selecting between Daniel and Jorge */}
+            {activeRole === "socio" && (
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleRoleChange("socio", USER_ACCOUNTS.daniel_socio)}
+                  className={`flex-1 py-2 px-3 rounded-xl border text-xs font-mono transition-all cursor-pointer ${
+                    activeUser.id === USER_ACCOUNTS.daniel_socio.id
+                      ? "bg-purple-600/40 border-purple-400 text-white font-bold"
+                      : "bg-black/40 border-white/10 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  Daniel Torre
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRoleChange("socio", USER_ACCOUNTS.jorge_socio)}
+                  className={`flex-1 py-2 px-3 rounded-xl border text-xs font-mono transition-all cursor-pointer ${
+                    activeUser.id === USER_ACCOUNTS.jorge_socio.id
+                      ? "bg-purple-600/40 border-purple-400 text-white font-bold"
+                      : "bg-black/40 border-white/10 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  Jorge Pérez
+                </button>
+              </div>
+            )}
+
+            {/* Password Input Form */}
+            <form onSubmit={handleUnlockGate} className="mt-5 space-y-3 text-left">
+              <div>
+                <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
+                  <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  <span>Contraseña de Seguridad:</span>
+                </label>
+                <input
+                  type="password"
+                  value={gatePasswordInput}
+                  onChange={(e) => {
+                    setGatePasswordInput(e.target.value);
+                    if (gateAuthError) setGateAuthError(null);
+                  }}
+                  placeholder="Escribe tu contraseña"
+                  className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
+                  autoFocus
+                />
+              </div>
+
+              {gateAuthError && (
+                <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
+                  <span>{gateAuthError}</span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full mt-2 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.4)] hover:scale-[1.02] cursor-pointer"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Desbloquear Acceso al Portal</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+
+            <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-[10px] text-gray-400 font-mono">
+              <button
+                type="button"
+                onClick={() => setIsAuthModalOpen(true)}
+                className="text-[#00D1FF] hover:underline cursor-pointer"
+              >
+                ← Cambiar de Rol / Nivel
+              </button>
+              <span>SSL 256-bit Secure</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+      /* ========================================================================= */
+      /* MAIN CONTAINER CONTENT (AUTHENTICATED) */
+      /* ========================================================================= */
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 pt-8 sm:pt-10">
         {/* User Identity Header Card */}
         <div className="relative p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-white/[0.04] via-white/[0.02] to-transparent border border-white/15 backdrop-blur-2xl shadow-2xl overflow-hidden mb-8 text-left">
