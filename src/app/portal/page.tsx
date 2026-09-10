@@ -127,12 +127,16 @@ function PortalMainContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
-  // Initialize from URL or LocalStorage and check Auth Status
+  // Initialize from URL and enforce mandatory password lock for CEO & Socios
   useEffect(() => {
+    // Clear any previous bypass tokens on load
     if (typeof window !== "undefined") {
-      const savedAuthUserId = localStorage.getItem("innocentia_auth_user_id");
-      if (savedAuthUserId) {
-        setAuthenticatedUserId(savedAuthUserId);
+      // Check session storage only for temporary single-page verification
+      const sessionAuthId = sessionStorage.getItem("innocentia_session_auth_id");
+      if (sessionAuthId) {
+        setAuthenticatedUserId(sessionAuthId);
+      } else {
+        setAuthenticatedUserId(null);
       }
     }
 
@@ -150,24 +154,6 @@ function PortalMainContent() {
       setActiveRole(urlRole);
       const preset = ROLE_PRESETS.find((p) => p.role === urlRole);
       if (preset) setActiveUser(preset.defaultUser);
-    } else if (typeof window !== "undefined") {
-      const savedRole = localStorage.getItem("innocentia_active_role") as RoleType | null;
-      const savedUserStr = localStorage.getItem("innocentia_active_user");
-      if (savedUserStr) {
-        try {
-          const parsed = JSON.parse(savedUserStr);
-          setActiveUser(parsed);
-          setActiveRole(parsed.role);
-          return;
-        } catch (e) {
-          // fallback
-        }
-      }
-      if (savedRole && ["ceo", "socio", "usuario", "dev", "asesor"].includes(savedRole)) {
-        setActiveRole(savedRole);
-        const preset = ROLE_PRESETS.find((p) => p.role === savedRole);
-        if (preset) setActiveUser(preset.defaultUser);
-      }
     }
   }, [urlRole, searchParams]);
 
@@ -178,7 +164,11 @@ function PortalMainContent() {
     setActiveUser(userToSet);
     setGateAuthError(null);
     setGatePasswordInput("");
+    // Always lock when switching to CEO or Socio unless authenticated in this specific action
+    setAuthenticatedUserId(null);
     if (typeof window !== "undefined") {
+      sessionStorage.removeItem("innocentia_session_auth_id");
+      localStorage.removeItem("innocentia_auth_user_id");
       localStorage.setItem("innocentia_active_role", newRole);
       localStorage.setItem("innocentia_active_user", JSON.stringify(userToSet));
     }
@@ -198,11 +188,10 @@ function PortalMainContent() {
       return;
     }
 
-    // Success
+    // Success: store in session
     setAuthenticatedUserId(activeUser.id);
     if (typeof window !== "undefined") {
-      localStorage.setItem("innocentia_auth_user_id", activeUser.id);
-      localStorage.setItem("innocentia_auth_token", "AUTH_" + activeUser.id + "_" + Date.now());
+      sessionStorage.setItem("innocentia_session_auth_id", activeUser.id);
       localStorage.setItem("innocentia_active_role", activeUser.role);
       localStorage.setItem("innocentia_active_user", JSON.stringify(activeUser));
     }
@@ -213,8 +202,10 @@ function PortalMainContent() {
     setGatePasswordInput("");
     setGateAuthError(null);
     if (typeof window !== "undefined") {
+      sessionStorage.removeItem("innocentia_session_auth_id");
       localStorage.removeItem("innocentia_auth_user_id");
       localStorage.removeItem("innocentia_auth_token");
+      localStorage.removeItem("innocentia_active_user");
     }
   };
 
@@ -2205,7 +2196,14 @@ function PortalMainContent() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onSelectRole={(role, user) => {
-          handleRoleChange(role, user);
+          if (user) {
+            setActiveRole(user.role);
+            setActiveUser(user);
+            setAuthenticatedUserId(user.id);
+            if (typeof window !== "undefined") {
+              sessionStorage.setItem("innocentia_session_auth_id", user.id);
+            }
+          }
           setIsAuthModalOpen(false);
         }}
       />
