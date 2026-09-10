@@ -412,6 +412,17 @@ function PortalMainContent() {
       amount: 7000,
       details: "Programación de suscripción anual de automatización ManyChat con inicio de cargo el 15 de Septiembre.",
     },
+    {
+      id: "LOG-111",
+      timestamp: "09 Sep 2026, 22:15",
+      action: "GASTO",
+      authorName: "Daniel Torre",
+      authorRole: "Socio Operaciones",
+      sourceAccount: "Pago en Efectivo",
+      target: "Chip Telefonía Móvil ($230 MXN)",
+      amount: 230,
+      details: "Compra de chip SIM de telefonía móvil por $230 MXN en efectivo registrado por Daniel Torre.",
+    },
   ]);
 
   // CEO Project Assignment Modal State
@@ -586,6 +597,18 @@ function PortalMainContent() {
       provider: "OpenAI Inc.",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
+    },
+    {
+      id: "FIN-11",
+      type: "gasto",
+      concept: "Chip de Telefonía Móvil / SIM Card (Línea Oficial)",
+      category: "Comunicaciones & Telefonía",
+      amount: 230,
+      date: "09 de Septiembre de 2026",
+      status: "pagado",
+      provider: "Telefonía Móvil",
+      sourceAccount: "Pago en Efectivo",
+      registeredBy: "Daniel Torre (Socio)",
     },
   ]);
 
