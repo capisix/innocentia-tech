@@ -1284,18 +1284,35 @@ function PortalMainContent() {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center justify-between pt-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/10">
                       <span className="text-xs font-mono text-gray-300">
                         Presupuesto: <strong className="text-emerald-400">${proj.budget.toLocaleString()} MXN</strong>
                       </span>
-                      <button
-                        type="button"
-                        onClick={() => openAssignModal(proj)}
-                        className="px-4 py-2 rounded-xl bg-white/10 hover:bg-[#00D1FF] hover:text-black border border-white/20 text-xs font-bold text-white transition-all cursor-pointer flex items-center gap-1.5"
-                      >
-                        <Crown className="w-3.5 h-3.5" />
-                        <span>Designar Técnicos</span>
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setCeoTab("chat")}
+                          className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                            proj.unreadAlerts > 0
+                              ? "bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.3)] animate-pulse"
+                              : "bg-white/5 hover:bg-white/10 text-gray-300 border border-white/15"
+                          }`}
+                        >
+                          <MessageSquare className="w-3.5 h-3.5 text-[#00D1FF]" />
+                          <span>
+                            {proj.unreadAlerts > 0 ? `${proj.unreadAlerts} sin leer` : "Chat"}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => openAssignModal(proj)}
+                          className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-[#00D1FF] hover:text-black border border-white/20 text-xs font-bold text-white transition-all cursor-pointer flex items-center gap-1.5"
+                        >
+                          <Crown className="w-3.5 h-3.5" />
+                          <span>Designar</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1305,14 +1322,25 @@ function PortalMainContent() {
             {/* CEO Tab 2: Designación de Técnicos */}
             {ceoTab === "asignacion" && (
               <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <div className="border-b border-white/10 pb-4">
-                  <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-amber-400" />
-                    <span>Panel de Designación Técnica (CEO Exclusivo)</span>
-                  </h2>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Como Director General, asigna y reasigna los ingenieros, diseñadores y DevOps a cada proyecto en desarrollo.
-                  </p>
+                <div className="border-b border-white/10 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                      <Crown className="w-5 h-5 text-amber-400" />
+                      <span>Panel de Designación Técnica (CEO Exclusivo)</span>
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Como Director General, asigna y reasigna los ingenieros, diseñadores y DevOps a cada proyecto en desarrollo.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setCeoTab("chat")}
+                    className="px-4 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-mono text-gray-200 hover:text-white flex items-center gap-2 self-start sm:self-auto cursor-pointer"
+                  >
+                    <MessageSquare className="w-4 h-4 text-[#00D1FF]" />
+                    <span>Abrir Bitácora &amp; Chat Global →</span>
+                  </button>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -1323,13 +1351,15 @@ function PortalMainContent() {
                         <th className="py-3 px-3">Dev Lead</th>
                         <th className="py-3 px-3">UX / Diseñador</th>
                         <th className="py-3 px-3">DevOps / Cloud</th>
+                        <th className="py-3 px-3 text-center">Avance</th>
+                        <th className="py-3 px-3 text-center">Chat / Mensajes</th>
                         <th className="py-3 px-3">Estado</th>
                         <th className="py-3 px-3 text-right">Acción</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/10">
                       {projects.map((proj) => (
-                        <tr key={proj.id} className="hover:bg-white/[0.02]">
+                        <tr key={proj.id} className="hover:bg-white/[0.02] transition-colors">
                           <td className="py-3.5 px-3">
                             <span className="font-bold text-white block">{proj.name}</span>
                             <span className="text-[10px] text-gray-400">{proj.client}</span>
@@ -1337,16 +1367,64 @@ function PortalMainContent() {
                           <td className="py-3.5 px-3 text-[#00D1FF] font-bold">{proj.devLead}</td>
                           <td className="py-3.5 px-3 text-purple-400 font-bold">{proj.uxLead}</td>
                           <td className="py-3.5 px-3 text-emerald-400 font-bold">{proj.devopsLead || "Iván Castillo (CEO)"}</td>
+                          
+                          {/* Avance */}
+                          <td className="py-3.5 px-3 text-center min-w-[120px]">
+                            <div className="space-y-1 inline-block w-full max-w-[100px]">
+                              <div className="flex justify-between items-center text-[10px] font-bold">
+                                <span className={proj.progress === 100 ? "text-emerald-400" : proj.progress >= 50 ? "text-[#00D1FF]" : "text-purple-400"}>
+                                  {proj.progress}%
+                                </span>
+                              </div>
+                              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full ${
+                                    proj.progress === 100
+                                      ? "bg-emerald-400"
+                                      : "bg-gradient-to-r from-[#FF3858] to-[#00D1FF]"
+                                  }`}
+                                  style={{ width: `${proj.progress}%` }}
+                                />
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Chat & Mensajes No Leídos */}
+                          <td className="py-3.5 px-3 text-center">
+                            <button
+                              type="button"
+                              onClick={() => setCeoTab("chat")}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                                proj.unreadAlerts > 0
+                                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-[0_0_12px_rgba(244,63,94,0.4)] animate-pulse hover:bg-rose-500/30"
+                                  : "bg-white/5 text-gray-400 border border-white/10 hover:border-white/30 hover:text-white"
+                              }`}
+                              title={proj.unreadAlerts > 0 ? `${proj.unreadAlerts} mensajes sin leer` : "Chat al día"}
+                            >
+                              <MessageSquare className={`w-3.5 h-3.5 ${proj.unreadAlerts > 0 ? "text-rose-400" : "text-gray-400"}`} />
+                              <span>{proj.unreadAlerts > 0 ? `${proj.unreadAlerts} sin leer` : "Al día"}</span>
+                            </button>
+                          </td>
+
                           <td className="py-3.5 px-3">
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] bg-white/10 border border-white/15 text-gray-300">
+                            <span
+                              className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+                                proj.status === "Completado"
+                                  ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                  : proj.status === "Por Iniciar"
+                                  ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                  : "bg-white/10 text-gray-300 border-white/15"
+                              }`}
+                            >
                               {proj.status}
                             </span>
                           </td>
+
                           <td className="py-3.5 px-3 text-right">
                             <button
                               type="button"
                               onClick={() => openAssignModal(proj)}
-                              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer"
+                              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition-all cursor-pointer hover:scale-105"
                             >
                               Modificar
                             </button>
