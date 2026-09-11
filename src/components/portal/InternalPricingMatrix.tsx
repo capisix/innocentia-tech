@@ -857,7 +857,7 @@ export default function InternalPricingMatrix({
               {/* Preset Extras List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {presetCatalog.map((extra) => {
-                  const IconComponent = extra.icon;
+                  const IconComponent = extra.icon || Sparkles;
                   const isChecked = !!selectedExtras[extra.id];
 
                   return (

@@ -103,7 +103,9 @@ Equipo de Consultoría y Desarrollo • Innocentia Tech
 https://innocentia.tech`;
 
   const handleCopy = (text: string, key: string) => {
-    navigator.clipboard.writeText(text);
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
     setCopiedKey(key);
     setTimeout(() => {
       setCopiedKey(null);
