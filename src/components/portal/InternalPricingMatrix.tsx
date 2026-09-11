@@ -20,6 +20,7 @@ import {
   RotateCcw,
   Bot,
   CreditCard,
+  Cloud,
   Shield,
   FileText,
 } from "../../lib/icons";

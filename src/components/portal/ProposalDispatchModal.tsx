@@ -18,7 +18,7 @@ import {
   Crown,
   CheckCircle2,
   Share2
-} from "lucide-react";
+} from "../../lib/icons";
 import { generateProjectPdf, ProjectPdfData } from "../../lib/generateProjectPdf";
 
 export interface ProposalDispatchModalProps {
