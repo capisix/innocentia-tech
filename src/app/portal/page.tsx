@@ -256,6 +256,13 @@ function PortalMainContent() {
   // Finance Category Filter Tab (Ingresos por Proyecto, Gastos Cloud, Comisiones Vendedores, Pago/Sueldos)
   const [financeCategoryTab, setFinanceCategoryTab] = useState<"todos" | "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo">("todos");
 
+  // Filters for Finance Tab (Por quién hace el pago y por fechas / período / búsqueda)
+  const [financeFilterPaidBy, setFinanceFilterPaidBy] = useState<string>("all");
+  const [financeFilterDate, setFinanceFilterDate] = useState<string>("all");
+  const [financeFilterMonth, setFinanceFilterMonth] = useState<string>("all");
+  const [financeFilterYear, setFinanceFilterYear] = useState<string>("all");
+  const [financeSearchQuery, setFinanceSearchQuery] = useState<string>("");
+
   // Filters for Audit Log & Bitácora de Movimientos
   const [auditFilterPaymentStatus, setAuditFilterPaymentStatus] = useState<string>("all"); // "all" | "realizado" | "pendiente" | "automatico"
   const [auditFilterYear, setAuditFilterYear] = useState<string>("all"); // "all" | "2026" | "2025"
@@ -1311,17 +1318,90 @@ function PortalMainContent() {
     }
   };
 
-  // Categorized Financial Calculations
-  const ingresosProyectos = financeRecords.filter((r) => r.section === "ingreso_proyecto" || r.type === "ingreso");
+  // Filtered Finance Records (Filtros por quién hace el pago, fecha, mes, año y término de búsqueda)
+  const filteredFinanceRecords = financeRecords.filter((r) => {
+    // 1. Paid By Filter
+    if (financeFilterPaidBy !== "all") {
+      if (financeFilterPaidBy === "sin_asignar") {
+        if (r.paidBy && r.paidBy.trim() !== "") return false;
+      } else if (financeFilterPaidBy === "clientes") {
+        if (!r.paidBy?.toLowerCase().includes("cliente") && r.section !== "ingreso_proyecto") return false;
+      } else {
+        if (!r.paidBy?.toLowerCase().includes(financeFilterPaidBy.toLowerCase())) return false;
+      }
+    }
+
+    // 2. Date / Period Quick Filter
+    const combinedDateText = `${r.date} ${r.dueDate || ""}`.toLowerCase();
+    if (financeFilterDate !== "all") {
+      if (financeFilterDate === "hoy") {
+        if (!combinedDateText.includes("09 de septiembre") && !combinedDateText.includes("10 de septiembre") && !combinedDateText.includes("12 de septiembre")) return false;
+      } else if (financeFilterDate === "ultimos_7_dias") {
+        if (!combinedDateText.includes("septiembre") || combinedDateText.includes("01 de ") || combinedDateText.includes("02 de ") || combinedDateText.includes("03 de ") || combinedDateText.includes("04 de ")) return false;
+      } else if (financeFilterDate === "septiembre_2026") {
+        if (!combinedDateText.includes("septiembre") && !combinedDateText.includes("sep")) return false;
+      } else if (financeFilterDate === "agosto_2026") {
+        if (!combinedDateText.includes("agosto") && !combinedDateText.includes("ago")) return false;
+      } else if (financeFilterDate === "recurrentes") {
+        if (r.status !== "recurrente" && !combinedDateText.includes("cada mes")) return false;
+      }
+    }
+
+    // 3. Month Filter
+    if (financeFilterMonth !== "all") {
+      const monthNames: Record<string, string> = {
+        "1": "enero",
+        "2": "febrero",
+        "3": "marzo",
+        "4": "abril",
+        "5": "mayo",
+        "6": "junio",
+        "7": "julio",
+        "8": "agosto",
+        "9": "septiembre",
+        "10": "octubre",
+        "11": "noviembre",
+        "12": "diciembre",
+      };
+      const targetMonthName = monthNames[financeFilterMonth];
+      if (targetMonthName && !combinedDateText.includes(targetMonthName)) return false;
+    }
+
+    // 4. Year Filter
+    if (financeFilterYear !== "all") {
+      if (!combinedDateText.includes(financeFilterYear)) return false;
+    }
+
+    // 5. Search Query
+    if (financeSearchQuery.trim() !== "") {
+      const q = financeSearchQuery.toLowerCase();
+      const matchConcept = r.concept.toLowerCase().includes(q);
+      const matchCategory = r.category.toLowerCase().includes(q);
+      const matchProvider = r.provider?.toLowerCase().includes(q) || false;
+      const matchBeneficiary = r.beneficiary?.toLowerCase().includes(q) || false;
+      const matchProject = r.projectRef?.toLowerCase().includes(q) || false;
+      const matchAccount = r.sourceAccount.toLowerCase().includes(q);
+      const matchPaidBy = r.paidBy?.toLowerCase().includes(q) || false;
+      const matchRegisteredBy = r.registeredBy.toLowerCase().includes(q);
+      if (!matchConcept && !matchCategory && !matchProvider && !matchBeneficiary && !matchProject && !matchAccount && !matchPaidBy && !matchRegisteredBy) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // Categorized Financial Calculations on filtered set
+  const ingresosProyectos = filteredFinanceRecords.filter((r) => r.section === "ingreso_proyecto" || r.type === "ingreso");
   const totalIngresosProyectos = ingresosProyectos.reduce((sum, r) => sum + r.amount, 0);
 
-  const gastosOperativos = financeRecords.filter((r) => r.section === "gasto_operativo" || (r.type === "servicio" && r.section !== "nomina_sueldo" && r.section !== "comision_vendedor"));
+  const gastosOperativos = filteredFinanceRecords.filter((r) => r.section === "gasto_operativo" || (r.type === "servicio" && r.section !== "nomina_sueldo" && r.section !== "comision_vendedor"));
   const totalGastosOperativos = gastosOperativos.reduce((sum, r) => sum + r.amount, 0);
 
-  const comisionesVendedores = financeRecords.filter((r) => r.section === "comision_vendedor");
+  const comisionesVendedores = filteredFinanceRecords.filter((r) => r.section === "comision_vendedor");
   const totalComisionesVendedores = comisionesVendedores.reduce((sum, r) => sum + r.amount, 0);
 
-  const sueldosNomina = financeRecords.filter((r) => r.section === "nomina_sueldo");
+  const sueldosNomina = filteredFinanceRecords.filter((r) => r.section === "nomina_sueldo");
   const totalSueldosNomina = sueldosNomina.reduce((sum, r) => sum + r.amount, 0);
 
   const totalIncome = totalIngresosProyectos;
@@ -1982,6 +2062,169 @@ function PortalMainContent() {
                   </div>
                 </div>
 
+                {/* ========================================================================= */}
+                {/* ADVANCED FINANCE FILTERS: PAGADOR, FECHAS & BÚSQUEDA */}
+                {/* ========================================================================= */}
+                <div className="p-5 sm:p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 shadow-xl">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="p-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                        <Sparkles className="w-4 h-4" />
+                      </span>
+                      <div>
+                        <h4 className="text-sm font-black text-white uppercase tracking-wide flex items-center gap-2">
+                          <span>Filtros de Tesorería (Pagador & Fechas)</span>
+                          {(financeFilterPaidBy !== "all" || financeFilterDate !== "all" || financeFilterMonth !== "all" || financeFilterYear !== "all" || financeSearchQuery.trim() !== "") && (
+                            <span className="px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 border border-purple-400 text-[10px] font-mono font-bold animate-pulse">
+                              Filtro Aplicado
+                            </span>
+                          )}
+                        </h4>
+                        <p className="text-[11px] text-gray-400 font-mono">
+                          Filtra por quién cubrió el pago (Daniel, Jorge, Iván, Bancos, etc.), mes de corte o busca conceptos específicos.
+                        </p>
+                      </div>
+                    </div>
+
+                    {(financeFilterPaidBy !== "all" || financeFilterDate !== "all" || financeFilterMonth !== "all" || financeFilterYear !== "all" || financeSearchQuery.trim() !== "") && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFinanceFilterPaidBy("all");
+                          setFinanceFilterDate("all");
+                          setFinanceFilterMonth("all");
+                          setFinanceFilterYear("all");
+                          setFinanceSearchQuery("");
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Limpiar Filtros</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
+                    {/* 1. Filter by Paid By */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <Users className="w-3 h-3 text-purple-400" />
+                        <span>👤 Pagador / De quién proviene:</span>
+                      </label>
+                      <select
+                        value={financeFilterPaidBy}
+                        onChange={(e) => setFinanceFilterPaidBy(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 font-bold"
+                      >
+                        <option value="all">✨ Todos los Pagadores / Orígenes</option>
+                        <option value="Daniel Torre">Daniel Torre (Socio)</option>
+                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
+                        <option value="Iván Castillo">Iván Castillo (CEO)</option>
+                        <option value="Santander Corporativa">Santander Corporativa (Innocentia Tech)</option>
+                        <option value="BBVA Operativa">BBVA Operativa & Nómina</option>
+                        <option value="Caja Chica">Caja Chica Efectivo</option>
+                        <option value="clientes">Clientes / Ingresos de Proyectos</option>
+                        <option value="sin_asignar">⚠️ Sin Pagador Asignado</option>
+                      </select>
+                    </div>
+
+                    {/* 2. Quick Period / Range Filter */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-[#00D1FF]" />
+                        <span>📅 Período / Vencimiento:</span>
+                      </label>
+                      <select
+                        value={financeFilterDate}
+                        onChange={(e) => setFinanceFilterDate(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-[#00D1FF] font-bold"
+                      >
+                        <option value="all">🌐 Todo el Historial</option>
+                        <option value="septiembre_2026">Mes Actual (Septiembre 2026)</option>
+                        <option value="agosto_2026">Mes Anterior (Agosto 2026)</option>
+                        <option value="hoy">Movimientos Recientes (Hoy / Esta Semana)</option>
+                        <option value="recurrentes">🔄 Sólo Pagos Recurrentes / Mensuales</option>
+                      </select>
+                    </div>
+
+                    {/* 3. Specific Month Filter */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-amber-400" />
+                        <span>📆 Mes Específico:</span>
+                      </label>
+                      <select
+                        value={financeFilterMonth}
+                        onChange={(e) => setFinanceFilterMonth(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-amber-400 font-bold"
+                      >
+                        <option value="all">Todos los Meses</option>
+                        <option value="9">Septiembre (09)</option>
+                        <option value="8">Agosto (08)</option>
+                        <option value="7">Julio (07)</option>
+                        <option value="6">Junio (06)</option>
+                        <option value="10">Octubre (10)</option>
+                      </select>
+                    </div>
+
+                    {/* 4. Search Bar */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <FileText className="w-3 h-3 text-emerald-400" />
+                        <span>🔍 Búsqueda Rápida:</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={financeSearchQuery}
+                        onChange={(e) => setFinanceSearchQuery(e.target.value)}
+                        placeholder="Concepto, proveedor, cliente, cuenta..."
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-emerald-400 placeholder:text-gray-600 text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Quick Payer Filter Pills */}
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase mr-1">Atajos de Pagador:</span>
+                    {[
+                      { label: "Todos", value: "all" },
+                      { label: "👤 Daniel Torre", value: "Daniel Torre" },
+                      { label: "👤 Jorge Pérez", value: "Jorge Pérez" },
+                      { label: "👤 Iván Castillo", value: "Iván Castillo" },
+                      { label: "💳 Santander Corp", value: "Santander Corporativa" },
+                      { label: "💳 BBVA Nómina", value: "BBVA Operativa" },
+                      { label: "💵 Caja Chica", value: "Caja Chica" },
+                      { label: "💼 Clientes", value: "clientes" },
+                      { label: "⚠️ Sin Asignar", value: "sin_asignar" },
+                    ].map((pill) => (
+                      <button
+                        key={pill.value}
+                        type="button"
+                        onClick={() => setFinanceFilterPaidBy(pill.value)}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
+                          financeFilterPaidBy === pill.value
+                            ? "bg-purple-500 text-white font-bold shadow-[0_0_12px_rgba(168,85,247,0.4)]"
+                            : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                        }`}
+                      >
+                        {pill.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Active Filters Result Summary */}
+                  <div className="flex items-center justify-between text-[11px] text-gray-400 font-mono pt-1">
+                    <span>
+                      Mostrando <strong className="text-white">{filteredFinanceRecords.length}</strong> de <strong className="text-white">{financeRecords.length}</strong> movimientos contables
+                    </span>
+                    {filteredFinanceRecords.length === 0 && (
+                      <span className="text-amber-400 font-bold">
+                        ⚠️ No se encontraron movimientos con los filtros seleccionados
+                      </span>
+                    )}
+                  </div>
+                </div>
+
                 {/* 5 High-Impact Metric Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                   {/* 1. Ingresos */}
@@ -2076,7 +2319,7 @@ function PortalMainContent() {
                         : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                     }`}
                   >
-                    ✨ Todos los Movimientos ({financeRecords.length})
+                    ✨ Todos los Movimientos ({filteredFinanceRecords.length})
                   </button>
                   <button
                     type="button"
@@ -3304,6 +3547,169 @@ function PortalMainContent() {
                   </div>
                 </div>
 
+                {/* ========================================================================= */}
+                {/* ADVANCED FINANCE FILTERS: PAGADOR, FECHAS & BÚSQUEDA */}
+                {/* ========================================================================= */}
+                <div className="p-5 sm:p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 shadow-xl">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 pb-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="p-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                        <Sparkles className="w-4 h-4" />
+                      </span>
+                      <div>
+                        <h4 className="text-sm font-black text-white uppercase tracking-wide flex items-center gap-2">
+                          <span>Filtros de Tesorería (Pagador & Fechas)</span>
+                          {(financeFilterPaidBy !== "all" || financeFilterDate !== "all" || financeFilterMonth !== "all" || financeFilterYear !== "all" || financeSearchQuery.trim() !== "") && (
+                            <span className="px-2 py-0.5 rounded-full bg-purple-500/30 text-purple-300 border border-purple-400 text-[10px] font-mono font-bold animate-pulse">
+                              Filtro Aplicado
+                            </span>
+                          )}
+                        </h4>
+                        <p className="text-[11px] text-gray-400 font-mono">
+                          Filtra por quién cubrió el pago (Daniel, Jorge, Iván, Bancos, etc.), mes de corte o busca conceptos específicos.
+                        </p>
+                      </div>
+                    </div>
+
+                    {(financeFilterPaidBy !== "all" || financeFilterDate !== "all" || financeFilterMonth !== "all" || financeFilterYear !== "all" || financeSearchQuery.trim() !== "") && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFinanceFilterPaidBy("all");
+                          setFinanceFilterDate("all");
+                          setFinanceFilterMonth("all");
+                          setFinanceFilterYear("all");
+                          setFinanceSearchQuery("");
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Limpiar Filtros</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
+                    {/* 1. Filter by Paid By */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <Users className="w-3 h-3 text-purple-400" />
+                        <span>👤 Pagador / De quién proviene:</span>
+                      </label>
+                      <select
+                        value={financeFilterPaidBy}
+                        onChange={(e) => setFinanceFilterPaidBy(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 font-bold"
+                      >
+                        <option value="all">✨ Todos los Pagadores / Orígenes</option>
+                        <option value="Daniel Torre">Daniel Torre (Socio)</option>
+                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
+                        <option value="Iván Castillo">Iván Castillo (CEO)</option>
+                        <option value="Santander Corporativa">Santander Corporativa (Innocentia Tech)</option>
+                        <option value="BBVA Operativa">BBVA Operativa & Nómina</option>
+                        <option value="Caja Chica">Caja Chica Efectivo</option>
+                        <option value="clientes">Clientes / Ingresos de Proyectos</option>
+                        <option value="sin_asignar">⚠️ Sin Pagador Asignado</option>
+                      </select>
+                    </div>
+
+                    {/* 2. Quick Period / Range Filter */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-[#00D1FF]" />
+                        <span>📅 Período / Vencimiento:</span>
+                      </label>
+                      <select
+                        value={financeFilterDate}
+                        onChange={(e) => setFinanceFilterDate(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-[#00D1FF] font-bold"
+                      >
+                        <option value="all">🌐 Todo el Historial</option>
+                        <option value="septiembre_2026">Mes Actual (Septiembre 2026)</option>
+                        <option value="agosto_2026">Mes Anterior (Agosto 2026)</option>
+                        <option value="hoy">Movimientos Recientes (Hoy / Esta Semana)</option>
+                        <option value="recurrentes">🔄 Sólo Pagos Recurrentes / Mensuales</option>
+                      </select>
+                    </div>
+
+                    {/* 3. Specific Month Filter */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-amber-400" />
+                        <span>📆 Mes Específico:</span>
+                      </label>
+                      <select
+                        value={financeFilterMonth}
+                        onChange={(e) => setFinanceFilterMonth(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-amber-400 font-bold"
+                      >
+                        <option value="all">Todos los Meses</option>
+                        <option value="9">Septiembre (09)</option>
+                        <option value="8">Agosto (08)</option>
+                        <option value="7">Julio (07)</option>
+                        <option value="6">Junio (06)</option>
+                        <option value="10">Octubre (10)</option>
+                      </select>
+                    </div>
+
+                    {/* 4. Search Bar */}
+                    <div>
+                      <label className="block text-gray-300 mb-1.5 font-bold uppercase text-[10px] flex items-center gap-1">
+                        <FileText className="w-3 h-3 text-emerald-400" />
+                        <span>🔍 Búsqueda Rápida:</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={financeSearchQuery}
+                        onChange={(e) => setFinanceSearchQuery(e.target.value)}
+                        placeholder="Concepto, proveedor, cliente, cuenta..."
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-emerald-400 placeholder:text-gray-600 text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Quick Payer Filter Pills */}
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase mr-1">Atajos de Pagador:</span>
+                    {[
+                      { label: "Todos", value: "all" },
+                      { label: "👤 Daniel Torre", value: "Daniel Torre" },
+                      { label: "👤 Jorge Pérez", value: "Jorge Pérez" },
+                      { label: "👤 Iván Castillo", value: "Iván Castillo" },
+                      { label: "💳 Santander Corp", value: "Santander Corporativa" },
+                      { label: "💳 BBVA Nómina", value: "BBVA Operativa" },
+                      { label: "💵 Caja Chica", value: "Caja Chica" },
+                      { label: "💼 Clientes", value: "clientes" },
+                      { label: "⚠️ Sin Asignar", value: "sin_asignar" },
+                    ].map((pill) => (
+                      <button
+                        key={pill.value}
+                        type="button"
+                        onClick={() => setFinanceFilterPaidBy(pill.value)}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
+                          financeFilterPaidBy === pill.value
+                            ? "bg-purple-500 text-white font-bold shadow-[0_0_12px_rgba(168,85,247,0.4)]"
+                            : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                        }`}
+                      >
+                        {pill.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Active Filters Result Summary */}
+                  <div className="flex items-center justify-between text-[11px] text-gray-400 font-mono pt-1">
+                    <span>
+                      Mostrando <strong className="text-white">{filteredFinanceRecords.length}</strong> de <strong className="text-white">{financeRecords.length}</strong> movimientos contables
+                    </span>
+                    {filteredFinanceRecords.length === 0 && (
+                      <span className="text-amber-400 font-bold">
+                        ⚠️ No se encontraron movimientos con los filtros seleccionados
+                      </span>
+                    )}
+                  </div>
+                </div>
+
                 {/* 5 High-Impact Metric Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                   {/* 1. Ingresos */}
@@ -3398,7 +3804,7 @@ function PortalMainContent() {
                         : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                     }`}
                   >
-                    ✨ Todos los Movimientos ({financeRecords.length})
+                    ✨ Todos los Movimientos ({filteredFinanceRecords.length})
                   </button>
                   <button
                     type="button"
