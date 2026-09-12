@@ -66,6 +66,7 @@ interface FinanceRecord {
   projectRef?: string;
   sourceAccount: string;
   registeredBy: string;
+  paidBy?: string;
 }
 
 export interface AuditLogEntry {
@@ -741,6 +742,7 @@ function PortalMainContent() {
       projectRef: "Clínica Médica AI",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Cliente: Dr. Roberto (Clínica Médica)",
     },
     {
       id: "FIN-02",
@@ -754,6 +756,7 @@ function PortalMainContent() {
       projectRef: "Gourmet Express",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Jorge Pérez (Socio)",
+      paidBy: "Cliente: Gourmet Express S.A.",
     },
     {
       id: "FIN-03",
@@ -767,6 +770,7 @@ function PortalMainContent() {
       projectRef: "Fintech Seguros",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Cliente: Fintech Seguros MX",
     },
 
     // 2. GASTOS OPERATIVOS & CLOUD
@@ -783,6 +787,7 @@ function PortalMainContent() {
       provider: "Amazon Web Services",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Daniel Torre (Socio)",
     },
     {
       id: "FIN-05",
@@ -797,6 +802,7 @@ function PortalMainContent() {
       provider: "Vercel Inc.",
       sourceAccount: "Stripe Gateway / Tarjeta",
       registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Daniel Torre (Socio)",
     },
     {
       id: "FIN-06",
@@ -811,6 +817,7 @@ function PortalMainContent() {
       provider: "OpenAI LLC",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Jorge Pérez (Socio)",
+      paidBy: "Jorge Pérez (Socio)",
     },
     {
       id: "FIN-07",
@@ -825,6 +832,7 @@ function PortalMainContent() {
       provider: "ManyChat Inc.",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Iván Castillo (CEO)",
     },
     {
       id: "FIN-08",
@@ -839,6 +847,7 @@ function PortalMainContent() {
       provider: "Google Deepmind / Antigravity",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Iván Castillo (CEO)",
     },
     {
       id: "FIN-09",
@@ -853,6 +862,7 @@ function PortalMainContent() {
       provider: "OpenAI LLC (Pagado por Daniel Torre)",
       sourceAccount: "Pago efectuado por Daniel Torre (Socio Operaciones)",
       registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Daniel Torre (Socio)",
     },
     {
       id: "FIN-10",
@@ -867,6 +877,7 @@ function PortalMainContent() {
       provider: "Google LLC",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Iván Castillo (CEO)",
     },
     {
       id: "FIN-11",
@@ -880,6 +891,7 @@ function PortalMainContent() {
       provider: "Telefonía Móvil",
       sourceAccount: "Caja Chica Efectivo",
       registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Daniel Torre (Socio)",
     },
 
     // 3. COMISIONES DE VENDEDORES
@@ -896,6 +908,7 @@ function PortalMainContent() {
       projectRef: "Clínica Médica AI",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Santander Corporativa (Innocentia Tech)",
     },
     {
       id: "FIN-13",
@@ -910,6 +923,7 @@ function PortalMainContent() {
       projectRef: "Gourmet Express",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Jorge Pérez (Socio)",
+      paidBy: "BBVA Operativa & Nómina",
     },
     {
       id: "FIN-14",
@@ -925,6 +939,7 @@ function PortalMainContent() {
       projectRef: "Fintech Seguros",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Daniel Torre (Socio)",
+      paidBy: "BBVA Operativa & Nómina",
     },
 
     // 4. PAGO O SUELDOS / NÓMINA TÉCNICA
@@ -940,6 +955,7 @@ function PortalMainContent() {
       beneficiary: "Ing. Rodrigo Pacheco (Dev Lead)",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Santander Corporativa (Innocentia Tech)",
     },
     {
       id: "FIN-16",
@@ -953,6 +969,7 @@ function PortalMainContent() {
       beneficiary: "Sofía Valenzuela (UX/UI Lead)",
       sourceAccount: "BBVA Operativa & Nómina",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "BBVA Operativa & Nómina",
     },
     {
       id: "FIN-17",
@@ -966,6 +983,7 @@ function PortalMainContent() {
       beneficiary: "Iván Castillo (DevOps Lead)",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
       registeredBy: "Iván Castillo (CEO)",
+      paidBy: "Santander Corporativa (Innocentia Tech)",
     },
   ]);
 
@@ -980,6 +998,77 @@ function PortalMainContent() {
   const [finBeneficiary, setFinBeneficiary] = useState("");
   const [finProjectRef, setFinProjectRef] = useState("");
   const [finSourceAccount, setFinSourceAccount] = useState("Santander Corporativa (Innocentia Tech)");
+  const [finPaidBy, setFinPaidBy] = useState("Daniel Torre (Socio)");
+
+  // Edit Finance Movement Modal State
+  const [isEditFinanceModalOpen, setIsEditFinanceModalOpen] = useState(false);
+  const [editingFinanceRecord, setEditingFinanceRecord] = useState<FinanceRecord | null>(null);
+  const [editFinSection, setEditFinSection] = useState<FinanceSection>("gasto_operativo");
+  const [editFinConcept, setEditFinConcept] = useState("");
+  const [editFinCategory, setEditFinCategory] = useState("");
+  const [editFinAmount, setEditFinAmount] = useState<number>(0);
+  const [editFinDueDate, setEditFinDueDate] = useState("");
+  const [editFinProvider, setEditFinProvider] = useState("");
+  const [editFinBeneficiary, setEditFinBeneficiary] = useState("");
+  const [editFinProjectRef, setEditFinProjectRef] = useState("");
+  const [editFinSourceAccount, setEditFinSourceAccount] = useState("");
+  const [editFinStatus, setEditFinStatus] = useState<"pagado" | "pendiente" | "recurrente">("recurrente");
+  const [editFinPaidBy, setEditFinPaidBy] = useState("");
+
+  const handleOpenEditFinanceRecord = (rec: FinanceRecord) => {
+    setEditingFinanceRecord(rec);
+    setEditFinSection(rec.section);
+    setEditFinConcept(rec.concept);
+    setEditFinCategory(rec.category);
+    setEditFinAmount(rec.amount);
+    setEditFinDueDate(rec.dueDate || rec.date || "");
+    setEditFinProvider(rec.provider || "");
+    setEditFinBeneficiary(rec.beneficiary || "");
+    setEditFinProjectRef(rec.projectRef || "");
+    setEditFinSourceAccount(rec.sourceAccount);
+    setEditFinStatus(rec.status);
+    setEditFinPaidBy(rec.paidBy || (rec.section === "gasto_operativo" ? rec.registeredBy : ""));
+    setIsEditFinanceModalOpen(true);
+  };
+
+  const handleSaveEditFinanceRecord = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingFinanceRecord) return;
+
+    const updatedRec: FinanceRecord = {
+      ...editingFinanceRecord,
+      section: editFinSection,
+      concept: editFinConcept,
+      category: editFinCategory,
+      amount: Number(editFinAmount),
+      dueDate: editFinDueDate || undefined,
+      provider: editFinProvider || undefined,
+      beneficiary: editFinBeneficiary || undefined,
+      projectRef: editFinProjectRef || undefined,
+      sourceAccount: editFinSourceAccount,
+      status: editFinStatus,
+      paidBy: editFinPaidBy.trim() || undefined,
+    };
+
+    setFinanceRecords((prev) => prev.map((r) => (r.id === editingFinanceRecord.id ? updatedRec : r)));
+
+    // Push into Audit Log
+    const newLog: AuditLogEntry = {
+      id: "LOG-" + Date.now().toString().slice(-4),
+      timestamp: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+      action: "EDICION",
+      authorName: activeUser.name,
+      authorRole: activeUser.roleTitle,
+      sourceAccount: editFinSourceAccount,
+      target: editFinConcept,
+      amount: Number(editFinAmount),
+      details: `Edición de movimiento "${editingFinanceRecord.id}" (${editFinConcept}). Pagado por: ${editFinPaidBy.trim() || "Sin asignar"}. Monto: $${Number(editFinAmount).toLocaleString()} MXN.`,
+    };
+    setAuditLogs((prev) => [newLog, ...prev]);
+
+    setIsEditFinanceModalOpen(false);
+    setEditingFinanceRecord(null);
+  };
 
   const handleAddFinanceRecord = (e: React.FormEvent) => {
     e.preventDefault();
@@ -1003,6 +1092,7 @@ function PortalMainContent() {
       projectRef: finProjectRef || undefined,
       sourceAccount: finSourceAccount,
       registeredBy: `${activeUser.name} (${activeUser.role === 'ceo' ? 'CEO' : 'Socio'})`,
+      paidBy: finPaidBy.trim() || undefined,
     };
 
     setFinanceRecords((prev) => [newRec, ...prev]);
@@ -1017,7 +1107,7 @@ function PortalMainContent() {
       sourceAccount: finSourceAccount,
       target: finConcept,
       amount: Number(finAmount),
-      details: `Registro en categoría "${finCategory}" (${finSection}) cargado a cuenta "${finSourceAccount}".`,
+      details: `Registro en categoría "${finCategory}" (${finSection}) cargado a cuenta "${finSourceAccount}". Pagado por: ${finPaidBy || "No especificado"}.`,
     };
     setAuditLogs((prev) => [newLog, ...prev]);
 
@@ -1027,6 +1117,7 @@ function PortalMainContent() {
     setFinBeneficiary("");
     setFinProjectRef("");
     setFinAmount(5000);
+    setFinPaidBy("Daniel Torre (Socio)");
     setIsFinanceModalOpen(false);
   };
 
@@ -2078,7 +2169,22 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-emerald-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.projectRef || r.concept}</strong>
-                                <span className="text-[10px] text-gray-400">{r.category}</span>
+                                <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                                  <span className="text-[10px] text-gray-400">{r.category}</span>
+                                  {r.paidBy ? (
+                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px] font-mono">
+                                      👤 {r.paidBy}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono hover:bg-amber-500/20 transition-all cursor-pointer"
+                                    >
+                                      ⚠️ Asignar pagador
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
                               <td className="py-3.5 px-3">
@@ -2097,14 +2203,24 @@ function PortalMainContent() {
                                 +${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -2159,7 +2275,27 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-rose-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.provider || r.concept}</strong>
-                                <span className="text-[10px] text-gray-400 font-mono">{r.registeredBy}</span>
+                                <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                                  {r.paidBy ? (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-[10px] font-medium">
+                                      <span>👤 Pagado por:</span>
+                                      <strong className="text-emerald-200">{r.paidBy}</strong>
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold hover:bg-amber-500/30 transition-all cursor-pointer shadow-sm"
+                                      title="Hacer clic para asignar quién pagó este servicio"
+                                    >
+                                      <span>⚠️ Sin pagador asignado</span>
+                                      <span className="underline ml-0.5 text-amber-200 font-sans font-bold flex items-center gap-0.5">
+                                        <Edit3 className="w-2.5 h-2.5 inline" /> Asignar
+                                      </span>
+                                    </button>
+                                  )}
+                                  <span className="text-[10px] text-gray-500 font-mono">Reg: {r.registeredBy}</span>
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
                               <td className="py-3.5 px-3">
@@ -2178,14 +2314,24 @@ function PortalMainContent() {
                                 -${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -2240,7 +2386,22 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
-                                <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
+                                <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                                  <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
+                                  {r.paidBy ? (
+                                    <span className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10 text-gray-300 text-[10px] font-mono">
+                                      👤 Pagado por: {r.paidBy}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono hover:bg-amber-500/20 transition-all cursor-pointer"
+                                    >
+                                      ✏️ Asignar
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-purple-300 font-bold">{r.projectRef || "Proyecto General"}</td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
@@ -2265,14 +2426,24 @@ function PortalMainContent() {
                                 -${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -2327,7 +2498,22 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-cyan-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || r.concept}</strong>
-                                <span className="text-[10px] text-cyan-400 font-mono">Equipo Técnico</span>
+                                <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                                  <span className="text-[10px] text-cyan-400 font-mono">Equipo Técnico</span>
+                                  {r.paidBy ? (
+                                    <span className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10 text-gray-300 text-[10px] font-mono">
+                                      👤 Pagado por: {r.paidBy}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono hover:bg-amber-500/20 transition-all cursor-pointer"
+                                    >
+                                      ✏️ Asignar
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
                               <td className="py-3.5 px-3">
@@ -2346,14 +2532,24 @@ function PortalMainContent() {
                                 -${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -3295,7 +3491,22 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-emerald-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.projectRef || r.concept}</strong>
-                                <span className="text-[10px] text-gray-400">{r.category}</span>
+                                <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                                  <span className="text-[10px] text-gray-400">{r.category}</span>
+                                  {r.paidBy ? (
+                                    <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[10px] font-mono">
+                                      👤 {r.paidBy}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono hover:bg-amber-500/20 transition-all cursor-pointer"
+                                    >
+                                      ⚠️ Asignar pagador
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
                               <td className="py-3.5 px-3">
@@ -3314,14 +3525,24 @@ function PortalMainContent() {
                                 +${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -3376,7 +3597,27 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-rose-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.provider || r.concept}</strong>
-                                <span className="text-[10px] text-gray-400 font-mono">{r.registeredBy}</span>
+                                <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                                  {r.paidBy ? (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-[10px] font-medium">
+                                      <span>👤 Pagado por:</span>
+                                      <strong className="text-emerald-200">{r.paidBy}</strong>
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold hover:bg-amber-500/30 transition-all cursor-pointer shadow-sm"
+                                      title="Hacer clic para asignar quién pagó este servicio"
+                                    >
+                                      <span>⚠️ Sin pagador asignado</span>
+                                      <span className="underline ml-0.5 text-amber-200 font-sans font-bold flex items-center gap-0.5">
+                                        <Edit3 className="w-2.5 h-2.5 inline" /> Asignar
+                                      </span>
+                                    </button>
+                                  )}
+                                  <span className="text-[10px] text-gray-500 font-mono">Reg: {r.registeredBy}</span>
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
                               <td className="py-3.5 px-3">
@@ -3395,14 +3636,24 @@ function PortalMainContent() {
                                 -${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -3457,7 +3708,22 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
-                                <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
+                                <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                                  <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
+                                  {r.paidBy ? (
+                                    <span className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10 text-gray-300 text-[10px] font-mono">
+                                      👤 Pagado por: {r.paidBy}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono hover:bg-amber-500/20 transition-all cursor-pointer"
+                                    >
+                                      ✏️ Asignar
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-purple-300 font-bold">{r.projectRef || "Proyecto General"}</td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
@@ -3482,14 +3748,24 @@ function PortalMainContent() {
                                 -${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -3544,7 +3820,22 @@ function PortalMainContent() {
                             <tr key={r.id} className="hover:bg-cyan-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || r.concept}</strong>
-                                <span className="text-[10px] text-cyan-400 font-mono">Equipo Técnico</span>
+                                <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                                  <span className="text-[10px] text-cyan-400 font-mono">Equipo Técnico</span>
+                                  {r.paidBy ? (
+                                    <span className="px-1.5 py-0.2 rounded bg-white/5 border border-white/10 text-gray-300 text-[10px] font-mono">
+                                      👤 Pagado por: {r.paidBy}
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditFinanceRecord(r)}
+                                      className="px-1.5 py-0.2 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] font-mono hover:bg-amber-500/20 transition-all cursor-pointer"
+                                    >
+                                      ✏️ Asignar
+                                    </button>
+                                  )}
+                                </div>
                               </td>
                               <td className="py-3.5 px-3 text-gray-200">{r.concept}</td>
                               <td className="py-3.5 px-3">
@@ -3563,14 +3854,24 @@ function PortalMainContent() {
                                 -${r.amount.toLocaleString()} MXN
                               </td>
                               <td className="py-3.5 px-3 text-center">
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteFinanceRecord(r.id)}
-                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
-                                  title="Eliminar registro"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditFinanceRecord(r)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-purple-500/20 text-gray-400 hover:text-purple-300 transition-all cursor-pointer"
+                                    title="Editar movimiento y pagador"
+                                  >
+                                    <Edit3 className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteFinanceRecord(r.id)}
+                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-gray-400 hover:text-rose-400 transition-all cursor-pointer"
+                                    title="Eliminar registro"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -5072,6 +5373,44 @@ function PortalMainContent() {
                 </div>
               </div>
 
+              {/* Paid By / Payer Attribution */}
+              <div>
+                <label className="block text-gray-400 mb-1.5 font-bold uppercase text-[10px]">
+                  👤 ¿Quién realizó o de quién proviene este pago? (Pagador / Origen):
+                </label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {[
+                    "Daniel Torre (Socio)",
+                    "Jorge Pérez (Socio)",
+                    "Iván Castillo (CEO)",
+                    "Santander Corporativa (Innocentia Tech)",
+                    "BBVA Operativa & Nómina",
+                    "Caja Chica Efectivo",
+                    "Cliente Registrado",
+                  ].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setFinPaidBy(preset)}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
+                        finPaidBy === preset
+                          ? "bg-purple-500/30 text-purple-300 border border-purple-400 font-bold"
+                          : "bg-white/5 text-gray-400 border border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {preset}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  value={finPaidBy}
+                  onChange={(e) => setFinPaidBy(e.target.value)}
+                  placeholder="ej: Daniel Torre (Socio) / Empresa Cliente / Santander"
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 text-xs font-mono"
+                />
+              </div>
+
               {/* Source Account Selector */}
               <div>
                 <label className="block text-gray-400 mb-1">Cuenta Bancaria de Origen / Receptora:</label>
@@ -5108,6 +5447,331 @@ function PortalMainContent() {
                 className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 hover:scale-105 text-white text-xs font-black uppercase tracking-wider shadow-lg transition-all cursor-pointer"
               >
                 Guardar en Libro Contable
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL: EDIT FINANCE MOVEMENT & ASSIGN PAYER */}
+      {/* ========================================================================= */}
+      {isEditFinanceModalOpen && editingFinanceRecord && (
+        <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
+          <form
+            onSubmit={handleSaveEditFinanceRecord}
+            className="w-full max-w-xl bg-[#07070E] border border-purple-500/40 rounded-[32px] p-6 sm:p-8 shadow-2xl text-left space-y-5 animate-in fade-in zoom-in-95 duration-200"
+          >
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[10px] font-mono font-bold uppercase tracking-wider">
+                    {editingFinanceRecord.id}
+                  </span>
+                  <span className="text-[10px] font-mono text-gray-400 font-bold uppercase tracking-wider">
+                    Edición de Movimiento & Pagador
+                  </span>
+                </div>
+                <h3 className="text-xl font-black text-white mt-1">Editar Movimiento Financiero</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsEditFinanceModalOpen(false);
+                  setEditingFinanceRecord(null);
+                }}
+                className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs font-mono max-h-[70vh] overflow-y-auto pr-1">
+              {/* Category Selector */}
+              <div>
+                <label className="block text-gray-400 mb-1.5 font-bold uppercase text-[10px]">
+                  Sección / Categoría del Movimiento:
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditFinSection("ingreso_proyecto");
+                      setEditFinCategory("Anticipo de Proyecto");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      editFinSection === "ingreso_proyecto"
+                        ? "bg-emerald-500/20 text-emerald-400 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    📈 1. Ingreso
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditFinSection("gasto_operativo");
+                      setEditFinCategory("Infraestructura Cloud");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      editFinSection === "gasto_operativo"
+                        ? "bg-rose-500/20 text-rose-400 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    📉 2. Gasto Cloud
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditFinSection("comision_vendedor");
+                      setEditFinCategory("Comisiones Asesores");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      editFinSection === "comision_vendedor"
+                        ? "bg-amber-500/20 text-amber-400 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    💼 3. Comisión
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditFinSection("nomina_sueldo");
+                      setEditFinCategory("Sueldos / Honorarios Tech");
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      editFinSection === "nomina_sueldo"
+                        ? "bg-cyan-500/20 text-cyan-400 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    👥 4. Sueldo/Nómina
+                  </button>
+                </div>
+              </div>
+
+              {/* PAYER ATTRIBUTION (De quién proviene / quién pagó) */}
+              <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-500/30 space-y-2">
+                <label className="block text-purple-300 font-bold uppercase text-[10px] flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+                  <span>👤 ¿Quién realizó o de quién proviene el pago? (Pagador / Origen):</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    "Daniel Torre (Socio)",
+                    "Jorge Pérez (Socio)",
+                    "Iván Castillo (CEO)",
+                    "Santander Corporativa (Innocentia Tech)",
+                    "BBVA Operativa & Nómina",
+                    "Caja Chica Efectivo",
+                    "Cliente Registrado",
+                  ].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setEditFinPaidBy(preset)}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all cursor-pointer ${
+                        editFinPaidBy === preset
+                          ? "bg-purple-500 text-white font-bold shadow-sm"
+                          : "bg-white/10 text-gray-300 hover:bg-white/15"
+                      }`}
+                    >
+                      {preset}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  value={editFinPaidBy}
+                  onChange={(e) => setEditFinPaidBy(e.target.value)}
+                  placeholder="ej: Daniel Torre (Socio), Jorge Pérez, Iván Castillo, Cliente X, Santander..."
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-purple-500/30 text-white focus:outline-none focus:border-purple-400 text-xs font-mono font-medium"
+                />
+                <span className="text-[10px] text-gray-400 block">
+                  Si este campo se deja vacío, la tabla mostrará la opción interactiva [✏️ Asignar].
+                </span>
+              </div>
+
+              {/* Concept Input */}
+              <div>
+                <label className="block text-gray-400 mb-1">Concepto Detallado:</label>
+                <input
+                  type="text"
+                  value={editFinConcept}
+                  onChange={(e) => setEditFinConcept(e.target.value)}
+                  required
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 font-mono text-xs"
+                />
+              </div>
+
+              {/* Amount & Subcategory */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-gray-400 mb-1">Monto (MXN):</label>
+                  <input
+                    type="number"
+                    value={editFinAmount}
+                    onChange={(e) => setEditFinAmount(Number(e.target.value))}
+                    required
+                    min={0.01}
+                    step="any"
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none focus:border-purple-400 font-mono text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-1">Subcategoría:</label>
+                  <select
+                    value={editFinCategory}
+                    onChange={(e) => setEditFinCategory(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-mono text-xs"
+                  >
+                    {editFinSection === "ingreso_proyecto" && (
+                      <>
+                        <option value="Anticipo de Proyecto">Anticipo de Proyecto</option>
+                        <option value="Liquidación Sprint">Liquidación Sprint</option>
+                        <option value="Pago Final Entrega">Pago Final Entrega</option>
+                        <option value="Mantenimiento Mensual">Mantenimiento Mensual</option>
+                      </>
+                    )}
+                    {editFinSection === "gasto_operativo" && (
+                      <>
+                        <option value="Infraestructura Cloud">Infraestructura Cloud</option>
+                        <option value="Hosting & Dominio Edge">Hosting & Dominio Edge</option>
+                        <option value="APIs de IA & Modelos">APIs de IA & Modelos</option>
+                        <option value="Marketing & Chatbots AI">Marketing & Chatbots AI</option>
+                        <option value="Herramientas de IA & SDK">Herramientas de IA & SDK</option>
+                        <option value="Servicios Cloud">Servicios Cloud</option>
+                        <option value="Suscripción IA">Suscripción IA</option>
+                        <option value="Telecomunicaciones">Telecomunicaciones (SIM/Chip)</option>
+                      </>
+                    )}
+                    {editFinSection === "comision_vendedor" && (
+                      <>
+                        <option value="Comisiones Asesores">Comisiones Asesores</option>
+                        <option value="Bono de Prospección">Bono de Prospección</option>
+                        <option value="Provisión de Comisión">Provisión de Comisión</option>
+                      </>
+                    )}
+                    {editFinSection === "nomina_sueldo" && (
+                      <>
+                        <option value="Sueldos / Honorarios Tech">Sueldos / Honorarios Tech</option>
+                        <option value="Sueldos / Honorarios Diseño">Sueldos / Honorarios Diseño</option>
+                        <option value="Sueldos / Honorarios Infra">Sueldos / Honorarios Infra / DevOps</option>
+                        <option value="Bono de Desempeño">Bono de Desempeño</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+              </div>
+
+              {/* Dynamic Context Fields */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {editFinSection === "ingreso_proyecto" && (
+                  <div>
+                    <label className="block text-gray-400 mb-1">Proyecto / Cliente:</label>
+                    <input
+                      type="text"
+                      value={editFinProjectRef}
+                      onChange={(e) => setEditFinProjectRef(e.target.value)}
+                      placeholder="ej: Clínica Médica AI"
+                      className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                    />
+                  </div>
+                )}
+
+                {editFinSection === "gasto_operativo" && (
+                  <div>
+                    <label className="block text-gray-400 mb-1">Proveedor / Servicio:</label>
+                    <input
+                      type="text"
+                      value={editFinProvider}
+                      onChange={(e) => setEditFinProvider(e.target.value)}
+                      placeholder="ej: Amazon Web Services / Vercel"
+                      className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                    />
+                  </div>
+                )}
+
+                {(editFinSection === "comision_vendedor" || editFinSection === "nomina_sueldo") && (
+                  <div>
+                    <label className="block text-gray-400 mb-1">Beneficiario / Asesor / Integrante:</label>
+                    <input
+                      type="text"
+                      value={editFinBeneficiary}
+                      onChange={(e) => setEditFinBeneficiary(e.target.value)}
+                      placeholder={editFinSection === "comision_vendedor" ? "ej: Carlos Mendoza" : "ej: Ing. Rodrigo Pacheco"}
+                      className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                    />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-gray-400 mb-1">Fecha de Corte / Vencimiento:</label>
+                  <input
+                    type="text"
+                    value={editFinDueDate}
+                    onChange={(e) => setEditFinDueDate(e.target.value)}
+                    placeholder="ej: 30 de Septiembre de 2026"
+                    className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Status & Account */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-gray-400 mb-1">Estado del Pago:</label>
+                  <select
+                    value={editFinStatus}
+                    onChange={(e) => setEditFinStatus(e.target.value as any)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold text-xs"
+                  >
+                    <option value="pagado">🟢 Pagado / Liquidado</option>
+                    <option value="recurrente">🔄 Recurrente / Activo</option>
+                    <option value="pendiente">🟡 Pendiente por Dispersar</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gray-400 mb-1">Cuenta Bancaria de Cargo / Abono:</label>
+                  <select
+                    value={editFinSourceAccount}
+                    onChange={(e) => setEditFinSourceAccount(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold text-xs"
+                  >
+                    <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa (Innocentia Tech)</option>
+                    <option value="BBVA Operativa & Nómina">BBVA Operativa & Nómina</option>
+                    <option value="Stripe Gateway / Tarjeta">Stripe Gateway / Tarjeta</option>
+                    <option value="Transferencia SPEI Directa">Transferencia SPEI Directa</option>
+                    <option value="Caja Chica Efectivo">Caja Chica Efectivo (Línea SIM / Menores)</option>
+                    <option value="PayPal Business Internacional">PayPal Business Internacional</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 text-[11px] text-gray-300 flex items-center justify-between">
+                <span>Editando como: <strong className="text-white">{activeUser.name}</strong> ({activeUser.roleTitle})</span>
+                <span className="text-[10px] font-mono text-purple-400 font-bold">Bitácora de Auditoría</span>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsEditFinanceModalOpen(false);
+                  setEditingFinanceRecord(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-mono transition-all cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 hover:scale-105 text-white text-xs font-black uppercase tracking-wider shadow-lg transition-all cursor-pointer"
+              >
+                Guardar Cambios & Actualizar Bitácora
               </button>
             </div>
           </form>
