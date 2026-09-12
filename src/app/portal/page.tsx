@@ -254,6 +254,10 @@ function PortalMainContent() {
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
 
+  // Finance View Mode (Tablas vs Calendario)
+  const [ceoFinanceViewMode, setCeoFinanceViewMode] = useState<"tablas" | "calendario">("tablas");
+  const [partnerFinanceViewMode, setPartnerFinanceViewMode] = useState<"tablas" | "calendario">("tablas");
+
   // Finance Category Filter Tab (Ingresos por Proyecto, Gastos Cloud, Comisiones Vendedores, Pago/Sueldos)
   const [financeCategoryTab, setFinanceCategoryTab] = useState<"todos" | "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo">("todos");
 
@@ -2066,11 +2070,24 @@ function PortalMainContent() {
                   <div className="flex items-center gap-3 flex-wrap">
                     <button
                       type="button"
-                      onClick={() => setCeoTab("calendario")}
-                      className="px-4 py-2.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 hover:scale-105"
+                      onClick={() => setCeoFinanceViewMode(ceoFinanceViewMode === "tablas" ? "calendario" : "tablas")}
+                      className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 ${
+                        ceoFinanceViewMode === "calendario"
+                          ? "bg-[#00D1FF]/20 hover:bg-[#00D1FF]/30 text-[#00D1FF] border border-[#00D1FF]/40 shadow-[#00D1FF]/10"
+                          : "bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 shadow-amber-500/10"
+                      }`}
                     >
-                      <Calendar className="w-4 h-4 text-amber-400" />
-                      <span>Ver Calendario de Pagos</span>
+                      {ceoFinanceViewMode === "calendario" ? (
+                        <>
+                          <FileText className="w-4 h-4 text-[#00D1FF]" />
+                          <span>📊 Ver Tablas Contables</span>
+                        </>
+                      ) : (
+                        <>
+                          <Calendar className="w-4 h-4 text-amber-400" />
+                          <span>📅 Ver Calendario de Pagos</span>
+                        </>
+                      )}
                     </button>
                     <button
                       type="button"
@@ -2083,6 +2100,48 @@ function PortalMainContent() {
                   </div>
                 </div>
 
+                {/* Mode Selector Tabs (Tablas vs Calendario) */}
+                <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#07070E] border border-white/15 w-fit">
+                  <button
+                    type="button"
+                    onClick={() => setCeoFinanceViewMode("tablas")}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                      ceoFinanceViewMode === "tablas"
+                        ? "bg-[#00D1FF] text-black shadow-[0_0_15px_rgba(0,209,255,0.4)]"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>📊 Vista de Tablas & Desglose Contable</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCeoFinanceViewMode("calendario")}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                      ceoFinanceViewMode === "calendario"
+                        ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>📅 Vista Calendario de Pagos (Hechos & Futuros)</span>
+                  </button>
+                </div>
+
+                {ceoFinanceViewMode === "calendario" ? (
+                  <PaymentsCalendarView
+                    financeRecords={financeRecords}
+                    projects={projects}
+                    servers={servers}
+                    auditLogs={auditLogs}
+                    activeUser={safeActiveUser}
+                    activeRole={activeRole}
+                    onOpenAddFinanceModal={() => setIsFinanceModalOpen(true)}
+                    onOpenEditFinanceRecord={handleOpenEditFinanceRecord}
+                    onTriggerReminder={handleTriggerTestReminder}
+                  />
+                ) : (
+                  <>
                 {/* ========================================================================= */}
                 {/* ADVANCED FINANCE FILTERS: PAGADOR, FECHAS & BÚSQUEDA */}
                 {/* ========================================================================= */}
@@ -2821,6 +2880,8 @@ function PortalMainContent() {
                       </table>
                     </div>
                   </div>
+                )}
+                  </>
                 )}
               </div>
             )}
@@ -3586,11 +3647,24 @@ function PortalMainContent() {
                   <div className="flex items-center gap-3 flex-wrap">
                     <button
                       type="button"
-                      onClick={() => setPartnerTab("calendario")}
-                      className="px-4 py-2.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 hover:scale-105"
+                      onClick={() => setPartnerFinanceViewMode(partnerFinanceViewMode === "tablas" ? "calendario" : "tablas")}
+                      className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 ${
+                        partnerFinanceViewMode === "calendario"
+                          ? "bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 shadow-purple-500/10"
+                          : "bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 shadow-amber-500/10"
+                      }`}
                     >
-                      <Calendar className="w-4 h-4 text-amber-400" />
-                      <span>Ver Calendario de Pagos</span>
+                      {partnerFinanceViewMode === "calendario" ? (
+                        <>
+                          <FileText className="w-4 h-4 text-purple-400" />
+                          <span>📊 Ver Tablas Contables</span>
+                        </>
+                      ) : (
+                        <>
+                          <Calendar className="w-4 h-4 text-amber-400" />
+                          <span>📅 Ver Calendario de Pagos</span>
+                        </>
+                      )}
                     </button>
                     <button
                       type="button"
@@ -3603,6 +3677,48 @@ function PortalMainContent() {
                   </div>
                 </div>
 
+                {/* Mode Selector Tabs (Tablas vs Calendario) */}
+                <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#07070E] border border-white/15 w-fit">
+                  <button
+                    type="button"
+                    onClick={() => setPartnerFinanceViewMode("tablas")}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                      partnerFinanceViewMode === "tablas"
+                        ? "bg-purple-600 text-white shadow-[0_0_15px_rgba(147,51,234,0.4)]"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>📊 Vista de Tablas & Desglose Contable</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPartnerFinanceViewMode("calendario")}
+                    className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                      partnerFinanceViewMode === "calendario"
+                        ? "bg-amber-500 text-black shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>📅 Vista Calendario de Pagos (Hechos & Futuros)</span>
+                  </button>
+                </div>
+
+                {partnerFinanceViewMode === "calendario" ? (
+                  <PaymentsCalendarView
+                    financeRecords={financeRecords}
+                    projects={projects}
+                    servers={servers}
+                    auditLogs={auditLogs}
+                    activeUser={safeActiveUser}
+                    activeRole={activeRole}
+                    onOpenAddFinanceModal={() => setIsFinanceModalOpen(true)}
+                    onOpenEditFinanceRecord={handleOpenEditFinanceRecord}
+                    onTriggerReminder={handleTriggerTestReminder}
+                  />
+                ) : (
+                  <>
                 {/* ========================================================================= */}
                 {/* ADVANCED FINANCE FILTERS: PAGADOR, FECHAS & BÚSQUEDA */}
                 {/* ========================================================================= */}
@@ -4341,6 +4457,8 @@ function PortalMainContent() {
                       </table>
                     </div>
                   </div>
+                )}
+                  </>
                 )}
               </div>
             )}
