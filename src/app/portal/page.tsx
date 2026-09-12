@@ -9,6 +9,7 @@ import ProjectTeamFeedAndChat from "../../components/portal/ProjectTeamFeedAndCh
 import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
 import AuthLoginModal, { RoleType, ROLE_PRESETS, USER_ACCOUNTS, UserAccount } from "../../components/portal/AuthLoginModal";
 import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix";
+import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
 import {
   Sparkles,
   ArrowRight,
@@ -247,8 +248,8 @@ function PortalMainContent() {
   const PresetIcon = currentPreset?.icon || Crown;
 
   // Tab States per Role
-  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "auditoria" | "tabulador" | "chat">("proyectos");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "chat">("finanzas");
+  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "chat">("proyectos");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "chat">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
@@ -1777,6 +1778,18 @@ function PortalMainContent() {
               </button>
 
               <button
+                onClick={() => setCeoTab("calendario")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  ceoTab === "calendario"
+                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-amber-400" />
+                <span>Calendario de Pagos</span>
+              </button>
+
+              <button
                 onClick={() => setCeoTab("auditoria")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   ceoTab === "auditoria"
@@ -2051,6 +2064,14 @@ function PortalMainContent() {
                   </div>
 
                   <div className="flex items-center gap-3 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => setCeoTab("calendario")}
+                      className="px-4 py-2.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 hover:scale-105"
+                    >
+                      <Calendar className="w-4 h-4 text-amber-400" />
+                      <span>Ver Calendario de Pagos</span>
+                    </button>
                     <button
                       type="button"
                       onClick={() => setIsFinanceModalOpen(true)}
@@ -2804,6 +2825,21 @@ function PortalMainContent() {
               </div>
             )}
 
+            {/* CEO Tab: Calendario Financiero Integral (Pagos Hechos & Próximos) */}
+            {ceoTab === "calendario" && (
+              <PaymentsCalendarView
+                financeRecords={financeRecords}
+                projects={projects}
+                servers={servers}
+                auditLogs={auditLogs}
+                activeUser={safeActiveUser}
+                activeRole={activeRole}
+                onOpenAddFinanceModal={() => setIsFinanceModalOpen(true)}
+                onOpenEditFinanceRecord={handleOpenEditFinanceRecord}
+                onTriggerReminder={handleTriggerTestReminder}
+              />
+            )}
+
             {/* CEO Tab 4: Bitácora de Auditoría, Filtros Avanzados & Gráfica Financiera */}
             {ceoTab === "auditoria" && (
               <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6 shadow-2xl text-left">
@@ -3452,6 +3488,18 @@ function PortalMainContent() {
               </button>
 
               <button
+                onClick={() => setPartnerTab("calendario")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  partnerTab === "calendario"
+                    ? "bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-amber-400" />
+                <span>Calendario de Pagos</span>
+              </button>
+
+              <button
                 onClick={() => setPartnerTab("auditoria")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   partnerTab === "auditoria"
@@ -3536,6 +3584,14 @@ function PortalMainContent() {
                   </div>
 
                   <div className="flex items-center gap-3 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => setPartnerTab("calendario")}
+                      className="px-4 py-2.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/10 hover:scale-105"
+                    >
+                      <Calendar className="w-4 h-4 text-amber-400" />
+                      <span>Ver Calendario de Pagos</span>
+                    </button>
                     <button
                       type="button"
                       onClick={() => setIsFinanceModalOpen(true)}
@@ -4287,6 +4343,21 @@ function PortalMainContent() {
                   </div>
                 )}
               </div>
+            )}
+
+            {/* Partner Tab: Calendario Financiero Integral (Pagos Hechos & Próximos) */}
+            {partnerTab === "calendario" && (
+              <PaymentsCalendarView
+                financeRecords={financeRecords}
+                projects={projects}
+                servers={servers}
+                auditLogs={auditLogs}
+                activeUser={safeActiveUser}
+                activeRole={activeRole}
+                onOpenAddFinanceModal={() => setIsFinanceModalOpen(true)}
+                onOpenEditFinanceRecord={handleOpenEditFinanceRecord}
+                onTriggerReminder={handleTriggerTestReminder}
+              />
             )}
 
             {/* Partner Tab 2: Auditoría y Cuentas */}
