@@ -74,7 +74,7 @@ export function generateProjectPdf(data: ProjectPdfData) {
   const modality = data.modalityTag || "Desarrollo por Proyecto / MVP a Medida";
   const clientName = data.clientName || "Daniel Torre de Haro";
   const clientEmail = data.clientEmail || "pro.acabados.mx@gmail.com";
-  const clientPhone = data.clientPhone || "9902302124";
+  const clientPhone = data.clientPhone || "9601771556";
   const currency = data.currency || "MXN";
   const validity = data.validityDays || 15;
 

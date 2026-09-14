@@ -166,7 +166,7 @@ export default function ProjectTeamFeedAndChat({
       id: "PROJ-592160",
       clientName: "Daniel Torre de Haro",
       clientCompany: "Pro Acabados",
-      clientPhone: "9902302124",
+      clientPhone: "9601771556",
       clientEmail: "pro.acabados.mx@gmail.com",
       vendorCode: "VEN-CARLOS-202",
       vendorName: "Carlos Mendoza",

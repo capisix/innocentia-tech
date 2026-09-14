@@ -21,7 +21,7 @@ export async function GET() {
         folio: "PROJ-592160",
         clientName: "Daniel Torre de Haro",
         company: "Pro Acabados",
-        phone: "9902302124",
+        phone: "9601771556",
         email: "pro.acabados.mx@gmail.com",
         city: "Mérida / Yucatán",
         status: "En Cotización",

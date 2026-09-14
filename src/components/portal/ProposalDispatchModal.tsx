@@ -41,7 +41,7 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
   const folio = proposalData.folio || "PROJ-592160";
   const clientName = proposalData.clientName || "Daniel Torre de Haro";
   const company = proposalData.clientCompany || proposalData.projectName || "Pro Acabados";
-  const phoneClean = (proposalData.clientPhone || "").replace(/[^0-9]/g, "") || "9902302124";
+  const phoneClean = (proposalData.clientPhone || "").replace(/[^0-9]/g, "") || "9601771556";
   const email = proposalData.clientEmail || "pro.acabados.mx@gmail.com";
   const vendor = proposalData.vendorName || "Carlos Mendoza";
   const vendorCode = proposalData.vendorCode || "VEN-CARLOS-202";
@@ -57,7 +57,7 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
 👤 *CLIENTE REGISTRADO:*
 • *Nombre:* ${clientName}
 • *Empresa / Marca:* ${company}
-• *Teléfono / WhatsApp:* ${proposalData.clientPhone || "9902302124"}
+• *Teléfono / WhatsApp:* ${proposalData.clientPhone || "9601771556"}
 • *Correo:* ${email}
 
 📌 *PROYECTO & MODALIDAD:*

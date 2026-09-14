@@ -1377,7 +1377,7 @@ function PortalMainContent() {
       id: "PROJ-592160",
       clientName: "Daniel Torre de Haro",
       company: "Pro Acabados",
-      phone: "9902302124",
+      phone: "9601771556",
       status: "Formulario Enviado",
       date: "Hoy, Reciente (9 Sep 2026)",
       estimatedBudget: "$50,000 - $150,000 MXN",

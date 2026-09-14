@@ -371,7 +371,7 @@ export default function InternalPricingMatrix({
       modalityTag: calcModalidad === "renta" ? "Modalidad SaaS / Renta Mensual" : "Desarrollo por Proyecto / MVP a Medida",
       clientName: leadOverride?.clientName || parsedClientName,
       clientEmail: leadOverride?.clientEmail || "pro.acabados.mx@gmail.com",
-      clientPhone: leadOverride?.clientPhone || "9902302124",
+      clientPhone: leadOverride?.clientPhone || "9601771556",
       clientCity: leadOverride?.clientCity || "Mérida, Yucatán, México",
       date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }),
       quoteItems: quoteItems,
@@ -1211,7 +1211,7 @@ export default function InternalPricingMatrix({
                   <span className="text-[10px] text-gray-400 uppercase block font-bold">Cliente Registrado:</span>
                   <p className="text-sm font-bold text-white mt-0.5">Daniel Torre de Haro</p>
                   <p className="text-gray-300">Empresa: <strong>Pro Acabados</strong></p>
-                  <p className="text-[#00D1FF]">📱 WhatsApp: 9902302124</p>
+                  <p className="text-[#00D1FF]">📱 WhatsApp: 9601771556</p>
                   <p className="text-gray-400">✉️ pro.acabados.mx@gmail.com</p>
                   <p className="text-gray-400">📍 Mérida / Yucatán / México</p>
                 </div>
@@ -1267,7 +1267,7 @@ export default function InternalPricingMatrix({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-white/10">
               <a
-                href="https://wa.me/529902302124?text=Hola%20Daniel,%20recibimos%20tu%20solicitud%20para%20el%20proyecto%20de%20App%20de%20Pedidos%20en%20Innocentia%20Tech."
+                href="https://wa.me/529601771556?text=Hola%20Daniel,%20recibimos%20tu%20solicitud%20para%20el%20proyecto%20de%20App%20de%20Pedidos%20en%20Innocentia%20Tech."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all"
@@ -1285,7 +1285,7 @@ export default function InternalPricingMatrix({
                     clientCompany: "Pro Acabados",
                     clientName: "Daniel Torre de Haro",
                     clientEmail: "pro.acabados.mx@gmail.com",
-                    clientPhone: "9902302124",
+                    clientPhone: "9601771556",
                     vendorName: "Carlos Mendoza",
                     vendorCode: "VEN-CARLOS-202",
                   });
