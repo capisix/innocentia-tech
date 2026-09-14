@@ -235,10 +235,10 @@ function PortalMainContent() {
     setGateIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/send-code", {
+      const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: gateOtpEmail.trim() }),
+        body: JSON.stringify({ action: "send", email: gateOtpEmail.trim() }),
       });
       const data = await res.json();
       setGateIsLoading(false);
@@ -272,10 +272,10 @@ function PortalMainContent() {
     setGateIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/verify-code", {
+      const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: gateOtpEmail.trim(), code: gateOtpCode.trim() }),
+        body: JSON.stringify({ action: "verify", email: gateOtpEmail.trim(), code: gateOtpCode.trim() }),
       });
       const data = await res.json();
       setGateIsLoading(false);
@@ -347,7 +347,7 @@ function PortalMainContent() {
   };
 
   const safeActiveUser: UserAccount = activeUser || USER_ACCOUNTS.ivan_ceo;
-  const currentPreset = ROLE_PRESETS.find((p) => p.role === (safeActiveUser?.role || activeRole)) || ROLE_PRESETS[0];
+  const currentPreset = (ROLE_PRESETS || []).find((p) => p.role === (safeActiveUser?.role || activeRole)) || (ROLE_PRESETS && ROLE_PRESETS[0]) || { role: "ceo", title: "CEO", badge: "Super Admin", badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40", features: [] };
   const PresetIcon = currentPreset?.icon || Crown;
 
   // Tab States per Role

@@ -313,10 +313,10 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/send-code", {
+      const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: otpEmail.trim() }),
+        body: JSON.stringify({ action: "send", email: otpEmail.trim() }),
       });
       const data = await res.json();
 
@@ -351,10 +351,10 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/verify-code", {
+      const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: otpEmail.trim(), code: otpCode.trim() }),
+        body: JSON.stringify({ action: "verify", email: otpEmail.trim(), code: otpCode.trim() }),
       });
       const data = await res.json();
       setIsLoading(false);
