@@ -40,7 +40,7 @@ export async function POST(req: Request) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "Innocentia Security <seguridad@innocentia.tech>",
+          from: process.env.RESEND_FROM_EMAIL || "Innocentia Security <onboarding@resend.dev>",
           to: [cleanEmail],
           subject: `${code} es tu código de verificación • Innocentia Tech`,
           html: `
