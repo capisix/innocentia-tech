@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Send, Sparkles, Maximize2, Minimize2, ArrowRight, RotateCcw, Clock } from "../../lib/icons";
+import { X, Send, Sparkles, Maximize2, Minimize2, ArrowRight, RotateCcw, Clock, MessageSquare } from "../../lib/icons";
 import Image from "next/image";
 import { getIntelligentHumanReply } from "../../lib/conversationalAI";
 
@@ -180,6 +180,11 @@ export default function FloatingChatWidget({
 
   const quickQuestions = [
     {
+      label: "💬 WhatsApp (+52 960 177 1556)",
+      query: "Quiero comunicarme directamente al WhatsApp oficial de Innocentia Tech.",
+      sender: "both" as const,
+    },
+    {
       label: "🎨 Diseñar una marca",
       query: "Quiero diseñar la identidad visual y marca de mi proyecto.",
       sender: "sofia" as const,
@@ -271,6 +276,14 @@ export default function FloatingChatWidget({
       text.includes("cotizacion") ||
       text.includes("cotizar");
 
+    const hasWhatsAppMention =
+      text.includes("WhatsApp") ||
+      text.includes("whatsapp") ||
+      text.includes("960 177 1556") ||
+      text.includes("9601771556") ||
+      text.includes("teléfono") ||
+      text.includes("telefono");
+
     const handleFormClick = (e: React.MouseEvent) => {
       e.preventDefault();
       if (onOpenProjectModal) {
@@ -307,8 +320,8 @@ export default function FloatingChatWidget({
           })}
         </p>
 
-        {hasFormLink && (
-          <div className="pt-2">
+        <div className="flex flex-wrap items-center gap-2 pt-1.5">
+          {hasFormLink && (
             <button
               type="button"
               onClick={handleFormClick}
@@ -317,11 +330,26 @@ export default function FloatingChatWidget({
               }`}
             >
               <span className="text-sm">🚀</span>
-              <span>Registrar Proyecto & Llenar Formulario</span>
+              <span>Registrar Proyecto</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </button>
-          </div>
-        )}
+          )}
+
+          {hasWhatsAppMention && (
+            <a
+              href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:scale-[1.03] active:scale-[0.97] transition-all border border-emerald-400/40 cursor-pointer ${
+                isSmall ? "px-3 py-2 text-[10px]" : "px-4 py-2.5 text-xs"
+              }`}
+            >
+              <span>💬 Abrir WhatsApp</span>
+              <span className="font-mono text-[9px] opacity-90">+52 960 177 1556</span>
+              <span>→</span>
+            </a>
+          )}
+        </div>
       </div>
     );
   };
@@ -379,8 +407,17 @@ export default function FloatingChatWidget({
                 </div>
               </div>
 
-              {/* Action Buttons (Reset / Minimize / Close) */}
+              {/* Action Buttons (WhatsApp / Reset / Minimize / Close) */}
               <div className="flex items-center gap-2">
+                <a
+                  href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all cursor-pointer"
+                >
+                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  <span>WhatsApp: +52 960 177 1556</span>
+                </a>
                 <button
                   type="button"
                   onClick={handleResetChat}
@@ -628,30 +665,50 @@ export default function FloatingChatWidget({
           </div>
         )}
 
-        {/* Clean Trigger Pill Button (Available everywhere) */}
+        {/* Clean Trigger Dual Buttons: WhatsApp Direct + Dual Core AI */}
         {!isOpen && (
-          <button
-            onClick={() => {
-              setIsOpen(true);
-              setIsMaximized(false);
-              setIdleStep(0);
-            }}
-            className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_25px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
-          >
-            <div className="flex items-center -space-x-1.5">
-              <div className="w-5 h-5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center overflow-hidden">
-                <Image src="/images/sofia_pink_beanbag.png" alt="S" width={16} height={16} className="object-contain" />
+          <div className="flex items-center gap-2.5">
+            {/* Direct WhatsApp Quick Launch */}
+            <a
+              href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Abrir WhatsApp Oficial (+52 960 177 1556)"
+              className="group flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3.5 rounded-full bg-[#040407]/95 border border-emerald-500/40 hover:border-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer"
+            >
+              <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/60 flex items-center justify-center text-sm">
+                💬
               </div>
-              <div className="w-5 h-5 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 flex items-center justify-center overflow-hidden">
-                <Image src="/images/ivan_standing_stylus.png" alt="I" width={16} height={16} className="object-contain" />
+              <div className="text-left hidden sm:block whitespace-nowrap">
+                <span className="text-xs font-bold text-emerald-400 block leading-tight">WhatsApp</span>
+                <span className="text-[9px] text-gray-400 font-mono">+52 960 177 1556</span>
               </div>
-            </div>
-            <div className="text-left whitespace-nowrap">
-              <span className="text-xs font-bold text-white block leading-tight">¿Necesitas ayuda?</span>
-              <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono">Sofía & Iván</span>
-            </div>
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
-          </button>
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping flex-shrink-0" />
+            </a>
+
+            {/* Dual Core Chatbot Launcher */}
+            <button
+              onClick={() => {
+                setIsOpen(true);
+                setIsMaximized(false);
+                setIdleStep(0);
+              }}
+              className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_25px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
+            >
+              <div className="flex items-center -space-x-1.5">
+                <div className="w-5 h-5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center overflow-hidden">
+                  <Image src="/images/sofia_pink_beanbag.png" alt="S" width={16} height={16} className="object-contain" />
+                </div>
+                <div className="w-5 h-5 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 flex items-center justify-center overflow-hidden">
+                  <Image src="/images/ivan_standing_stylus.png" alt="I" width={16} height={16} className="object-contain" />
+                </div>
+              </div>
+              <div className="text-left whitespace-nowrap">
+                <span className="text-xs font-bold text-white block leading-tight">¿Necesitas ayuda?</span>
+                <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono">Sofía & Iván</span>
+              </div>
+            </button>
+          </div>
         )}
 
         {/* Standard Floating Chat Window (Mobile & Desktop Responsive) */}
@@ -694,6 +751,16 @@ export default function FloatingChatWidget({
 
               {/* Actions */}
               <div className="flex items-center gap-1.5">
+                <a
+                  href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="WhatsApp Directo (+52 960 177 1556)"
+                  className="px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white text-[10px] font-mono font-bold flex items-center gap-1 transition-all"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>WhatsApp</span>
+                </a>
                 <button
                   type="button"
                   onClick={handleResetChat}
@@ -785,6 +852,15 @@ export default function FloatingChatWidget({
                 placeholder="Pregunta sobre diseño o software..."
                 className="flex-1 bg-black/60 border border-white/15 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-[#00D1FF]/60 placeholder-gray-500"
               />
+              <a
+                href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Abrir WhatsApp directo (+52 960 177 1556)"
+                className="p-2 rounded-full bg-emerald-600/90 hover:bg-emerald-500 text-white transition-all shadow-[0_0_12px_rgba(16,185,129,0.4)] flex items-center justify-center cursor-pointer"
+              >
+                <span className="text-xs">💬</span>
+              </a>
               <button
                 type="submit"
                 className="p-2 rounded-full bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white hover:scale-105 transition-transform cursor-pointer"
@@ -792,6 +868,19 @@ export default function FloatingChatWidget({
                 <Send className="w-3.5 h-3.5" />
               </button>
             </form>
+
+            {/* Direct WhatsApp Strip */}
+            <div className="px-3 pb-2 pt-0 text-center text-[10px] text-gray-400 font-mono flex items-center justify-center gap-1.5 bg-white/5">
+              <span>¿Atención directa?</span>
+              <a
+                href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 hover:text-emerald-300 font-bold underline flex items-center gap-1"
+              >
+                <span>WhatsApp +52 960 177 1556</span>
+              </a>
+            </div>
           </div>
         )}
       </div>
