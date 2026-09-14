@@ -21,6 +21,7 @@ export interface ProjectPdfData {
   clientPhone: string;
   clientCity?: string;
   date?: string;
+  validityDays?: number;
 
   // Breakdown
   quoteItems?: ProposalQuoteItem[];
@@ -29,11 +30,13 @@ export interface ProjectPdfData {
   currency?: string;
   ivaNote?: string;
 
-  // Scope
+  // Scope & Conditions
   description?: string;
   scopeItems?: ProposalScopeItem[];
   scopeValidationText?: string;
   agreedConditions?: string[];
+  paymentTerms?: string[];
+  observations?: string[];
 
   // Vendor & QR
   vendorName: string;
@@ -53,9 +56,9 @@ export interface ProjectPdfData {
 export function generateProjectPdf(data: ProjectPdfData) {
   if (typeof window === "undefined") return;
 
-  const printWindow = window.open("", "_blank", "width=900,height=1050");
+  const printWindow = window.open("", "_blank", "width=950,height=1100");
   if (!printWindow) {
-    alert("Por favor habilita las ventanas emergentes (popups) para abrir la propuesta oficial en PDF.");
+    alert("Por favor habilita las ventanas emergentes (popups) para abrir y descargar la propuesta oficial en PDF.");
     return;
   }
 
@@ -65,35 +68,36 @@ export function generateProjectPdf(data: ProjectPdfData) {
     year: "numeric",
   });
 
-  const clientId = data.clientId || "CLI-" + Math.floor(10000 + Math.random() * 90000);
-  const company = data.clientCompany || data.projectName;
-  const subtitle = data.subtitle || data.description || "App de pedidos y entregas de producto";
-  const modality = data.modalityTag || "Desarrollo por proyecto / MVP";
-  const city = data.clientCity || "Mérida, Yucatán, México";
-  const vendor = data.vendorName || "Carlos Mendoza";
-  const vendorCode = data.vendorCode || "VEN-CARLOS-202";
+  const folio = data.folio || "PROJ-" + Math.floor(100000 + Math.random() * 900000);
+  const company = data.clientCompany || data.projectName || "Pro Acabados";
+  const projectName = data.projectName || company;
+  const modality = data.modalityTag || "Desarrollo por Proyecto / MVP a Medida";
+  const clientName = data.clientName || "Daniel Torre de Haro";
+  const clientEmail = data.clientEmail || "pro.acabados.mx@gmail.com";
+  const clientPhone = data.clientPhone || "9902302124";
+  const currency = data.currency || "MXN";
+  const validity = data.validityDays || 15;
 
-  // Build items list
+  // Items
   const defaultItems: ProposalQuoteItem[] = [
-    { concept: "Base de software", amount: 120000 },
-    { concept: "Diseño UI/UX personalizado", amount: 22000, highlight: true },
-    { concept: "Chatbot IA + WhatsApp Business", amount: 18500 },
-    { concept: "Pasarela Stripe / SPEI", amount: 12000 },
+    { concept: "Arquitectura Core & Frontend Responsivo Web/Mobile", amount: 95000 },
+    { concept: "Diseño UI/UX Personalizado & Microanimaciones Interactivas", amount: 25000 },
+    { concept: "Base de Datos Relacional PostgreSQL & Backend APIs", amount: 22500 },
+    { concept: "Módulo de IA Conversacional & Notificaciones WhatsApp", amount: 18000 },
+    { concept: "Pasarela de Pagos Digitales & Panel Administrativo", amount: 12000 },
   ];
-
   const items = (data.quoteItems && data.quoteItems.length > 0) ? data.quoteItems : defaultItems;
   const subtotal = data.subtotal || items.reduce((sum, item) => sum + item.amount, 0);
   const total = data.total || subtotal;
 
-  // Build scope items
+  // Scope Items
   const defaultScope: ProposalScopeItem[] = [
-    { number: "01", title: "Diseño UI/UX de alta fidelidad y microanimaciones." },
-    { number: "02", title: "Autenticación y base de datos PostgreSQL." },
-    { number: "03", title: "Pagos en línea y seguimiento GPS en tiempo real." },
-    { number: "04", title: "IA conversacional y notificaciones por WhatsApp." },
-    { number: "05", title: "Panel administrativo, métricas y exportación de datos." },
+    { number: "01", title: "Diseño de interfaz UI/UX de alta fidelidad, flujos de navegación y prototipo interactivo." },
+    { number: "02", title: "Desarrollo de plataforma web progresiva (PWA) optimizada para dispositivos móviles y escritorio." },
+    { number: "03", title: "Arquitectura de backend con microservicios y base de datos relacional en la nube." },
+    { number: "04", title: "Integración de notificaciones push, automatización de mensajería y canal de atención." },
+    { number: "05", title: "Panel de control administrativo con métricas en tiempo real y exportación de reportes." },
   ];
-
   let scopeList = (data.scopeItems && data.scopeItems.length > 0) ? data.scopeItems : defaultScope;
   if ((!data.scopeItems || data.scopeItems.length === 0) && (data.designNeeds || data.techFeatures)) {
     const combined = [...(data.designNeeds || []), ...(data.techFeatures || [])];
@@ -105,37 +109,40 @@ export function generateProjectPdf(data: ProjectPdfData) {
     }
   }
 
-  const validationText = data.scopeValidationText ||
-    "La cotización identifica los módulos acordados en la etapa de levantamiento. Se debe confirmar la cobertura de funciones específicas antes del cierre definitivo de alcance.";
-
-  const defaultConditions = [
-    `Plazo solicitado: ${data.timeline || "1 a 3 meses"}; calendario de entrega por confirmar.`,
-    "Definir anticipo, hitos de pago y criterios de aceptación.",
-    "Precisar soporte, garantía, licencias y entrega de código.",
-    "Detallar hosting y consumos de IA, WhatsApp y pasarela.",
-    "Acordar vigencia y tratamiento de cambios de alcance.",
+  // Payment Terms
+  const defaultPaymentTerms = [
+    "50% Anticipo para inicio de desarrollo, arquitectura y levantamiento de requerimientos.",
+    "30% Contra entregables intermedios y validación de sprints de desarrollo.",
+    "20% Liquidación final contra entrega de software en producción y entrega de accesos.",
+    `Plazo de entrega estimado: ${data.timeline || "1 a 3 meses"} bajo metodología ágil con avances quincenales.`,
   ];
-  const conditions = (data.agreedConditions && data.agreedConditions.length > 0) ? data.agreedConditions : defaultConditions;
+  const paymentTermsList = (data.paymentTerms && data.paymentTerms.length > 0) ? data.paymentTerms : defaultPaymentTerms;
 
-  const declaredBudget = data.declaredBudget || data.budgetRange || "$50,000 a $150,000 MXN";
-  const budgetNotice = data.budgetNotice || (total > 150000 ? `La estimación se adapta a la complejidad de módulos requeridos (${declaredBudget}).` : undefined);
+  // Conditions & Observations
+  const defaultObservations = [
+    "Garantía de 30 días naturales posteriores al lanzamiento oficial para resolución de bugs o ajustes técnicos sin costo.",
+    "Propiedad intelectual y código fuente 100% transferidos al cliente al liquidar la totalidad del proyecto.",
+    "Costos de infraestructura en la nube (AWS, OpenAI, WhatsApp Cloud) se facturan directamente por los proveedores.",
+    "Cualquier funcionalidad o módulo adicional fuera del alcance cotizado se cotizará como fase complementaria.",
+  ];
+  const observationsList = (data.observations && data.observations.length > 0) ? data.observations : defaultObservations;
 
-  // SVG QR Code pointing to online proposal verification
+  // SVG QR Code pointing to online verification
   const qrCodeSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="qr-svg">
-      <rect width="100" height="100" fill="#FFFFFF" rx="8" />
+      <rect width="100" height="100" fill="#FFFFFF" rx="6" />
       <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M20,20 h10 v10 h-10 z" fill="#000000" />
       <path d="M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M70,20 h10 v10 h-10 z" fill="#000000" />
       <path d="M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M20,70 h10 v10 h-10 z" fill="#000000" />
-      <rect x="45" y="10" width="5" height="10" fill="#000000" />
-      <rect x="45" y="25" width="5" height="15" fill="#000000" />
-      <rect x="10" y="45" width="10" height="5" fill="#000000" />
-      <rect x="25" y="45" width="15" height="5" fill="#000000" />
+      <rect x="45" y="10" width="6" height="10" fill="#000000" />
+      <rect x="45" y="25" width="6" height="15" fill="#000000" />
+      <rect x="10" y="45" width="10" height="6" fill="#000000" />
+      <rect x="25" y="45" width="15" height="6" fill="#000000" />
       <rect x="45" y="45" width="10" height="10" fill="#000000" />
-      <rect x="60" y="45" width="15" height="5" fill="#000000" />
-      <rect x="80" y="45" width="10" height="5" fill="#000000" />
-      <rect x="45" y="60" width="5" height="15" fill="#000000" />
-      <rect x="45" y="80" width="5" height="10" fill="#000000" />
+      <rect x="60" y="45" width="15" height="6" fill="#000000" />
+      <rect x="80" y="45" width="10" height="6" fill="#000000" />
+      <rect x="45" y="60" width="6" height="15" fill="#000000" />
+      <rect x="45" y="80" width="6" height="10" fill="#000000" />
       <rect x="60" y="60" width="10" height="10" fill="#000000" />
       <rect x="75" y="60" width="15" height="10" fill="#000000" />
       <rect x="60" y="75" width="15" height="15" fill="#000000" />
@@ -148,9 +155,9 @@ export function generateProjectPdf(data: ProjectPdfData) {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Propuesta Comercial • ${data.folio} • Innocentia Tech</title>
+  <title>Propuesta Comercial • ${folio} • Innocentia Tech</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
     * {
       box-sizing: border-box;
@@ -168,7 +175,7 @@ export function generateProjectPdf(data: ProjectPdfData) {
       print-color-adjust: exact !important;
     }
 
-    /* Print Controls Bar */
+    /* Print Controls Bar (Screen only) */
     .controls-bar {
       position: fixed;
       top: 0;
@@ -183,94 +190,64 @@ export function generateProjectPdf(data: ProjectPdfData) {
       z-index: 9999;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
-    .controls-bar button, .controls-bar a {
-      background: linear-gradient(135deg, #FF3858, #00D1FF);
-      color: #FFFFFF;
+    .controls-bar button {
+      background: linear-gradient(135deg, #00D1FF, #0284C7);
+      color: #040814;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 22px;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       cursor: pointer;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 0 20px rgba(0,209,255,0.3);
+      box-shadow: 0 0 20px rgba(0,209,255,0.4);
+      transition: all 0.2s ease;
     }
-    .controls-bar .btn-sec {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: #E2E8F0;
-      box-shadow: none;
-    }
-
-    @page {
-      size: A4 portrait;
-      margin: 0;
+    .controls-bar button:hover {
+      transform: scale(1.03);
+      filter: brightness(1.1);
     }
 
-    @media print {
-      .controls-bar {
-        display: none !important;
-      }
-      body {
-        background: #08090E !important;
-      }
-      .page-container {
-        padding-top: 0 !important;
-      }
-      .page {
-        margin: 0 !important;
-        box-shadow: none !important;
-        page-break-after: always !important;
-        page-break-inside: avoid !important;
-      }
+    .doc-container {
+      max-width: 860px;
+      margin: 70px auto 40px auto;
+      padding: 0 20px;
     }
 
-    .page-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 70px;
-      padding-bottom: 40px;
-      gap: 30px;
-    }
-
-    .page {
-      width: 210mm;
-      min-height: 297mm;
-      max-height: 297mm;
-      height: 297mm;
-      background: #08090E;
+    /* Page Sheet Layout (A4 exact proportion) */
+    .sheet-page {
+      background-color: #07070E;
       background-image: 
-        radial-gradient(circle at 10% 15%, rgba(255,56,88,0.06) 0%, transparent 40%),
-        radial-gradient(circle at 90% 85%, rgba(0,209,255,0.06) 0%, transparent 40%),
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 28px 28px, 28px 28px;
-      padding: 24mm 24mm;
+        linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 34px 34px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 44px 48px 36px 48px;
+      margin-bottom: 30px;
+      min-height: 1160px;
       position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.9);
       display: flex;
+      flex-col;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* Ambient Subtle Constellation Lines */
-    .page::before {
-      content: '';
+    /* Constellation background graph */
+    .constellation-overlay {
       position: absolute;
       top: 0;
       right: 0;
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, rgba(0,209,255,0.08), transparent 70%);
+      left: 0;
+      height: 220px;
       pointer-events: none;
+      opacity: 0.7;
     }
 
     /* Header */
@@ -278,456 +255,551 @@ export function generateProjectPdf(data: ProjectPdfData) {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 20px;
       margin-bottom: 24px;
+      position: relative;
+      z-index: 10;
     }
-    .brand-group {
+
+    .logo-box {
       display: flex;
       align-items: center;
-      gap: 12px;
     }
-    .brand-logo-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: #FFFFFF;
-    }
-    .brand-logo-text span.accent-red { color: #FF3858; }
-    .brand-logo-text span.accent-cyan { color: #00D1FF; }
 
-    .header-meta {
+    .logo-img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .header-right {
       text-align: right;
     }
-    .meta-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      font-weight: 700;
-      color: #00D1FF;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 2px;
-    }
-    .meta-folio {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      font-weight: 800;
-      color: #FFFFFF;
-      letter-spacing: 0.5px;
-    }
 
-    /* Titles */
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      font-weight: 800;
+    .header-prop-title {
       color: #00D1FF;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .section-label::before {
-      content: '';
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #00D1FF;
-    }
-
-    .project-main-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 26px;
       font-weight: 800;
-      color: #FFFFFF;
-      line-height: 1.2;
-      margin-bottom: 4px;
-      letter-spacing: -0.5px;
-    }
-    .project-sub-title {
       font-size: 13px;
-      color: #94A3B8;
-      margin-bottom: 6px;
-    }
-    .project-modality {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: #64748B;
-      display: inline-block;
-      margin-bottom: 20px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
     }
 
-    /* 2-Column Info Card */
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-    }
-    .info-col-title {
+    .header-folio {
+      color: #94A3B8;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .header-folio strong {
+      color: #F8FAFC;
+    }
+
+    /* Titles & Headings */
+    .section-main-title {
+      color: #00D1FF;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 800;
-      color: #64748B;
+      font-size: 20px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
-    .info-col-name {
-      font-weight: 700;
-      color: #FFFFFF;
-      font-size: 13px;
-      margin-bottom: 3px;
-    }
-    .info-col-item {
+
+    .project-meta-line {
       font-size: 12px;
       color: #94A3B8;
-      margin-bottom: 2px;
-      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 4px;
+    }
+    .project-meta-line strong {
+      color: #E2E8F0;
+      font-weight: 600;
+    }
+
+    /* Dark Cards */
+    .dark-card {
+      background: #090B12;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .card-title {
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .card-title-cyan {
+      color: #00D1FF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    /* Client Data 2-column grid */
+    .client-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 32px;
+      row-gap: 12px;
+    }
+
+    .data-row {
+      display: flex;
+      align-items: baseline;
+      font-size: 12.5px;
+    }
+    .data-label {
+      color: #64748B;
+      width: 80px;
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+    .data-val {
+      color: #F1F5F9;
+      font-weight: 600;
+      word-break: break-all;
     }
 
     /* Investment Breakdown Table */
-    .breakdown-table {
-      width: 100%;
-      margin-bottom: 20px;
+    .table-container {
+      margin-bottom: 16px;
     }
-    .breakdown-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 9px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+    .inv-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .inv-table th {
+      color: #94A3B8;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .inv-table th.th-left { text-align: left; }
+    .inv-table th.th-right { text-align: right; }
+
+    .inv-table td {
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       font-size: 12.5px;
     }
-    .breakdown-row.subtotal-row {
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      border-bottom: none;
-      padding-top: 12px;
-      font-weight: 600;
-      color: #FFFFFF;
-    }
-    .item-name {
-      color: #CBD5E1;
+    .inv-table td.td-concept {
+      color: #F8FAFC;
       font-weight: 500;
     }
-    .item-price {
+    .inv-table td.td-amount {
+      text-align: right;
+      color: #00D1FF;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      color: #FFFFFF;
-    }
-    .item-price.highlight {
-      color: #00D1FF;
+      font-size: 13px;
     }
 
-    /* Grand Total Card */
-    .total-box {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .subtotal-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 8px;
+      font-size: 12px;
+      color: #94A3B8;
+    }
+    .subtotal-line strong {
+      color: #E2E8F0;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Total Box */
+    .total-card {
+      background: #090B12;
+      border: 1px solid rgba(0, 209, 255, 0.4);
       border-radius: 18px;
-      padding: 18px 24px;
+      padding: 20px 24px;
+      margin-top: 14px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      box-shadow: inset 0 0 30px rgba(0, 209, 255, 0.03);
+      box-shadow: 0 0 25px rgba(0,209,255,0.08);
     }
-    .total-label-wrap {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .total-label-title {
-      font-size: 10px;
+
+    .total-card-label {
+      color: #00D1FF;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 800;
-      color: #94A3B8;
+      font-size: 15px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
-    .total-label-curr {
+
+    .total-card-amount {
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 900;
+      font-size: 26px;
+      letter-spacing: -0.5px;
+    }
+
+    .moneda-tag {
       font-size: 11px;
       color: #64748B;
-      font-weight: 600;
-      margin-top: 2px;
-    }
-    .total-amount-large {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 34px;
-      font-weight: 900;
-      color: #10B981;
-      letter-spacing: -1px;
-      text-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
-    }
-
-    .disclaimer-text {
-      font-size: 10.5px;
-      color: #64748B;
-      line-height: 1.45;
-      margin-bottom: 20px;
-    }
-
-    /* Page Footer */
-    .doc-footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10.5px;
-      color: #64748B;
-    }
-    .doc-footer strong {
-      color: #94A3B8;
-    }
-    .footer-right {
-      text-align: right;
+      margin-bottom: 16px;
     }
 
-    /* Page 2 Specific Styles */
-    .scope-desc {
-      font-size: 12.5px;
-      color: #94A3B8;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
+    /* Scope & Deliverables List */
     .scope-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 12px;
     }
+
     .scope-item {
       display: flex;
       align-items: flex-start;
       gap: 12px;
-      font-size: 12px;
+      font-size: 12.5px;
       color: #E2E8F0;
-    }
-    .scope-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10.5px;
-      font-weight: 800;
-      color: #00D1FF;
-      background: rgba(0,209,255,0.1);
-      border: 1px solid rgba(0,209,255,0.25);
-      border-radius: 6px;
-      padding: 2px 6px;
-      flex-shrink: 0;
-    }
-
-    .card-box {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 14px 18px;
-      margin-bottom: 18px;
-    }
-    .card-box-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9.5px;
-      font-weight: 800;
-      color: #F59E0B;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-    .card-box-text {
-      font-size: 11px;
-      color: #94A3B8;
       line-height: 1.45;
     }
 
-    .conditions-list {
-      list-style: none;
-      text-transform: uppercase;
-      font-size: 10px;
-    }
-    
-    /* Floating Print Button for Screen */
-    .print-bar {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #090A10;
-      border: 2px solid #00D1FF;
-      border-radius: 100px;
-      padding: 10px 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      z-index: 9999;
-    }
-    .print-btn {
-      background: #00D1FF;
-      color: #000;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 50px;
+    .scope-number {
+      background: rgba(0, 209, 255, 0.12);
+      border: 1px solid rgba(0, 209, 255, 0.3);
+      color: #00D1FF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
       font-weight: 800;
-      font-size: 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.2s;
+      padding: 2px 8px;
+      border-radius: 8px;
+      flex-shrink: 0;
     }
-    .print-btn:hover {
-      background: #38BDF8;
-      transform: scale(1.04);
+
+    /* Bullet List for Terms & Observations */
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      color: #CBD5E1;
+      line-height: 1.45;
+    }
+
+    .bullet-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00D1FF;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    .doc-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .footer-left {
+      font-size: 11.5px;
+      color: #94A3B8;
+      line-height: 1.6;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+    .footer-center a {
+      color: #00D1FF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-right {
+      width: 62px;
+      height: 62px;
+      flex-shrink: 0;
+    }
+    .qr-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 6px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background-color: #07070E !important;
+      }
+      .controls-bar {
+        display: none !important;
+      }
+      .doc-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .sheet-page {
+        border: none !important;
+        box-shadow: none !important;
+        margin-bottom: 0 !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        min-height: 100vh !important;
+        padding: 36px 40px !important;
+      }
     }
   </style>
 </head>
 <body>
 
   <!-- Screen Action Bar -->
-  <div class="print-bar no-print">
-    <span style="color: #fff; font-size: 12px; font-weight: 600;">Ficha de Proyecto Generada</span>
-    <button class="print-btn" onclick="window.print()">🖨️ Guardar como PDF / Imprimir</button>
-  </div>
-
-  <!-- Header -->
-  <div class="header">
-    <div class="header-logo">
-      <img src="https://innocentia.tech/images/logo_official_header.png" alt="Innocentia Tech" />
+  <div class="controls-bar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="font-family:'Space Grotesk', sans-serif; font-weight:800; color:#00D1FF; font-size:14px; letter-spacing:1px;">INNOCENTIA TECH</span>
+      <span style="color:#64748B; font-size:12px;">• Propuesta Comercial Oficial (${folio})</span>
     </div>
-    <div class="header-info">
-      <strong>INNOCENTIA TECH CORE</strong>
-      <span>Laboratorio de Software, IA & Arquitectura Táctil</span><br>
-      <span>+52 960 177 1556 • contacto@innocentia.tech • Mérida, Yucatán</span>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button onclick="window.print()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Descargar / Imprimir PDF
+      </button>
     </div>
   </div>
 
-  <!-- Folio Banner -->
-  <div class="folio-banner">
-    <div class="folio-title">
-      <h1>FICHA OFICIAL DE REQUERIMIENTO & COTIZACIÓN</h1>
-      <p>Emisión Oficial: ${currentDate} • Estado: Validada por Sistema</p>
-    </div>
-    <div class="folio-badge">
-      ${data.folio}
-    </div>
-  </div>
+  <div class="doc-container">
 
-  <!-- Client & Vendor Information -->
-  <div class="grid-2">
-    <div>
-      <div class="section-title">👤 Datos del Cliente & Empresa</div>
-      <div class="card">
-        <div class="data-row">
-          <span class="data-label">Cliente Titular:</span>
-          <span class="data-value">${data.clientName}</span>
+    <!-- ========================================================================= -->
+    <!-- PÁGINA 1: COTIZACIÓN ESTIMADA & DESGLOSE ECONÓMICO -->
+    <!-- ========================================================================= -->
+    <div class="sheet-page">
+      <!-- Constellation Top Graph Overlay -->
+      <svg class="constellation-overlay" viewBox="0 0 800 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="90" r="3" fill="#FF3858" />
+        <circle cx="140" cy="180" r="2.5" fill="#00D1FF" />
+        <circle cx="350" cy="80" r="3.5" fill="#00D1FF" />
+        <circle cx="500" cy="100" r="2.5" fill="#FF3858" />
+        <circle cx="640" cy="50" r="3.5" fill="#00D1FF" />
+        <circle cx="780" cy="140" r="3" fill="#FF3858" />
+        <line x1="20" y1="90" x2="140" y2="180" stroke="rgba(0,209,255,0.2)" stroke-width="1.2" />
+        <line x1="140" y1="180" x2="350" y2="80" stroke="rgba(0,209,255,0.2)" stroke-width="1.2" />
+        <line x1="350" y1="80" x2="500" y2="100" stroke="rgba(255,56,88,0.2)" stroke-width="1.2" />
+        <line x1="500" y1="100" x2="640" y2="50" stroke="rgba(0,209,255,0.2)" stroke-width="1.2" />
+        <line x1="640" y1="50" x2="780" y2="140" stroke="rgba(255,56,88,0.2)" stroke-width="1.2" />
+      </svg>
+
+      <div>
+        <!-- Header -->
+        <div class="doc-header">
+          <div class="logo-box">
+            <img src="https://innocentia.tech/images/logo_official_header.png" onerror="this.onerror=null; this.src='/images/logo_official_header.png';" alt="INNOCENTIA" class="logo-img" />
+          </div>
+          <div class="header-right">
+            <div class="header-prop-title">Propuesta Comercial</div>
+            <div class="header-folio">FOLIO: <strong>${folio}</strong></div>
+          </div>
         </div>
-        <div class="data-row">
-          <span class="data-label">Empresa / Negocio:</span>
-          <span class="data-value">${data.clientCompany}</span>
+
+        <!-- Section Title -->
+        <div class="section-main-title">Cotización Estimada</div>
+        <div class="project-meta-line">PROYECTO: <strong>${projectName}</strong></div>
+        <div class="project-meta-line" style="margin-bottom: 22px;">MODALIDAD: <strong>${modality}</strong></div>
+
+        <!-- Card 1: Datos del Cliente -->
+        <div class="dark-card">
+          <div class="card-title">Datos del Cliente</div>
+          <div class="client-grid">
+            <div class="data-row"><span class="data-label">Nombre:</span><span class="data-val">${clientName}</span></div>
+            <div class="data-row"><span class="data-label">Fecha:</span><span class="data-val">${currentDate}</span></div>
+            <div class="data-row"><span class="data-label">Empresa:</span><span class="data-val">${company}</span></div>
+            <div class="data-row"><span class="data-label">Vigencia:</span><span class="data-val">${validity} días naturales</span></div>
+            <div class="data-row"><span class="data-label">Correo:</span><span class="data-val">${clientEmail}</span></div>
+            <div class="data-row"><span class="data-label">Teléfono:</span><span class="data-val">${clientPhone}</span></div>
+          </div>
         </div>
-        <div class="data-row">
-          <span class="data-label">Teléfono:</span>
-          <span class="data-value">${data.clientPhone}</span>
+
+        <!-- Section 2: Desglose de Inversión -->
+        <div style="margin-top: 10px;">
+          <div class="section-main-title" style="font-size: 15px; margin-bottom: 4px;">Desglose de Inversión</div>
+          <table class="inv-table">
+            <thead>
+              <tr>
+                <th class="th-left">Concepto</th>
+                <th class="th-right">Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map(item => `
+                <tr>
+                  <td class="td-concept">${item.concept}</td>
+                  <td class="td-amount">$${item.amount.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+
+          <div class="subtotal-line" style="margin-top: 8px;">
+            <span>Subtotal</span>
+            <strong>$${subtotal.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${currency}</strong>
+          </div>
+          <div class="subtotal-line" style="padding-top: 0; color: #64748B; font-size: 11px;">
+            <span>Impuestos</span>
+            <span>Precios netos / Sujeto a IVA en caso de requerir comprobante fiscal</span>
+          </div>
         </div>
-        <div class="data-row">
-          <span class="data-label">Correo Electrónico:</span>
-          <span class="data-value">${data.clientEmail || "Registrado en expediente"}</span>
+
+        <!-- Card: Inversión Total -->
+        <div class="total-card">
+          <div class="total-card-label">Inversión Total</div>
+          <div class="total-card-amount">$${total.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style="font-size:14px; color:#00D1FF; font-weight:700;">${currency}</span></div>
+        </div>
+
+        <div class="moneda-tag">MONEDA: ${currency} (Pesos Mexicanos)</div>
+      </div>
+
+      <!-- Footer -->
+      <div class="doc-footer">
+        <div class="footer-left">
+          <div>ventas@innocentia.tech</div>
+          <div>WhatsApp Business 960 177 1556</div>
+        </div>
+        <div class="footer-center">
+          <a href="https://innocentia.tech" target="_blank">www.innocentia.tech</a>
+        </div>
+        <div class="footer-right">
+          ${qrCodeSvg}
         </div>
       </div>
     </div>
 
-    <div>
-      <div class="section-title">💼 Asignación Comercial & Dirección</div>
-      <div class="card">
-        <div class="data-row">
-          <span class="data-label">Asesor Asignado:</span>
-          <span class="data-value" style="color: #0284C7;">${data.vendorName}</span>
+    <!-- ========================================================================= -->
+    <!-- PÁGINA 2: ALCANCE Y CONDICIONES -->
+    <!-- ========================================================================= -->
+    <div class="sheet-page">
+      <!-- Constellation Top Graph Overlay -->
+      <svg class="constellation-overlay" viewBox="0 0 800 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="90" r="3" fill="#FF3858" />
+        <circle cx="140" cy="180" r="2.5" fill="#00D1FF" />
+        <circle cx="350" cy="80" r="3.5" fill="#00D1FF" />
+        <circle cx="500" cy="100" r="2.5" fill="#FF3858" />
+        <circle cx="640" cy="50" r="3.5" fill="#00D1FF" />
+        <circle cx="780" cy="140" r="3" fill="#FF3858" />
+        <line x1="20" y1="90" x2="140" y2="180" stroke="rgba(0,209,255,0.2)" stroke-width="1.2" />
+        <line x1="140" y1="180" x2="350" y2="80" stroke="rgba(0,209,255,0.2)" stroke-width="1.2" />
+        <line x1="350" y1="80" x2="500" y2="100" stroke="rgba(255,56,88,0.2)" stroke-width="1.2" />
+        <line x1="500" y1="100" x2="640" y2="50" stroke="rgba(0,209,255,0.2)" stroke-width="1.2" />
+        <line x1="640" y1="50" x2="780" y2="140" stroke="rgba(255,56,88,0.2)" stroke-width="1.2" />
+      </svg>
+
+      <div>
+        <!-- Header -->
+        <div class="doc-header">
+          <div class="logo-box">
+            <img src="https://innocentia.tech/images/logo_official_header.png" onerror="this.onerror=null; this.src='/images/logo_official_header.png';" alt="INNOCENTIA" class="logo-img" />
+          </div>
+          <div class="header-right">
+            <div class="header-prop-title">Propuesta Comercial</div>
+            <div class="header-folio">FOLIO: <strong>${folio}</strong></div>
+          </div>
         </div>
-        <div class="data-row">
-          <span class="data-label">Código de Canal:</span>
-          <span class="data-value">${data.vendorCode || "INN-DIRECT-01"}</span>
+
+        <!-- Section Title -->
+        <div class="section-main-title">Alcance y Condiciones</div>
+        <div class="project-meta-line" style="margin-bottom: 22px;">PROYECTO: <strong>${projectName}</strong></div>
+
+        <!-- Card 1: Alcance y Entregables -->
+        <div class="dark-card">
+          <div class="card-title-cyan">Alcance y Entregables</div>
+          <ul class="scope-list">
+            ${scopeList.map(item => `
+              <li class="scope-item">
+                <span class="scope-number">${item.number}</span>
+                <span>${item.title}</span>
+              </li>
+            `).join("")}
+          </ul>
         </div>
-        <div class="data-row">
-          <span class="data-label">Canal de Atención:</span>
-          <span class="data-value">+52 960 177 1556</span>
+
+        <!-- Card 2: Pagos y Plazos -->
+        <div class="dark-card">
+          <div class="card-title-cyan">Pagos y Plazos</div>
+          <ul class="bullet-list">
+            ${paymentTermsList.map(term => `
+              <li class="bullet-item">
+                <span class="bullet-dot"></span>
+                <span>${term}</span>
+              </li>
+            `).join("")}
+          </ul>
         </div>
-        <div class="data-row">
-          <span class="data-label">Atribución:</span>
-          <span class="data-value">Dirección General Innocentia</span>
+
+        <!-- Card 3: Condiciones y Observaciones -->
+        <div class="dark-card">
+          <div class="card-title-cyan">Condiciones y Observaciones</div>
+          <ul class="bullet-list">
+            ${observationsList.map(obs => `
+              <li class="bullet-item">
+                <span class="bullet-dot"></span>
+                <span>${obs}</span>
+              </li>
+            `).join("")}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="doc-footer">
+        <div class="footer-left">
+          <div>ventas@innocentia.tech</div>
+          <div>WhatsApp Business 960 177 1556</div>
+        </div>
+        <div class="footer-center">
+          <a href="https://innocentia.tech" target="_blank">www.innocentia.tech</a>
+        </div>
+        <div class="footer-right">
+          ${qrCodeSvg}
         </div>
       </div>
     </div>
+
   </div>
 
-  <!-- Project Scope & Investment -->
-  <div class="section-title">🚀 Alcance, Presupuesto & Tiempos Estimados</div>
-  <div class="card" style="margin-bottom: 20px;">
-    <div class="data-row">
-      <span class="data-label">Nombre del Proyecto:</span>
-      <span class="data-value" style="font-size: 13px; color: #000;">${data.projectName}</span>
-    </div>
-    <div class="data-row">
-      <span class="data-label">Tipo de Solución:</span>
-      <span class="data-value"><span class="badge-tag">${projectTypesList}</span></span>
-    </div>
-    <div class="data-row">
-      <span class="data-label">Rango Presupuestal Estimado:</span>
-      <span class="data-value" style="color: #059669;">${budgetLabel}</span>
-    </div>
-    <div class="data-row">
-      <span class="data-label">Plazo de Entrega Deseado:</span>
-      <span class="data-value">${timelineLabel}</span>
-    </div>
-  </div>
-
-  <!-- Technical Breakdown (Sofia & Ivan) -->
-  <div class="grid-2">
-    <div>
-      <div class="section-title">🎨 Requerimientos de Diseño (Sofía)</div>
-      <div class="card">
-        <ul class="features-list">
-          ${designList}
-        </ul>
-      </div>
-    </div>
-
-    <div>
-      <div class="section-title">⚡ Arquitectura & Backend (Iván)</div>
-      <div class="card">
-        <ul class="features-list">
-          ${techList}
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- Description -->
-  <div class="section-title">📝 Descripción del Requerimiento</div>
-  <div class="desc-box">${data.description || "El cliente requiere una solución tecnológica a la medida optimizada para alta conversión y experiencia fluida."}</div>
-
-  <!-- Footer -->
-  <div class="footer">
-    <div>
-      <strong>INNOCENTIA TECH</strong> • Donde la imaginación se convierte en tecnología.<br>
-      Ficha oficial de proyecto archivada en servidor central con sello de tiempo.
-    </div>
-    <div class="footer-stamp">
-      ✓ Expediente Formal Registrado
-    </div>
-  </div>
-
-  <script>
-    window.onload = function() {
-      setTimeout(function() {
-        window.print();
-      }, 500);
-    };
-  </script>
 </body>
 </html>
-  `.trim();
+  `;
 
   printWindow.document.open();
   printWindow.document.write(htmlContent);
