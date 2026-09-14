@@ -6142,12 +6142,12 @@ function PortalMainContent() {
                 onClick={() => setAdvisorTab("citas_calendario")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
                   advisorTab === "citas_calendario"
-                    ? "bg-gradient-to-r from-[#00D1FF] to-purple-600 text-black font-extrabold shadow-[0_0_20px_rgba(0,209,255,0.4)]"
-                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                    ? "bg-[#00D1FF] text-black font-black shadow-[0_0_25px_rgba(0,209,255,0.6)] ring-2 ring-white"
+                    : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                 }`}
               >
-                <Calendar className="w-4 h-4 text-[#00D1FF]" />
-                <span>📅 Calendario & Citas (Google Calendar)</span>
+                <Calendar className={`w-4 h-4 ${advisorTab === "citas_calendario" ? "text-black" : "text-[#00D1FF]"}`} />
+                <span>Calendario de Citas & Google Meet</span>
               </button>
 
               <button
