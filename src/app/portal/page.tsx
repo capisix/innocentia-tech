@@ -9,6 +9,8 @@ import ProjectTeamFeedAndChat from "../../components/portal/ProjectTeamFeedAndCh
 import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
 import AuthLoginModal, { RoleType, ROLE_PRESETS, USER_ACCOUNTS, UserAccount } from "../../components/portal/AuthLoginModal";
 import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix";
+import UserProfileModal from "../../components/portal/UserProfileModal";
+import { Camera, Settings } from "../../lib/icons";
 import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
 import {
   Sparkles,
@@ -143,6 +145,66 @@ function PortalMainContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [activeRole, setActiveRole] = useState<RoleType>("ceo");
   const [activeUser, setActiveUser] = useState<UserAccount>(USER_ACCOUNTS.ivan_ceo);
+  const [isUserProfileModalOpen, setIsUserProfileModalOpen] = useState(false);
+  const [customProfiles, setCustomProfiles] = useState<Record<string, Partial<UserAccount>>>({});
+  const [customPasswords, setCustomPasswords] = useState<Record<string, string>>({});
+
+  // Load custom user profiles (photo & passwords) on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const savedProfiles = localStorage.getItem("innocentia_custom_profiles");
+        if (savedProfiles) {
+          const parsed = JSON.parse(savedProfiles);
+          setCustomProfiles(parsed);
+          if (parsed[activeUser.id]) {
+            setActiveUser((prev) => ({ ...prev, ...parsed[prev.id] }));
+          }
+        }
+        const savedPasswords = localStorage.getItem("innocentia_custom_passwords");
+        if (savedPasswords) {
+          setCustomPasswords(JSON.parse(savedPasswords));
+        }
+      }
+    } catch (e) {
+      console.error("Error loading custom profile data:", e);
+    }
+  }, []);
+
+  // Update user profile (Photo, password, etc.)
+  const handleUpdateUserProfile = (updatedData: Partial<UserAccount> & { newPassword?: string }) => {
+    setActiveUser((prev) => {
+      const nextUser = { ...prev, ...updatedData };
+      if (typeof window !== "undefined") {
+        // Save profile
+        const updatedProfiles = {
+          ...customProfiles,
+          [nextUser.id]: {
+            avatarUrl: nextUser.avatarUrl,
+            name: nextUser.name,
+          },
+          [nextUser.email.toLowerCase()]: {
+            avatarUrl: nextUser.avatarUrl,
+            name: nextUser.name,
+          },
+        };
+        setCustomProfiles(updatedProfiles);
+        localStorage.setItem("innocentia_custom_profiles", JSON.stringify(updatedProfiles));
+
+        // Save password if provided
+        if (updatedData.newPassword) {
+          const updatedPass = {
+            ...customPasswords,
+            [nextUser.id]: updatedData.newPassword,
+            [nextUser.email.toLowerCase()]: updatedData.newPassword,
+          };
+          setCustomPasswords(updatedPass);
+          localStorage.setItem("innocentia_custom_passwords", JSON.stringify(updatedPass));
+        }
+      }
+      return nextUser;
+    });
+  };
   const [authenticatedUserId, setAuthenticatedUserId] = useState<string | null>(null);
   const [gateIdentifierInput, setGateIdentifierInput] = useState<string>("");
   const [gatePasswordInput, setGatePasswordInput] = useState<string>("");
@@ -351,6 +413,15 @@ function PortalMainContent() {
       return;
     }
 
+    // Check custom passwords saved in localStorage
+    let savedPassDict = customPasswords;
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("innocentia_custom_passwords");
+        if (raw) savedPassDict = JSON.parse(raw);
+      } catch (e) {}
+    }
+
     const foundEntry = Object.entries(USER_ACCOUNTS).find(([key, u]) => {
       const matchesIdentifier =
         !identifier ||
@@ -360,7 +431,9 @@ function PortalMainContent() {
         u.name.toLowerCase().split(" ")[0] === identifier ||
         u.name.toLowerCase() === identifier;
 
-      return matchesIdentifier && u.password === password;
+      const userSavedPass = savedPassDict[u.id] || savedPassDict[u.email.toLowerCase()] || u.password;
+
+      return matchesIdentifier && (userSavedPass === password || u.password === password);
     });
 
     if (!foundEntry) {
@@ -1770,13 +1843,27 @@ function PortalMainContent() {
           <div className="flex items-center gap-2">
             {authenticatedUserId === activeUser.id ? (
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs font-mono text-white">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <button
+                  type="button"
+                  onClick={() => setIsUserProfileModalOpen(true)}
+                  title="Configurar Foto de Perfil y Contraseña"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-mono text-white transition-all cursor-pointer group shadow-sm hover:scale-105"
+                >
+                  <div className="w-6 h-6 rounded-full overflow-hidden bg-gradient-to-tr from-[#FF3858] to-[#00D1FF] p-0.5 flex-shrink-0">
+                    {activeUser.avatarUrl ? (
+                      <img src={activeUser.avatarUrl} alt={activeUser.name} className="w-full h-full object-cover rounded-full" />
+                    ) : (
+                      <div className="w-full h-full bg-[#07070E] rounded-full flex items-center justify-center text-[9px] font-black text-[#00D1FF]">
+                        {activeUser.avatarLetter || activeUser.name.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
                   <span className="font-bold">{activeUser.name}</span>
                   <span className={`text-[10px] px-2 py-0.5 rounded-full border ${currentPreset.badgeColor}`}>
                     {currentPreset.badge}
                   </span>
-                </div>
+                  <Settings className="w-3.5 h-3.5 text-gray-400 group-hover:text-white group-hover:rotate-45 transition-transform" />
+                </button>
 
                 <button
                   type="button"
@@ -2062,10 +2149,32 @@ function PortalMainContent() {
 
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
             <div className="flex items-center gap-4 sm:gap-5">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 shadow-[0_0_30px_rgba(255,56,88,0.3)] flex-shrink-0">
-                <div className="w-full h-full bg-[#07070E] rounded-[14px] flex items-center justify-center">
-                  <PresetIcon className="w-8 h-8 text-[#00D1FF]" />
+              <div className="relative group flex-shrink-0">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 shadow-[0_0_30px_rgba(0,209,255,0.35)] overflow-hidden flex items-center justify-center cursor-pointer"
+                  onClick={() => setIsUserProfileModalOpen(true)}
+                  title="Cambiar Foto de Perfil"
+                >
+                  {activeUser.avatarUrl ? (
+                    <img
+                      src={activeUser.avatarUrl}
+                      alt={activeUser.name}
+                      className="w-full h-full object-cover rounded-[22px] group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-[#07070E] rounded-[22px] flex items-center justify-center text-xl sm:text-2xl font-black text-[#00D1FF]">
+                      {activeUser.avatarLetter || activeUser.name.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsUserProfileModalOpen(true)}
+                  title="Cambiar foto de perfil o contraseña"
+                  className="absolute -bottom-1 -right-1 p-1.5 rounded-xl bg-black/90 border border-white/30 text-[#00D1FF] hover:text-white hover:scale-110 transition-all cursor-pointer shadow-lg"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                </button>
               </div>
               <div>
                 <div className="flex items-center gap-2.5 mb-1 flex-wrap">
@@ -2136,6 +2245,16 @@ function PortalMainContent() {
                   <span className="text-lg font-black text-[#00D1FF]">12 de 16</span>
                 </div>
               )}
+
+              <button
+                type="button"
+                onClick={() => setIsUserProfileModalOpen(true)}
+                className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white transition-all flex items-center gap-2 cursor-pointer shadow-sm hover:scale-105"
+              >
+                <Camera className="w-4 h-4 text-[#00D1FF]" />
+                <span className="hidden sm:inline">Foto & Contraseña</span>
+                <span className="sm:hidden">Perfil</span>
+              </button>
 
               <button
                 type="button"

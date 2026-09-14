@@ -29,6 +29,7 @@ export interface UserAccount {
   company?: string;
   password?: string;
   avatarLetter?: string;
+  avatarUrl?: string;
   isEmailVerified?: boolean;
 }
 
