@@ -10,6 +10,7 @@ import ProjectCreationForm from "../../components/portal/ProjectCreationForm";
 import AuthLoginModal, { RoleType, ROLE_PRESETS, USER_ACCOUNTS, UserAccount } from "../../components/portal/AuthLoginModal";
 import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix";
 import UserProfileModal from "../../components/portal/UserProfileModal";
+import CommercialCalendarView, { CommercialAppointment } from "../../components/portal/CommercialCalendarView";
 import { Camera, Settings } from "../../lib/icons";
 import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
 import {
@@ -468,22 +469,27 @@ function PortalMainContent() {
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "citas_calendario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
 
+  // Handlers for Seller Appointments
+  const handleAddSellerAppointment = (newApt: Omit<CommercialAppointment, "id">) => {
+    const created: CommercialAppointment = {
+      id: "APT-" + Math.floor(100 + Math.random() * 900),
+      ...newApt,
+    };
+    setSellerAppointments((prev) => [created, ...prev]);
+  };
+
+  const handleUpdateSellerAppointment = (id: string, updated: Partial<CommercialAppointment>) => {
+    setSellerAppointments((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, ...updated } : a))
+    );
+  };
+
+  const handleDeleteSellerAppointment = (id: string) => {
+    setSellerAppointments((prev) => prev.filter((a) => a.id !== id));
+  };
+
   // Seller Appointments (Citas Comerciales vinculables a Google Calendar)
-  const [sellerAppointments, setSellerAppointments] = useState<Array<{
-    id: string;
-    clientName: string;
-    company: string;
-    clientPhone: string;
-    date: string;
-    time: string;
-    meetingType: string;
-    topic: string;
-    status: "Confirmada" | "Pendiente" | "Realizada" | "Reprogramada";
-    notes: string;
-    meetUrl?: string;
-    pin?: string;
-    dialNumber?: string;
-  }>>([
+  const [sellerAppointments, setSellerAppointments] = useState<CommercialAppointment[]>([
     {
       id: "APT-HOY-01",
       clientName: "Axana & Gabriel (con Jessica Torre e Iván Castillo)",
@@ -6291,108 +6297,16 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* TAB 2: APPOINTMENTS & GOOGLE CALENDAR SYNC */}
+            {/* TAB 2: APPOINTMENTS & GOOGLE CALENDAR SYNC (CALENDAR VIEW) */}
             {advisorTab === "citas_calendario" && (
-              <div className="space-y-6">
-                {/* Top Action Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-[32px] bg-gradient-to-r from-[#00D1FF]/15 via-purple-950/30 to-black border border-white/20">
-                  <div>
-                    <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-[#00D1FF]" />
-                      <span>Agenda Comercial & Google Calendar</span>
-                    </h3>
-                    <p className="text-xs text-gray-300 mt-1">
-                      Agenda demostraciones con clientes, programa llamadas y sincronízalas en 1 clic con tu <strong>Google Calendar</strong>.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsNewAptModalOpen(true)}
-                    className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:scale-105 text-black font-black text-xs uppercase font-mono tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.4)] transition-all cursor-pointer flex-shrink-0"
-                  >
-                    <Plus className="w-4 h-4 text-black" />
-                    <span>+ Agendar Nueva Cita</span>
-                  </button>
-                </div>
-
-                {/* Scheduled Appointments Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {sellerAppointments.map((apt) => (
-                    <div
-                      key={apt.id}
-                      className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/50 transition-all shadow-xl text-left relative overflow-hidden"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <span className="text-[10px] font-mono text-[#00D1FF] font-bold block">{apt.id} • {apt.meetingType}</span>
-                          <h4 className="text-base font-black text-white mt-0.5">{apt.clientName}</h4>
-                          <span className="text-xs font-mono text-purple-300 font-bold">{apt.company}</span>
-                        </div>
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold border ${
-                          apt.status === "Confirmada"
-                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                            : "bg-amber-500/20 text-amber-300 border-amber-500/40"
-                        }`}>
-                          ● {apt.status}
-                        </span>
-                      </div>
-
-                      <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs font-mono">
-                        <div className="flex items-center gap-2 text-gray-300">
-                          <Calendar className="w-3.5 h-3.5 text-[#00D1FF]" />
-                          <span>Fecha: <strong>{apt.date}</strong> a las <strong>{apt.time} hrs</strong></span>
-                        </div>
-                        <div className="flex items-center gap-2 text-gray-300">
-                          <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
-                          <span>Tema: {apt.topic}</span>
-                        </div>
-                        {apt.notes && (
-                          <p className="text-[11px] text-gray-400 italic pt-1 border-t border-white/5">
-                            "{apt.notes}"
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Action Buttons: Google Calendar + WhatsApp Reminder */}
-                      <div className="space-y-2 pt-1">
-                        {apt.meetUrl && (
-                          <a
-                            href={apt.meetUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-[#00D1FF] hover:brightness-110 text-black font-black text-xs font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all cursor-pointer"
-                          >
-                            <span>🎥 Unirse a Google Meet Ahora</span>
-                            <ArrowRight className="w-4 h-4 text-black" />
-                          </a>
-                        )}
-
-                        <div className="grid grid-cols-2 gap-2">
-                          <a
-                            href={getGoogleCalendarUrl(apt)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                          >
-                            <Calendar className="w-3.5 h-3.5 text-[#4285F4]" />
-                            <span>Google Calendar</span>
-                          </a>
-
-                          <a
-                            href={`https://wa.me/${apt.clientPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${apt.clientName}, te confirmo nuestra reunión de Innocentia Tech agendada para el día ${apt.date} a las ${apt.time} hrs (${apt.meetingType}). Link Meet: ${apt.meetUrl || 'https://meet.google.com/mnh-metd-fcn'}`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-3.5 py-2 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                          >
-                            <span>💬 WhatsApp</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <CommercialCalendarView
+                appointments={sellerAppointments}
+                onAddAppointment={handleAddSellerAppointment}
+                onUpdateAppointment={handleUpdateSellerAppointment}
+                onDeleteAppointment={handleDeleteSellerAppointment}
+                activeUser={safeActiveUser}
+                getGoogleCalendarUrl={getGoogleCalendarUrl}
+              />
             )}
 
             {/* TAB 3: PROJECT STATUS (ESTATUS DE PROYECTOS EN DESARROLLO) */}
