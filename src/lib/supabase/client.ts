@@ -8,8 +8,10 @@ export interface SupabaseConfig {
 }
 
 export const getSupabaseConfig = (): SupabaseConfig => {
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const cleanUrl = rawUrl.replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
   return {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    url: cleanUrl,
     anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
   };
 };
