@@ -53,6 +53,10 @@ export async function POST(req: Request) {
       role = "socio";
       roleTitle = "Socio Co-Fundador & Estrategia";
       name = "Jorge Pérez";
+    } else if (cleanEmail.includes("jess") || cleanEmail.includes("boldberry")) {
+      role = "asesor";
+      roleTitle = "Asesora Comercial & Vendedora";
+      name = "Jessica Torre";
     } else if (cleanEmail.includes("carlos") || cleanEmail.includes("ventas")) {
       role = "asesor";
       roleTitle = "Asesor Comercial Certificado";

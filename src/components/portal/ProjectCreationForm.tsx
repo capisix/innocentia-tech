@@ -799,6 +799,23 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                         <button
                           type="button"
                           onClick={() => {
+                            setVendorSelectMode("jessica");
+                            setVendorCode("VEN-JESS-301");
+                            setVendorName("Jessica Torre");
+                          }}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                            vendorSelectMode === "jessica"
+                              ? "bg-pink-500/20 border-pink-400 text-white shadow-[0_0_15px_rgba(244,114,182,0.3)]"
+                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          <span className="text-xs font-bold block text-white">Jessica Torre</span>
+                          <span className="text-[9px] font-mono text-pink-300 block">Asesora Comercial / Boldberry</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
                             setVendorSelectMode("carlos");
                             setVendorCode("VEN-CARLOS-202");
                             setVendorName("Carlos Mendoza");

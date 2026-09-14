@@ -11,6 +11,11 @@ import {
   Mail,
   Key,
   RotateCcw,
+  Crown,
+  Building2,
+  Users,
+  Terminal,
+  Briefcase,
 } from "../../lib/icons";
 
 export type RoleType = "ceo" | "socio" | "usuario" | "dev" | "asesor";
@@ -25,6 +30,18 @@ export interface UserAccount {
   password?: string;
   avatarLetter?: string;
   isEmailVerified?: boolean;
+}
+
+export interface RolePreset {
+  role: RoleType;
+  title: string;
+  badge: string;
+  badgeColor: string;
+  description: string;
+  users: UserAccount[];
+  defaultUser: UserAccount;
+  icon: any;
+  features: string[];
 }
 
 export const USER_ACCOUNTS: Record<string, UserAccount> = {
@@ -61,26 +78,15 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
     avatarLetter: "JP",
     isEmailVerified: true,
   },
-  mariana_cliente: {
-    id: "usr_client_01",
-    name: "Dra. Mariana Valdés",
-    email: "mariana@clinicamedica.ai",
-    role: "usuario",
-    roleTitle: "Cliente Titular",
-    company: "Clínica Médica AI",
-    password: "cliente2026",
-    avatarLetter: "MV",
-    isEmailVerified: true,
-  },
-  rodrigo_dev: {
-    id: "usr_dev_01",
-    name: "Ing. Rodrigo Pacheco",
-    email: "rodrigo.dev@innocentia.tech",
-    role: "dev",
-    roleTitle: "Senior Fullstack & AI Engineer",
-    company: "Innocentia Tech Core",
-    password: "dev2026",
-    avatarLetter: "RP",
+  jessica_vendedora: {
+    id: "usr_sales_jess",
+    name: "Jessica Torre",
+    email: "jess@boldberry.mx",
+    role: "asesor",
+    roleTitle: "Asesora Comercial & Vendedora",
+    company: "Innocentia Tech / Boldberry",
+    password: "231179",
+    avatarLetter: "JT",
     isEmailVerified: true,
   },
   carlos_asesor: {
@@ -94,7 +100,112 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
     avatarLetter: "CM",
     isEmailVerified: true,
   },
+  rodrigo_dev: {
+    id: "usr_dev_01",
+    name: "Ing. Rodrigo Pacheco",
+    email: "rodrigo.dev@innocentia.tech",
+    role: "dev",
+    roleTitle: "Senior Fullstack & AI Engineer",
+    company: "Innocentia Tech Core",
+    password: "dev2026",
+    avatarLetter: "RP",
+    isEmailVerified: true,
+  },
+  mariana_cliente: {
+    id: "usr_client_01",
+    name: "Dra. Mariana Valdés",
+    email: "mariana@clinicamedica.ai",
+    role: "usuario",
+    roleTitle: "Cliente Titular",
+    company: "Clínica Médica AI",
+    password: "cliente2026",
+    avatarLetter: "MV",
+    isEmailVerified: true,
+  },
 };
+
+export const ROLE_PRESETS: RolePreset[] = [
+  {
+    role: "ceo",
+    title: "CEO / Dirección General",
+    badge: "Super Admin",
+    badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+    description: "Control maestro: Designación de técnicos a proyectos, métricas globales, aprobaciones y finanzas ejecutivas.",
+    defaultUser: USER_ACCOUNTS.ivan_ceo,
+    users: [USER_ACCOUNTS.ivan_ceo],
+    icon: Crown,
+    features: [
+      "Designar y reasignar técnicos y diseñadores a proyectos",
+      "Visión global de todos los proyectos activos y completados",
+      "Supervisión de finanzas, egresos y comisiones de vendedores",
+      "Alertas críticas de clientes y control maestro del sistema",
+    ],
+  },
+  {
+    role: "socio",
+    title: "Socio / Co-Fundador",
+    badge: "Partner",
+    badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/40",
+    description: "Gestión financiera integral: Control de ingresos, gastos, fechas de corte, caducidad de servidores y proyectos.",
+    defaultUser: USER_ACCOUNTS.daniel_socio,
+    users: [USER_ACCOUNTS.daniel_socio, USER_ACCOUNTS.jorge_socio],
+    icon: Building2,
+    features: [
+      "Registro y supervisión de cobros a clientes y pagos a proveedores",
+      "Monitoreo de servidores, bases de datos y servicios en la nube",
+      "Cálculo automático de utilidades y reparto de dividendos",
+      "Aprobación de presupuestos y cotizaciones de clientes",
+    ],
+  },
+  {
+    role: "asesor",
+    title: "Asesor Comercial / Ventas",
+    badge: "Comercial",
+    badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+    description: "Panel de ventas: Generación de enlaces con código de vendedor, seguimiento de leads propios y cálculo de comisiones.",
+    defaultUser: USER_ACCOUNTS.jessica_vendedora,
+    users: [USER_ACCOUNTS.jessica_vendedora, USER_ACCOUNTS.carlos_asesor],
+    icon: Briefcase,
+    features: [
+      "Enlace único para compartir formulario vinculado al vendedor",
+      "Avisos automáticos cuando un cliente envía una nueva solicitud",
+      "Seguimiento del status de desarrollo de proyectos de sus clientes",
+      "Tabulador de comisiones y ganancias acumuladas",
+    ],
+  },
+  {
+    role: "dev",
+    title: "Dev & Tech Lead",
+    badge: "Developer",
+    badgeColor: "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]/40",
+    description: "Área técnica: Sprints de desarrollo, repositorios GitHub, despliegues Vercel y monitoreo de APIs.",
+    defaultUser: USER_ACCOUNTS.rodrigo_dev,
+    users: [USER_ACCOUNTS.rodrigo_dev],
+    icon: Terminal,
+    features: [
+      "Vista de tareas técnicas asignadas por proyecto",
+      "Documentación técnica de arquitectura y endpoints",
+      "Sincronización de repositorios y commits de producción",
+      "Reporte de avance de sprint para el CEO",
+    ],
+  },
+  {
+    role: "usuario",
+    title: "Cliente / Titular",
+    badge: "Cliente",
+    badgeColor: "bg-blue-500/20 text-blue-300 border-blue-500/40",
+    description: "Portal exclusivo de cliente: Avance en tiempo real de su software, entregables, facturas y canal de soporte.",
+    defaultUser: USER_ACCOUNTS.mariana_cliente,
+    users: [USER_ACCOUNTS.mariana_cliente],
+    icon: Users,
+    features: [
+      "Seguimiento del porcentaje de avance de su aplicación",
+      "Visualización de sprints completados y entregas semanales",
+      "Historial de pagos realizados y facturas fiscales",
+      "Acceso directo para pruebas de la versión preliminar",
+    ],
+  },
+];
 
 interface AuthLoginModalProps {
   isOpen: boolean;
@@ -162,6 +273,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         resolvedUser = USER_ACCOUNTS.daniel_socio;
       } else if (email.includes("jorge")) {
         resolvedUser = USER_ACCOUNTS.jorge_socio;
+      } else if (email.includes("jess") || email.includes("boldberry")) {
+        resolvedUser = USER_ACCOUNTS.jessica_vendedora;
       } else if (email.includes("carlos") || email.includes("ventas")) {
         resolvedUser = USER_ACCOUNTS.carlos_asesor;
       } else if (email.includes("rodrigo") || email.includes("dev")) {
@@ -178,7 +291,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           isEmailVerified: true,
         };
       } else {
-        // Default direct access to CEO/Socio
+        // Default direct access to Socio
         resolvedUser = USER_ACCOUNTS.daniel_socio;
       }
 
@@ -256,6 +369,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
             ? USER_ACCOUNTS.ivan_ceo
             : email.includes("jorge")
             ? USER_ACCOUNTS.jorge_socio
+            : email.includes("jess") || email.includes("boldberry")
+            ? USER_ACCOUNTS.jessica_vendedora
             : USER_ACCOUNTS.daniel_socio;
           handleCompleteSuccess(user);
         } else {
@@ -269,6 +384,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         ? USER_ACCOUNTS.ivan_ceo
         : email.includes("jorge")
         ? USER_ACCOUNTS.jorge_socio
+        : email.includes("jess") || email.includes("boldberry")
+        ? USER_ACCOUNTS.jessica_vendedora
         : USER_ACCOUNTS.daniel_socio;
       handleCompleteSuccess(user);
     }
@@ -290,8 +407,9 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
     setIsLoading(true);
 
     setTimeout(() => {
-      // Master Passwords that grant immediate access
+      // Master Passwords & Direct Seller Keys
       const masterKeys = [
+        "231179",
         "innocentia2026",
         "socio2026",
         "ceo2026",
@@ -300,18 +418,27 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         "nadaesimposible2026",
         "admin",
         "admin2026",
+        "ventas2026",
         "carlos2026",
         "dev2026",
         "cliente2026",
       ];
 
-      if (masterKeys.includes(password.toLowerCase())) {
+      if (masterKeys.includes(password.toLowerCase()) || password === "231179") {
         let user: UserAccount = USER_ACCOUNTS.daniel_socio;
-        if (password === "yucaterco21" || password === "ceo2026") user = USER_ACCOUNTS.ivan_ceo;
-        if (password === "nadaesimposible2026") user = USER_ACCOUNTS.jorge_socio;
-        if (password === "ventas2026" || password === "carlos2026") user = USER_ACCOUNTS.carlos_asesor;
-        if (password === "dev2026") user = USER_ACCOUNTS.rodrigo_dev;
-        if (password === "cliente2026") user = USER_ACCOUNTS.mariana_cliente;
+        if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
+          user = USER_ACCOUNTS.jessica_vendedora;
+        } else if (password === "yucaterco21" || password === "ceo2026") {
+          user = USER_ACCOUNTS.ivan_ceo;
+        } else if (password === "nadaesimposible2026") {
+          user = USER_ACCOUNTS.jorge_socio;
+        } else if (password === "ventas2026" || password === "carlos2026") {
+          user = USER_ACCOUNTS.carlos_asesor;
+        } else if (password === "dev2026") {
+          user = USER_ACCOUNTS.rodrigo_dev;
+        } else if (password === "cliente2026") {
+          user = USER_ACCOUNTS.mariana_cliente;
+        }
 
         handleCompleteSuccess(user);
         setIsLoading(false);
@@ -596,25 +723,25 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           {authMode === "password" && (
             <form onSubmit={handleAuthenticatePassword} className="space-y-3.5">
               <p className="text-xs text-gray-400">
-                Ingresa con tu <strong>contraseña maestra o credencial de socio</strong>:
+                Ingresa con tu <strong>correo y contraseña de acceso</strong>:
               </p>
 
               <div>
                 <label className="block text-xs font-mono text-gray-300 mb-1.5">
-                  Correo o Usuario (Opcional):
+                  Correo o Usuario:
                 </label>
                 <input
                   type="text"
                   value={inputIdentifier}
                   onChange={(e) => setInputIdentifier(e.target.value)}
-                  placeholder="admin@innocentia.tech o usuario"
+                  placeholder="ejemplo: jess@boldberry.mx o usuario"
                   className="w-full px-4 py-2.5 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-purple-500 focus:outline-none placeholder:text-gray-600"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-mono text-gray-300 mb-1.5">
-                  Contraseña o Clave Maestra:
+                  Contraseña o Clave:
                 </label>
                 <input
                   type="password"
