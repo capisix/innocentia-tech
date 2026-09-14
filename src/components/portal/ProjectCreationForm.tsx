@@ -344,6 +344,51 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
       console.error(e);
     }
 
+    // Backend API Sync: Store in database
+    try {
+      fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientName,
+          company: clientCompany,
+          phone: clientPhone,
+          email: clientEmail,
+          city: clientCity,
+          projectType: [projectType],
+          designNeeds,
+          techFeatures,
+          estimatedBudget: budgetOptions.find((b) => b.id === budgetRange)?.title,
+          totalQuote: 172500,
+          vendorCode: vendorCode || "SIN-ASESOR",
+          vendorName: vendorName || "Sin Asesor",
+          quoteDetails: {
+            projectName,
+            description: projectDescription,
+            timeline,
+          },
+        }),
+      }).catch((err) => console.log("Leads API sync:", err));
+
+      // Asynchronous email dispatch confirmation
+      if (clientEmail) {
+        fetch("/api/notifications/email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: clientEmail,
+            subject: `Propuesta Comercial Oficial • ${folio} • ${projectName} • Innocentia Tech`,
+            clientName,
+            folio,
+            total: 172500,
+            proposalUrl: `https://innocentia.tech/crear-proyecto?ref=${folio}&cli=${registeredClientId}`,
+          }),
+        }).catch((err) => console.log("Email dispatch sync:", err));
+      }
+    } catch (err) {
+      console.log("Async dispatch:", err);
+    }
+
     if (onProjectCreated) {
       onProjectCreated({
         folio,
