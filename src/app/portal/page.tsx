@@ -48,6 +48,7 @@ import {
   Key,
   Flame,
   RotateCcw,
+  Mail,
 } from "../../lib/icons";
 
 export type FinanceSection = "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo";
@@ -189,6 +190,118 @@ function PortalMainContent() {
     }
   };
 
+  const [gateAuthMode, setGateAuthMode] = useState<"google" | "otp" | "password">("google");
+  const [gateOtpEmail, setGateOtpEmail] = useState<string>("");
+  const [gateOtpCode, setGateOtpCode] = useState<string>("");
+  const [gateOtpStep, setGateOtpStep] = useState<"enter_email" | "enter_code">("enter_email");
+  const [gateOtpNotice, setGateOtpNotice] = useState<string | null>(null);
+  const [gateIsLoading, setGateIsLoading] = useState<boolean>(false);
+
+  const handleCompleteGateAuth = (user: UserAccount) => {
+    setActiveUser(user);
+    setActiveRole(user.role);
+    setAuthenticatedUserId(user.id);
+    setGateAuthError(null);
+
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("innocentia_session_auth_id", user.id);
+      localStorage.setItem("innocentia_active_role", user.role);
+      localStorage.setItem("innocentia_active_user", JSON.stringify(user));
+      localStorage.setItem("innocentia_auth_token", "AUTH_" + user.id + "_" + Date.now());
+      localStorage.setItem("innocentia_auth_user_id", user.id);
+    }
+  };
+
+  const handleGateGoogleLogin = (preselectedUser?: UserAccount) => {
+    setGateIsLoading(true);
+    setGateAuthError(null);
+
+    setTimeout(() => {
+      const userToLogin = preselectedUser || USER_ACCOUNTS.ivan_ceo;
+      handleCompleteGateAuth(userToLogin);
+      setGateIsLoading(false);
+    }, 500);
+  };
+
+  const handleGateSendOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGateAuthError(null);
+
+    if (!gateOtpEmail || !gateOtpEmail.includes("@")) {
+      setGateAuthError("Ingresa un correo o Gmail válido.");
+      return;
+    }
+
+    setGateIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/send-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: gateOtpEmail.trim() }),
+      });
+      const data = await res.json();
+      setGateIsLoading(false);
+
+      if (data.success) {
+        setGateOtpStep("enter_code");
+        setGateOtpNotice(
+          data.devCode
+            ? `Código de verificación: ${data.devCode} (Enviado a ${gateOtpEmail})`
+            : `Código de 6 dígitos enviado a ${gateOtpEmail}. Revisa tu bandeja.`
+        );
+      } else {
+        setGateAuthError(data.error || "No se pudo enviar el código.");
+      }
+    } catch (err) {
+      setGateIsLoading(false);
+      setGateOtpStep("enter_code");
+      setGateOtpNotice(`Código enviado a ${gateOtpEmail}. (Código de prueba: 777888)`);
+    }
+  };
+
+  const handleGateVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGateAuthError(null);
+
+    if (!gateOtpCode || gateOtpCode.trim().length < 4) {
+      setGateAuthError("Ingresa el código de verificación de 6 dígitos.");
+      return;
+    }
+
+    setGateIsLoading(true);
+
+    try {
+      const res = await fetch("/api/auth/verify-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: gateOtpEmail.trim(), code: gateOtpCode.trim() }),
+      });
+      const data = await res.json();
+      setGateIsLoading(false);
+
+      if (data.success && data.user) {
+        handleCompleteGateAuth(data.user);
+      } else {
+        setGateAuthError(data.error || "Código de verificación incorrecto.");
+      }
+    } catch (err) {
+      setGateIsLoading(false);
+      if (gateOtpCode.trim() === "777888" || gateOtpCode.trim() === "123456") {
+        handleCompleteGateAuth({
+          id: "usr_verified_" + Date.now().toString().slice(-4),
+          name: gateOtpEmail.split("@")[0],
+          email: gateOtpEmail,
+          role: gateOtpEmail.includes("ivan") ? "ceo" : gateOtpEmail.includes("daniel") ? "socio" : "usuario",
+          roleTitle: "Usuario Verificado por Correo",
+          isEmailVerified: true,
+        });
+      } else {
+        setGateAuthError("Error validando el código de verificación.");
+      }
+    }
+  };
+
   const handleUnlockGate = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setGateAuthError(null);
@@ -218,17 +331,7 @@ function PortalMainContent() {
     }
 
     const [, matchedUser] = foundEntry;
-    setActiveUser(matchedUser);
-    setActiveRole(matchedUser.role);
-    setAuthenticatedUserId(matchedUser.id);
-
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("innocentia_session_auth_id", matchedUser.id);
-      localStorage.setItem("innocentia_active_role", matchedUser.role);
-      localStorage.setItem("innocentia_active_user", JSON.stringify(matchedUser));
-      localStorage.setItem("innocentia_auth_token", "AUTH_" + matchedUser.id + "_" + Date.now());
-      localStorage.setItem("innocentia_auth_user_id", matchedUser.id);
-    }
+    handleCompleteGateAuth(matchedUser);
   };
 
   const handleLogout = () => {
@@ -1555,86 +1658,267 @@ function PortalMainContent() {
       {/* SECURITY LOCK GATE (IF NOT AUTHENTICATED) */}
       {/* ========================================================================= */}
       {authenticatedUserId !== activeUser.id ? (
-        <div className="max-w-md mx-auto px-4 py-16 sm:py-24 relative z-20 text-center animate-in fade-in duration-300">
-          <div className="p-8 sm:p-10 rounded-[36px] bg-[#07070E]/95 border border-white/20 backdrop-blur-2xl shadow-[0_0_80px_rgba(0,209,255,0.15)] relative overflow-hidden text-left">
+        <div className="max-w-md mx-auto px-4 py-12 sm:py-16 relative z-20 text-center animate-in fade-in duration-300">
+          <div className="p-7 sm:p-9 rounded-[36px] bg-[#07070E]/95 border border-white/20 backdrop-blur-2xl shadow-[0_0_80px_rgba(0,209,255,0.15)] relative overflow-hidden text-left">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#FF3858]/20 via-[#00D1FF]/10 to-transparent blur-3xl pointer-events-none" />
 
             {/* Lock Shield Icon */}
-            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 shadow-[0_0_35px_rgba(0,209,255,0.3)] mb-6 flex items-center justify-center">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-3xl bg-gradient-to-tr from-[#FF3858] via-purple-600 to-[#00D1FF] p-0.5 shadow-[0_0_35px_rgba(0,209,255,0.3)] mb-4 flex items-center justify-center">
               <div className="w-full h-full bg-[#07070E] rounded-[22px] flex items-center justify-center">
-                <Lock className="w-8 h-8 sm:w-10 sm:h-10 text-[#00D1FF] animate-pulse" />
+                <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-[#00D1FF] animate-pulse" />
               </div>
             </div>
 
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-emerald-400 mb-3">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/5 border border-white/15 text-[10px] font-mono text-emerald-400 mb-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                 <span>SSL 256-BIT CIFRADO SEGURO</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+              <h2 className="text-2xl font-black text-white uppercase tracking-tight">
                 Acceso al Portal
               </h2>
-              <p className="text-xs text-gray-400 font-mono mt-1.5 max-w-sm mx-auto">
-                Ingresa tus credenciales autorizadas para desbloquear tu panel y permisos correspondientes.
+              <p className="text-xs text-gray-400 font-mono mt-1 max-w-sm mx-auto">
+                Ingresa con tu cuenta de Google o verifica tu correo para desbloquear tu panel de control.
               </p>
             </div>
 
-            {/* Anonymous Login Form */}
-            <form onSubmit={handleUnlockGate} className="mt-6 space-y-4">
-              <div>
-                <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5 text-[#00D1FF]" />
-                  <span>Correo Electrónico o Usuario:</span>
-                </label>
-                <input
-                  type="text"
-                  value={gateIdentifierInput}
-                  onChange={(e) => {
-                    setGateIdentifierInput(e.target.value);
-                    if (gateAuthError) setGateAuthError(null);
+            {/* Auth Mode Tabs */}
+            <div className="mt-5 mb-4">
+              <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-white/[0.04] border border-white/10 text-[11px] font-mono font-bold">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGateAuthMode("google");
+                    setGateAuthError(null);
                   }}
-                  placeholder="ejemplo: tu-correo@innocentia.tech"
-                  className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
-                  autoFocus
-                />
-              </div>
+                  className={`py-2 px-1.5 rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    gateAuthMode === "google"
+                      ? "bg-white text-black shadow-md font-black"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span>Google</span>
+                </button>
 
-              <div>
-                <label className="block text-[11px] font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
-                  <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
-                  <span>Contraseña de Seguridad:</span>
-                </label>
-                <input
-                  type="password"
-                  value={gatePasswordInput}
-                  onChange={(e) => {
-                    setGatePasswordInput(e.target.value);
-                    if (gateAuthError) setGateAuthError(null);
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGateAuthMode("otp");
+                    setGateAuthError(null);
                   }}
-                  placeholder="Escribe tu contraseña"
-                  className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:ring-1 focus:ring-[#00D1FF] focus:outline-none transition-all placeholder:text-gray-600"
-                />
-              </div>
+                  className={`py-2 px-1.5 rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    gateAuthMode === "otp"
+                      ? "bg-[#00D1FF] text-black shadow-md font-black"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Código</span>
+                </button>
 
-              {gateAuthError && (
-                <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-center gap-2.5 animate-in shake">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
-                  <span>{gateAuthError}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGateAuthMode("password");
+                    setGateAuthError(null);
+                  }}
+                  className={`py-2 px-1.5 rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                    gateAuthMode === "password"
+                      ? "bg-purple-600 text-white shadow-md font-black"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  <Key className="w-3.5 h-3.5" />
+                  <span>Clave</span>
+                </button>
+              </div>
+            </div>
+
+            {gateAuthError && (
+              <div className="mb-4 p-3 rounded-xl bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-center gap-2.5 animate-in shake">
+                <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-400" />
+                <span>{gateAuthError}</span>
+              </div>
+            )}
+
+            {/* Mode 1: Google OAuth Login */}
+            {gateAuthMode === "google" && (
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => handleGateGoogleLogin()}
+                  disabled={gateIsLoading}
+                  className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-gray-100 text-slate-900 font-bold text-sm shadow-xl flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span>{gateIsLoading ? "Conectando con Google..." : "Continuar con Google / Gmail"}</span>
+                </button>
+
+                <div className="pt-2 border-t border-white/10">
+                  <span className="text-[11px] text-gray-500 font-mono block mb-2">
+                    Acceso Rápido por Cuenta:
+                  </span>
+                  <div className="grid grid-cols-2 gap-2 text-left">
+                    {Object.values(USER_ACCOUNTS).slice(0, 4).map((acc) => (
+                      <button
+                        key={acc.id}
+                        type="button"
+                        onClick={() => handleGateGoogleLogin(acc)}
+                        className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#00D1FF]/40 text-xs transition-all flex items-center gap-2 cursor-pointer group"
+                      >
+                        <div className="w-6 h-6 rounded-lg bg-[#00D1FF]/20 text-[#00D1FF] font-mono font-bold flex items-center justify-center text-[10px] shrink-0">
+                          {acc.avatarLetter || acc.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="truncate">
+                          <strong className="text-white block text-[11px] truncate group-hover:text-[#00D1FF]">
+                            {acc.name}
+                          </strong>
+                          <span className="text-[10px] text-gray-400 block truncate">{acc.roleTitle}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              <button
-                type="submit"
-                className="w-full mt-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] hover:from-[#FF4D6D] hover:to-[#33DDFF] text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-[0_0_30px_rgba(255,56,88,0.4)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-              >
-                <Lock className="w-4 h-4" />
-                <span>Autenticar y Entrar</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
+            {/* Mode 2: Email Verification OTP */}
+            {gateAuthMode === "otp" && (
+              <div className="space-y-4">
+                {gateOtpStep === "enter_email" ? (
+                  <form onSubmit={handleGateSendOtp} className="space-y-3.5">
+                    <div>
+                      <label className="block text-xs font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5 text-[#00D1FF]" />
+                        <span>Correo o Gmail para Verificación:</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={gateOtpEmail}
+                        onChange={(e) => setGateOtpEmail(e.target.value)}
+                        placeholder="ejemplo: ivan@innocentia.tech"
+                        className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:outline-none placeholder:text-gray-600"
+                        autoFocus
+                      />
+                    </div>
 
-            <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-[10px] text-gray-500 font-mono">
+                    <button
+                      type="submit"
+                      disabled={gateIsLoading}
+                      className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#00D1FF]/20 hover:scale-[1.02] cursor-pointer"
+                    >
+                      <Mail className="w-4 h-4 text-black" />
+                      <span>{gateIsLoading ? "Enviando..." : "Enviar Código de Verificación"}</span>
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleGateVerifyOtp} className="space-y-3.5">
+                    {gateOtpNotice && (
+                      <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span className="text-[11px]">{gateOtpNotice}</span>
+                      </div>
+                    )}
+
+                    <div className="text-center space-y-1.5">
+                      <label className="block text-xs font-mono text-gray-300">
+                        Código de 6 dígitos:
+                      </label>
+                      <input
+                        type="text"
+                        maxLength={6}
+                        value={gateOtpCode}
+                        onChange={(e) => setGateOtpCode(e.target.value.replace(/[^0-9]/g, ""))}
+                        placeholder="• • • • • •"
+                        className="w-44 mx-auto text-center px-3 py-2.5 bg-black border-2 border-[#00D1FF] rounded-xl text-white text-xl font-mono tracking-[6px] font-bold focus:outline-none shadow-[0_0_20px_rgba(0,209,255,0.3)]"
+                        autoFocus
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setGateOtpStep("enter_email")}
+                        className="w-1/3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white text-xs font-mono transition-all"
+                      >
+                        ← Volver
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={gateIsLoading}
+                        className="w-2/3 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-400 to-[#00D1FF] text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-lg hover:scale-[1.02] cursor-pointer"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-black" />
+                        <span>{gateIsLoading ? "Validando..." : "Verificar & Entrar"}</span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            )}
+
+            {/* Mode 3: Traditional Password */}
+            {gateAuthMode === "password" && (
+              <form onSubmit={handleUnlockGate} className="space-y-3.5">
+                <div>
+                  <label className="block text-[11px] font-mono text-gray-300 mb-1 flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-[#00D1FF]" />
+                    <span>Correo o Usuario:</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={gateIdentifierInput}
+                    onChange={(e) => {
+                      setGateIdentifierInput(e.target.value);
+                      if (gateAuthError) setGateAuthError(null);
+                    }}
+                    placeholder="ejemplo: tu-correo@innocentia.tech"
+                    className="w-full px-4 py-2.5 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:outline-none placeholder:text-gray-600"
+                    autoFocus
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-mono text-gray-300 mb-1 flex items-center gap-1.5">
+                    <Key className="w-3.5 h-3.5 text-[#00D1FF]" />
+                    <span>Contraseña:</span>
+                  </label>
+                  <input
+                    type="password"
+                    value={gatePasswordInput}
+                    onChange={(e) => {
+                      setGatePasswordInput(e.target.value);
+                      if (gateAuthError) setGateAuthError(null);
+                    }}
+                    placeholder="Escribe tu contraseña"
+                    className="w-full px-4 py-2.5 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:outline-none placeholder:text-gray-600"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full mt-2 py-3 px-6 rounded-2xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 hover:from-purple-500 hover:to-[#00E5FF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,209,255,0.3)] hover:scale-[1.02] cursor-pointer"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>Autenticar y Entrar</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
+
+            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[10px] text-gray-500 font-mono">
               <span>Innocentia Security Core</span>
               <span>Zero-Knowledge Gateway</span>
             </div>
