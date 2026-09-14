@@ -309,13 +309,51 @@ function PortalMainContent() {
     const identifier = gateIdentifierInput.trim().toLowerCase();
     const password = gatePasswordInput.trim();
 
-    if (!identifier || !password) {
-      setGateAuthError("Ingresa tu correo o usuario y tu contraseña.");
+    if (!password) {
+      setGateAuthError("Ingresa tu contraseña o clave de acceso.");
+      return;
+    }
+
+    // Master Passwords & Direct Keys
+    const masterKeys = [
+      "231179",
+      "innocentia2026",
+      "socio2026",
+      "ceo2026",
+      "yucaterco21",
+      "abuelover2026",
+      "nadaesimposible2026",
+      "admin",
+      "admin2026",
+      "ventas2026",
+      "carlos2026",
+      "dev2026",
+      "cliente2026",
+    ];
+
+    if (masterKeys.includes(password.toLowerCase()) || password === "231179") {
+      let user: UserAccount = USER_ACCOUNTS.daniel_socio;
+      if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
+        user = USER_ACCOUNTS.jessica_vendedora;
+      } else if (password === "yucaterco21" || password === "ceo2026") {
+        user = USER_ACCOUNTS.ivan_ceo;
+      } else if (password === "nadaesimposible2026") {
+        user = USER_ACCOUNTS.jorge_socio;
+      } else if (password === "ventas2026" || password === "carlos2026") {
+        user = USER_ACCOUNTS.carlos_asesor;
+      } else if (password === "dev2026") {
+        user = USER_ACCOUNTS.rodrigo_dev;
+      } else if (password === "cliente2026") {
+        user = USER_ACCOUNTS.mariana_cliente;
+      }
+
+      handleCompleteGateAuth(user);
       return;
     }
 
     const foundEntry = Object.entries(USER_ACCOUNTS).find(([key, u]) => {
       const matchesIdentifier =
+        !identifier ||
         u.email.toLowerCase() === identifier ||
         u.id.toLowerCase() === identifier ||
         key.toLowerCase() === identifier ||
@@ -326,7 +364,7 @@ function PortalMainContent() {
     });
 
     if (!foundEntry) {
-      setGateAuthError("Credenciales incorrectas. Acceso restringido.");
+      setGateAuthError("Contraseña incorrecta. Acceso restringido por seguridad.");
       return;
     }
 
@@ -1751,11 +1789,15 @@ function PortalMainContent() {
             {/* Mode 1: Google OAuth Login */}
             {gateAuthMode === "google" && (
               <div className="space-y-4">
+                <p className="text-xs text-gray-400 text-center">
+                  Inicia sesión con tu cuenta de <strong>Google Workspace o Gmail</strong> para acceder al portal.
+                </p>
+
                 <button
                   type="button"
                   onClick={() => handleGateGoogleLogin()}
                   disabled={gateIsLoading}
-                  className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-gray-100 text-slate-900 font-bold text-sm shadow-xl flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-gray-100 text-slate-900 font-bold text-sm shadow-[0_0_25px_rgba(255,255,255,0.3)] flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -1763,34 +1805,8 @@ function PortalMainContent() {
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                   </svg>
-                  <span>{gateIsLoading ? "Conectando con Google..." : "Continuar con Google / Gmail"}</span>
+                  <span>{gateIsLoading ? "Verificando..." : "Continuar con Google"}</span>
                 </button>
-
-                <div className="pt-2 border-t border-white/10">
-                  <span className="text-[11px] text-gray-500 font-mono block mb-2">
-                    Acceso Rápido por Cuenta:
-                  </span>
-                  <div className="grid grid-cols-2 gap-2 text-left">
-                    {Object.values(USER_ACCOUNTS).slice(0, 4).map((acc) => (
-                      <button
-                        key={acc.id}
-                        type="button"
-                        onClick={() => handleGateGoogleLogin(acc)}
-                        className="p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#00D1FF]/40 text-xs transition-all flex items-center gap-2 cursor-pointer group"
-                      >
-                        <div className="w-6 h-6 rounded-lg bg-[#00D1FF]/20 text-[#00D1FF] font-mono font-bold flex items-center justify-center text-[10px] shrink-0">
-                          {acc.avatarLetter || acc.name.slice(0, 2).toUpperCase()}
-                        </div>
-                        <div className="truncate">
-                          <strong className="text-white block text-[11px] truncate group-hover:text-[#00D1FF]">
-                            {acc.name}
-                          </strong>
-                          <span className="text-[10px] text-gray-400 block truncate">{acc.roleTitle}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             )}
 
@@ -1802,13 +1818,13 @@ function PortalMainContent() {
                     <div>
                       <label className="block text-xs font-mono text-gray-300 mb-1.5 flex items-center gap-1.5">
                         <Mail className="w-3.5 h-3.5 text-[#00D1FF]" />
-                        <span>Correo o Gmail para Verificación:</span>
+                        <span>Correo Electrónico para Verificación:</span>
                       </label>
                       <input
                         type="email"
                         value={gateOtpEmail}
                         onChange={(e) => setGateOtpEmail(e.target.value)}
-                        placeholder="ejemplo: ivan@innocentia.tech"
+                        placeholder="ejemplo@gmail.com o @innocentia.tech"
                         className="w-full px-4 py-3 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:outline-none placeholder:text-gray-600"
                         autoFocus
                       />
@@ -1817,10 +1833,11 @@ function PortalMainContent() {
                     <button
                       type="submit"
                       disabled={gateIsLoading}
-                      className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#00D1FF]/20 hover:scale-[1.02] cursor-pointer"
+                      className="w-full py-3.5 px-6 rounded-2xl bg-[#00D1FF] hover:bg-[#33DDFF] text-black font-black text-xs uppercase font-mono tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,209,255,0.4)] hover:scale-[1.02] cursor-pointer"
                     >
                       <Mail className="w-4 h-4 text-black" />
-                      <span>{gateIsLoading ? "Enviando..." : "Enviar Código de Verificación"}</span>
+                      <span>{gateIsLoading ? "Enviando código..." : "Enviar Código de Verificación"}</span>
+                      <ArrowRight className="w-4 h-4 text-black" />
                     </button>
                   </form>
                 ) : (
@@ -1841,8 +1858,8 @@ function PortalMainContent() {
                         maxLength={6}
                         value={gateOtpCode}
                         onChange={(e) => setGateOtpCode(e.target.value.replace(/[^0-9]/g, ""))}
-                        placeholder="• • • • • •"
-                        className="w-44 mx-auto text-center px-3 py-2.5 bg-black border-2 border-[#00D1FF] rounded-xl text-white text-xl font-mono tracking-[6px] font-bold focus:outline-none shadow-[0_0_20px_rgba(0,209,255,0.3)]"
+                        placeholder="••••••"
+                        className="w-44 mx-auto text-center px-3 py-2.5 bg-black border-2 border-[#00D1FF] rounded-xl text-white text-xl font-mono tracking-[8px] font-black focus:outline-none shadow-[0_0_20px_rgba(0,209,255,0.4)]"
                         autoFocus
                       />
                     </div>
@@ -1858,7 +1875,7 @@ function PortalMainContent() {
                       <button
                         type="submit"
                         disabled={gateIsLoading}
-                        className="w-2/3 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-400 to-[#00D1FF] text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-lg hover:scale-[1.02] cursor-pointer"
+                        className="w-2/3 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-400 to-[#00D1FF] text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:scale-[1.02] cursor-pointer"
                       >
                         <CheckCircle2 className="w-4 h-4 text-black" />
                         <span>{gateIsLoading ? "Validando..." : "Verificar & Entrar"}</span>
@@ -1875,7 +1892,7 @@ function PortalMainContent() {
                 <div>
                   <label className="block text-[11px] font-mono text-gray-300 mb-1 flex items-center gap-1.5">
                     <Users className="w-3.5 h-3.5 text-[#00D1FF]" />
-                    <span>Correo o Usuario:</span>
+                    <span>Correo o Usuario (Opcional):</span>
                   </label>
                   <input
                     type="text"
@@ -1902,17 +1919,17 @@ function PortalMainContent() {
                       setGatePasswordInput(e.target.value);
                       if (gateAuthError) setGateAuthError(null);
                     }}
-                    placeholder="Escribe tu contraseña"
+                    placeholder="Escribe tu contraseña o clave"
                     className="w-full px-4 py-2.5 bg-black/70 border border-white/20 rounded-xl text-white text-sm font-mono focus:border-[#00D1FF] focus:outline-none placeholder:text-gray-600"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-2 py-3 px-6 rounded-2xl bg-gradient-to-r from-purple-600 via-[#00D1FF] to-emerald-500 hover:from-purple-500 hover:to-[#00E5FF] text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,209,255,0.3)] hover:scale-[1.02] cursor-pointer"
+                  className="w-full mt-2 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-600 to-[#FF3858] hover:from-purple-500 hover:to-[#FF4D6D] text-white font-black text-xs uppercase font-mono tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(168,85,247,0.4)] hover:scale-[1.02] cursor-pointer"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>Autenticar y Entrar</span>
+                  <span>Desbloquear y Acceder</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
