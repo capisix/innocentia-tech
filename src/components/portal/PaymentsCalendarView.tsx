@@ -279,6 +279,26 @@ export default function PaymentsCalendarView({
       });
     });
 
+    // 5. Cita / Junta Hoy (Lunes 14 de Septiembre - Axana, Jessica Torre, Daniel Torre & Gabriel)
+    events.push({
+      id: "meet-axana-jess-gabriel-today",
+      title: "Junta Axana-Jess+Gabriel (4:30 – 6:00 PM)",
+      category: "Reunión Estratégica & Comercial • Google Meet",
+      type: "ingreso",
+      timing: "proximo",
+      amount: 0,
+      dateStr: "14 de Septiembre de 2026",
+      year: 2026,
+      month: 9,
+      day: 14,
+      paidBy: "Daniel Torre (Socio) & Jessica Torre (Asesora)",
+      sourceAccount: "Google Meet: https://meet.google.com/mnh-metd-fcn",
+      beneficiary: "Gabriel & Axana (Acuerdos Comerciales)",
+      status: "pendiente",
+      projectRef: "Alianzas Estratégicas 2026",
+      isHighPriority: true,
+    });
+
     return events;
   }, [financeRecords, projects, servers, auditLogs, selectedDay]);
 
@@ -1017,6 +1037,23 @@ export default function PaymentsCalendarView({
                         </div>
                       )}
                     </div>
+
+                    {ev.id.startsWith("meet-") && (
+                      <div className="mt-3 pt-2 border-t border-slate-800 flex flex-col gap-2">
+                        <a
+                          href="https://meet.google.com/mnh-metd-fcn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-[#00D1FF] text-black font-black text-xs uppercase flex items-center justify-center gap-2 hover:brightness-110 shadow-lg shadow-cyan-500/20"
+                        >
+                          <span>🎥 Unirse a Google Meet</span>
+                        </a>
+                        <div className="flex items-center justify-between text-[11px] text-slate-300 px-1">
+                          <span>📞 Tel: +52 55 8421 0898</span>
+                          <span className="font-mono font-bold text-amber-400">PIN: 4192862301978</span>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Quick Edit button if finance record exists */}
                     {onOpenEditFinanceRecord && ev.sourceId && ev.sourceId.startsWith("FIN-") && (

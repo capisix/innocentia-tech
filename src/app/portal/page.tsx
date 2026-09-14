@@ -407,7 +407,25 @@ function PortalMainContent() {
     topic: string;
     status: "Confirmada" | "Pendiente" | "Realizada" | "Reprogramada";
     notes: string;
+    meetUrl?: string;
+    pin?: string;
+    dialNumber?: string;
   }>>([
+    {
+      id: "APT-HOY-01",
+      clientName: "Axana & Gabriel (con Jessica Torre y Daniel)",
+      company: "Axana (Junta Estratégica & Comercial)",
+      clientPhone: "+52 55 8421 0898",
+      date: "2026-09-14",
+      time: "16:30",
+      meetingType: "Videollamada Google Meet (4:30 – 6:00 PM)",
+      topic: "Junta Axana-Jess+Gabriel",
+      status: "Confirmada",
+      meetUrl: "https://meet.google.com/mnh-metd-fcn",
+      pin: "4192862301978",
+      dialNumber: "+52 55 8421 0898",
+      notes: "Junta hoy lunes 14 de sep · 4:30–6:00 p.m. Vínculo: https://meet.google.com/mnh-metd-fcn • PIN: 4192862301978. Asistentes: Jessica Torre, Daniel Torre, Gabriel, Axana.",
+    },
     {
       id: "APT-101",
       clientName: "Daniel Torre de Haro",
@@ -4018,6 +4036,60 @@ function PortalMainContent() {
               </button>
             </div>
 
+            {/* BANNER DE REUNIÓN DE HOY (SOCIO & DANIEL TORRE) */}
+            <div className="p-6 sm:p-7 rounded-[32px] bg-gradient-to-r from-purple-900/40 via-[#07070E] to-[#00D1FF]/15 border-2 border-[#00D1FF]/40 shadow-[0_0_35px_rgba(0,209,255,0.15)] text-left relative overflow-hidden space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-wider bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 animate-pulse flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#00D1FF]"></span>
+                      Junta de Hoy en Agenda
+                    </span>
+                    <span className="text-xs font-mono text-purple-300 font-bold">Lunes 14 de Septiembre • 4:30 PM a 6:00 PM</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2">
+                    <span>Junta Axana-Jess+Gabriel</span>
+                  </h3>
+                  <p className="text-xs text-gray-300 font-mono">
+                    👤 <strong>Asistentes:</strong> Daniel Torre (Tú), Jessica Torre, Gabriel, Axana • <strong>Tema:</strong> Revisión de cuenta & acuerdos comerciales
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    href="https://meet.google.com/mnh-metd-fcn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-purple-600 text-black font-black text-xs uppercase font-mono tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.5)] hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>🎥 Unirse a Google Meet</span>
+                    <ArrowRight className="w-4 h-4 text-black" />
+                  </a>
+
+                  <a
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Junta%20Axana-Jess%2BGabriel&dates=20260914T163000/20260914T180000&details=Junta%20Axana-Jess%2BGabriel%0A%0A%F0%9F%93%8D%20Link%20Meet%3A%20https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn%0A%E2%98%8E%EF%B8%8F%20Tel%C3%A9fono%3A%20%2B52%2055%208421%200898%20PIN%3A%204192862301978%0A%0A%F0%9F%91%A5%20Asistentes%3A%20Daniel%20Torre%2C%20Jessica%20Torre%2C%20Gabriel%2C%20Axana&location=https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs flex items-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Calendar className="w-4 h-4 text-[#4285F4]" />
+                    <span>Google Calendar</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-black/50 border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-gray-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400">🔗 Link:</span>
+                  <span className="text-[#00D1FF] underline select-all">https://meet.google.com/mnh-metd-fcn</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span>📞 Tel: <strong>+52 55 8421 0898</strong></span>
+                  <span className="px-2.5 py-1 rounded-lg bg-white/10 text-white font-bold">PIN: 4192862301978</span>
+                </div>
+              </div>
+            </div>
+
             {/* Partner Tab 1: Supervisión Financiera Categorizada */}
             {partnerTab === "finanzas" && (
               <div className="space-y-6 text-left">
@@ -6164,25 +6236,39 @@ function PortalMainContent() {
                       </div>
 
                       {/* Action Buttons: Google Calendar + WhatsApp Reminder */}
-                      <div className="grid grid-cols-2 gap-2 pt-1">
-                        <a
-                          href={getGoogleCalendarUrl(apt)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                        >
-                          <Calendar className="w-3.5 h-3.5 text-[#4285F4]" />
-                          <span>Google Calendar</span>
-                        </a>
+                      <div className="space-y-2 pt-1">
+                        {apt.meetUrl && (
+                          <a
+                            href={apt.meetUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-[#00D1FF] hover:brightness-110 text-black font-black text-xs font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all cursor-pointer"
+                          >
+                            <span>🎥 Unirse a Google Meet Ahora</span>
+                            <ArrowRight className="w-4 h-4 text-black" />
+                          </a>
+                        )}
 
-                        <a
-                          href={`https://wa.me/${apt.clientPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${apt.clientName}, te confirmo nuestra cita comercial de Innocentia Tech agendada para el día ${apt.date} a las ${apt.time} hrs (${apt.meetingType}). ¡Nos vemos pronto!`)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-3.5 py-2.5 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                        >
-                          <span>💬 Recordatorio</span>
-                        </a>
+                        <div className="grid grid-cols-2 gap-2">
+                          <a
+                            href={getGoogleCalendarUrl(apt)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                          >
+                            <Calendar className="w-3.5 h-3.5 text-[#4285F4]" />
+                            <span>Google Calendar</span>
+                          </a>
+
+                          <a
+                            href={`https://wa.me/${apt.clientPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${apt.clientName}, te confirmo nuestra reunión de Innocentia Tech agendada para el día ${apt.date} a las ${apt.time} hrs (${apt.meetingType}). Link Meet: ${apt.meetUrl || 'https://meet.google.com/mnh-metd-fcn'}`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3.5 py-2 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                          >
+                            <span>💬 WhatsApp</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   ))}
