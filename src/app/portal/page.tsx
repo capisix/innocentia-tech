@@ -399,7 +399,7 @@ function PortalMainContent() {
         user = USER_ACCOUNTS.jessica_vendedora;
       } else if (password === "yucaterco21" || password === "ceo2026") {
         user = USER_ACCOUNTS.ivan_ceo;
-      } else if (password === "nadaesimposible2026") {
+      } else if (password === "nadaesimposible2026" || identifier.includes("jorge") || identifier.includes("jorgeluis")) {
         user = USER_ACCOUNTS.jorge_socio;
       } else if (password === "ventas2026" || password === "carlos2026") {
         user = USER_ACCOUNTS.carlos_asesor;

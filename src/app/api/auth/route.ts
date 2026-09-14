@@ -113,7 +113,7 @@ export async function POST(req: Request) {
         role = "ceo";
         roleTitle = "Director General & CEO";
         name = "Iván Castillo";
-      } else if (cleanEmail.includes("jorge")) {
+      } else if (cleanEmail.includes("jorge") || cleanEmail.includes("jorgeluis") || cleanEmail.includes("jorgeluis626")) {
         role = "socio";
         roleTitle = "Socio Co-Fundador & Estrategia";
         name = "Jorge Pérez";

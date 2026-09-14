@@ -71,7 +71,7 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
   jorge_socio: {
     id: "usr_partner_jorge",
     name: "Jorge Pérez",
-    email: "jorge.perez@innocentia.tech",
+    email: "jorgeluis626@gmail.com",
     role: "socio",
     roleTitle: "Socio Co-Fundador & Estrategia",
     company: "Innocentia Tech",
@@ -272,7 +272,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         resolvedUser = USER_ACCOUNTS.ivan_ceo;
       } else if (email.includes("daniel") || email.includes("socio")) {
         resolvedUser = USER_ACCOUNTS.daniel_socio;
-      } else if (email.includes("jorge")) {
+      } else if (email.includes("jorge") || email.includes("jorgeluis") || email.includes("jorgeluis626")) {
         resolvedUser = USER_ACCOUNTS.jorge_socio;
       } else if (email.includes("jess") || email.includes("boldberry")) {
         resolvedUser = USER_ACCOUNTS.jessica_vendedora;
