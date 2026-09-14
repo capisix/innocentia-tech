@@ -291,7 +291,7 @@ export default function PaymentsCalendarView({
       year: 2026,
       month: 9,
       day: 14,
-      paidBy: "Daniel Torre (Socio) & Jessica Torre (Asesora)",
+      paidBy: "Iván Castillo (CEO) & Jessica Torre (Asesora)",
       sourceAccount: "Google Meet: https://meet.google.com/mnh-metd-fcn",
       beneficiary: "Gabriel & Axana (Acuerdos Comerciales)",
       status: "pendiente",

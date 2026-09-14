@@ -486,7 +486,7 @@ function PortalMainContent() {
   }>>([
     {
       id: "APT-HOY-01",
-      clientName: "Axana & Gabriel (con Jessica Torre y Daniel)",
+      clientName: "Axana & Gabriel (con Jessica Torre e Iván Castillo)",
       company: "Axana (Junta Estratégica & Comercial)",
       clientPhone: "+52 55 8421 0898",
       date: "2026-09-14",
@@ -497,7 +497,7 @@ function PortalMainContent() {
       meetUrl: "https://meet.google.com/mnh-metd-fcn",
       pin: "4192862301978",
       dialNumber: "+52 55 8421 0898",
-      notes: "Junta hoy lunes 14 de sep · 3:30–5:00 p.m. Vínculo: https://meet.google.com/mnh-metd-fcn • PIN: 4192862301978. Asistentes: Jessica Torre, Daniel Torre, Gabriel, Axana.",
+      notes: "Junta hoy lunes 14 de sep · 3:30–5:00 p.m. Vínculo: https://meet.google.com/mnh-metd-fcn • PIN: 4192862301978. Asistentes: Iván Castillo (CEO), Jessica Torre, Gabriel, Axana.",
     },
     {
       id: "APT-101",
@@ -4170,7 +4170,7 @@ function PortalMainContent() {
                     <span>Junta Axana-Jess+Gabriel</span>
                   </h3>
                   <p className="text-xs text-gray-300 font-mono">
-                    👤 <strong>Asistentes:</strong> Daniel Torre (Tú), Jessica Torre, Gabriel, Axana • <strong>Tema:</strong> Revisión de cuenta & acuerdos comerciales
+                    👤 <strong>Asistentes:</strong> Iván Castillo (CEO), Jessica Torre, Gabriel, Axana • <strong>Tema:</strong> Revisión de cuenta & acuerdos comerciales
                   </p>
                 </div>
 
@@ -4186,7 +4186,7 @@ function PortalMainContent() {
                   </a>
 
                   <a
-                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Junta%20Axana-Jess%2BGabriel&dates=20260914T153000/20260914T170000&details=Junta%20Axana-Jess%2BGabriel%0A%0A%F0%9F%93%8D%20Link%20Meet%3A%20https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn%0A%E2%98%8E%EF%B8%8F%20Tel%C3%A9fono%3A%20%2B52%2055%208421%200898%20PIN%3A%204192862301978%0A%0A%F0%9F%91%A5%20Asistentes%3A%20Daniel%20Torre%2C%20Jessica%20Torre%2C%20Gabriel%2C%20Axana&location=https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn"
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Junta%20Axana-Jess%2BGabriel&dates=20260914T153000/20260914T170000&details=Junta%20Axana-Jess%2BGabriel%0A%0A%F0%9F%93%8D%20Link%20Meet%3A%20https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn%0A%E2%98%8E%EF%B8%8F%20Tel%C3%A9fono%3A%20%2B52%2055%208421%200898%20PIN%3A%204192862301978%0A%0A%F0%9F%91%A5%20Asistentes%3A%20Iv%C3%A1n%20Castillo%2C%20Jessica%20Torre%2C%20Gabriel%2C%20Axana&location=https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs flex items-center gap-2 transition-all cursor-pointer"
