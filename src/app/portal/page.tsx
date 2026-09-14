@@ -11,7 +11,6 @@ import AuthLoginModal, { RoleType, ROLE_PRESETS, USER_ACCOUNTS, UserAccount } fr
 import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix";
 import UserProfileModal from "../../components/portal/UserProfileModal";
 import CommercialCalendarView, { CommercialAppointment } from "../../components/portal/CommercialCalendarView";
-import { Camera, Settings } from "../../lib/icons";
 import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
 import {
   Sparkles,
@@ -52,6 +51,8 @@ import {
   Flame,
   RotateCcw,
   Mail,
+  Camera,
+  Settings,
 } from "../../lib/icons";
 
 export type FinanceSection = "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo";
