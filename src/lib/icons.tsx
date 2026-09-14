@@ -622,20 +622,6 @@ export const Settings = createIcon(
   </g>
 );
 
-export const User = createIcon(
-  <g>
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </g>
-);
-
-export const Eye = createIcon(
-  <g>
-    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-    <circle cx="12" cy="12" r="3" />
-  </g>
-);
-
 export const EyeOff = createIcon(
   <g>
     <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
