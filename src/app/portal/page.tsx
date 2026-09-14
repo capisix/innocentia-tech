@@ -490,14 +490,14 @@ function PortalMainContent() {
       company: "Axana (Junta Estratégica & Comercial)",
       clientPhone: "+52 55 8421 0898",
       date: "2026-09-14",
-      time: "16:30",
-      meetingType: "Videollamada Google Meet (4:30 – 6:00 PM)",
+      time: "15:30",
+      meetingType: "Videollamada Google Meet (3:30 – 5:00 PM)",
       topic: "Junta Axana-Jess+Gabriel",
       status: "Confirmada",
       meetUrl: "https://meet.google.com/mnh-metd-fcn",
       pin: "4192862301978",
       dialNumber: "+52 55 8421 0898",
-      notes: "Junta hoy lunes 14 de sep · 4:30–6:00 p.m. Vínculo: https://meet.google.com/mnh-metd-fcn • PIN: 4192862301978. Asistentes: Jessica Torre, Daniel Torre, Gabriel, Axana.",
+      notes: "Junta hoy lunes 14 de sep · 3:30–5:00 p.m. Vínculo: https://meet.google.com/mnh-metd-fcn • PIN: 4192862301978. Asistentes: Jessica Torre, Daniel Torre, Gabriel, Axana.",
     },
     {
       id: "APT-101",
@@ -4164,7 +4164,7 @@ function PortalMainContent() {
                       <span className="w-2 h-2 rounded-full bg-[#00D1FF]"></span>
                       Junta de Hoy en Agenda
                     </span>
-                    <span className="text-xs font-mono text-purple-300 font-bold">Lunes 14 de Septiembre • 4:30 PM a 6:00 PM</span>
+                    <span className="text-xs font-mono text-purple-300 font-bold">Lunes 14 de Septiembre • 3:30 PM a 5:00 PM (Actualizada)</span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2">
                     <span>Junta Axana-Jess+Gabriel</span>
@@ -4186,7 +4186,7 @@ function PortalMainContent() {
                   </a>
 
                   <a
-                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Junta%20Axana-Jess%2BGabriel&dates=20260914T163000/20260914T180000&details=Junta%20Axana-Jess%2BGabriel%0A%0A%F0%9F%93%8D%20Link%20Meet%3A%20https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn%0A%E2%98%8E%EF%B8%8F%20Tel%C3%A9fono%3A%20%2B52%2055%208421%200898%20PIN%3A%204192862301978%0A%0A%F0%9F%91%A5%20Asistentes%3A%20Daniel%20Torre%2C%20Jessica%20Torre%2C%20Gabriel%2C%20Axana&location=https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn"
+                    href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Junta%20Axana-Jess%2BGabriel&dates=20260914T153000/20260914T170000&details=Junta%20Axana-Jess%2BGabriel%0A%0A%F0%9F%93%8D%20Link%20Meet%3A%20https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn%0A%E2%98%8E%EF%B8%8F%20Tel%C3%A9fono%3A%20%2B52%2055%208421%200898%20PIN%3A%204192862301978%0A%0A%F0%9F%91%A5%20Asistentes%3A%20Daniel%20Torre%2C%20Jessica%20Torre%2C%20Gabriel%2C%20Axana&location=https%3A%2F%2Fmeet.google.com%2Fmnh-metd-fcn"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-bold text-xs flex items-center gap-2 transition-all cursor-pointer"

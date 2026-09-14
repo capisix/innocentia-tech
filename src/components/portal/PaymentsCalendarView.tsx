@@ -282,7 +282,7 @@ export default function PaymentsCalendarView({
     // 5. Cita / Junta Hoy (Lunes 14 de Septiembre - Axana, Jessica Torre, Daniel Torre & Gabriel)
     events.push({
       id: "meet-axana-jess-gabriel-today",
-      title: "Junta Axana-Jess+Gabriel (4:30 – 6:00 PM)",
+      title: "Junta Axana-Jess+Gabriel (3:30 – 5:00 PM)",
       category: "Reunión Estratégica & Comercial • Google Meet",
       type: "ingreso",
       timing: "proximo",
