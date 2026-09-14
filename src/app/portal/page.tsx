@@ -393,7 +393,99 @@ function PortalMainContent() {
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "chat">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
-  const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
+  const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "citas_calendario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
+
+  // Seller Appointments (Citas Comerciales vinculables a Google Calendar)
+  const [sellerAppointments, setSellerAppointments] = useState<Array<{
+    id: string;
+    clientName: string;
+    company: string;
+    clientPhone: string;
+    date: string;
+    time: string;
+    meetingType: string;
+    topic: string;
+    status: "Confirmada" | "Pendiente" | "Realizada" | "Reprogramada";
+    notes: string;
+  }>>([
+    {
+      id: "APT-101",
+      clientName: "Daniel Torre de Haro",
+      company: "Pro Acabados",
+      clientPhone: "9601771556",
+      date: "2026-09-18",
+      time: "11:00",
+      meetingType: "Demostración de Plataforma & Cotización",
+      topic: "Revisión de arquitectura App Móvil y panel multi-sucursal",
+      status: "Confirmada",
+      notes: "Cliente interesado en integrar WhatsApp Cloud API y pasarela de cobro.",
+    },
+    {
+      id: "APT-102",
+      clientName: "Lic. Andrea Morales",
+      company: "Fintech Seguros MX",
+      clientPhone: "+52 55 111 8899",
+      date: "2026-09-22",
+      time: "16:30",
+      meetingType: "Videollamada Google Meet",
+      topic: "Presentación demo SaaS Avanzado & Automatización",
+      status: "Pendiente",
+      notes: "Enviar propuesta formal con alcance y tabla de comisiones antes de la llamada.",
+    },
+  ]);
+
+  // New Appointment Form Modal State
+  const [isNewAptModalOpen, setIsNewAptModalOpen] = useState(false);
+  const [newAptClientName, setNewAptClientName] = useState("");
+  const [newAptCompany, setNewAptCompany] = useState("");
+  const [newAptPhone, setNewAptPhone] = useState("");
+  const [newAptDate, setNewAptDate] = useState("2026-09-20");
+  const [newAptTime, setNewAptTime] = useState("12:00");
+  const [newAptType, setNewAptType] = useState("Videollamada Google Meet");
+  const [newAptTopic, setNewAptTopic] = useState("");
+  const [newAptNotes, setNewAptNotes] = useState("");
+
+  const handleCreateAppointment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAptClientName.trim()) return;
+
+    const newApt = {
+      id: "APT-" + Math.floor(100 + Math.random() * 900),
+      clientName: newAptClientName.trim(),
+      company: newAptCompany.trim() || "Empresa Particular",
+      clientPhone: newAptPhone.trim() || "9601771556",
+      date: newAptDate,
+      time: newAptTime,
+      meetingType: newAptType,
+      topic: newAptTopic.trim() || "Demostración de Software Innocentia Tech",
+      status: "Confirmada" as const,
+      notes: newAptNotes.trim() || "Cita agendada por asesor comercial.",
+    };
+
+    setSellerAppointments((prev) => [newApt, ...prev]);
+    setIsNewAptModalOpen(false);
+    setNewAptClientName("");
+    setNewAptCompany("");
+    setNewAptPhone("");
+    setNewAptTopic("");
+    setNewAptNotes("");
+  };
+
+  // Google Calendar URL Generator
+  const getGoogleCalendarUrl = (apt: typeof sellerAppointments[0]) => {
+    const title = `Innocentia Tech Demo • ${apt.company} (${apt.clientName})`;
+    const details = `Cita comercial y demostración de software Innocentia Tech.\n\n👤 Cliente: ${apt.clientName}\n🏢 Empresa: ${apt.company}\n📱 Teléfono: ${apt.clientPhone}\n🎯 Modalidad: ${apt.meetingType}\n📝 Tema: ${apt.topic}\n\nAsesor: ${safeActiveUser.name}`;
+    
+    // Parse date & time to ISO format (e.g. 20260918T110000Z)
+    const cleanDate = apt.date.replace(/-/g, "");
+    const cleanTime = apt.time.replace(/:/g, "") + "00";
+    const startIso = `${cleanDate}T${cleanTime}`;
+    // Add 1 hour duration
+    const endHour = (parseInt(apt.time.split(":")[0]) + 1).toString().padStart(2, "0");
+    const endIso = `${cleanDate}T${endHour}${apt.time.split(":")[1]}00`;
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startIso}/${endIso}&details=${encodeURIComponent(details)}&location=${encodeURIComponent("Google Meet / Online")}`;
+  };
 
   // Finance View Mode (Tablas vs Calendario)
   const [ceoFinanceViewMode, setCeoFinanceViewMode] = useState<"tablas" | "calendario">("tablas");
@@ -5829,26 +5921,55 @@ function PortalMainContent() {
         )}
 
         {/* ========================================================================= */}
-        {/* VIEW 5: VENDEDOR / ASESOR COMERCIAL */}
+        {/* VIEW 5: VENDEDOR / ASESOR COMERCIAL (JESSICA TORRE & ASESORES) */}
         {/* ========================================================================= */}
         {activeRole === "asesor" && (
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
-            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
+            {/* Advisor Subnav Tabs */}
+            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-none">
               <button
+                type="button"
                 onClick={() => setAdvisorTab("leads_formulario")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
                   advisorTab === "leads_formulario"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
                 <Link2 className="w-4 h-4" />
-                <span>Link de Vendedor & Leads</span>
+                <span>Link & Leads</span>
               </button>
 
               <button
+                type="button"
+                onClick={() => setAdvisorTab("citas_calendario")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                  advisorTab === "citas_calendario"
+                    ? "bg-gradient-to-r from-[#00D1FF] to-purple-600 text-black font-extrabold shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <Calendar className="w-4 h-4 text-[#00D1FF]" />
+                <span>📅 Calendario & Citas (Google Calendar)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setAdvisorTab("status_proyectos")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                  advisorTab === "status_proyectos"
+                    ? "bg-[#00D1FF] text-black font-extrabold shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <Layers className="w-4 h-4" />
+                <span>Estatus de Proyectos</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setAdvisorTab("tabulador")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
                   advisorTab === "tabulador"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
@@ -5859,20 +5980,22 @@ function PortalMainContent() {
               </button>
 
               <button
+                type="button"
                 onClick={() => setAdvisorTab("comisiones")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
                   advisorTab === "comisiones"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
-                <DollarSign className="w-4 h-4" />
+                <PieChart className="w-4 h-4" />
                 <span>Mis Comisiones</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => setAdvisorTab("chat")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
                   advisorTab === "chat"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
@@ -5883,49 +6006,93 @@ function PortalMainContent() {
               </button>
             </div>
 
+            {/* TAB 1: REFERRAL LINK & LEADS */}
             {advisorTab === "leads_formulario" && (
               <div className="space-y-6">
-                {/* Referral Link Generator */}
-                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-[#FF3858]/10 via-[#00D1FF]/10 to-transparent border border-white/20 space-y-4">
-                  <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                    <Share2 className="w-5 h-5 text-[#FF3858]" />
-                    <span>Tu Enlace Exclusivo para Cotización de Clientes</span>
-                  </h3>
-                  <p className="text-xs text-gray-300">
-                    Envía este link a tus prospectos. Cuando un cliente llena el formulario, el proyecto queda registrado automáticamente a tu nombre y recibes alertas al instante.
+                {/* Dynamic Referral Link Generator */}
+                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-pink-500/15 via-purple-950/40 to-[#00D1FF]/15 border border-white/20 space-y-4 shadow-xl">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                      <Share2 className="w-5 h-5 text-pink-400" />
+                      <span>Tu Enlace Exclusivo para Cotización de Clientes</span>
+                    </h3>
+                    <span className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-mono font-bold w-fit">
+                      Código: {safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-300 leading-relaxed">
+                    Envía este link a tus prospectos. Cuando un cliente llena el formulario, el proyecto queda registrado automáticamente con tu código y recibes alertas al instante.
                   </p>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <input
                       type="text"
                       readOnly
-                      value={vendorReferralLink}
-                      className="flex-1 px-4 py-3 bg-black/60 border border-white/15 rounded-2xl text-xs font-mono text-white focus:outline-none"
+                      value={`https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`}
+                      className="flex-1 px-4 py-3.5 bg-black/70 border border-white/20 rounded-2xl text-xs font-mono text-[#00D1FF] font-bold focus:outline-none"
                     />
                     <button
                       type="button"
-                      onClick={handleCopyVendorLink}
-                      className="px-5 py-3 rounded-2xl bg-[#FF3858] hover:bg-[#FF4D6D] text-white text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer"
+                      onClick={() => {
+                        const link = `https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`;
+                        navigator.clipboard.writeText(link);
+                        setCopiedLink(true);
+                        setTimeout(() => setCopiedLink(false), 2500);
+                      }}
+                      className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-[#FF3858] hover:scale-105 text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(255,56,88,0.4)] cursor-pointer"
                     >
                       {copiedLink ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
-                      <span>{copiedLink ? "¡Copiado!" : "Copiar Enlace"}</span>
+                      <span>{copiedLink ? "¡Enlace Copiado!" : "Copiar Enlace"}</span>
                     </button>
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent(`Hola! Te comparto nuestro enlace oficial de cotización en Innocentia Tech para diseñar y desarrollar tu proyecto: https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] cursor-pointer"
+                    >
+                      <span>💬 Compartir por WhatsApp</span>
+                    </a>
                   </div>
                 </div>
 
                 {/* Leads Table */}
                 <div className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
-                  <h3 className="text-base font-black text-white uppercase">Clientes que han llenado tu formulario</h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-black text-white uppercase flex items-center gap-2">
+                      <Users className="w-4 h-4 text-[#00D1FF]" />
+                      <span>Clientes que han llenado tu formulario</span>
+                    </h3>
+                    <span className="text-xs font-mono text-gray-400">Total: {sellerLeads.length} prospectos</span>
+                  </div>
+
                   <div className="divide-y divide-white/10">
                     {sellerLeads.map((lead) => (
-                      <div key={lead.id} className="py-3 flex items-center justify-between gap-4">
+                      <div key={lead.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/[0.02] px-2 rounded-xl transition-all">
                         <div>
-                          <span className="text-sm font-bold text-white block">{lead.clientName} ({lead.company})</span>
-                          <span className="text-xs font-mono text-gray-400">{lead.phone} • {lead.date}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-white">{lead.clientName}</span>
+                            <span className="text-xs font-mono text-purple-300">({lead.company})</span>
+                          </div>
+                          <span className="text-xs font-mono text-gray-400">📱 {lead.phone} • 📅 {lead.date} • 💰 Presupuesto: {lead.estimatedBudget}</span>
                         </div>
-                        <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-white/10 border border-white/15 text-gray-300">
-                          {lead.status}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold border ${
+                            lead.status.includes("Aprobado")
+                              ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                              : "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                          }`}>
+                            {lead.status}
+                          </span>
+                          <a
+                            href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${lead.clientName}, soy ${safeActiveUser.name} de Innocentia Tech. Recibí tu solicitud para el proyecto de ${lead.company}. ¿Podemos agendar una llamada rápida para mostrarte una demo?`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-1.5 transition-all"
+                            title="Contactar por WhatsApp"
+                          >
+                            <span>💬 WhatsApp</span>
+                          </a>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -5933,22 +6100,352 @@ function PortalMainContent() {
               </div>
             )}
 
-            {advisorTab === "tabulador" && (
-              <InternalPricingMatrix userRole="asesor" userName={activeUser.name} />
-            )}
+            {/* TAB 2: APPOINTMENTS & GOOGLE CALENDAR SYNC */}
+            {advisorTab === "citas_calendario" && (
+              <div className="space-y-6">
+                {/* Top Action Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-7 rounded-[32px] bg-gradient-to-r from-[#00D1FF]/15 via-purple-950/30 to-black border border-white/20">
+                  <div>
+                    <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-[#00D1FF]" />
+                      <span>Agenda Comercial & Google Calendar</span>
+                    </h3>
+                    <p className="text-xs text-gray-300 mt-1">
+                      Agenda demostraciones con clientes, programa llamadas y sincronízalas en 1 clic con tu <strong>Google Calendar</strong>.
+                    </p>
+                  </div>
 
-            {advisorTab === "comisiones" && (
-              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-4">
-                <h3 className="text-xl font-black text-white uppercase">Tabulador de Comisiones Acumuladas</h3>
-                <span className="text-3xl font-black text-[#FF3858] block">$64,200 MXN</span>
-                <p className="text-xs text-gray-400 font-mono">
-                  Comisiones calculadas al 12% por proyectos cerrados y facturados en Innocentia Tech.
-                </p>
+                  <button
+                    type="button"
+                    onClick={() => setIsNewAptModalOpen(true)}
+                    className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:scale-105 text-black font-black text-xs uppercase font-mono tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.4)] transition-all cursor-pointer flex-shrink-0"
+                  >
+                    <Plus className="w-4 h-4 text-black" />
+                    <span>+ Agendar Nueva Cita</span>
+                  </button>
+                </div>
+
+                {/* Scheduled Appointments Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {sellerAppointments.map((apt) => (
+                    <div
+                      key={apt.id}
+                      className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/50 transition-all shadow-xl text-left relative overflow-hidden"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <span className="text-[10px] font-mono text-[#00D1FF] font-bold block">{apt.id} • {apt.meetingType}</span>
+                          <h4 className="text-base font-black text-white mt-0.5">{apt.clientName}</h4>
+                          <span className="text-xs font-mono text-purple-300 font-bold">{apt.company}</span>
+                        </div>
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold border ${
+                          apt.status === "Confirmada"
+                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                            : "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                        }`}>
+                          ● {apt.status}
+                        </span>
+                      </div>
+
+                      <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs font-mono">
+                        <div className="flex items-center gap-2 text-gray-300">
+                          <Calendar className="w-3.5 h-3.5 text-[#00D1FF]" />
+                          <span>Fecha: <strong>{apt.date}</strong> a las <strong>{apt.time} hrs</strong></span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-300">
+                          <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
+                          <span>Tema: {apt.topic}</span>
+                        </div>
+                        {apt.notes && (
+                          <p className="text-[11px] text-gray-400 italic pt-1 border-t border-white/5">
+                            "{apt.notes}"
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Action Buttons: Google Calendar + WhatsApp Reminder */}
+                      <div className="grid grid-cols-2 gap-2 pt-1">
+                        <a
+                          href={getGoogleCalendarUrl(apt)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                        >
+                          <Calendar className="w-3.5 h-3.5 text-[#4285F4]" />
+                          <span>Google Calendar</span>
+                        </a>
+
+                        <a
+                          href={`https://wa.me/${apt.clientPhone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${apt.clientName}, te confirmo nuestra cita comercial de Innocentia Tech agendada para el día ${apt.date} a las ${apt.time} hrs (${apt.meetingType}). ¡Nos vemos pronto!`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3.5 py-2.5 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                        >
+                          <span>💬 Recordatorio</span>
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
+            {/* TAB 3: PROJECT STATUS (ESTATUS DE PROYECTOS EN DESARROLLO) */}
+            {advisorTab === "status_proyectos" && (
+              <div className="space-y-6">
+                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-[#00D1FF]/15 via-purple-950/30 to-black border border-white/20 space-y-2">
+                  <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
+                    <Layers className="w-5 h-5 text-[#00D1FF]" />
+                    <span>Estatus de Proyectos en Desarrollo</span>
+                  </h3>
+                  <p className="text-xs text-gray-300">
+                    Monitorea en tiempo real los sprints, fechas de entrega y avances técnicos de los proyectos cerrados por tu gestión comercial.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {projects.map((proj) => (
+                    <div
+                      key={proj.id}
+                      className="p-6 sm:p-7 rounded-[32px] bg-[#07070E] border border-white/15 space-y-5 shadow-2xl hover:border-[#00D1FF]/40 transition-all text-left"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <span className="text-[10px] font-mono text-[#00D1FF] font-bold px-2.5 py-1 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30 uppercase">
+                            {proj.id}
+                          </span>
+                          <h4 className="text-lg font-black text-white mt-2">{proj.name}</h4>
+                          <p className="text-xs text-gray-300 font-mono">Cliente: <strong>{proj.client}</strong></p>
+                        </div>
+                        <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
+                          {proj.status}
+                        </span>
+                      </div>
+
+                      {/* Progress Bar */}
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between text-xs font-mono">
+                          <span className="text-gray-400">Progreso General:</span>
+                          <strong className="text-emerald-400">{proj.progress}%</strong>
+                        </div>
+                        <div className="w-full h-3 rounded-full bg-white/5 border border-white/10 overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-[#FF3858] via-purple-500 to-[#00D1FF] rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(0,209,255,0.6)]"
+                            style={{ width: `${proj.progress}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Sprint Details & Tech Team */}
+                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs font-mono">
+                        <div className="flex justify-between border-b border-white/5 pb-2">
+                          <span className="text-gray-400">Sprint Activo:</span>
+                          <strong className="text-white">{proj.currentSprint}</strong>
+                        </div>
+                        <div className="flex justify-between border-b border-white/5 pb-2">
+                          <span className="text-gray-400">Entrega Estimada:</span>
+                          <strong className="text-[#00D1FF]">{proj.targetDate}</strong>
+                        </div>
+                        <div className="flex justify-between border-b border-white/5 pb-2">
+                          <span className="text-gray-400">Diseño UI/UX:</span>
+                          <span className="text-pink-300">{proj.leadDesigner}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Arquitectura & Código:</span>
+                          <span className="text-cyan-300">{proj.devLead}</span>
+                        </div>
+                      </div>
+
+                      {/* Commission & Budget */}
+                      <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs font-mono">
+                        <div>
+                          <span className="text-gray-400 block text-[10px]">Valor del Proyecto:</span>
+                          <strong className="text-white text-sm">${proj.budget.toLocaleString()} MXN</strong>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-gray-400 block text-[10px]">Comisión Vendedor (12%):</span>
+                          <strong className="text-emerald-400 text-sm">+${(proj.budget * 0.12).toLocaleString()} MXN</strong>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: TABULADOR & PRICING */}
+            {advisorTab === "tabulador" && (
+              <InternalPricingMatrix userRole="asesor" userName={safeActiveUser.name} />
+            )}
+
+            {/* TAB 5: COMMISSIONS */}
+            {advisorTab === "comisiones" && (
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+                  <div>
+                    <h3 className="text-2xl font-black text-white uppercase">Tabulador de Comisiones Acumuladas</h3>
+                    <p className="text-xs text-gray-400 font-mono mt-1">
+                      Comisiones comerciales calculadas al 12% por proyectos cerrados en Innocentia Tech.
+                    </p>
+                  </div>
+                  <div className="text-left sm:text-right">
+                    <span className="text-[10px] font-mono text-gray-400 uppercase block">Total Acumulado a Cobrar:</span>
+                    <span className="text-3xl sm:text-4xl font-black text-emerald-400">$64,200 MXN</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <span className="text-[10px] font-mono text-gray-400 block uppercase">Proyectos Facturados</span>
+                    <span className="text-2xl font-black text-white">2 Proyectos</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <span className="text-[10px] font-mono text-gray-400 block uppercase">En Cotización Activa</span>
+                    <span className="text-2xl font-black text-amber-300">3 Propuestas</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                    <span className="text-[10px] font-mono text-gray-400 block uppercase">Comisión Promedio</span>
+                    <span className="text-2xl font-black text-[#00D1FF]">12.0%</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 6: CHAT */}
             {advisorTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="asesor" userName={activeUser.name} />
+              <ProjectTeamFeedAndChat userRole="asesor" userName={safeActiveUser.name} />
+            )}
+
+            {/* MODAL: AGENDAR NUEVA CITA COMERCIAL */}
+            {isNewAptModalOpen && (
+              <div className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
+                <div className="w-full max-w-lg bg-[#07070E] border border-white/20 rounded-[32px] p-6 sm:p-8 shadow-2xl text-left space-y-5 relative">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-[#00D1FF]" />
+                      <h3 className="text-lg font-black text-white uppercase">Agendar Nueva Cita Comercial</h3>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsNewAptModalOpen(false)}
+                      className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white cursor-pointer"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleCreateAppointment} className="space-y-4 text-xs font-mono">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-gray-400 mb-1">Nombre del Cliente:</label>
+                        <input
+                          type="text"
+                          required
+                          value={newAptClientName}
+                          onChange={(e) => setNewAptClientName(e.target.value)}
+                          placeholder="Lic. Daniel Torre"
+                          className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 mb-1">Empresa / Marca:</label>
+                        <input
+                          type="text"
+                          value={newAptCompany}
+                          onChange={(e) => setNewAptCompany(e.target.value)}
+                          placeholder="Pro Acabados"
+                          className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-gray-400 mb-1">Teléfono / WhatsApp:</label>
+                        <input
+                          type="text"
+                          value={newAptPhone}
+                          onChange={(e) => setNewAptPhone(e.target.value)}
+                          placeholder="9601771556"
+                          className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 mb-1">Fecha de la Cita:</label>
+                        <input
+                          type="date"
+                          required
+                          value={newAptDate}
+                          onChange={(e) => setNewAptDate(e.target.value)}
+                          className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-gray-400 mb-1">Hora:</label>
+                        <input
+                          type="time"
+                          required
+                          value={newAptTime}
+                          onChange={(e) => setNewAptTime(e.target.value)}
+                          className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-400 mb-1">Modalidad de la Reunión:</label>
+                      <select
+                        value={newAptType}
+                        onChange={(e) => setNewAptType(e.target.value)}
+                        className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                      >
+                        <option value="Videollamada Google Meet">Videollamada Google Meet</option>
+                        <option value="Demostración de Plataforma & Cotización">Demostración de Plataforma & Cotización</option>
+                        <option value="Llamada Telefónica">Llamada Telefónica</option>
+                        <option value="Reunión Presencial">Reunión Presencial</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-400 mb-1">Tema Principal a Tratar:</label>
+                      <input
+                        type="text"
+                        value={newAptTopic}
+                        onChange={(e) => setNewAptTopic(e.target.value)}
+                        placeholder="Ej: Demo de App Móvil y revisión de presupuesto"
+                        className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-400 mb-1">Notas Adicionales:</label>
+                      <textarea
+                        rows={2}
+                        value={newAptNotes}
+                        onChange={(e) => setNewAptNotes(e.target.value)}
+                        placeholder="Detalles sobre el cliente o dudas previas..."
+                        className="w-full px-4 py-2 rounded-xl bg-black/70 border border-white/20 text-white focus:border-[#00D1FF] focus:outline-none resize-none"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => setIsNewAptModalOpen(false)}
+                        className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#00D1FF] to-purple-600 text-black font-black uppercase tracking-wider shadow-lg hover:scale-105 transition-all cursor-pointer"
+                      >
+                        Agendar Cita
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             )}
           </div>
         )}
