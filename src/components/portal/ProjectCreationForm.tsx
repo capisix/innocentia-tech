@@ -57,8 +57,8 @@ export default function ProjectCreationForm({
   const [isLockedByReferral, setIsLockedByReferral] = useState(false);
   const [isClientRegistered, setIsClientRegistered] = useState(false);
 
-  // Step 2: Tipo de Solución Tecnológica
-  const [projectType, setProjectType] = useState("mobile_app");
+  // Step 2: Tipo de Solución Tecnológica (Multi-selección)
+  const [selectedProjectTypes, setSelectedProjectTypes] = useState<string[]>(["web_platform"]);
 
   // Step 3: Pilares / Servicios Requeridos (Condicionan los siguientes pasos)
   const [selectedServices, setSelectedServices] = useState<string[]>([
@@ -83,7 +83,6 @@ export default function ProjectCreationForm({
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [budgetRange, setBudgetRange] = useState("150k_350k");
-  const [timeline, setTimeline] = useState("standard");
 
   // Read URL query params if client arrives via referral link
   useEffect(() => {
@@ -255,24 +254,21 @@ export default function ProjectCreationForm({
     },
   ];
 
-  // Catálogo: Tiempos de Entrega
-  const timelineOptions = [
-    {
-      id: "fast_mvp",
-      title: "⚡ Lanzamiento Rápido (2 a 4 semanas)",
-      desc: "Versión inicial ágil para salir rápido al mercado y validar con usuarios.",
-    },
-    {
-      id: "standard",
-      title: "🚀 Proyecto Completo (1 a 3 meses)",
-      desc: "Desarrollo integral con todas las fases de diseño, programación y pruebas.",
-    },
-    {
-      id: "enterprise",
-      title: "🏢 Desarrollo Continuo a Medida",
-      desc: "Para proyectos grandes que requieren evolución constante y soporte técnico continuo.",
-    },
-  ];
+  // Cálculo de Tiempo de Entrega Estimado según tipos de proyecto y servicios seleccionados
+  const getEstimatedTimelineText = () => {
+    if (selectedProjectTypes.includes("full_ecosystem") || selectedProjectTypes.length >= 3) {
+      return "6 a 12 semanas (Desarrollo Multi-Plataforma con entregas por sprint)";
+    }
+    if (selectedProjectTypes.includes("mobile_app")) {
+      return "4 a 8 semanas (App Móvil iOS/Android + Backend Cloud)";
+    }
+    if (selectedProjectTypes.includes("enterprise_erp") || selectedProjectTypes.includes("ai_system")) {
+      return "4 a 8 semanas (Plataforma con Automatización / ERP)";
+    }
+    return "3 a 6 semanas (MVP & Plataforma Web Ágil)";
+  };
+
+  const estimatedTimeline = getEstimatedTimelineText();
 
   // Sugerencias de Giro
   const industrySuggestions = [
@@ -297,7 +293,7 @@ export default function ProjectCreationForm({
       {
         key: "solution_type",
         title: "2. Tipo de Solución Digital",
-        subtitle: "Selecciona la categoría principal de producto",
+        subtitle: "Selecciona una o más categorías de producto",
       },
       {
         key: "services",
@@ -340,6 +336,16 @@ export default function ProjectCreationForm({
   const currentStep = activeSteps[safeStepIndex] || activeSteps[0];
 
   // Toggle Handlers
+  const toggleProjectType = (val: string) => {
+    setSelectedProjectTypes((prev) => {
+      if (prev.includes(val)) {
+        if (prev.length === 1) return prev; // Mantener al menos una opción seleccionada
+        return prev.filter((item) => item !== val);
+      }
+      return [...prev, val];
+    });
+  };
+
   const toggleService = (val: string) => {
     setSelectedServices((prev) => {
       if (prev.includes(val)) {
@@ -370,7 +376,7 @@ export default function ProjectCreationForm({
     clientEmail.trim().length >= 5 &&
     clientIndustry.trim().length >= 2;
 
-  const isStepSolutionValid = projectType.length > 0;
+  const isStepSolutionValid = selectedProjectTypes.length > 0;
   const isStepServicesValid = selectedServices.length > 0;
   const isStepBrandingValid = !selectedServices.includes("brand_marketing") || brandNeeds.length > 0;
   const isStepTechValid = !selectedServices.includes("software_dev") || techFeatures.length > 0;
@@ -405,6 +411,11 @@ export default function ProjectCreationForm({
       setCurrentStepIndex(safeStepIndex - 1);
     }
   };
+
+  const selectedProjectTitles = selectedProjectTypes
+    .map((id) => projectTypes.find((p) => p.id === id)?.title)
+    .filter(Boolean)
+    .join(" + ");
 
   const handleSubmitProject = (e: React.FormEvent) => {
     e.preventDefault();
@@ -442,10 +453,10 @@ export default function ProjectCreationForm({
 
 📌 *DETALLES DEL PROYECTO:*
 • *Nombre del Proyecto:* ${projectName}
-• *Tipo de Solución:* ${projectTypes.find((p) => p.id === projectType)?.title}
+• *Tipo de Solución:* ${selectedProjectTitles || "Solución Digital Innocentia"}
 • *Pilares Solicitados:* ${selectedServices.map((s) => (s === "brand_marketing" ? "Diseño de Marca & Marketing" : "Desarrollo de Software / App")).join(" + ")}
 • *Rango de Inversión:* ${budgetOptions.find((b) => b.id === budgetRange)?.title} (${budgetOptions.find((b) => b.id === budgetRange)?.usd})
-• *Plazo de Entrega:* ${timelineOptions.find((t) => t.id === timeline)?.title}
+• *Tiempo Estimado de Entrega:* ${estimatedTimeline}
 ${brandSection}
 ${techSection}
 
@@ -470,12 +481,12 @@ ${techSection}
           vendorCode: vendorCode || "SIN-ASESOR",
           vendorName: vendorName || "Sin Asesor",
           projectName,
-          projectType,
+          projectType: selectedProjectTypes.join(", "),
           selectedServices,
           brandNeeds,
           techFeatures,
           budgetRange,
-          timeline,
+          timeline: estimatedTimeline,
           description: projectDescription,
           date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
           status: "Nueva Solicitud",
@@ -500,7 +511,7 @@ ${techSection}
           phone: clientPhone,
           email: clientEmail,
           city: clientCity,
-          projectType: [projectType],
+          projectType: selectedProjectTypes,
           selectedServices,
           designNeeds: brandNeeds,
           techFeatures,
@@ -511,7 +522,7 @@ ${techSection}
           quoteDetails: {
             projectName,
             description: projectDescription,
-            timeline,
+            timeline: estimatedTimeline,
           },
         }),
       }).catch((err) => console.log("Leads API sync:", err));
@@ -532,9 +543,10 @@ ${techSection}
         clientEmail,
         vendorCode,
         vendorName,
-        projectType,
+        projectType: selectedProjectTypes,
         selectedServices,
         budgetRange,
+        timeline: estimatedTimeline,
         date: new Date().toLocaleDateString("es-MX"),
       });
     }
@@ -614,6 +626,10 @@ ${techSection}
                 <strong className="text-[#00D1FF]">{clientWebsite}</strong>
               </div>
             )}
+            <div className="flex justify-between border-b border-white/10 pb-2">
+              <span className="text-gray-400">Solución Digital:</span>
+              <strong className="text-[#00D1FF]">{selectedProjectTitles}</strong>
+            </div>
             <div className="flex justify-between border-b border-white/10 pb-2">
               <span className="text-gray-400">Servicios Elegidos:</span>
               <strong className="text-emerald-400">
@@ -698,11 +714,11 @@ ${techSection}
                   clientEmail,
                   vendorName: vendorName || "Dirección General Innocentia",
                   vendorCode: vendorCode || "INN-DIRECT-01",
-                  projectType: [projectType],
+                  projectType: selectedProjectTypes,
                   designNeeds: brandNeeds,
                   techFeatures: techFeatures,
                   budgetRange: budgetOptions.find((b) => b.id === budgetRange)?.title,
-                  timeline: timelineOptions.find((t) => t.id === timeline)?.title,
+                  timeline: estimatedTimeline,
                   description: projectDescription,
                 })
               }
@@ -900,28 +916,33 @@ ${techSection}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 2: TIPO DE SOLUCIÓN DIGITAL */}
+            {/* PASO 2: TIPO DE SOLUCIÓN DIGITAL (MULTI-SELECCIÓN) */}
             {/* ======================================================== */}
             {currentStep.key === "solution_type" && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="space-y-1">
-                  <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
-                    ¿Qué tipo de producto digital vamos a construir para {clientCompany || clientName || "tu negocio"}?
-                  </h3>
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
+                      ¿Qué tipo de producto digital vamos a construir para {clientCompany || clientName || "tu negocio"}?
+                    </h3>
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/40 text-[#00D1FF] font-bold">
+                      ✓ Puedes elegir más de 1 opción
+                    </span>
+                  </div>
                   <p className="text-xs sm:text-sm text-gray-400 font-light">
-                    Selecciona la categoría principal de la solución tecnológica.
+                    Selecciona una o varias categorías tecnológicas que integrará tu proyecto (puedes combinar Web, App Móvil, IA y CRM/ERP).
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {projectTypes.map((t) => {
                     const Icon = t.icon;
-                    const isSelected = projectType === t.id;
+                    const isSelected = selectedProjectTypes.includes(t.id);
                     return (
                       <div
                         key={t.id}
-                        onClick={() => setProjectType(t.id)}
-                        className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer space-y-2 ${
+                        onClick={() => toggleProjectType(t.id)}
+                        className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer space-y-2 select-none ${
                           isSelected
                             ? "bg-white/10 border-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.25)] scale-[1.01]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/25"
@@ -934,7 +955,15 @@ ${techSection}
                           >
                             <Icon className="w-5 h-5" style={{ color: t.color }} />
                           </div>
-                          {isSelected && <CheckCircle2 className="w-5 h-5 text-[#00D1FF]" />}
+                          <div className="flex items-center gap-1.5">
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => toggleProjectType(t.id)}
+                              className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
+                            />
+                            {isSelected && <CheckCircle2 className="w-4 h-4 text-[#00D1FF]" />}
+                          </div>
                         </div>
                         <h4 className="text-sm font-bold text-white font-mono">{t.title}</h4>
                         <p className="text-xs text-gray-400 font-light leading-relaxed">{t.desc}</p>
@@ -966,7 +995,7 @@ ${techSection}
                       <div
                         key={srv.id}
                         onClick={() => toggleService(srv.id)}
-                        className={`p-5 rounded-2xl border transition-all cursor-pointer space-y-3 ${
+                        className={`p-5 rounded-2xl border transition-all cursor-pointer space-y-3 select-none ${
                           isChecked
                             ? "bg-white/10 border-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.25)] scale-[1.01]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/25"
@@ -987,7 +1016,7 @@ ${techSection}
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => {}}
-                            className="w-5 h-5 accent-[#00D1FF] cursor-pointer"
+                            className="w-5 h-5 accent-[#00D1FF] cursor-pointer pointer-events-none"
                           />
                         </div>
                         <h4 className="text-sm sm:text-base font-bold text-white font-mono leading-snug">
@@ -999,10 +1028,6 @@ ${techSection}
                       </div>
                     );
                   })}
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-purple-950/20 border border-purple-500/30 text-xs font-mono text-purple-300">
-                  ℹ️ <strong>Flujo Dinámico:</strong> Al avanzar, se mostrarán las opciones detalladas según las áreas que marcaste.
                 </div>
               </div>
             )}
@@ -1033,7 +1058,7 @@ ${techSection}
                       <div
                         key={opt.id}
                         onClick={() => toggleBrandNeed(opt.label)}
-                        className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 ${
+                        className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 select-none ${
                           isChecked
                             ? "bg-[#FF3858]/10 border-[#FF3858]/60 shadow-[0_0_15px_rgba(255,56,88,0.2)]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
@@ -1047,7 +1072,7 @@ ${techSection}
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => {}}
-                            className="w-4 h-4 accent-[#FF3858] cursor-pointer"
+                            className="w-4 h-4 accent-[#FF3858] cursor-pointer pointer-events-none"
                           />
                         </div>
                         <p className="text-[11px] text-gray-400 font-mono">{opt.hint}</p>
@@ -1084,7 +1109,7 @@ ${techSection}
                       <div
                         key={opt.id}
                         onClick={() => toggleTechFeature(opt.label)}
-                        className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 ${
+                        className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 select-none ${
                           isChecked
                             ? "bg-[#00D1FF]/10 border-[#00D1FF]/60 shadow-[0_0_15px_rgba(0,209,255,0.2)]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
@@ -1098,7 +1123,7 @@ ${techSection}
                             type="checkbox"
                             checked={isChecked}
                             onChange={() => {}}
-                            className="w-4 h-4 accent-[#00D1FF] cursor-pointer"
+                            className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
                           />
                         </div>
                         <p className="text-[11px] text-gray-400 font-mono">{opt.hint}</p>
@@ -1110,7 +1135,7 @@ ${techSection}
             )}
 
             {/* ======================================================== */}
-            {/* PASO FINAL: ALCANCE, PRESUPUESTO & TIEMPOS */}
+            {/* PASO FINAL: ALCANCE, PRESUPUESTO & TIEMPOS INFORMATIVOS */}
             {/* ======================================================== */}
             {currentStep.key === "scope_budget" && (
               <div className="space-y-5 animate-in fade-in duration-200">
@@ -1123,7 +1148,7 @@ ${techSection}
                   </p>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {/* Nombre del Proyecto */}
                   <div className="space-y-1 text-xs font-mono">
                     <label className="text-gray-300 block font-bold">
@@ -1164,10 +1189,10 @@ ${techSection}
                         <div
                           key={b.id}
                           onClick={() => setBudgetRange(b.id)}
-                          className={`p-3.5 rounded-2xl border transition-all cursor-pointer text-xs font-mono space-y-1 ${
+                          className={`p-3.5 rounded-2xl border transition-all cursor-pointer text-xs font-mono space-y-1 select-none ${
                             budgetRange === b.id
-                              ? "bg-purple-950/40 border-purple-400 text-white shadow-md"
-                              : "bg-white/[0.02] border-white/10 text-gray-400"
+                              ? "bg-purple-950/40 border-purple-400 text-white shadow-md ring-1 ring-purple-400/50"
+                              : "bg-white/[0.02] border-white/10 text-gray-400 hover:border-white/25"
                           }`}
                         >
                           <strong className="text-white block">{b.title}</strong>
@@ -1178,26 +1203,79 @@ ${techSection}
                     </div>
                   </div>
 
-                  {/* Timeline */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-mono text-gray-300 block font-bold">
-                      Plazo Deseado de Entrega:
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {timelineOptions.map((t) => (
-                        <div
-                          key={t.id}
-                          onClick={() => setTimeline(t.id)}
-                          className={`p-3.5 rounded-2xl border transition-all cursor-pointer text-xs font-mono space-y-1 ${
-                            timeline === t.id
-                              ? "bg-emerald-950/40 border-emerald-400 text-white shadow-md"
-                              : "bg-white/[0.02] border-white/10 text-gray-400"
-                          }`}
-                        >
-                          <strong className="text-white block">{t.title}</strong>
-                          <p className="text-[10px] text-gray-400">{t.desc}</p>
+                  {/* Tiempos de Entrega e Hitos Informativos (Cuadros Informativos según el proyecto) */}
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-[#00D1FF]" />
+                      <label className="text-xs font-mono text-gray-200 block font-bold uppercase tracking-wider">
+                        Tiempos Estimados de Entrega por Fases:
+                      </label>
+                    </div>
+                    <p className="text-[11px] font-mono text-gray-400">
+                      Tiempos de ingeniería y desarrollo calculados según los requerimientos y arquitectura técnica:
+                    </p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {/* Fase 1 */}
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#FF3858]/30 space-y-1.5 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-[#FF3858] uppercase px-2 py-0.5 rounded-full bg-[#FF3858]/10 border border-[#FF3858]/30">
+                            Fase 1 • UI/UX
+                          </span>
+                          <span className="text-xs font-mono font-bold text-white">1 a 2 semanas</span>
                         </div>
-                      ))}
+                        <h5 className="text-xs font-bold text-white font-mono pt-1">
+                          🎨 Prototipo Figma Navegable
+                        </h5>
+                        <p className="text-[10px] text-gray-400 font-mono leading-relaxed">
+                          Arquitectura de información, wireframes y validación visual navegable a 60fps de todas las pantallas antes de programar.
+                        </p>
+                      </div>
+
+                      {/* Fase 2 */}
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#00D1FF]/30 space-y-1.5 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-[#00D1FF] uppercase px-2 py-0.5 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30">
+                            Fase 2 • MVP
+                          </span>
+                          <span className="text-xs font-mono font-bold text-white">2 a 6 semanas</span>
+                        </div>
+                        <h5 className="text-xs font-bold text-white font-mono pt-1">
+                          ⚡ Desarrollo &amp; Versión Funcional
+                        </h5>
+                        <p className="text-[10px] text-gray-400 font-mono leading-relaxed">
+                          Base de datos cifrada, backend escalable, módulos operativos base y acceso a entorno privado de pruebas para tu equipo.
+                        </p>
+                      </div>
+
+                      {/* Fase 3 */}
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 space-y-1.5 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30">
+                            Fase 3 • Lanzamiento
+                          </span>
+                          <span className="text-xs font-mono font-bold text-white">4 a 10 semanas</span>
+                        </div>
+                        <h5 className="text-xs font-bold text-white font-mono pt-1">
+                          🚀 Integración &amp; Despliegue Final
+                        </h5>
+                        <p className="text-[10px] text-gray-400 font-mono leading-relaxed">
+                          Pasarelas de pago, WebSockets, WhatsApp API, pruebas de estrés y publicación en tiendas (App Store/Play Store) y servidores cloud.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Resumen dinámico según los tipos de solución seleccionados */}
+                    <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/20 via-black to-[#00D1FF]/10 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                        <span className="text-gray-300">
+                          Estimación global para tu proyecto: <strong className="text-white">{estimatedTimeline}</strong>
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-emerald-400 font-bold uppercase self-start sm:self-auto">
+                        ✓ Entregas con Demos Quincenales
+                      </span>
                     </div>
                   </div>
                 </div>
