@@ -28,53 +28,64 @@ interface ProjectCreationFormProps {
   onProjectCreated?: (projectData: any) => void;
 }
 
+export type StepKey = "contact" | "solution_type" | "services" | "branding" | "tech" | "scope_budget";
+
 export default function ProjectCreationForm({
   initialVendorCode = "",
   initialVendorName = "",
   isEmbeddedInPortal = false,
   onProjectCreated,
 }: ProjectCreationFormProps) {
-  // Step 1: Client & Vendor Registration
-  // Step 2: Project Type
-  // Step 3: Design (Sofia)
-  // Step 4: Tech & Backend (Ivan)
-  // Step 5: Scope, Budget & Generation
-  const [step, setStep] = useState(1);
+  // Navigation & Completion State
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [copiedLink, setCopiedLink] = useState(false);
   const [registeredClientId, setRegisteredClientId] = useState("");
   const [createdProjectFolio, setCreatedProjectFolio] = useState("");
 
-  // Step 1 State - Client Registration
+  // Step 1: Datos de Empresa y Contacto
   const [clientName, setClientName] = useState("");
   const [clientCompany, setClientCompany] = useState("");
-  const [clientPhone, setClientPhone] = useState("");
+  const [clientWebsite, setClientWebsite] = useState("");
+  const [clientIndustry, setClientIndustry] = useState("");
   const [clientEmail, setClientEmail] = useState("");
+  const [clientPhone, setClientPhone] = useState("");
   const [clientCity, setClientCity] = useState("");
 
-  // Step 1 State - Vendor Attribution (Defaults to Unassigned / Blank so CEO can route manually)
+  // Step 1 State - Vendor Attribution (Silent in background)
   const [vendorCode, setVendorCode] = useState(initialVendorCode || "SIN-ASESOR");
-  const [vendorName, setVendorName] = useState(initialVendorName || "Sin Asesor Asignado (Por Canalizar por Dirección General)");
+  const [vendorName, setVendorName] = useState(initialVendorName || "Sin Asesor Asignado");
   const [isLockedByReferral, setIsLockedByReferral] = useState(false);
-  const [vendorSelectMode, setVendorSelectMode] = useState<"unassigned" | "carlos" | "direct" | "custom">("unassigned");
   const [isClientRegistered, setIsClientRegistered] = useState(false);
 
-  // Form State - Project Specifications
-  const [projectName, setProjectName] = useState("");
+  // Step 2: Tipo de Solución Tecnológica
   const [projectType, setProjectType] = useState("mobile_app");
-  const [designNeeds, setDesignNeeds] = useState<string[]>([
-    "🎨 Diseño UI/UX interactivo de alta fidelidad en Figma",
-    "🎬 Microanimaciones e interfaz fluida a 60fps",
-  ]);
-  const [techFeatures, setTechFeatures] = useState<string[]>([
-    "🔐 Autenticación y base de datos PostgreSQL cifrada",
-    "💳 Pasarela de pagos en línea (Stripe / MercadoPago)",
-  ]);
-  const [timeline, setTimeline] = useState("standard");
-  const [budgetRange, setBudgetRange] = useState("150k_350k");
-  const [projectDescription, setProjectDescription] = useState("");
 
-  // Read URL query params if client arrives via referral link (e.g. ?ref=VEN-CARLOS-202&vendedor=Carlos+Mendoza)
+  // Step 3: Pilares / Servicios Requeridos (Condicionan los siguientes pasos)
+  const [selectedServices, setSelectedServices] = useState<string[]>([
+    "brand_marketing",
+    "software_dev",
+  ]);
+
+  // Step 4 (Condicional): Marca & Marketing
+  const [brandNeeds, setBrandNeeds] = useState<string[]>([
+    "🎨 Diseño de Logotipo Profesional",
+    "✨ Diseño de Identidad Visual Completa",
+  ]);
+
+  // Step 5 (Condicional): Funcionalidades Técnicas & App
+  const [techFeatures, setTechFeatures] = useState<string[]>([
+    "🔐 Cuentas de Usuario y Base de Datos Segura",
+    "💳 Cobros y Pagos con Tarjeta en Línea",
+    "📲 Notificaciones y Mensajes Automáticos por WhatsApp",
+  ]);
+
+  // Step Final: Alcance, Presupuesto & Tiempos
+  const [projectName, setProjectName] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
+  const [budgetRange, setBudgetRange] = useState("150k_350k");
+  const [timeline, setTimeline] = useState("standard");
+
+  // Read URL query params if client arrives via referral link
   useEffect(() => {
     try {
       if (typeof window !== "undefined" && window.location && window.location.search) {
@@ -83,7 +94,6 @@ export default function ProjectCreationForm({
         const vend = urlParams.get("vendedor") || urlParams.get("asesor");
         if (ref || vend) {
           setIsLockedByReferral(true);
-          setVendorSelectMode("custom");
           if (ref) setVendorCode(ref);
           if (vend) setVendorName(decodeURIComponent(vend));
         }
@@ -93,231 +103,359 @@ export default function ProjectCreationForm({
     }
   }, []);
 
+  // Catálogo: Tipo de Solución Digital
   const projectTypes = [
     {
       id: "mobile_app",
-      title: "App Móvil (iOS & Android)",
-      desc: "Desarrollo nativo en Flutter/React Native con diseño táctil y soporte para App Store & Play Store.",
+      title: "App Móvil (iPhone & Android)",
+      desc: "Aplicación instalable para celulares y tabletas, lista para publicarse en la App Store (Apple) y Google Play Store.",
       icon: Smartphone,
       color: "#FF3858",
     },
     {
       id: "web_platform",
-      title: "Plataforma Web / SaaS",
-      desc: "Sistemas web en Next.js, panel de usuarios, automatización en la nube y e-commerce.",
+      title: "Plataforma Web / Sistema en la Nube",
+      desc: "Sistema accesible desde cualquier navegador: portal para tus clientes, panel de administración interno, ventas en línea y automatización.",
       icon: Globe,
       color: "#00D1FF",
     },
     {
       id: "ai_system",
-      title: "Inteligencia Artificial & Agentes",
-      desc: "Modelos LLMs, chatbots autónomos, visión por computadora y análisis predictivo.",
+      title: "Inteligencia Artificial & Automatización",
+      desc: "Asistentes inteligentes tipo ChatGPT personalizados para tu empresa, atención automática de clientes 24/7 y análisis inteligente de datos.",
       icon: BrainCircuit,
       color: "#8A2BE2",
     },
     {
       id: "enterprise_erp",
-      title: "CRM, ERP & Gestión Empresarial",
-      desc: "Control de ventas, inventarios, logística, facturación CFDI y WebSockets en tiempo real.",
+      title: "Sistema de Gestión Empresarial (CRM / ERP)",
+      desc: "Control total de tu negocio: administración de clientes y prospectos, control de ventas e inventarios, logística y facturación electrónica.",
       icon: Building2,
       color: "#FF8800",
     },
-  ];
-
-  const designOptions = [
     {
-      id: "branding",
-      label: "🎨 Creación de marca, logotipo vectorial y manual de identidad",
-      hint: "Sofía (UX/UI): Creación completa de colorimetría, tipografía corporativa y assets gráficos.",
-    },
-    {
-      id: "ux_ui",
-      label: "✨ Diseño UI/UX interactivo de alta fidelidad en Figma",
-      hint: "Sofía (UX/UI): Wireframes, flujos de navegación optimizados para conversión y prototipo clickeable.",
-    },
-    {
-      id: "animations",
-      label: "🎬 Microanimaciones e interfaz fluida a 60fps",
-      hint: "Sofía (UX/UI): Transiciones visuales con Framer Motion, feedback háptico y efectos neón/vidrio.",
-    },
-    {
-      id: "design_system",
-      label: "📐 Sistema de diseño modular y componentes reutilizables",
-      hint: "Sofía (UX/UI): Tokens de diseño en Tailwind CSS listos para escalabilidad del equipo de ingeniería.",
+      id: "full_ecosystem",
+      title: "Ecosistema Digital Integral (Web + App + Panel)",
+      desc: "Solución completa todo-en-uno conectada en computadoras y dispositivos móviles para una experiencia unificada de tu marca.",
+      icon: Sparkles,
+      color: "#10B981",
     },
   ];
 
+  // Catálogo: Servicios / Pilares
+  const serviceOptions = [
+    {
+      id: "brand_marketing",
+      title: "🎨 Diseño de Marca, Identidad & Campaña de Marketing",
+      desc: "Diseño o rediseño de logotipo, manual de identidad visual corporativa, estudio de mercado y campañas de posicionamiento.",
+      badge: "Branding & Estrategia",
+      color: "#FF3858",
+    },
+    {
+      id: "software_dev",
+      title: "⚡ Desarrollo de Software, App o Plataforma Digital",
+      desc: "Programación y arquitectura de la aplicación, módulos para usuarios, base de datos en la nube y panel administrativo.",
+      badge: "Ingeniería & Tecnología",
+      color: "#00D1FF",
+    },
+  ];
+
+  // Catálogo: Marca & Marketing
+  const brandingOptions = [
+    {
+      id: "logo_design",
+      label: "🎨 Diseño de Logotipo Profesional",
+      hint: "Creación de logotipo vectorial de alta calidad, versiones en positivo/negativo y archivos listos para web e impresos.",
+    },
+    {
+      id: "identity_design",
+      label: "✨ Diseño de Identidad Visual Completa",
+      hint: "Manual de marca con paleta de colores corporativos, tipografías oficiales, iconografía y guía de uso visual.",
+    },
+    {
+      id: "brand_projection",
+      label: "🚀 Proyección y Posicionamiento de Marca",
+      hint: "Estrategia de propuesta de valor, tono de comunicación y definición de identidad para destacar frente a la competencia.",
+    },
+    {
+      id: "market_research",
+      label: "📊 Estudio de Mercado y Análisis de Competencia",
+      hint: "Investigación del sector, análisis de competidores clave y detección de oportunidades estratégicas de mercado.",
+    },
+    {
+      id: "audience_segmentation",
+      label: "🎯 Segmentación Especializada & Campaña de Marketing Digital",
+      hint: "Definición del cliente ideal (Buyer Persona), diseño de embudos de conversión y estrategia de pauta publicitaria.",
+    },
+  ];
+
+  // Catálogo: Funcionalidades Técnicas & App
   const techOptions = [
     {
       id: "auth_db",
-      label: "🔐 Autenticación y base de datos PostgreSQL cifrada",
-      hint: "Iván (Tech): OAuth (Google/Apple), sesiones seguras JWT y base de datos relacional con respaldos automáticos.",
+      label: "🔐 Cuentas de Usuario y Base de Datos Segura",
+      hint: "Registro e inicio de sesión seguro (con Google, Apple o correo) y almacenamiento protegido de la información de tu empresa y clientes.",
     },
     {
       id: "payments",
-      label: "💳 Pasarela de pagos en línea (Stripe / MercadoPago)",
-      hint: "Iván (Tech): Cobros únicos, suscripciones recurrentes, split de comisiones y facturación electrónica.",
+      label: "💳 Cobros y Pagos con Tarjeta en Línea",
+      hint: "Recepción de pagos con tarjeta de débito/crédito, transferencias bancarias, suscripciones mensuales o cobros automáticos.",
     },
     {
       id: "realtime_gps",
-      label: "📍 Rastreo GPS en vivo y WebSockets en tiempo real",
-      hint: "Iván (Tech): Transmisión bidireccional instantánea para mapas de entrega, vehículos y chats multiusuario.",
-    },
-    {
-      id: "ai_agents",
-      label: "🤖 Integración de IA conversacional (OpenAI / Claude)",
-      hint: "Iván (Tech): Agentes inteligentes entrenados con tus políticas de negocio para atención 24/7.",
+      label: "📍 Ubicación y Rastreo en Tiempo Real (GPS / Mapas)",
+      hint: "Mapas interactivos en vivo para seguimiento de entregas a domicilio, ubicación de vehículos, pedidos o choferes al instante.",
     },
     {
       id: "whatsapp_api",
-      label: "📲 Notificaciones automáticas por WhatsApp API",
-      hint: "Iván (Tech): Confirmaciones de pedidos, recordatorios y cotizaciones enviadas al WhatsApp del cliente.",
+      label: "📲 Notificaciones y Mensajes Automáticos por WhatsApp",
+      hint: "Envío automático de confirmaciones de compra, recordatorios de citas, avisos y cotizaciones directo al WhatsApp de tus clientes.",
     },
     {
       id: "admin_dashboard",
-      label: "📊 Panel administrativo con métricas y exportación de datos",
-      hint: "Iván (Tech): Dashboard con KPIs en tiempo real, control de roles de usuario y reportes en Excel/PDF.",
+      label: "📊 Panel de Control y Reportes para el Administrador",
+      hint: "Panel privado para dueños y gerentes con estadísticas de ventas en tiempo real, control de usuarios y descarga de reportes en Excel o PDF.",
+    },
+    {
+      id: "custom_ai_bot",
+      label: "🤖 Bot Personalizado / Asistente de IA para Clientes",
+      hint: "Chatbot inteligente entrenado con la información de tu negocio para responder dudas frecuentes y dar atención 24/7.",
+    },
+    {
+      id: "multichannel_social",
+      label: "🌐 Conexión a Múltiples Redes Sociales y Canales",
+      hint: "Integración multicanal con Instagram, Facebook, TikTok, WhatsApp y correo para centralizar mensajes y prospectos.",
+    },
+    {
+      id: "calendar_sync",
+      label: "📅 Calendarios y Agendamiento con Sincronización de APIs",
+      hint: "Sistema de citas, reservaciones y agendas con sincronización en tiempo real a Google Calendar, Outlook y APIs externas.",
     },
   ];
 
+  // Catálogo: Rango de Presupuesto
   const budgetOptions = [
     {
       id: "50k_150k",
       title: "$50,000 - $150,000 MXN",
       usd: "~$2,800 - $8,500 USD",
-      desc: "Ideal para MVPs ágiles, sitios interactivos y aplicaciones fase 1.",
+      desc: "Ideal para una primera versión funcional (MVP), prototipo comercial o proyecto inicial.",
     },
     {
       id: "150k_350k",
       title: "$150,000 - $350,000 MXN",
       usd: "~$8,500 - $19,500 USD",
-      desc: "Solución completa con diseño premium, backend escalable e integraciones.",
+      desc: "Solución completa con diseño profesional a la medida, conexiones de sistemas y base de datos robusta.",
     },
     {
       id: "350k_plus",
       title: "$350,000+ MXN",
       usd: "~$19,500+ USD",
-      desc: "Ecosistema corporativo de alta concurrencia, IA personalizada y cloud dedicada.",
+      desc: "Proyecto corporativo de gran escala para alto volumen de usuarios, múltiples módulos o IA avanzada.",
     },
   ];
 
+  // Catálogo: Tiempos de Entrega
   const timelineOptions = [
     {
       id: "fast_mvp",
-      title: "⚡ MVP Rápido (2 a 4 semanas)",
-      desc: "Lanzamiento ágil para validar en mercado con sprint intensivo.",
+      title: "⚡ Lanzamiento Rápido (2 a 4 semanas)",
+      desc: "Versión inicial ágil para salir rápido al mercado y validar con usuarios.",
     },
     {
       id: "standard",
       title: "🚀 Proyecto Completo (1 a 3 meses)",
-      desc: "Arquitectura integral por sprints, diseño en Figma y pruebas QA.",
+      desc: "Desarrollo integral con todas las fases de diseño, programación y pruebas.",
     },
     {
       id: "enterprise",
-      title: "🏢 Infraestructura Continua",
-      desc: "Desarrollo a gran escala con soporte técnico y evolución continua.",
+      title: "🏢 Desarrollo Continuo a Medida",
+      desc: "Para proyectos grandes que requieren evolución constante y soporte técnico continuo.",
     },
   ];
 
-  const toggleDesign = (val: string) => {
-    setDesignNeeds((prev) =>
+  // Sugerencias de Giro
+  const industrySuggestions = [
+    "Comercio / E-commerce",
+    "Restaurantes & Alimentos",
+    "Inmobiliaria & Bienes Raíces",
+    "Salud, Clínicas & Belleza",
+    "Servicios Profesionales",
+    "Logística & Transporte",
+    "Educación & Cursos",
+    "Tecnología & Startups",
+  ];
+
+  // Flujo de Pasos Dinámico
+  const getActiveSteps = (): { key: StepKey; title: string; subtitle: string }[] => {
+    const steps: { key: StepKey; title: string; subtitle: string }[] = [
+      {
+        key: "contact",
+        title: "1. Datos de la Empresa y Contacto",
+        subtitle: "Información de tu negocio para preparar la propuesta",
+      },
+      {
+        key: "solution_type",
+        title: "2. Tipo de Solución Digital",
+        subtitle: "Selecciona la categoría principal de producto",
+      },
+      {
+        key: "services",
+        title: "3. Servicios & Pilares Requeridos",
+        subtitle: "Elige si deseas diseño de marca, app o marketing",
+      },
+    ];
+
+    let stepNumber = 4;
+
+    if (selectedServices.includes("brand_marketing")) {
+      steps.push({
+        key: "branding",
+        title: `${stepNumber}. Diseño de Marca & Estrategia de Marketing`,
+        subtitle: "Selecciona los entregables de identidad y posicionamiento",
+      });
+      stepNumber++;
+    }
+
+    if (selectedServices.includes("software_dev")) {
+      steps.push({
+        key: "tech",
+        title: `${stepNumber}. Funcionalidades y Módulos Técnicos`,
+        subtitle: "Selecciona las funciones y conexiones para tu aplicación",
+      });
+      stepNumber++;
+    }
+
+    steps.push({
+      key: "scope_budget",
+      title: `${stepNumber}. Alcance, Presupuesto y Tiempos`,
+      subtitle: "Detalles del proyecto y rango de inversión estimado",
+    });
+
+    return steps;
+  };
+
+  const activeSteps = getActiveSteps();
+  const safeStepIndex = Math.min(currentStepIndex, activeSteps.length - 1);
+  const currentStep = activeSteps[safeStepIndex] || activeSteps[0];
+
+  // Toggle Handlers
+  const toggleService = (val: string) => {
+    setSelectedServices((prev) => {
+      if (prev.includes(val)) {
+        if (prev.length === 1) return prev; // Mantener al menos uno
+        return prev.filter((item) => item !== val);
+      }
+      return [...prev, val];
+    });
+  };
+
+  const toggleBrandNeed = (val: string) => {
+    setBrandNeeds((prev) =>
       prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val]
     );
   };
 
-  const toggleTech = (val: string) => {
+  const toggleTechFeature = (val: string) => {
     setTechFeatures((prev) =>
       prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val]
     );
   };
 
-  // Generate Referral Share Link
-  const [vendorReferralLink, setVendorReferralLink] = useState(`https://innocentia.tech/crear-proyecto?ref=${vendorCode}`);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setVendorReferralLink(
-        `${window.location.origin}/crear-proyecto?ref=${encodeURIComponent(vendorCode)}&vendedor=${encodeURIComponent(vendorName)}`
-      );
-    }
-  }, [vendorCode, vendorName]);
-
-  const copyReferralLink = () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(vendorReferralLink);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 3000);
-    }
-  };
-
-  // Validations (Vendor is optional so client can leave it blank for CEO routing)
-  const isStep1Valid =
+  // Validaciones
+  const isStepContactValid =
     clientName.trim().length >= 3 &&
     clientCompany.trim().length >= 2 &&
     clientPhone.trim().length >= 8 &&
-    clientEmail.trim().length >= 5;
+    clientEmail.trim().length >= 5 &&
+    clientIndustry.trim().length >= 2;
 
-  const isStep2Valid = projectType.length > 0;
-  const isStep3Valid = designNeeds.length > 0;
-  const isStep4Valid = techFeatures.length > 0;
-  const isStep5Valid = projectName.trim().length >= 3 && projectDescription.trim().length >= 10;
+  const isStepSolutionValid = projectType.length > 0;
+  const isStepServicesValid = selectedServices.length > 0;
+  const isStepBrandingValid = !selectedServices.includes("brand_marketing") || brandNeeds.length > 0;
+  const isStepTechValid = !selectedServices.includes("software_dev") || techFeatures.length > 0;
+  const isStepFinalValid = projectName.trim().length >= 3 && projectDescription.trim().length >= 10;
 
-  const handleRegisterClient = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isStep1Valid) return;
+  const isCurrentStepValid = () => {
+    if (currentStep.key === "contact") return isStepContactValid;
+    if (currentStep.key === "solution_type") return isStepSolutionValid;
+    if (currentStep.key === "services") return isStepServicesValid;
+    if (currentStep.key === "branding") return isStepBrandingValid;
+    if (currentStep.key === "tech") return isStepTechValid;
+    if (currentStep.key === "scope_budget") return isStepFinalValid;
+    return true;
+  };
 
-    const cliId = "CLI-" + Math.floor(10000 + Math.random() * 90000);
-    setRegisteredClientId(cliId);
-    setIsClientRegistered(true);
-    setStep(2);
+  const handleNextStep = () => {
+    if (!isCurrentStepValid()) return;
+
+    if (currentStep.key === "contact" && !isClientRegistered) {
+      const cliId = "CLI-" + Math.floor(10000 + Math.random() * 90000);
+      setRegisteredClientId(cliId);
+      setIsClientRegistered(true);
+    }
+
+    if (safeStepIndex < activeSteps.length - 1) {
+      setCurrentStepIndex(safeStepIndex + 1);
+    }
+  };
+
+  const handlePrevStep = () => {
+    if (safeStepIndex > 0) {
+      setCurrentStepIndex(safeStepIndex - 1);
+    }
   };
 
   const handleSubmitProject = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isStep5Valid) return;
+    if (!isStepFinalValid) return;
 
     const folio = "PROJ-" + Math.floor(100000 + Math.random() * 900000);
     setCreatedProjectFolio(folio);
     setIsCompleted(true);
 
+    const brandSection =
+      selectedServices.includes("brand_marketing") && brandNeeds.length > 0
+        ? `\n🎨 *REQUERIMIENTOS DE MARCA & MARKETING:*\n${brandNeeds.map((b) => `  ✓ ${b}`).join("\n")}`
+        : "";
+
+    const techSection =
+      selectedServices.includes("software_dev") && techFeatures.length > 0
+        ? `\n⚡ *FUNCIONALIDADES Y MÓDULOS TÉCNICOS:*\n${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}`
+        : "";
+
     const projectSummary = `
-🚀 *FICHA OFICIAL DE PROYECTO & COTIZACIÓN • INNOCENTIA TECH*
+🚀 *FICHA DE PROYECTO & COTIZACIÓN • INNOCENTIA TECH*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 *Folio de Proyecto:* ${folio}
-🆔 *ID de Cliente Registrado:* ${registeredClientId || "CLI-2026-8941"}
-📅 *Fecha de Emisión:* ${new Date().toLocaleDateString("es-MX", { dateStyle: "long" })}
+🆔 *ID de Registro:* ${registeredClientId || "CLI-2026-8941"}
+📅 *Fecha:* ${new Date().toLocaleDateString("es-MX", { dateStyle: "long" })}
 
-👤 *CLIENTE REGISTRADO:*
-• *Nombre:* ${clientName}
+👤 *DATOS DE LA EMPRESA & CONTACTO:*
+• *Contacto:* ${clientName}
 • *Empresa:* ${clientCompany}
+• *Giro / Industria:* ${clientIndustry}
+• *Página Web / Redes:* ${clientWebsite || "No especificada"}
 • *WhatsApp / Tel:* ${clientPhone}
 • *Correo:* ${clientEmail}
 • *Ciudad:* ${clientCity || "No especificada"}
 
-💼 *ASESOR COMERCIAL VINCULADO:*
-• *Código Vendedor:* ${vendorCode}
-• *Nombre Asesor:* ${vendorName}
-• *Atribución Comercial:* Bolsa 20% Máx (Principio 1er Registro - 24 Meses)
-
 📌 *DETALLES DEL PROYECTO:*
 • *Nombre del Proyecto:* ${projectName}
 • *Tipo de Solución:* ${projectTypes.find((p) => p.id === projectType)?.title}
+• *Pilares Solicitados:* ${selectedServices.map((s) => (s === "brand_marketing" ? "Diseño de Marca & Marketing" : "Desarrollo de Software / App")).join(" + ")}
 • *Rango de Inversión:* ${budgetOptions.find((b) => b.id === budgetRange)?.title} (${budgetOptions.find((b) => b.id === budgetRange)?.usd})
 • *Plazo de Entrega:* ${timelineOptions.find((t) => t.id === timeline)?.title}
+${brandSection}
+${techSection}
 
-🎨 *REQUERIMIENTOS DE DISEÑO (SOFÍA):*
-${designNeeds.map((d) => `  ✓ ${d}`).join("\n")}
-
-⚡ *ARQUITECTURA & DESARROLLO (IVÁN):*
-${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
-
-📝 *DESCRIPCIÓN DEL REQUERIMIENTO:*
+📝 *DESCRIPCIÓN DE LA IDEA O NECESIDAD:*
 "${projectDescription}"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔒 *Proyecto y cliente formalmente vinculados en Innocentia Tech.*
+🔒 *Solicitud registrada exitosamente en Innocentia Tech.*
     `.trim();
 
-    // Store lead for team chat & proposal system
+    // Store lead for internal portal
     try {
       if (typeof window !== "undefined") {
         const stored = JSON.parse(localStorage.getItem("innocentia_incoming_leads") || "[]");
@@ -325,12 +463,17 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
           id: folio,
           clientName,
           clientCompany,
+          clientWebsite,
+          clientIndustry,
           clientPhone,
           clientEmail,
           vendorCode: vendorCode || "SIN-ASESOR",
-          vendorName: vendorName || "Sin Asesor (Por Canalizar por Dirección)",
+          vendorName: vendorName || "Sin Asesor",
           projectName,
           projectType,
+          selectedServices,
+          brandNeeds,
+          techFeatures,
           budgetRange,
           timeline,
           description: projectDescription,
@@ -344,7 +487,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
       console.error(e);
     }
 
-    // Backend API Sync: Store in database
+    // Backend API Sync
     try {
       fetch("/api/leads", {
         method: "POST",
@@ -352,11 +495,14 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
         body: JSON.stringify({
           clientName,
           company: clientCompany,
+          website: clientWebsite,
+          industry: clientIndustry,
           phone: clientPhone,
           email: clientEmail,
           city: clientCity,
           projectType: [projectType],
-          designNeeds,
+          selectedServices,
+          designNeeds: brandNeeds,
           techFeatures,
           estimatedBudget: budgetOptions.find((b) => b.id === budgetRange)?.title,
           totalQuote: 172500,
@@ -369,22 +515,6 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
           },
         }),
       }).catch((err) => console.log("Leads API sync:", err));
-
-      // Asynchronous email dispatch confirmation
-      if (clientEmail) {
-        fetch("/api/notifications/email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: clientEmail,
-            subject: `Propuesta Comercial Oficial • ${folio} • ${projectName} • Innocentia Tech`,
-            clientName,
-            folio,
-            total: 172500,
-            proposalUrl: `https://innocentia.tech/crear-proyecto?ref=${folio}&cli=${registeredClientId}`,
-          }),
-        }).catch((err) => console.log("Email dispatch sync:", err));
-      }
     } catch (err) {
       console.log("Async dispatch:", err);
     }
@@ -396,11 +526,14 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
         projectName,
         clientName,
         clientCompany,
+        clientWebsite,
+        clientIndustry,
         clientPhone,
         clientEmail,
         vendorCode,
         vendorName,
         projectType,
+        selectedServices,
         budgetRange,
         date: new Date().toLocaleDateString("es-MX"),
       });
@@ -413,79 +546,32 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
 
   return (
     <div className="w-full space-y-6 text-left animate-in fade-in duration-300">
-      {/* VENDOR REFERRAL / ATRIBUCIÓN COMERCIAL BANNER */}
-      <div className="p-4 sm:p-5 rounded-[24px] bg-gradient-to-r from-[#00D1FF]/15 via-[#0c0d18]/90 to-purple-950/20 border border-[#00D1FF]/40 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-lg flex-shrink-0">
-            💼
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-white font-mono uppercase tracking-wider">
-                {isEmbeddedInPortal ? "Asesor Comercial Asignado:" : "Atención & Asignación:"}
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] text-[10px] font-mono font-bold border border-[#00D1FF]/30">
-                {vendorCode || "INNOCENTIA DIRECTO"}
-              </span>
-            </div>
-            <p className="text-xs text-gray-300 font-mono">
-              <strong>{vendorName || "Dirección General & Equipo de Arquitectura"}</strong>
-              {isEmbeddedInPortal
-                ? " • Atribución comercial y comisiones vinculadas conforme a contrato."
-                : " • Tu proyecto será atendido directamente por nuestro equipo directivo y técnico."}
-            </p>
-          </div>
-        </div>
-
-        {/* Shareable Link Generator (Only for internal vendor portal view) */}
-        {isEmbeddedInPortal && (
-          <div className="flex items-center gap-2 self-start md:self-auto">
-            <button
-              type="button"
-              onClick={copyReferralLink}
-              className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#00D1FF] text-xs font-mono text-gray-200 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
-            >
-              {copiedLink ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-300 font-bold">¡Link Copiado!</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5 text-[#00D1FF]" />
-                  <span>Copiar Link para Cliente</span>
-                </>
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* CLIENT ALREADY REGISTERED SUMMARY (Visible from Step 2 onwards) */}
-      {isClientRegistered && (
+      {/* CLIENT ALREADY REGISTERED SUMMARY (Visible desde el Paso 2 en adelante) */}
+      {isClientRegistered && safeStepIndex > 0 && (
         <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase">Cliente Registrado:</span>
+              <span className="text-gray-400 block text-[10px] uppercase">Empresa Registrada:</span>
               <strong className="text-white text-sm">
-                {clientName} ({clientCompany})
+                {clientCompany} — {clientName}
               </strong>
+              {clientIndustry && <span className="text-gray-400 ml-2">({clientIndustry})</span>}
               <span className="text-emerald-400 ml-2 font-bold">[{registeredClientId}]</span>
             </div>
           </div>
 
           <button
             type="button"
-            onClick={() => setStep(1)}
+            onClick={() => setCurrentStepIndex(0)}
             className="text-[11px] text-[#00D1FF] hover:underline self-start sm:self-auto cursor-pointer"
           >
-            Editar datos del cliente ✎
+            Editar datos de empresa ✎
           </button>
         </div>
       )}
 
-      {/* SUCCESS CONFIRMATION MODAL / SCREEN (DIDÁCTICA & ORIENTADA AL CLIENTE) */}
+      {/* SUCCESS CONFIRMATION MODAL / SCREEN */}
       {isCompleted ? (
         <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#00D1FF]/10 via-[#07070E] to-[#FF3858]/10 border-2 border-[#00D1FF]/40 space-y-8 text-center shadow-[0_0_80px_rgba(0,209,255,0.15)] animate-in zoom-in-95 duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-[#00D1FF]/15 to-transparent blur-3xl pointer-events-none" />
@@ -507,32 +593,40 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               Folio Oficial: {createdProjectFolio}
             </div>
             <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed">
-              Hola <strong>{clientName}</strong>, hemos recibido con éxito las especificaciones técnicas para{" "}
-              <strong>"{projectName || "Tu Aplicación"}"</strong> de <strong>{clientCompany}</strong>.
+              Hola <strong>{clientName}</strong>, hemos recibido con éxito las especificaciones para{" "}
+              <strong>"{projectName || "Tu Proyecto"}"</strong> de <strong>{clientCompany}</strong> ({clientIndustry}).
             </p>
           </div>
 
           {/* Ficha Resumen */}
           <div className="p-5 rounded-2xl bg-black/80 border border-white/15 max-w-lg mx-auto text-left text-xs font-mono space-y-2.5 shadow-xl">
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Cliente & Empresa:</span>
-              <strong className="text-white">{clientName} ({clientCompany})</strong>
+              <span className="text-gray-400">Empresa / Negocio:</span>
+              <strong className="text-white">{clientCompany} ({clientIndustry})</strong>
             </div>
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Teléfono Registrado:</span>
-              <strong className="text-white">{clientPhone}</strong>
+              <span className="text-gray-400">Contacto Directo:</span>
+              <strong className="text-white">{clientName} • {clientPhone}</strong>
             </div>
+            {clientWebsite && (
+              <div className="flex justify-between border-b border-white/10 pb-2">
+                <span className="text-gray-400">Página Web / Redes:</span>
+                <strong className="text-[#00D1FF]">{clientWebsite}</strong>
+              </div>
+            )}
             <div className="flex justify-between border-b border-white/10 pb-2">
-              <span className="text-gray-400">Canal de Asignación:</span>
-              <strong className="text-[#00D1FF]">{vendorName || "Dirección General Innocentia"}</strong>
+              <span className="text-gray-400">Servicios Elegidos:</span>
+              <strong className="text-emerald-400">
+                {selectedServices.map((s) => (s === "brand_marketing" ? "Marca & Marketing" : "Software / App")).join(" + ")}
+              </strong>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-400">Estado de la Solicitud:</span>
-              <strong className="text-amber-400 font-bold">⏳ Análisis de Arquitectura en Curso</strong>
+              <strong className="text-amber-400 font-bold">⏳ Análisis de Requerimientos en Curso</strong>
             </div>
           </div>
 
-          {/* Proceso Didáctico de Próximos Pasos */}
+          {/* Próximos Pasos */}
           <div className="max-w-2xl mx-auto space-y-3 text-left">
             <h4 className="text-xs font-mono font-bold text-gray-400 uppercase tracking-wider text-center">
               ¿Qué ocurre a continuación?
@@ -542,9 +636,9 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center font-mono">
                   1
                 </div>
-                <h5 className="text-xs font-bold text-white font-mono">Triaje Técnico</h5>
+                <h5 className="text-xs font-bold text-white font-mono">Evaluación Técnica</h5>
                 <p className="text-[11px] text-gray-400 font-mono leading-tight">
-                  Iván y el equipo de ingeniería evalúan la arquitectura y módulos óptimos para tu app.
+                  Revisamos a detalle las funciones, pantallas y alcance solicitados para tu proyecto.
                 </p>
               </div>
 
@@ -554,7 +648,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 </div>
                 <h5 className="text-xs font-bold text-[#00D1FF] font-mono">Propuesta & Demo</h5>
                 <p className="text-[11px] text-gray-400 font-mono leading-tight">
-                  Preparamos la propuesta formal y seleccionamos la demo interactiva multiplataforma.
+                  Preparamos la cotización formal con el plan de trabajo y una demo interactiva.
                 </p>
               </div>
 
@@ -564,13 +658,13 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                 </div>
                 <h5 className="text-xs font-bold text-white font-mono">Contacto Directo</h5>
                 <p className="text-[11px] text-gray-400 font-mono leading-tight">
-                  Te contactaremos por WhatsApp o llamada para afinar dudas y mostrarte la demo en vivo.
+                  Te contactamos por WhatsApp o llamada para resolver dudas y coordinar los primeros pasos.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Módulo de Chat Directo y Contacto Inmediato */}
+          {/* Contacto Directo */}
           <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-black to-[#00D1FF]/10 border border-emerald-500/40 max-w-xl mx-auto space-y-3 text-center">
             <div className="flex items-center justify-center gap-2 text-emerald-400 font-mono font-bold text-xs">
               <MessageSquare className="w-4 h-4 text-emerald-400" />
@@ -590,23 +684,23 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             </a>
           </div>
 
-          {/* Action Buttons */}
+          {/* Botones de Acción */}
           <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-white/10">
             <button
               type="button"
               onClick={() =>
                 generateProjectPdf({
                   folio: createdProjectFolio,
-                  projectName: projectName || "Plataforma Tecnológica",
+                  projectName: projectName || "Proyecto Digital & Estrategia",
                   clientName,
-                  clientCompany,
+                  clientCompany: `${clientCompany} (${clientIndustry})`,
                   clientPhone,
                   clientEmail,
                   vendorName: vendorName || "Dirección General Innocentia",
                   vendorCode: vendorCode || "INN-DIRECT-01",
-                  projectType,
-                  designNeeds,
-                  techFeatures,
+                  projectType: [projectType],
+                  designNeeds: brandNeeds,
+                  techFeatures: techFeatures,
                   budgetRange: budgetOptions.find((b) => b.id === budgetRange)?.title,
                   timeline: timelineOptions.find((t) => t.id === timeline)?.title,
                   description: projectDescription,
@@ -630,10 +724,12 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               onClick={() => {
                 setIsCompleted(false);
                 setIsClientRegistered(false);
-                setStep(1);
+                setCurrentStepIndex(0);
                 setProjectName("");
                 setClientName("");
                 setClientCompany("");
+                setClientWebsite("");
+                setClientIndustry("");
                 setClientPhone("");
                 setClientEmail("");
                 setProjectDescription("");
@@ -645,79 +741,137 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
           </div>
         </div>
       ) : (
-        /* WIZARD FORM */
+        /* WIZARD FORM DINÁMICO */
         <div className="rounded-[32px] bg-black/80 border border-white/20 p-6 sm:p-9 backdrop-blur-2xl space-y-6 shadow-2xl">
           {/* Step Progress Bar */}
           <div className="space-y-3">
             <div className="flex items-center justify-between text-xs font-mono">
               <span className="text-gray-400">
-                Paso <strong className="text-[#00D1FF]">{step}</strong> de 5
+                Paso <strong className="text-[#00D1FF]">{safeStepIndex + 1}</strong> de {activeSteps.length}
               </span>
               <span className="text-gray-300 font-bold uppercase">
-                {step === 1 && "1. REGISTRO DEL CLIENTE & VINCULACIÓN AL ASESOR (OBLIGATORIO)"}
-                {step === 2 && "2. Tipo de Solución Tecnológica"}
-                {step === 3 && "3. Experiencia & Diseño UI/UX (Sofía)"}
-                {step === 4 && "4. Arquitectura & Capacidades (Iván)"}
-                {step === 5 && "5. Alcance, Presupuesto & Generación de Ficha"}
+                {currentStep.title}
               </span>
             </div>
 
             <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-[#FF3858] via-purple-500 to-[#00D1FF] transition-all duration-300 rounded-full"
-                style={{ width: `${(step / 5) * 100}%` }}
+                style={{ width: `${((safeStepIndex + 1) / activeSteps.length) * 100}%` }}
               />
             </div>
           </div>
 
           <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
             {/* ======================================================== */}
-            {/* PASO 1: REGISTRO DEL CLIENTE & VINCULACIÓN COMERCIAL (OBLIGATORIO PRIMERO) */}
+            {/* PASO 1: DATOS DE LA EMPRESA & CONTACTO */}
             {/* ======================================================== */}
-            {step === 1 && (
+            {currentStep.key === "contact" && (
               <div className="space-y-5 animate-in fade-in duration-200">
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-xs font-mono text-emerald-300 font-bold uppercase">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>FASE INICIAL: REGISTRO OBLIGATORIO DE CLIENTE &amp; ATRIBUCIÓN</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>PASO 1: DATOS DE LA EMPRESA Y CONTACTO</span>
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
-                    Registrar Cliente &amp; Asignar Asesor Comercial
+                    Información de tu Empresa y Contacto
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-400 font-light">
-                    Conforme a las Cláusulas 4 y 5 del Contrato Comercial, el registro previo en CRM protege la titularidad del <strong>4% por 24 meses continuos</strong> antes de configurar el proyecto.
+                    Ingresa los datos principales de tu negocio para preparar tu cotización formal y canalizarte con los especialistas adecuados.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs font-mono">
+                  {/* Nombre de la Empresa */}
                   <div className="space-y-1">
                     <label className="text-gray-300 block font-bold">
-                      Nombre Completo del Cliente / Contacto *
+                      Nombre de la Empresa o Negocio *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Ej. Ing. Alejandro Morales"
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">
-                      Empresa / Razón Social o Negocio *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Ej. Gourmet Express S.A. de C.V."
+                      placeholder="Ej. Gourmet Express, Axana Shoes, etc."
                       value={clientCompany}
                       onChange={(e) => setClientCompany(e.target.value)}
                       className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
                     />
                   </div>
 
+                  {/* Nombre del Contacto */}
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">
+                      Nombre Completo del Contacto / Titular *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Alejandro Morales"
+                      value={clientName}
+                      onChange={(e) => setClientName(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  {/* Giro / Industria */}
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">
+                      Giro o Industria del Negocio *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ej. Restaurantes, E-commerce, Inmobiliaria..."
+                      value={clientIndustry}
+                      onChange={(e) => setClientIndustry(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                    {/* Chips de giros rápidos */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {industrySuggestions.slice(0, 4).map((ind) => (
+                        <button
+                          key={ind}
+                          type="button"
+                          onClick={() => setClientIndustry(ind)}
+                          className={`px-2 py-0.5 rounded-lg text-[10px] border transition-all cursor-pointer ${
+                            clientIndustry === ind
+                              ? "bg-[#00D1FF]/20 border-[#00D1FF] text-[#00D1FF]"
+                              : "bg-white/5 border-white/10 text-gray-400 hover:text-white"
+                          }`}
+                        >
+                          {ind}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Página Web o Red Social */}
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">
+                      Página Web o Red Social (Opcional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej. www.miempresa.com o @miempresa"
+                      value={clientWebsite}
+                      onChange={(e) => setClientWebsite(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  {/* Correo Electrónico */}
+                  <div className="space-y-1">
+                    <label className="text-gray-300 block font-bold">Correo Electrónico *</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="Ej. contacto@miempresa.com"
+                      value={clientEmail}
+                      onChange={(e) => setClientEmail(e.target.value)}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+
+                  {/* WhatsApp / Teléfono */}
                   <div className="space-y-1">
                     <label className="text-gray-300 block font-bold">WhatsApp / Teléfono Móvil *</label>
                     <input
@@ -730,20 +884,9 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                     />
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">Correo Electrónico *</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="Ej. alejandro@gourmetexpress.mx"
-                      value={clientEmail}
-                      onChange={(e) => setClientEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
-                    />
-                  </div>
-
+                  {/* Ciudad */}
                   <div className="space-y-1 sm:col-span-2">
-                    <label className="text-gray-300 block font-bold">Ciudad / Estado / País</label>
+                    <label className="text-gray-300 block font-bold">Ciudad / Estado / País (Opcional)</label>
                     <input
                       type="text"
                       placeholder="Ej. Mérida, Yucatán, México"
@@ -753,187 +896,20 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                     />
                   </div>
                 </div>
-
-                {/* VINCULACIÓN OFICIAL DEL VENDEDOR */}
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black to-[#00D1FF]/15 border border-[#00D1FF]/40 space-y-3.5 text-xs font-mono">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2">
-                    <span className="font-bold text-white uppercase flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-[#00D1FF]" />
-                      Atribución Comercial &amp; Vendedor Vinculado
-                    </span>
-                    {isLockedByReferral ? (
-                      <span className="text-[10px] text-amber-300 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/40 font-bold flex items-center gap-1 self-start sm:self-auto">
-                        <span>🔒 Vinculado por Enlace de Asesor (Bloqueado)</span>
-                      </span>
-                    ) : (
-                      <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30 self-start sm:self-auto">
-                        Principio de 1er Registro (24 Meses)
-                      </span>
-                    )}
-                  </div>
-
-                  {/* If not locked by referral link, allow choosing from registered advisors, direct, or leaving in blank */}
-                  {!isLockedByReferral && (
-                    <div className="space-y-1.5">
-                      <label className="text-gray-300 block text-[11px] font-bold">
-                        ¿Cómo te contactaste con Innocentia Tech? (Seleccionar Asesor o Dejar en Blanco)
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setVendorSelectMode("unassigned");
-                            setVendorCode("SIN-ASESOR");
-                            setVendorName("Sin Asesor (Por Canalizar por Dirección General)");
-                          }}
-                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                            vendorSelectMode === "unassigned"
-                              ? "bg-amber-500/20 border-amber-400 text-white shadow-[0_0_15px_rgba(245,158,11,0.3)]"
-                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
-                          }`}
-                        >
-                          <span className="text-xs font-bold block text-white">Dejar en Blanco</span>
-                          <span className="text-[9px] font-mono text-amber-300 block">Canalizar por Dirección</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setVendorSelectMode("jessica");
-                            setVendorCode("VEN-JESS-301");
-                            setVendorName("Jessica Torre");
-                          }}
-                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                            vendorSelectMode === "jessica"
-                              ? "bg-pink-500/20 border-pink-400 text-white shadow-[0_0_15px_rgba(244,114,182,0.3)]"
-                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
-                          }`}
-                        >
-                          <span className="text-xs font-bold block text-white">Jessica Torre</span>
-                          <span className="text-[9px] font-mono text-pink-300 block">Asesora Comercial / Boldberry</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setVendorSelectMode("carlos");
-                            setVendorCode("VEN-CARLOS-202");
-                            setVendorName("Carlos Mendoza");
-                          }}
-                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                            vendorSelectMode === "carlos"
-                              ? "bg-[#00D1FF]/20 border-[#00D1FF] text-white shadow-[0_0_15px_rgba(0,209,255,0.2)]"
-                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
-                          }`}
-                        >
-                          <span className="text-xs font-bold block text-white">Carlos Mendoza</span>
-                          <span className="text-[9px] font-mono text-[#00D1FF] block">Asesor Comercial Senior</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setVendorSelectMode("direct");
-                            setVendorCode("INN-DIRECT-01");
-                            setVendorName("Innocentia Tech Core (Dirección General)");
-                          }}
-                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                            vendorSelectMode === "direct"
-                              ? "bg-purple-600/30 border-purple-400 text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]"
-                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
-                          }`}
-                        >
-                          <span className="text-xs font-bold block text-white">Directo Innocentia</span>
-                          <span className="text-[9px] font-mono text-purple-300 block">Dirección General</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setVendorSelectMode("custom");
-                            setVendorCode("");
-                            setVendorName("");
-                          }}
-                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
-                            vendorSelectMode === "custom"
-                              ? "bg-white/10 border-white/40 text-white"
-                              : "bg-black/60 border-white/10 text-gray-400 hover:text-white"
-                          }`}
-                        >
-                          <span className="text-xs font-bold block text-white">Otro Asesor / Código</span>
-                          <span className="text-[9px] font-mono text-gray-400 block">Ingresar manualmente</span>
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Attribution Inputs (Read-only if locked by referral link or in preset mode) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    <div className="space-y-1">
-                      <label className="text-gray-400 block text-[10px] uppercase flex items-center justify-between">
-                        <span>Código de Vendedor / Asesor</span>
-                        {isLockedByReferral && <span className="text-amber-400">🔒 Fijo</span>}
-                      </label>
-                      <input
-                        type="text"
-                        readOnly={isLockedByReferral || vendorSelectMode !== "custom"}
-                        value={vendorCode}
-                        onChange={(e) => setVendorCode(e.target.value)}
-                        placeholder="Sin Asesor (Opcional)"
-                        className={`w-full px-3.5 py-2.5 rounded-xl bg-black border font-bold focus:outline-none transition-all ${
-                          isLockedByReferral || vendorSelectMode !== "custom"
-                            ? "border-[#00D1FF]/40 text-[#00D1FF] opacity-90 cursor-not-allowed bg-black/80"
-                            : "border-white/20 text-[#00D1FF] focus:border-[#00D1FF]"
-                        }`}
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-gray-400 block text-[10px] uppercase flex items-center justify-between">
-                        <span>Nombre del Asesor Comercial</span>
-                        {isLockedByReferral && <span className="text-amber-400">🔒 Fijo</span>}
-                      </label>
-                      <input
-                        type="text"
-                        readOnly={isLockedByReferral || vendorSelectMode !== "custom"}
-                        value={vendorName}
-                        onChange={(e) => setVendorName(e.target.value)}
-                        placeholder="Sin Asesor (Opcional)"
-                        className={`w-full px-3.5 py-2.5 rounded-xl bg-black border font-bold focus:outline-none transition-all ${
-                          isLockedByReferral || vendorSelectMode !== "custom"
-                            ? "border-white/20 text-white opacity-90 cursor-not-allowed bg-black/80"
-                            : "border-white/20 text-white focus:border-purple-400"
-                        }`}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={handleRegisterClient}
-                    disabled={!isStep1Valid}
-                    className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#3A86FF] hover:from-emerald-300 hover:to-[#00D1FF] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.35)] cursor-pointer transition-all hover:scale-105"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-black" />
-                    <span>Registrar Cliente &amp; Continuar al Creador de Proyecto →</span>
-                  </button>
-                </div>
               </div>
             )}
 
             {/* ======================================================== */}
-            {/* PASO 2: TIPO DE SOLUCIÓN */}
+            {/* PASO 2: TIPO DE SOLUCIÓN DIGITAL */}
             {/* ======================================================== */}
-            {step === 2 && (
+            {currentStep.key === "solution_type" && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="space-y-1">
                   <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
-                    ¿Qué tipo de producto digital vamos a construir para {clientCompany || clientName}?
+                    ¿Qué tipo de producto digital vamos a construir para {clientCompany || clientName || "tu negocio"}?
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-400 font-light">
-                    Selecciona la categoría principal para configurar el stack y el equipo de desarrollo.
+                    Selecciona la categoría principal de la solución tecnológica.
                   </p>
                 </div>
 
@@ -970,31 +946,93 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 3: DISEÑO UI/UX (SOFÍA) */}
+            {/* PASO 3: SERVICIOS & PILARES REQUERIDOS */}
             {/* ======================================================== */}
-            {step === 3 && (
+            {currentStep.key === "services" && (
+              <div className="space-y-4 animate-in fade-in duration-200">
+                <div className="space-y-1">
+                  <h3 className="text-lg sm:text-xl font-bold text-white uppercase font-mono">
+                    ¿Qué servicios o pilares necesita tu proyecto?
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-400 font-light">
+                    Puedes elegir diseño de marca + desarrollo de app + marketing. Los siguientes pasos se adaptarán automáticamente a lo que selecciones.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {serviceOptions.map((srv) => {
+                    const isChecked = selectedServices.includes(srv.id);
+                    return (
+                      <div
+                        key={srv.id}
+                        onClick={() => toggleService(srv.id)}
+                        className={`p-5 rounded-2xl border transition-all cursor-pointer space-y-3 ${
+                          isChecked
+                            ? "bg-white/10 border-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.25)] scale-[1.01]"
+                            : "bg-white/[0.02] border-white/10 hover:border-white/25"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span
+                            className="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-full border"
+                            style={{
+                              color: srv.color,
+                              borderColor: `${srv.color}40`,
+                              backgroundColor: `${srv.color}15`,
+                            }}
+                          >
+                            {srv.badge}
+                          </span>
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => {}}
+                            className="w-5 h-5 accent-[#00D1FF] cursor-pointer"
+                          />
+                        </div>
+                        <h4 className="text-sm sm:text-base font-bold text-white font-mono leading-snug">
+                          {srv.title}
+                        </h4>
+                        <p className="text-xs text-gray-400 leading-relaxed font-light">
+                          {srv.desc}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-purple-950/20 border border-purple-500/30 text-xs font-mono text-purple-300">
+                  ℹ️ <strong>Flujo Dinámico:</strong> Al avanzar, se mostrarán las opciones detalladas según las áreas que marcaste.
+                </div>
+              </div>
+            )}
+
+            {/* ======================================================== */}
+            {/* PASO CONDICIONAL: MARCA & ESTRATEGIA DE MARKETING */}
+            {/* ======================================================== */}
+            {currentStep.key === "branding" && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-                  <div className="w-9 h-9 rounded-full bg-[#FF3858]/20 border border-[#FF3858] flex items-center justify-center text-xs">
-                    🔴
+                  <div className="w-9 h-9 rounded-full bg-[#FF3858]/20 border border-[#FF3858] flex items-center justify-center text-sm">
+                    🎨
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-bold text-white uppercase font-mono">
-                      Requerimientos de Diseño &amp; Experiencia (Sofía)
+                      Diseño de Marca &amp; Estrategia de Marketing
                     </h3>
                     <p className="text-xs text-gray-400 font-mono">
-                      Selecciona los entregables visuales y de interacción que requiere este proyecto.
+                      Selecciona los entregables de identidad, posicionamiento y marketing que deseas para {clientCompany}.
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {designOptions.map((opt) => {
-                    const isChecked = designNeeds.includes(opt.label);
+                  {brandingOptions.map((opt) => {
+                    const isChecked = brandNeeds.includes(opt.label);
                     return (
                       <div
                         key={opt.id}
-                        onClick={() => toggleDesign(opt.label)}
+                        onClick={() => toggleBrandNeed(opt.label)}
                         className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 ${
                           isChecked
                             ? "bg-[#FF3858]/10 border-[#FF3858]/60 shadow-[0_0_15px_rgba(255,56,88,0.2)]"
@@ -1021,20 +1059,20 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 4: ARQUITECTURA & TECNOLOGÍA (IVÁN) */}
+            {/* PASO CONDICIONAL: FUNCIONALIDADES & MÓDULOS TÉCNICOS */}
             {/* ======================================================== */}
-            {step === 4 && (
+            {currentStep.key === "tech" && (
               <div className="space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-                  <div className="w-9 h-9 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF] flex items-center justify-center text-xs">
-                    🔵
+                  <div className="w-9 h-9 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF] flex items-center justify-center text-sm">
+                    ⚡
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-bold text-white uppercase font-mono">
-                      Capacidades Técnicas &amp; Backend (Iván)
+                      Funcionalidades y Módulos de la Aplicación
                     </h3>
                     <p className="text-xs text-gray-400 font-mono">
-                      Define los módulos, bases de datos y APIs requeridas para la cotización.
+                      Selecciona las capacidades, conexiones y herramientas que integrará tu plataforma.
                     </p>
                   </div>
                 </div>
@@ -1045,7 +1083,7 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
                     return (
                       <div
                         key={opt.id}
-                        onClick={() => toggleTech(opt.label)}
+                        onClick={() => toggleTechFeature(opt.label)}
                         className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 ${
                           isChecked
                             ? "bg-[#00D1FF]/10 border-[#00D1FF]/60 shadow-[0_0_15px_rgba(0,209,255,0.2)]"
@@ -1072,42 +1110,44 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
             )}
 
             {/* ======================================================== */}
-            {/* PASO 5: ALCANCE, PRESUPUESTO & GENERACIÓN */}
+            {/* PASO FINAL: ALCANCE, PRESUPUESTO & TIEMPOS */}
             {/* ======================================================== */}
-            {step === 5 && (
+            {currentStep.key === "scope_budget" && (
               <div className="space-y-5 animate-in fade-in duration-200">
                 <div className="space-y-1">
                   <h3 className="text-base sm:text-lg font-bold text-white uppercase font-mono">
-                    Alcance, Descripción &amp; Tiempos de Entrega
+                    Alcance, Descripción &amp; Tiempos Estimados
                   </h3>
                   <p className="text-xs text-gray-400 font-mono">
-                    Describe la idea del proyecto para {clientCompany} y selecciona el rango de inversión estimado.
+                    Cuéntanos la idea de tu proyecto para {clientCompany} y selecciona el rango de inversión estimado.
                   </p>
                 </div>
 
                 <div className="space-y-3">
+                  {/* Nombre del Proyecto */}
                   <div className="space-y-1 text-xs font-mono">
                     <label className="text-gray-300 block font-bold">
-                      Nombre del Proyecto *
+                      Nombre o Idea de tu Proyecto *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="Ej. App de Delivery & Reservas para Restaurantes"
+                      placeholder="Ej. App de Entregas a Domicilio, Plataforma de Citas Médicas, Portal Inmobiliario, etc."
                       value={projectName}
                       onChange={(e) => setProjectName(e.target.value)}
                       className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
                     />
                   </div>
 
+                  {/* Pregunta Directa & Amigable */}
                   <div className="space-y-1 text-xs font-mono">
                     <label className="text-gray-300 block font-bold">
-                      Descripción del Problema o Funcionalidad Deseada *
+                      ¿De qué trata tu proyecto o qué necesidad buscas resolver? *
                     </label>
                     <textarea
                       rows={3}
                       required
-                      placeholder="Explica qué problema resuelve la aplicación, quiénes son los usuarios y qué flujo principal debe tener..."
+                      placeholder="Cuéntanos brevemente qué deseas construir, quiénes serán los usuarios y qué funciones principales te gustaría que tenga..."
                       value={projectDescription}
                       onChange={(e) => setProjectDescription(e.target.value)}
                       className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
@@ -1164,44 +1204,42 @@ ${techFeatures.map((t) => `  ✓ ${t}`).join("\n")}
               </div>
             )}
 
-            {/* Wizard Navigation Buttons (Steps 2 to 5) */}
-            {step > 1 && (
-              <div className="flex items-center justify-between pt-4 border-t border-white/10">
+            {/* Wizard Navigation Buttons */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/10">
+              {safeStepIndex > 0 ? (
                 <button
                   type="button"
-                  onClick={() => setStep(step - 1)}
+                  onClick={handlePrevStep}
                   className="px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-300 text-xs font-mono transition-all cursor-pointer"
                 >
                   ← Anterior
                 </button>
+              ) : (
+                <div />
+              )}
 
-                {step < 5 ? (
-                  <button
-                    type="button"
-                    onClick={() => setStep(step + 1)}
-                    disabled={
-                      (step === 2 && !isStep2Valid) ||
-                      (step === 3 && !isStep3Valid) ||
-                      (step === 4 && !isStep4Valid)
-                    }
-                    className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-105"
-                  >
-                    <span>Siguiente Paso</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleSubmitProject}
-                    disabled={!isStep5Valid}
-                    className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#FF3858] hover:from-emerald-300 hover:to-[#FF4D6D] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105"
-                  >
-                    <Send className="w-4 h-4 text-black" />
-                    <span>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
-                  </button>
-                )}
-              </div>
-            )}
+              {safeStepIndex < activeSteps.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  disabled={!isCurrentStepValid()}
+                  className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-purple-600 hover:from-[#00E5FF] hover:to-purple-500 disabled:opacity-40 disabled:pointer-events-none text-white text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-105"
+                >
+                  <span>Siguiente Paso</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleSubmitProject}
+                  disabled={!isStepFinalValid}
+                  className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#FF3858] hover:from-emerald-300 hover:to-[#FF4D6D] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105"
+                >
+                  <Send className="w-4 h-4 text-black" />
+                  <span>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
+                </button>
+              )}
+            </div>
           </form>
         </div>
       )}
