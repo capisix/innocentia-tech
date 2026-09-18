@@ -653,7 +653,7 @@ export default function AIPersonasSection() {
 
                 <div className="relative w-full aspect-[1740/904] max-h-[440px] transition-transform duration-700 group-hover:scale-[1.02] select-none">
                   <Image
-                    src="/images/dual_kids_master_transparent.png"
+                    src="/images/dual_kids_master_transparent.png?v=5"
                     alt="Ideas sin límites, Soluciones reales • Sofía e Iván Innocentia Tech"
                     fill
                     className="object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.85)]"
