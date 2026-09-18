@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Sparkles, Play, X } from "../../lib/icons";
+import { Sparkles, Play, X, ArrowRight } from "../../lib/icons";
 
 interface PersonaVideoData {
   title: string;
@@ -29,16 +29,12 @@ export default function AIPersonasSection() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const characterLaws = [
-    { icon: "😊", label: "Dan la bienvenida" },
-    { icon: "🧭", label: "Guían al usuario" },
-    { icon: "💬", label: "Responden preguntas" },
-    { icon: "💡", label: "Visualizan ideas" },
-    { icon: "🏗️", label: "Construyen soluciones" },
-  ];
-
   return (
     <section id="ai-personas" className="relative py-24 bg-transparent overflow-hidden border-t border-white/10">
+      {/* Background Ambience & Cyber Foliage Glow */}
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#FF3858]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#00D1FF]/10 rounded-full blur-[140px] pointer-events-none" />
+
       <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-12">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -54,295 +50,354 @@ export default function AIPersonasSection() {
           </p>
         </div>
 
-        {/* 2 Big Master Cards: Sofía 🔴 (Left) vs Iván ⚡ (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          {/* ========================================================== */}
-          {/* CARD 1: SOFÍA (100% PURE TRANSPARENT - ZERO BOXES) */}
-          {/* ========================================================== */}
-          <div className="group relative rounded-[36px] bg-gradient-to-b from-[#FF3858]/10 via-[#07070D]/90 to-[#040407] border border-[#FF3858]/40 hover:border-[#FF3858]/80 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.18)] hover:shadow-[0_25px_80px_rgba(255,56,88,0.35)] transition-all duration-500 overflow-hidden flex flex-col justify-between">
-            {/* Background Ambient Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/15 rounded-full blur-[110px] pointer-events-none" />
-
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center relative z-10">
-              {/* Left Column: Pure Transparent Figure on Holographic Neon Ring Pedestal */}
-              <div
-                onClick={() =>
-                  setActiveVideo({
-                    title: "Sofía",
-                    role: "Dirección UI/UX & Creatividad",
-                    subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                    videoSrc: "/videos/sofia_presentacion.mp4",
-                    themeColor: "#FF3858",
-                    secondaryColor: "#FF7A00",
-                    avatarImg: "/images/sofia_seated_art.jpg",
-                    icon: "🖌️",
-                  })
-                }
-                className="sm:col-span-5 flex items-center justify-center relative py-2 cursor-pointer group/avatar"
-                title="Haz clic para ver el video de presentación de Sofía"
-              >
-                <div className="relative w-56 h-80 sm:w-64 sm:h-96 flex items-center justify-center">
-                  {/* Glowing Neon Ring Pedestal */}
-                  <div className="absolute bottom-1 w-48 h-12 rounded-[100%] bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] opacity-80 blur-md -z-10 animate-pulse" />
-                  <div className="absolute bottom-2.5 w-44 h-8 rounded-[100%] border-2 border-[#FF3858] shadow-[0_0_25px_#FF3858] -z-10" />
-                  <div className="absolute -bottom-1 w-52 h-16 bg-[#FF3858]/35 rounded-[100%] blur-xl -z-10" />
-
-                  {/* High Resolution Seated Sofía Art */}
-                  <Image
-                    src="/images/sofia_seated_art.jpg"
-                    alt="Sofía - Diseño y UX"
-                    fill
-                    className="object-contain filter drop-shadow-[0_0_25px_rgba(255,56,88,0.7)] group-hover/avatar:scale-105 transition-transform duration-500 rounded-3xl mix-blend-lighten"
-                    priority
-                  />
-
-                  {/* Play badge overlay on hover */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_30px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
-                      <Play className="w-6 h-6 fill-white ml-0.5" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Native HTML/CSS Specifications */}
-              <div className="sm:col-span-7 space-y-4 text-left">
-                {/* Header & Badges */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-3xl sm:text-4xl font-black text-[#FF3858] uppercase tracking-tight flex items-center gap-2">
-                      <span>SOFÍA</span>
-                      <span className="text-2xl">🖌️</span>
-                    </h3>
-                  </div>
-
-                  <span className="text-xs font-mono text-[#FF7A00] font-bold uppercase tracking-wider block">
-                    DISEÑO • UX • CREATIVIDAD
-                  </span>
-
-                  <span className="inline-block px-3.5 py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[10px] font-mono font-bold text-[#FF3858] uppercase shadow-sm">
-                    HEMISFERIO CREATIVO
-                  </span>
-                </div>
-
-                {/* Description */}
-                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
-                  Representa la imaginación, la creatividad y la sensibilidad del diseño. Convierte ideas en experiencias visuales memorables, intuitivas y emocionales.
-                </p>
-
-                {/* Personality */}
-                <div className="space-y-1.5 pt-1">
-                  <span className="text-[10px] font-mono text-[#FF7A00] font-bold uppercase block tracking-wider">
-                    PERSONALIDAD
-                  </span>
-                  <div className="space-y-1.5 text-xs text-gray-200">
-                    <p className="flex items-center gap-2">
-                      <span className="text-sm">❤️</span> <span>Curiosa y entusiasta</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-sm">⭐</span> <span>Empática y cercana</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-sm">✨</span> <span>Imaginativa y detallista</span>
-                    </p>
-                  </div>
-                </div>
-
-                {/* Key Elements (3 Micro Glass Cards) */}
-                <div className="space-y-1.5 pt-2 border-t border-white/10">
-                  <span className="text-[10px] font-mono text-[#FF3858] font-bold uppercase block tracking-wider">
-                    ELEMENTOS CLAVE
-                  </span>
-                  <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/40 transition-colors">
-                      <span className="text-base block mb-0.5">🖌️</span>
-                      <span className="text-gray-200 font-bold block">Pincel</span>
-                      <span className="text-gray-400 text-[8px]">Mágico</span>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/40 transition-colors">
-                      <span className="text-base block mb-0.5">🎨</span>
-                      <span className="text-gray-200 font-bold block">Creatividad</span>
-                      <span className="text-gray-400 text-[8px]">& Inspiración</span>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/40 transition-colors">
-                      <span className="text-base block mb-0.5">❤️</span>
-                      <span className="text-gray-200 font-bold block">Empatía</span>
-                      <span className="text-gray-400 text-[8px]">& Pasión</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        {/* 2 Big Master Cards with Central Infinity Bridge */}
+        <div className="relative">
+          {/* Central Infinity Bridge (Visible on large screens) */}
+          <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex-col items-center justify-center pointer-events-none">
+            <div className="w-13 h-13 rounded-full bg-[#07070F] border-2 border-[#00D1FF]/80 shadow-[0_0_35px_rgba(0,209,255,0.5)] flex items-center justify-center text-xl backdrop-blur-2xl">
+              <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent font-black">
+                ♾️
+              </span>
             </div>
-
-            {/* PRESENTATION VIDEO BUTTON (SOFÍA) */}
-            <div className="pt-4 border-t border-white/10 relative z-10">
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveVideo({
-                    title: "Sofía",
-                    role: "Dirección UI/UX & Creatividad",
-                    subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                    videoSrc: "/videos/sofia_presentacion.mp4",
-                    themeColor: "#FF3858",
-                    secondaryColor: "#FF7A00",
-                    avatarImg: "/images/sofia_seated_art.jpg",
-                    icon: "🖌️",
-                  })
-                }
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,56,88,0.4)] hover:shadow-[0_0_40px_rgba(255,56,88,0.65)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98"
-              >
-                <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                  <Play className="w-3 h-3 fill-white text-white ml-0.5" />
-                </div>
-                <span>🎬 Ver Video de Presentación • Sofía (60FPS)</span>
-              </button>
+            <div className="mt-1.5 px-2.5 py-1 rounded-full bg-black/90 border border-white/20 text-[8px] font-mono font-bold text-center text-gray-200 uppercase tracking-tight leading-tight backdrop-blur-xl shadow-lg">
+              DOS MUNDOS<br />UNA MISMA VISIÓN
             </div>
           </div>
 
-          {/* ========================================================== */}
-          {/* CARD 2: IVÁN (100% PURE TRANSPARENT - ZERO BOXES) */}
-          {/* ========================================================== */}
-          <div className="group relative rounded-[36px] bg-gradient-to-b from-[#00D1FF]/10 via-[#07070D]/90 to-[#040407] border border-[#00D1FF]/40 hover:border-[#00D1FF]/80 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.18)] hover:shadow-[0_25px_80px_rgba(0,209,255,0.35)] transition-all duration-500 overflow-hidden flex flex-col justify-between">
-            {/* Background Ambient Glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/15 rounded-full blur-[110px] pointer-events-none" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+            {/* ========================================================== */}
+            {/* CARD 1: SOFÍA (HEMISFERIO CREATIVO) */}
+            {/* ========================================================== */}
+            <div className="group relative rounded-[38px] bg-gradient-to-b from-[#FF3858]/15 via-[#080811]/95 to-[#040408] border-2 border-[#FF3858]/60 hover:border-[#FF3858] p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.22)] hover:shadow-[0_25px_90px_rgba(255,56,88,0.45)] transition-all duration-500 overflow-hidden flex flex-col justify-between">
+              {/* Background Ambient Glow */}
+              <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[110px] pointer-events-none" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center relative z-10">
-              {/* Left Column: Pure Transparent Figure on Cyber Neon Ring Pedestal */}
-              <div
-                onClick={() =>
-                  setActiveVideo({
-                    title: "Iván",
-                    role: "CEO & Arquitectura Tech",
-                    subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                    videoSrc: "/videos/ivan_presentacion.mp4",
-                    themeColor: "#00D1FF",
-                    secondaryColor: "#3A86FF",
-                    avatarImg: "/images/ivan_seated_tech.jpg",
-                    icon: "⚡",
-                  })
-                }
-                className="sm:col-span-5 flex items-center justify-center relative py-2 cursor-pointer group/avatar"
-                title="Haz clic para ver el video de presentación de Iván"
-              >
-                <div className="relative w-56 h-80 sm:w-64 sm:h-96 flex items-center justify-center">
-                  {/* Glowing Cyber Ring Pedestal */}
-                  <div className="absolute bottom-1 w-48 h-12 rounded-[100%] bg-gradient-to-r from-[#00D1FF] via-[#3A86FF] to-[#8A2BE2] opacity-80 blur-md -z-10 animate-pulse" />
-                  <div className="absolute bottom-2.5 w-44 h-8 rounded-[100%] border-2 border-[#00D1FF] shadow-[0_0_25px_#00D1FF] -z-10" />
-                  <div className="absolute -bottom-1 w-52 h-16 bg-[#00D1FF]/35 rounded-[100%] blur-xl -z-10" />
+              {/* Decorative Neon Doodles (Top Right) */}
+              <div className="absolute top-6 right-8 pointer-events-none opacity-80 text-right space-y-1 hidden sm:block">
+                <span className="text-xl block filter drop-shadow-[0_0_10px_#FF3858]">👑</span>
+                <span className="text-lg block filter drop-shadow-[0_0_8px_#FF7A00]">💡</span>
+              </div>
 
-                  {/* High Resolution Seated Iván Tech */}
-                  <Image
-                    src="/images/ivan_seated_tech.jpg"
-                    alt="Iván - Software y Arquitectura"
-                    fill
-                    className="object-contain filter drop-shadow-[0_0_25px_rgba(0,209,255,0.7)] group-hover/avatar:scale-105 transition-transform duration-500 rounded-3xl mix-blend-lighten"
-                    priority
-                  />
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center relative z-10">
+                {/* Left Column: Seated Artwork on Holographic Neon Ring Pedestal */}
+                <div
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Sofía",
+                      role: "Dirección UI/UX & Creatividad",
+                      subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      themeColor: "#FF3858",
+                      secondaryColor: "#FF7A00",
+                      avatarImg: "/images/sofia_seated_art.jpg",
+                      icon: "🖌️",
+                    })
+                  }
+                  className="sm:col-span-5 flex flex-col items-center justify-center relative py-2 cursor-pointer group/avatar"
+                  title="Haz clic para ver el video de presentación de Sofía"
+                >
+                  {/* Floating Hand-Written Style Quote */}
+                  <div className="absolute -top-1 left-2 sm:-left-2 z-20 pointer-events-none">
+                    <span className="text-[10px] sm:text-[11px] font-sans italic text-[#FF85A1] font-semibold tracking-wide filter drop-shadow-[0_0_8px_rgba(255,56,88,0.8)] block text-center sm:text-left leading-tight">
+                      La imaginación<br />cambia el mundo ♡
+                    </span>
+                  </div>
 
-                  {/* Play badge overlay on hover */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_30px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
-                      <Play className="w-6 h-6 fill-black ml-0.5" />
+                  <div className="relative w-56 h-80 sm:w-60 sm:h-96 flex items-center justify-center mt-3 sm:mt-0">
+                    {/* Glowing Neon Ring Pedestal */}
+                    <div className="absolute bottom-1 w-48 h-12 rounded-[100%] bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] opacity-80 blur-md -z-10 animate-pulse" />
+                    <div className="absolute bottom-2.5 w-44 h-8 rounded-[100%] border-2 border-[#FF3858] shadow-[0_0_25px_#FF3858] -z-10" />
+                    <div className="absolute -bottom-1 w-52 h-16 bg-[#FF3858]/35 rounded-[100%] blur-xl -z-10" />
+
+                    {/* High Resolution Seated Sofía Art */}
+                    <Image
+                      src="/images/sofia_seated_art.jpg"
+                      alt="Sofía - Diseño y UX"
+                      fill
+                      className="object-contain filter drop-shadow-[0_0_30px_rgba(255,56,88,0.75)] group-hover/avatar:scale-105 transition-transform duration-500 rounded-3xl mix-blend-lighten"
+                      priority
+                    />
+
+                    {/* Play badge overlay on hover */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
+                      <div className="w-14 h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_35px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                        <Play className="w-6 h-6 fill-white ml-0.5" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column: Specifications & Personality */}
+                <div className="sm:col-span-7 space-y-4 text-left">
+                  {/* Header & Badges */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-[#FF3858] to-[#FF7A00] bg-clip-text text-transparent uppercase tracking-tight flex items-center gap-2">
+                        <span>SOFÍA</span>
+                        <span className="text-2xl text-[#FF3858]">🖌️</span>
+                      </h3>
+                    </div>
+
+                    <span className="text-xs font-mono text-[#FF9E00] font-bold uppercase tracking-wider block">
+                      DISEÑO • UX • CREATIVIDAD
+                    </span>
+
+                    <span className="inline-block px-3.5 py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 text-[10px] font-mono font-bold text-[#FF5470] uppercase shadow-sm">
+                      HEMISFERIO CREATIVO
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                    Representa la imaginación, la creatividad y la sensibilidad del diseño. Convierte ideas en experiencias visuales memorables, intuitivas y emocionales.
+                  </p>
+
+                  {/* Personality */}
+                  <div className="space-y-1 pt-0.5">
+                    <span className="text-[10px] font-mono text-[#FF7A00] font-bold uppercase block tracking-wider">
+                      PERSONALIDAD
+                    </span>
+                    <div className="space-y-1.5 text-xs text-gray-200 font-mono">
+                      <p className="flex items-center gap-2">
+                        <span className="text-sm">💖</span> <span>Curiosa y entusiasta</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-sm">⭐</span> <span>Empática y cercana</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-sm">✨</span> <span>Imaginativa y detallista</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Key Elements (3 Micro Glass Cards) */}
+                  <div className="space-y-1.5 pt-2 border-t border-white/10">
+                    <span className="text-[10px] font-mono text-[#FF3858] font-bold uppercase block tracking-wider">
+                      ELEMENTOS CLAVE
+                    </span>
+                    <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/50 transition-colors">
+                        <span className="text-base block mb-0.5">🖌️</span>
+                        <span className="text-gray-200 font-bold block">Pincel</span>
+                        <span className="text-gray-400 text-[8px]">Mágico</span>
+                      </div>
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/50 transition-colors">
+                        <span className="text-base block mb-0.5">🎨</span>
+                        <span className="text-gray-200 font-bold block">Creatividad</span>
+                        <span className="text-gray-400 text-[8px]">& Inspiración</span>
+                      </div>
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/50 transition-colors">
+                        <span className="text-base block mb-0.5">💖</span>
+                        <span className="text-gray-200 font-bold block">Empatía</span>
+                        <span className="text-gray-400 text-[8px]">& Pasión</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Native HTML/CSS Specifications */}
-              <div className="sm:col-span-7 space-y-4 text-left">
-                {/* Header & Badges */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-3xl sm:text-4xl font-black text-[#00D1FF] uppercase tracking-tight flex items-center gap-2">
-                      <span>IVÁN</span>
-                      <span className="text-2xl">⚡</span>
-                    </h3>
+              {/* PRESENTATION VIDEO BUTTON PILL (SOFÍA) */}
+              <div className="pt-5 border-t border-white/10 relative z-10">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Sofía",
+                      role: "Dirección UI/UX & Creatividad",
+                      subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      themeColor: "#FF3858",
+                      secondaryColor: "#FF7A00",
+                      avatarImg: "/images/sofia_seated_art.jpg",
+                      icon: "🖌️",
+                    })
+                  }
+                  className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-black/80 via-[#FF3858]/20 to-black/80 hover:from-[#FF3858]/30 hover:to-[#FF7A00]/30 border-2 border-[#FF3858]/80 hover:border-[#FF3858] text-white font-mono font-bold text-xs tracking-wider flex items-center justify-between gap-2 shadow-[0_0_25px_rgba(255,56,88,0.35)] hover:shadow-[0_0_40px_rgba(255,56,88,0.6)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                >
+                  <div className="w-7 h-7 rounded-full bg-[#FF3858] text-white flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_#FF3858] group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
                   </div>
-
-                  <span className="text-xs font-mono text-[#3A86FF] font-bold uppercase tracking-wider block">
-                    SOFTWARE • ARQUITECTURA • CÓDIGO
+                  <span className="uppercase text-[11px] sm:text-xs font-extrabold text-white group-hover/btn:text-[#FFD166] transition-colors">
+                    VER VIDEO DE PRESENTACIÓN • SOFÍA (60FPS)
                   </span>
-
-                  <span className="inline-block px-3.5 py-1 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 text-[10px] font-mono font-bold text-[#00D1FF] uppercase shadow-sm">
-                    HEMISFERIO LÓGICO
-                  </span>
-                </div>
-
-                {/* Description */}
-                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
-                  Representa la lógica, la estructura y la tecnología. Transforma ideas en soluciones sólidas, escalables, eficientes y seguras.
-                </p>
-
-                {/* Personality */}
-                <div className="space-y-1.5 pt-1">
-                  <span className="text-[10px] font-mono text-[#3A86FF] font-bold uppercase block tracking-wider">
-                    PERSONALIDAD
-                  </span>
-                  <div className="space-y-1.5 text-xs text-gray-200">
-                    <p className="flex items-center gap-2">
-                      <span className="text-sm">⚙️</span> <span>Lógico y analítico</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-sm">🛡️</span> <span>Responsable y confiable</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-sm">⚡</span> <span>Innovador y enfocado</span>
-                    </p>
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-1 transition-transform">
+                    <ArrowRight className="w-3.5 h-3.5 text-white" />
                   </div>
-                </div>
-
-                {/* Key Elements (3 Micro Glass Cards) */}
-                <div className="space-y-1.5 pt-2 border-t border-white/10">
-                  <span className="text-[10px] font-mono text-[#00D1FF] font-bold uppercase block tracking-wider">
-                    ELEMENTOS CLAVE
-                  </span>
-                  <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/40 transition-colors">
-                      <span className="text-base block mb-0.5">&lt;/&gt;</span>
-                      <span className="text-gray-200 font-bold block">Código</span>
-                      <span className="text-gray-400 text-[8px]">& Estructura</span>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/40 transition-colors">
-                      <span className="text-base block mb-0.5">🧊</span>
-                      <span className="text-gray-200 font-bold block">Arquitectura</span>
-                      <span className="text-gray-400 text-[8px]">& Solidez</span>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/40 transition-colors">
-                      <span className="text-base block mb-0.5">⚡</span>
-                      <span className="text-gray-200 font-bold block">Ingeniería</span>
-                      <span className="text-gray-400 text-[8px]">& Eficiencia</span>
-                    </div>
-                  </div>
-                </div>
+                </button>
               </div>
             </div>
 
-            {/* PRESENTATION VIDEO BUTTON (IVÁN) */}
-            <div className="pt-4 border-t border-white/10 relative z-10">
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveVideo({
-                    title: "Iván",
-                    role: "CEO & Arquitectura Tech",
-                    subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                    videoSrc: "/videos/ivan_presentacion.mp4",
-                    themeColor: "#00D1FF",
-                    secondaryColor: "#3A86FF",
-                    avatarImg: "/images/ivan_seated_tech.jpg",
-                    icon: "⚡",
-                  })
-                }
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.4)] hover:shadow-[0_0_40px_rgba(0,209,255,0.65)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98"
-              >
-                <div className="w-5 h-5 rounded-full bg-black/20 flex items-center justify-center">
-                  <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+            {/* ========================================================== */}
+            {/* CARD 2: IVÁN (HEMISFERIO LÓGICO) */}
+            {/* ========================================================== */}
+            <div className="group relative rounded-[38px] bg-gradient-to-b from-[#00D1FF]/15 via-[#080811]/95 to-[#040408] border-2 border-[#00D1FF]/60 hover:border-[#00D1FF] p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.22)] hover:shadow-[0_25px_90px_rgba(0,209,255,0.45)] transition-all duration-500 overflow-hidden flex flex-col justify-between">
+              {/* Background Ambient Glow */}
+              <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/20 rounded-full blur-[110px] pointer-events-none" />
+
+              {/* Decorative Neon Doodles (Top Right) */}
+              <div className="absolute top-6 right-8 pointer-events-none opacity-80 text-right space-y-1 hidden sm:block">
+                <span className="text-xl block filter drop-shadow-[0_0_10px_#00D1FF]">⚡</span>
+                <span className="text-lg block filter drop-shadow-[0_0_8px_#3A86FF]">⚙️</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center relative z-10">
+                {/* Left Column: Seated Artwork on Cyber Neon Ring Pedestal */}
+                <div
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Iván",
+                      role: "CEO & Arquitectura Tech",
+                      subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                      videoSrc: "/videos/ivan_presentacion.mp4",
+                      themeColor: "#00D1FF",
+                      secondaryColor: "#3A86FF",
+                      avatarImg: "/images/ivan_seated_tech.jpg",
+                      icon: "⚡",
+                    })
+                  }
+                  className="sm:col-span-5 flex flex-col items-center justify-center relative py-2 cursor-pointer group/avatar"
+                  title="Haz clic para ver el video de presentación de Iván"
+                >
+                  {/* Floating Hand-Written Style Quote */}
+                  <div className="absolute -top-1 left-2 sm:-left-2 z-20 pointer-events-none">
+                    <span className="text-[10px] sm:text-[11px] font-sans italic text-[#70E000] font-semibold tracking-wide filter drop-shadow-[0_0_8px_rgba(0,209,255,0.8)] block text-center sm:text-left leading-tight">
+                      Curiosidad hoy,<br />soluciones mañana ⚡
+                    </span>
+                  </div>
+
+                  <div className="relative w-56 h-80 sm:w-60 sm:h-96 flex items-center justify-center mt-3 sm:mt-0">
+                    {/* Glowing Cyber Ring Pedestal */}
+                    <div className="absolute bottom-1 w-48 h-12 rounded-[100%] bg-gradient-to-r from-[#00D1FF] via-[#3A86FF] to-[#8A2BE2] opacity-80 blur-md -z-10 animate-pulse" />
+                    <div className="absolute bottom-2.5 w-44 h-8 rounded-[100%] border-2 border-[#00D1FF] shadow-[0_0_25px_#00D1FF] -z-10" />
+                    <div className="absolute -bottom-1 w-52 h-16 bg-[#00D1FF]/35 rounded-[100%] blur-xl -z-10" />
+
+                    {/* High Resolution Seated Iván Tech */}
+                    <Image
+                      src="/images/ivan_seated_tech.jpg"
+                      alt="Iván - Software y Arquitectura"
+                      fill
+                      className="object-contain filter drop-shadow-[0_0_30px_rgba(0,209,255,0.75)] group-hover/avatar:scale-105 transition-transform duration-500 rounded-3xl mix-blend-lighten"
+                      priority
+                    />
+
+                    {/* Play badge overlay on hover */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
+                      <div className="w-14 h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_35px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                        <Play className="w-6 h-6 fill-black ml-0.5" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span>⚡ Ver Video de Presentación • Iván (60FPS)</span>
-              </button>
+
+                {/* Right Column: Specifications & Personality */}
+                <div className="sm:col-span-7 space-y-4 text-left">
+                  {/* Header & Badges */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] bg-clip-text text-transparent uppercase tracking-tight flex items-center gap-2">
+                        <span>IVÁN</span>
+                        <span className="text-2xl text-[#00D1FF]">⚡</span>
+                      </h3>
+                    </div>
+
+                    <span className="text-xs font-mono text-[#3A86FF] font-bold uppercase tracking-wider block">
+                      SOFTWARE • ARQUITECTURA • CÓDIGO
+                    </span>
+
+                    <span className="inline-block px-3.5 py-1 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 text-[10px] font-mono font-bold text-[#00D1FF] uppercase shadow-sm">
+                      HEMISFERIO LÓGICO
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                    Representa la lógica, la estructura y la tecnología. Transforma ideas en soluciones sólidas, escalables, eficientes y seguras.
+                  </p>
+
+                  {/* Personality */}
+                  <div className="space-y-1 pt-0.5">
+                    <span className="text-[10px] font-mono text-[#3A86FF] font-bold uppercase block tracking-wider">
+                      PERSONALIDAD
+                    </span>
+                    <div className="space-y-1.5 text-xs text-gray-200 font-mono">
+                      <p className="flex items-center gap-2">
+                        <span className="text-sm">⚙️</span> <span>Lógico y analítico</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-sm">🛡️</span> <span>Responsable y confiable</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-sm">⚡</span> <span>Innovador y enfocado</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Key Elements (3 Micro Glass Cards) */}
+                  <div className="space-y-1.5 pt-2 border-t border-white/10">
+                    <span className="text-[10px] font-mono text-[#00D1FF] font-bold uppercase block tracking-wider">
+                      ELEMENTOS CLAVE
+                    </span>
+                    <div className="grid grid-cols-3 gap-2 text-center text-[10px] font-mono">
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/50 transition-colors">
+                        <span className="text-base block mb-0.5">&lt;/&gt;</span>
+                        <span className="text-gray-200 font-bold block">Código</span>
+                        <span className="text-gray-400 text-[8px]">& Estructura</span>
+                      </div>
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/50 transition-colors">
+                        <span className="text-base block mb-0.5">🧊</span>
+                        <span className="text-gray-200 font-bold block">Arquitectura</span>
+                        <span className="text-gray-400 text-[8px]">& Solidez</span>
+                      </div>
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/50 transition-colors">
+                        <span className="text-base block mb-0.5">⚡</span>
+                        <span className="text-gray-200 font-bold block">Ingeniería</span>
+                        <span className="text-gray-400 text-[8px]">& Eficiencia</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* PRESENTATION VIDEO BUTTON PILL (IVÁN) */}
+              <div className="pt-5 border-t border-white/10 relative z-10">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Iván",
+                      role: "CEO & Arquitectura Tech",
+                      subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                      videoSrc: "/videos/ivan_presentacion.mp4",
+                      themeColor: "#00D1FF",
+                      secondaryColor: "#3A86FF",
+                      avatarImg: "/images/ivan_seated_tech.jpg",
+                      icon: "⚡",
+                    })
+                  }
+                  className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-black/80 via-[#00D1FF]/20 to-black/80 hover:from-[#00D1FF]/30 hover:to-[#3A86FF]/30 border-2 border-[#00D1FF]/80 hover:border-[#00D1FF] text-white font-mono font-bold text-xs tracking-wider flex items-center justify-between gap-2 shadow-[0_0_25px_rgba(0,209,255,0.35)] hover:shadow-[0_0_40px_rgba(0,209,255,0.6)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                >
+                  <div className="w-7 h-7 rounded-full bg-[#00D1FF] text-black flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_#00D1FF] group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
+                  </div>
+                  <span className="uppercase text-[11px] sm:text-xs font-extrabold text-white group-hover/btn:text-[#00D1FF] transition-colors">
+                    VER VIDEO DE PRESENTACIÓN • IVÁN (60FPS)
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-1 transition-transform">
+                    <ArrowRight className="w-3.5 h-3.5 text-white" />
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* ========================================================== */}
+        {/* FOOTER TAGLINE BANNER */}
+        {/* ========================================================== */}
+        <div className="text-center pt-2 pb-4">
+          <span className="text-[11px] sm:text-xs font-mono font-bold tracking-[0.25em] text-gray-400 uppercase">
+            IMAGINACIÓN <span className="text-[#FF3858]">✦</span> TECNOLOGÍA <span className="text-[#00D1FF]">=</span> UN MUNDO MEJOR
+          </span>
         </div>
 
         {/* ========================================================== */}
