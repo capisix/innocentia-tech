@@ -117,8 +117,8 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON (IDENTICAL POSITION & SIZE) */}
-                <div className="absolute bottom-[2.8%] left-[60%] right-[3.5%] h-[7.2%] flex items-center z-20">
+                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON (100% IDENTICAL TWIN GEOMETRY) */}
+                <div className="absolute bottom-[2.4%] left-[64%] right-[3.8%] h-[6.8%] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -139,11 +139,11 @@ export default function AIPersonasSection() {
                       className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
                       style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
-                      <Play className="w-2/3 h-2/3 fill-white text-white ml-0.5" />
+                      <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
                     </div>
                     <span 
                       className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                      style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
+                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                     >
                       VER PRESENTACIÓN (60FPS)
                     </span>
@@ -151,7 +151,7 @@ export default function AIPersonasSection() {
                       className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
                       style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
-                      <ArrowRight className="w-2/3 h-2/3 text-white" />
+                      <ArrowRight className="w-1/2 h-1/2 text-white" />
                     </div>
                   </button>
                 </div>
@@ -230,8 +230,8 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON (IDENTICAL POSITION & SIZE) */}
-                <div className="absolute bottom-[2.8%] left-[60%] right-[3.5%] h-[7.2%] flex items-center z-20">
+                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON (100% IDENTICAL TWIN GEOMETRY) */}
+                <div className="absolute bottom-[2.4%] left-[64%] right-[3.8%] h-[6.8%] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -252,11 +252,11 @@ export default function AIPersonasSection() {
                       className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
                       style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
-                      <Play className="w-2/3 h-2/3 fill-black text-black ml-0.5" />
+                      <Play className="w-1/2 h-1/2 fill-black text-black ml-0.5" />
                     </div>
                     <span 
                       className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm leading-none"
-                      style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
+                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                     >
                       VER PRESENTACIÓN (60FPS)
                     </span>
@@ -264,7 +264,7 @@ export default function AIPersonasSection() {
                       className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
                       style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
-                      <ArrowRight className="w-2/3 h-2/3 text-black" />
+                      <ArrowRight className="w-1/2 h-1/2 text-black" />
                     </div>
                   </button>
                 </div>
