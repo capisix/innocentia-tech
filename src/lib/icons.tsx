@@ -326,7 +326,6 @@ export const Youtube = createIcon(
   </g>
 );
 
-export const Play = createIcon("polygon points='5 3 19 12 5 21 5 3'");
 export const Copy = createIcon(
   <g>
     <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
