@@ -701,38 +701,204 @@ export default function AIPersonasSection() {
         {/* ========================================================== */}
         {/* BANNER MASTER: IDEAS SIN LÍMITES, SOLUCIONES REALES (CINEMATIC MASTERPIECE) */}
         {/* ========================================================== */}
-        <div 
-          onClick={() =>
-            setActiveVideo({
-              title: "Sofía & Iván",
-              role: "Dual Core Architecture",
-              subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
-              videoSrc: "/videos/sofia_presentacion.mp4",
-              themeColor: "#00D1FF",
-              secondaryColor: "#FF3858",
-              avatarImg: "/images/sofia_seated_art.jpg",
-              icon: "✨",
-            })
-          }
-          className="group relative w-full aspect-[1024/532] rounded-[24px] sm:rounded-[36px] overflow-hidden cursor-pointer shadow-[0_0_50px_rgba(255,56,88,0.2),0_0_50px_rgba(0,209,255,0.2)] hover:shadow-[0_0_80px_rgba(255,56,88,0.4),0_0_80px_rgba(0,209,255,0.4)] transition-all duration-500 border border-white/10 hover:border-white/30"
-          title="Haz clic para ver cómo crean juntos Sofía e Iván (Video HD 60FPS)"
-        >
-          {/* High-definition Cinematic Masterpiece Artwork */}
-          <Image
-            src="/images/synergy_cinematic_bg.jpg"
-            alt="Sofía e Iván • Ideas sin límites, Soluciones reales • Innocentia Tech"
-            fill
-            className="object-cover sm:object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
-            priority
-          />
+        {/* ========================================================== */}
+        {/* BANNER MASTER: IDEAS SIN LÍMITES, SOLUCIONES REALES (CINEMATIC INTERACTIVE UI) */}
+        {/* ========================================================== */}
+        <div className="p-[1.5px] rounded-[32px] sm:rounded-[44px] bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] shadow-[0_0_60px_rgba(255,56,88,0.3),0_0_60px_rgba(0,209,255,0.3)]">
+          <div className="relative rounded-[30px] sm:rounded-[42px] bg-[#07070E] p-6 sm:p-8 md:p-10 lg:p-12 overflow-hidden text-left group">
+            {/* Clean Realistic Background Artwork (Image 2 - Kids with Holograms & Gear) */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+              <Image
+                src="/images/synergy_kids_art.jpg"
+                alt="Sofía e Iván • Ideas sin límites, Soluciones reales • Innocentia Tech"
+                fill
+                className="object-contain object-right md:object-right-bottom scale-100 md:scale-105 transition-transform duration-700 group-hover:scale-[1.06]"
+                priority
+              />
+              {/* Strategic Contrast Gradient Masks (Keeps text on left 100% sharp while letting kids shine on right) */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#07070E] via-[#07070E]/90 via-40% to-transparent z-10 pointer-events-none hidden md:block" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07070E] via-[#07070E]/75 to-transparent z-10 pointer-events-none md:hidden" />
+            </div>
 
-          {/* Interactive Hover Play Trigger Button Overlay positioned over the artwork button */}
-          <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div className="px-5 py-2.5 rounded-full bg-black/80 backdrop-blur-xl border border-[#00D1FF] text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_30px_rgba(0,209,255,0.8)]">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-r from-[#00D1FF] to-[#FF3858] flex items-center justify-center shadow-md">
-                <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+            {/* Ambient Halos Behind Content */}
+            <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[100px] pointer-events-none animate-pulse z-10" />
+            <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[100px] pointer-events-none z-10" />
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-20">
+              {/* Left Column: Typography, Synergy Glass Cards & Interactive Button */}
+              <div className="lg:col-span-6 space-y-4 sm:space-y-5">
+                {/* Top Badge */}
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/25 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
+                  <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  <span>CUANDO DOS FORMAS DE PENSAR SE ENCUENTRAN</span>
+                </div>
+
+                {/* Headline */}
+                <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1]">
+                  IDEAS SIN LÍMITES, <br />
+                  <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,56,88,0.4)]">
+                    SOLUCIONES REALES.
+                  </span>
+                </h3>
+
+                {/* Subtitle */}
+                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-md">
+                  Creatividad y tecnología trabajando juntas para un mundo más extraordinario.
+                </p>
+
+                {/* Twin Synergy Cards: Sofía + Iván */}
+                <div className="flex items-stretch gap-2.5 sm:gap-3 pt-1">
+                  {/* Sofía Card */}
+                  <div className="flex-1 rounded-2xl bg-black/75 backdrop-blur-2xl border border-[#FF3858]/50 hover:border-[#FF3858] transition-all p-3 sm:p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(255,56,88,0.2)] group/sofia">
+                    <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-white/10 text-xs font-mono font-black text-[#FF3858] uppercase">
+                      <Paintbrush className="w-3.5 h-3.5" />
+                      <span>SOFÍA</span>
+                    </div>
+                    <div className="space-y-1.5 text-xs text-gray-200 font-medium">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#FF3858]">💖</span>
+                        <span>Imagina</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#FFD166]">🎨</span>
+                        <span>Diseña</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#FF5470]">✨</span>
+                        <span>Conecta</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Connecting Plus Sign */}
+                  <div className="flex items-center justify-center text-xl font-mono text-white/60 px-0.5 font-bold select-none drop-shadow">
+                    +
+                  </div>
+
+                  {/* Iván Card */}
+                  <div className="flex-1 rounded-2xl bg-black/75 backdrop-blur-2xl border border-[#00D1FF]/50 hover:border-[#00D1FF] transition-all p-3 sm:p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(0,209,255,0.2)] group/ivan">
+                    <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-white/10 text-xs font-mono font-black text-[#00D1FF] uppercase">
+                      <span className="font-mono font-black text-[#00D1FF]">&lt;/&gt;</span>
+                      <span>IVÁN</span>
+                    </div>
+                    <div className="space-y-1.5 text-xs text-gray-200 font-medium">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#00D1FF]">🧊</span>
+                        <span>Analiza</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#70D6FF]">⚙️</span>
+                        <span>Construye</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#FFD166]">⚡</span>
+                        <span>Optimiza</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* JUNTOS Synergy Card */}
+                <div className="w-full rounded-2xl bg-black/75 backdrop-blur-2xl border border-white/20 p-3 sm:p-3.5 space-y-2 shadow-xl">
+                  <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider">
+                    <span className="text-base text-[#00D1FF]">♾️</span>
+                    <span className="bg-gradient-to-r from-[#FF3858] via-purple-400 to-[#00D1FF] bg-clip-text text-transparent font-black">
+                      JUNTOS
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-xs font-medium text-gray-200">
+                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#FF3858]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
+                      <span>👥</span>
+                      <span className="text-[11px] sm:text-xs">Crean</span>
+                    </div>
+                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#FFD166]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
+                      <span>💡</span>
+                      <span className="text-[11px] sm:text-xs">Resuelven</span>
+                    </div>
+                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#00D1FF]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
+                      <span>🚀</span>
+                      <span className="text-[11px] sm:text-xs whitespace-nowrap">Hacen posible</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Interactive Action Button */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Sofía & Iván",
+                      role: "Dual Core Architecture",
+                      subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
+                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      themeColor: "#00D1FF",
+                      secondaryColor: "#FF3858",
+                      avatarImg: "/images/sofia_seated_art.jpg",
+                      icon: "✨",
+                    })
+                  }
+                  className="w-full px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/30 via-black/90 to-[#FF3858]/30 hover:from-[#00D1FF]/50 hover:to-[#FF3858]/50 border border-[#00D1FF]/70 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_35px_rgba(0,209,255,0.35)] hover:shadow-[0_0_50px_rgba(0,209,255,0.65)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+                  </div>
+                  <span className="uppercase text-white tracking-widest text-[11px] sm:text-xs">
+                    DESCUBRE CÓMO CREAN JUNTOS
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-[#00D1FF] group-hover/btn:translate-x-1 transition-transform" />
+                </button>
               </div>
-              <span className="uppercase tracking-wider">VER PRESENTACIÓN CONJUNTA (60FPS)</span>
+
+              {/* Right Column: Visual Spatial Area for the Kids Artwork */}
+              <div className="lg:col-span-6 min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] pointer-events-none" />
+            </div>
+
+            {/* Bottom Row: The 3 Core Pillars + Official Innocentia Brand Logo */}
+            <div className="mt-8 sm:mt-12 pt-6 border-t border-white/20 grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-medium relative z-20 items-center">
+              <div className="flex items-center gap-3 text-gray-300">
+                <span className="w-8 h-8 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center text-sm flex-shrink-0 shadow-[0_0_12px_rgba(255,56,88,0.4)]">
+                  💖
+                </span>
+                <div>
+                  <div className="text-white font-bold">Sofía imagina lo imposible.</div>
+                  <div className="text-[10px] font-mono text-gray-400">ARTE • EMOCIÓN • EXPERIENCIAS</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-gray-300 md:border-l md:border-white/20 md:pl-4">
+                <span className="w-8 h-8 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 flex items-center justify-center text-sm flex-shrink-0 shadow-[0_0_12px_rgba(0,209,255,0.4)] text-[#00D1FF]">
+                  ⚡
+                </span>
+                <div>
+                  <div className="text-white font-bold">Iván encuentra cómo hacerlo posible.</div>
+                  <div className="text-[10px] font-mono text-gray-400">TECNOLOGÍA • ESTRUCTURA • RESULTADOS</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-gray-300 md:border-l md:border-white/20 md:pl-4">
+                <span className="w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500/50 flex items-center justify-center text-sm flex-shrink-0 shadow-[0_0_12px_rgba(168,85,247,0.4)] text-purple-300">
+                  ♾️
+                </span>
+                <div>
+                  <div className="text-white font-bold">Innocentia lo convierte en realidad.</div>
+                  <div className="text-[10px] font-mono text-gray-400">UN FUTURO MÁS HUMANO • HOY</div>
+                </div>
+              </div>
+
+              {/* Official Innocentia Brand Logo Column */}
+              <div className="flex flex-col items-start md:items-end justify-center md:border-l md:border-white/20 md:pl-4 text-left md:text-right gap-1">
+                <div className="relative h-7 w-36">
+                  <Image
+                    src="/images/innocentia_logo_official.png"
+                    alt="Innocentia Tech Official Logo"
+                    fill
+                    className="object-contain object-left md:object-right filter brightness-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                  />
+                </div>
+                <div className="text-[9px] font-mono text-gray-400">
+                  Where Imagination Becomes Technology.
+                </div>
+              </div>
             </div>
           </div>
         </div>
