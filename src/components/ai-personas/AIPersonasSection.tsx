@@ -57,14 +57,14 @@ export default function AIPersonasSection() {
             {/* CARD 1: SOFÍA (3D MASTER PIECE CON OVERLAYS FLUIDOS) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-[#07070F] border-2 border-[#FF3858]/60 hover:border-[#FF3858] backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.22)] hover:shadow-[0_30px_90px_rgba(255,56,88,0.55)] transition-all duration-500 overflow-hidden select-none"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 shadow-[0_20px_60px_rgba(255,56,88,0.18)] hover:shadow-[0_30px_90px_rgba(255,56,88,0.45)] transition-all duration-500 overflow-hidden select-none"
               style={{ containerType: "inline-size" }}
             >
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[110px] pointer-events-none" />
 
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px]">
+              <div className="relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 <Image
                   src="/images/sofia_master_card.jpg"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
@@ -100,7 +100,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
                 <div className="absolute top-[26%] left-[57%] right-[4%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full rounded-full bg-black/70 border border-[#FF7A00]/50 text-[#FF9E00] font-mono font-bold uppercase tracking-wider flex items-center justify-center shadow-[0_0_10px_rgba(255,122,0,0.3)] backdrop-blur-sm px-1"
+                    className="w-full h-full text-[#FF9E00] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_8px_rgba(255,158,0,0.85)] px-1"
                     style={{ fontSize: "clamp(7px, 2.2cqi, 11px)" }}
                   >
                     DISEÑO • UX • CREATIVIDAD
@@ -110,7 +110,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
                 <div className="absolute top-[32%] left-[61.5%] right-[10.5%] h-[5%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full rounded-full bg-[#FF3858]/25 border border-[#FF3858]/60 text-[#FF5470] font-mono font-extrabold uppercase tracking-wider flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)] backdrop-blur-sm animate-pulse px-1"
+                    className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,84,112,0.9)] animate-pulse px-1"
                     style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
                   >
                     HEMISFERIO CREATIVO
@@ -170,14 +170,14 @@ export default function AIPersonasSection() {
             {/* CARD 2: IVÁN (3D MASTER PIECE CON OVERLAYS FLUIDOS) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-[#07070F] border-2 border-[#00D1FF]/60 hover:border-[#00D1FF] backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.22)] hover:shadow-[0_30px_90px_rgba(0,209,255,0.55)] transition-all duration-500 overflow-hidden select-none"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 shadow-[0_20px_60px_rgba(0,209,255,0.18)] hover:shadow-[0_30px_90px_rgba(0,209,255,0.45)] transition-all duration-500 overflow-hidden select-none"
               style={{ containerType: "inline-size" }}
             >
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/20 rounded-full blur-[110px] pointer-events-none" />
 
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/799] overflow-hidden rounded-[26px] sm:rounded-[34px]">
+              <div className="relative w-full aspect-[1024/799] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 <Image
                   src="/images/ivan_master_card.jpg"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
@@ -213,7 +213,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
                 <div className="absolute top-[24%] left-[60.5%] right-[2.5%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full rounded-full bg-black/70 border border-[#3A86FF]/50 text-[#3A86FF] font-mono font-bold uppercase tracking-normal flex items-center justify-center shadow-[0_0_10px_rgba(58,134,255,0.3)] backdrop-blur-sm px-1"
+                    className="w-full h-full text-[#3A86FF] font-mono font-black uppercase tracking-normal flex items-center justify-center drop-shadow-[0_0_8px_rgba(58,134,255,0.85)] px-1"
                     style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
                   >
                     SOFTWARE • ARQUITECTURA • CÓDIGO
@@ -223,7 +223,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO LÓGICO") */}
                 <div className="absolute top-[30%] left-[67.5%] right-[8.5%] h-[5%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full rounded-full bg-[#00D1FF]/25 border border-[#00D1FF]/60 text-[#00D1FF] font-mono font-extrabold uppercase tracking-wider flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)] backdrop-blur-sm animate-pulse px-1"
+                    className="w-full h-full text-[#00D1FF] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(0,209,255,0.9)] animate-pulse px-1"
                     style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
                   >
                     HEMISFERIO LÓGICO
