@@ -35,7 +35,7 @@ export default function AIPersonasSection() {
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#FF3858]/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#00D1FF]/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/15 text-xs font-mono tracking-wider text-[#FF3858] uppercase shadow-lg">
@@ -66,55 +66,88 @@ export default function AIPersonasSection() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (3D MASTER PIECE ARTWORK) */}
+            {/* CARD 1: SOFÍA (3D MASTER PIECE CON OVERLAYS ANIMADOS) */}
             {/* ========================================================== */}
-            <div
-              onClick={() =>
-                setActiveVideo({
-                  title: "Sofía",
-                  role: "Dirección UI/UX & Creatividad",
-                  subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                  videoSrc: "/videos/sofia_presentacion.mp4",
-                  themeColor: "#FF3858",
-                  secondaryColor: "#FF7A00",
-                  avatarImg: "/images/sofia_seated_art.jpg",
-                  icon: "🖌️",
-                })
-              }
-              className="group relative rounded-[38px] bg-[#07070F] border-2 border-[#FF3858]/60 hover:border-[#FF3858] backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.22)] hover:shadow-[0_30px_90px_rgba(255,56,88,0.55)] transition-all duration-500 overflow-hidden cursor-pointer hover:scale-[1.015] active:scale-[0.99] flex flex-col justify-between"
-              title="Haz clic para ver el video de presentación oficial de Sofía"
-            >
+            <div className="group relative rounded-[38px] bg-[#07070F] border-2 border-[#FF3858]/60 hover:border-[#FF3858] backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.22)] hover:shadow-[0_30px_90px_rgba(255,56,88,0.55)] transition-all duration-500 overflow-hidden select-none">
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[110px] pointer-events-none" />
 
-              {/* High-Resolution 3D Master Artwork */}
-              <div className="relative w-full aspect-[1024/840] overflow-hidden rounded-[36px]">
+              {/* High-Resolution 3D Master Artwork Container */}
+              <div className="relative w-full aspect-[1024/828] overflow-hidden rounded-[36px]">
                 <Image
                   src="/images/sofia_master_card.jpg"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.01]"
                   priority
                 />
 
-                {/* Subtle Interactive Hover Highlight */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                {/* Floating 60FPS Play Badge (Appears on Hover) */}
-                <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                  <div className="px-3 py-1.5 rounded-full bg-[#FF3858] text-white text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_20px_#FF3858]">
-                    <Play className="w-3 h-3 fill-white text-white" />
-                    <span>VER VIDEO 60FPS</span>
+                {/* Left Area Click Trigger (Avatar) */}
+                <div
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Sofía",
+                      role: "Dirección UI/UX & Creatividad",
+                      subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      themeColor: "#FF3858",
+                      secondaryColor: "#FF7A00",
+                      avatarImg: "/images/sofia_seated_art.jpg",
+                      icon: "🖌️",
+                    })
+                  }
+                  className="absolute top-0 left-0 bottom-0 w-[48%] z-10 cursor-pointer group/avatar"
+                  title="Haz clic para ver el video de presentación de Sofía"
+                >
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
+                    <div className="w-14 h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_35px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                      <Play className="w-6 h-6 fill-white ml-0.5" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Interactive Click Target on Bottom Pill Area */}
-                <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="w-full py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#FF3858]/20 border border-[#FF3858]/50 backdrop-blur-sm text-center">
-                    <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">
-                      ✦ Clic para reproducir video de Sofía ✦
-                    </span>
+                {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
+                <div className="absolute top-[26.2%] left-[57.5%] right-[4.5%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-black/60 border border-[#FF7A00]/50 text-[#FF9E00] text-[9px] sm:text-[11px] md:text-xs font-mono font-bold uppercase tracking-wider text-center shadow-[0_0_10px_rgba(255,122,0,0.3)] backdrop-blur-sm truncate">
+                    DISEÑO • UX • CREATIVIDAD
                   </div>
+                </div>
+
+                {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
+                <div className="absolute top-[32.2%] left-[62%] right-[11%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-[#FF3858]/25 border border-[#FF3858]/60 text-[#FF5470] text-[8px] sm:text-[10px] md:text-[11px] font-mono font-extrabold uppercase tracking-wider text-center shadow-[0_0_15px_rgba(255,56,88,0.4)] backdrop-blur-sm animate-pulse truncate">
+                    HEMISFERIO CREATIVO
+                  </div>
+                </div>
+
+                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
+                <div className="absolute bottom-[2.5%] left-[48.5%] right-[2%] h-[8%] min-h-[30px] sm:min-h-[36px] flex items-center z-20">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveVideo({
+                        title: "Sofía",
+                        role: "Dirección UI/UX & Creatividad",
+                        subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                        videoSrc: "/videos/sofia_presentacion.mp4",
+                        themeColor: "#FF3858",
+                        secondaryColor: "#FF7A00",
+                        avatarImg: "/images/sofia_seated_art.jpg",
+                        icon: "🖌️",
+                      })
+                    }
+                    className="w-full h-full px-2 sm:px-3 rounded-full bg-gradient-to-r from-[#FF3858]/90 via-[#FF5470] to-[#FF7A00]/90 hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black text-[9px] sm:text-[10px] md:text-xs tracking-wider flex items-center justify-between gap-1.5 shadow-[0_0_25px_rgba(255,56,88,0.5)] hover:shadow-[0_0_40px_rgba(255,56,88,0.8)] transition-all cursor-pointer hover:scale-[1.02] active:scale-98 group/btn"
+                  >
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                      <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white text-white ml-0.5" />
+                    </div>
+                    <span className="uppercase font-extrabold text-white truncate drop-shadow-md">
+                      VER VIDEO DE PRESENTACIÓN • SOFÍA (60FPS)
+                    </span>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                      <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
+                    </div>
+                  </button>
                 </div>
               </div>
 
@@ -128,55 +161,88 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (3D MASTER PIECE ARTWORK) */}
+            {/* CARD 2: IVÁN (3D MASTER PIECE CON OVERLAYS ANIMADOS) */}
             {/* ========================================================== */}
-            <div
-              onClick={() =>
-                setActiveVideo({
-                  title: "Iván",
-                  role: "CEO & Arquitectura Tech",
-                  subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                  videoSrc: "/videos/ivan_presentacion.mp4",
-                  themeColor: "#00D1FF",
-                  secondaryColor: "#3A86FF",
-                  avatarImg: "/images/ivan_seated_tech.jpg",
-                  icon: "⚡",
-                })
-              }
-              className="group relative rounded-[38px] bg-[#07070F] border-2 border-[#00D1FF]/60 hover:border-[#00D1FF] backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.22)] hover:shadow-[0_30px_90px_rgba(0,209,255,0.55)] transition-all duration-500 overflow-hidden cursor-pointer hover:scale-[1.015] active:scale-[0.99] flex flex-col justify-between"
-              title="Haz clic para ver el video de presentación oficial de Iván"
-            >
+            <div className="group relative rounded-[38px] bg-[#07070F] border-2 border-[#00D1FF]/60 hover:border-[#00D1FF] backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.22)] hover:shadow-[0_30px_90px_rgba(0,209,255,0.55)] transition-all duration-500 overflow-hidden select-none">
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/20 rounded-full blur-[110px] pointer-events-none" />
 
-              {/* High-Resolution 3D Master Artwork */}
-              <div className="relative w-full aspect-[1024/840] overflow-hidden rounded-[36px]">
+              {/* High-Resolution 3D Master Artwork Container */}
+              <div className="relative w-full aspect-[1024/799] overflow-hidden rounded-[36px]">
                 <Image
                   src="/images/ivan_master_card.jpg"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.01]"
                   priority
                 />
 
-                {/* Subtle Interactive Hover Highlight */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                {/* Floating 60FPS Play Badge (Appears on Hover) */}
-                <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
-                  <div className="px-3 py-1.5 rounded-full bg-[#00D1FF] text-black text-[10px] font-mono font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_20px_#00D1FF]">
-                    <Play className="w-3 h-3 fill-black text-black" />
-                    <span>VER VIDEO 60FPS</span>
+                {/* Left Area Click Trigger (Avatar) */}
+                <div
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Iván",
+                      role: "CEO & Arquitectura Tech",
+                      subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                      videoSrc: "/videos/ivan_presentacion.mp4",
+                      themeColor: "#00D1FF",
+                      secondaryColor: "#3A86FF",
+                      avatarImg: "/images/ivan_seated_tech.jpg",
+                      icon: "⚡",
+                    })
+                  }
+                  className="absolute top-0 left-0 bottom-0 w-[55%] z-10 cursor-pointer group/avatar"
+                  title="Haz clic para ver el video de presentación de Iván"
+                >
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
+                    <div className="w-14 h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_35px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                      <Play className="w-6 h-6 fill-black ml-0.5" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Interactive Click Target on Bottom Pill Area */}
-                <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="w-full py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#00D1FF]/20 border border-[#00D1FF]/50 backdrop-blur-sm text-center">
-                    <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">
-                      ✦ Clic para reproducir video de Iván ✦
-                    </span>
+                {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
+                <div className="absolute top-[24.2%] left-[61%] right-[3%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-black/60 border border-[#3A86FF]/50 text-[#3A86FF] text-[9px] sm:text-[11px] md:text-xs font-mono font-bold uppercase tracking-wider text-center shadow-[0_0_10px_rgba(58,134,255,0.3)] backdrop-blur-sm truncate">
+                    SOFTWARE • ARQUITECTURA • CÓDIGO
                   </div>
+                </div>
+
+                {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO LÓGICO") */}
+                <div className="absolute top-[30.2%] left-[68.5%] right-[9.5%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-[#00D1FF]/25 border border-[#00D1FF]/60 text-[#00D1FF] text-[8px] sm:text-[10px] md:text-[11px] font-mono font-extrabold uppercase tracking-wider text-center shadow-[0_0_15px_rgba(0,209,255,0.4)] backdrop-blur-sm animate-pulse truncate">
+                    HEMISFERIO LÓGICO
+                  </div>
+                </div>
+
+                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
+                <div className="absolute bottom-[2.6%] left-[63.5%] right-[2%] h-[8%] min-h-[30px] sm:min-h-[36px] flex items-center z-20">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveVideo({
+                        title: "Iván",
+                        role: "CEO & Arquitectura Tech",
+                        subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                        videoSrc: "/videos/ivan_presentacion.mp4",
+                        themeColor: "#00D1FF",
+                        secondaryColor: "#3A86FF",
+                        avatarImg: "/images/ivan_seated_tech.jpg",
+                        icon: "⚡",
+                      })
+                    }
+                    className="w-full h-full px-2 sm:px-3 rounded-full bg-gradient-to-r from-[#00D1FF]/90 via-[#00B4D8] to-[#3A86FF]/90 hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black text-[9px] sm:text-[10px] md:text-xs tracking-wider flex items-center justify-between gap-1.5 shadow-[0_0_25px_rgba(0,209,255,0.5)] hover:shadow-[0_0_40px_rgba(0,209,255,0.8)] transition-all cursor-pointer hover:scale-[1.02] active:scale-98 group/btn"
+                  >
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-black/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                      <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-black text-black ml-0.5" />
+                    </div>
+                    <span className="uppercase font-black text-black truncate drop-shadow-sm">
+                      VER VIDEO DE PRESENTACIÓN • IVÁN (60FPS)
+                    </span>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-black/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                      <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-black" />
+                    </div>
+                  </button>
                 </div>
               </div>
 
