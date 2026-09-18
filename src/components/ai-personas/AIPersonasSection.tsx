@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Sparkles, Play, X, ArrowRight } from "../../lib/icons";
+import { Sparkles, Play, X, ArrowRight, Paintbrush } from "../../lib/icons";
 
 interface PersonaVideoData {
   title: string;
