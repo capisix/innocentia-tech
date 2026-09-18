@@ -63,10 +63,10 @@ export default function AIPersonasSection() {
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[110px] pointer-events-none" />
 
-              {/* High-Resolution 3D Master Artwork Container (Harmonized Aspect Ratio) */}
+              {/* High-Resolution 3D Master Artwork Container (Transparent PNG) */}
               <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 <Image
-                  src="/images/sofia_master_card.jpg"
+                  src="/images/sofia_master_card_transparent.png"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.01]"
@@ -176,10 +176,10 @@ export default function AIPersonasSection() {
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/20 rounded-full blur-[110px] pointer-events-none" />
 
-              {/* High-Resolution 3D Master Artwork Container (Harmonized Aspect Ratio) */}
+              {/* High-Resolution 3D Master Artwork Container (Transparent PNG) */}
               <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 <Image
-                  src="/images/ivan_master_card.jpg"
+                  src="/images/ivan_master_card_transparent.png"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.01]"
