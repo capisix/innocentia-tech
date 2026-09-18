@@ -54,10 +54,10 @@ export default function AIPersonasSection() {
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (PNG TRANSPARENTE CON EFECTO DE CRISTAL) */}
+            {/* CARD 1: SOFÍA (ARTE TRANSPARENTE + DIÁLOGOS DE CRISTAL INTERACTIVOS) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(255,56,88,0.25)] hover:drop-shadow-[0_20px_50px_rgba(255,56,88,0.45)]"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(255,56,88,0.25)] hover:drop-shadow-[0_25px_60px_rgba(255,56,88,0.45)]"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container - Totalmente Transparente */}
@@ -67,7 +67,7 @@ export default function AIPersonasSection() {
                 <div className="absolute bottom-4 right-4 w-60 h-60 bg-[#FF7A00]/15 rounded-full blur-[80px] pointer-events-none" />
 
                 <Image
-                  src="/images/sofia_transparent_user.png"
+                  src="/images/sofia_card_art_clean.png"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
                   className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
@@ -88,11 +88,11 @@ export default function AIPersonasSection() {
                       icon: "🖌️",
                     })
                   }
-                  className="absolute top-0 left-0 bottom-0 w-[48%] z-20 cursor-pointer group/avatar"
+                  className="absolute top-0 left-0 bottom-0 w-[52%] z-20 cursor-pointer group/avatar"
                   title="Haz clic para ver el video de presentación de Sofía"
                 >
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 transform scale-90 group-hover/avatar:scale-100">
-                    <div className="px-4 py-2.5 rounded-2xl bg-black/75 backdrop-blur-xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(255,56,88,0.7)] group-hover/avatar:border-[#FF3858] transition-colors">
+                    <div className="px-4 py-2.5 rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(255,56,88,0.7)] group-hover/avatar:border-[#FF3858] transition-colors">
                       <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_15px_#FF3858] flex-shrink-0">
                         <Play className="w-4 h-4 fill-white text-white ml-0.5" />
                       </div>
@@ -104,63 +104,166 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
-                <div className="absolute top-[26.0%] left-[57.5%] right-[5.0%] h-[5.5%] flex items-center justify-center pointer-events-none z-20">
-                  <div 
-                    className="w-full h-full text-[#FFD166] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,209,102,0.95)] px-1 leading-none text-center"
-                    style={{ fontSize: "clamp(6.5px, 2.1cqi, 10.5px)" }}
-                  >
-                    DISEÑO • UX • CREATIVIDAD
+                {/* ========================================================== */}
+                {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS DIALOGUE SYSTEM */}
+                {/* ========================================================== */}
+                <div 
+                  className="absolute top-[23.5%] left-[54.5%] right-[3.2%] bottom-[2.2%] z-20 flex flex-col justify-between"
+                  style={{ gap: "clamp(4px, 1.2cqi, 8px)" }}
+                >
+                  {/* Row 1: Subtitle Pill & Hemisferio Badge */}
+                  <div className="flex flex-col items-center" style={{ gap: "clamp(2px, 0.7cqi, 5px)" }}>
+                    <div 
+                      className="w-full py-0.5 px-2 rounded-full bg-black/50 border border-[#FFD166]/40 backdrop-blur-md text-[#FFD166] font-mono font-black uppercase tracking-wider text-center drop-shadow-[0_0_8px_rgba(255,209,102,0.6)] flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(6.5px, 2.1cqi, 11px)" }}
+                    >
+                      DISEÑO • UX • CREATIVIDAD
+                    </div>
+                    <div 
+                      className="w-full py-0.5 px-2 rounded-full bg-[#FF3858]/15 border border-[#FF3858]/50 backdrop-blur-md text-[#FF5470] font-mono font-black uppercase tracking-widest text-center animate-pulse flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(6px, 1.8cqi, 9.5px)" }}
+                    >
+                      HEMISFERIO CREATIVO
+                    </div>
                   </div>
-                </div>
 
-                {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
-                <div className="absolute top-[32.8%] left-[62.0%] right-[11.5%] h-[5.0%] flex items-center justify-center pointer-events-none z-20">
+                  {/* Row 2: Misión / Descripción Card */}
                   <div 
-                    className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_12px_rgba(255,84,112,0.98)] animate-pulse px-1 leading-none text-center"
-                    style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
+                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(255,56,88,0.15)] flex items-center"
+                    style={{ padding: "clamp(5px, 1.8cqi, 12px)" }}
                   >
-                    HEMISFERIO CREATIVO
+                    <p 
+                      className="text-gray-200 font-light leading-snug"
+                      style={{ fontSize: "clamp(6px, 1.75cqi, 10px)" }}
+                    >
+                      Representa la <strong className="text-[#FF5470] font-semibold">imaginación</strong>, la creatividad y la sensibilidad del diseño. Convierte ideas en <strong className="text-[#FFD166] font-semibold">experiencias visuales memorables</strong>, intuitivas y emocionales.
+                    </p>
                   </div>
-                </div>
 
-                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.4%] left-[64%] right-[3.8%] h-[6.8%] flex items-center z-30">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setActiveVideo({
-                        title: "Sofía",
-                        role: "Dirección UI/UX & Creatividad",
-                        subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                        videoSrc: "/videos/sofia_presentacion.mp4",
-                        themeColor: "#FF3858",
-                        secondaryColor: "#FF7A00",
-                        avatarImg: "/images/sofia_seated_art.jpg",
-                        icon: "🖌️",
-                      })
-                    }
-                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/40 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(255,56,88,0.65)] hover:shadow-[0_0_45px_rgba(255,56,88,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                  {/* Row 3: Personalidad Card */}
+                  <div 
+                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(255,56,88,0.15)] flex flex-col justify-center"
+                    style={{ padding: "clamp(5px, 1.8cqi, 12px)", gap: "clamp(2px, 0.8cqi, 6px)" }}
                   >
                     <div 
-                      className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
+                      className="inline-flex items-center font-mono font-bold text-[#FF5470] uppercase tracking-wider leading-none"
+                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
                     >
-                      <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
+                      PERSONALIDAD
                     </div>
-                    <span 
-                      className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
-                    >
-                      VER PRESENTACIÓN (60FPS)
-                    </span>
+                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.6cqi, 4px)" }}>
+                      <div 
+                        className="flex items-center text-gray-200 font-medium leading-none"
+                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                      >
+                        <span className="text-[#FF3858]">💖</span>
+                        <span>Curiosa y entusiasta</span>
+                      </div>
+                      <div 
+                        className="flex items-center text-gray-200 font-medium leading-none"
+                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                      >
+                        <span className="text-[#FFD166]">⭐</span>
+                        <span>Empática y cercana</span>
+                      </div>
+                      <div 
+                        className="flex items-center text-gray-200 font-medium leading-none"
+                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                      >
+                        <span className="text-[#FF5470]">✨</span>
+                        <span>Imaginativa y detallista</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 4: Elementos Clave (3 Micro Cards) */}
+                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.8cqi, 5px)" }}>
                     <div 
-                      className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
+                      className="font-mono font-bold text-[#FF5470] uppercase tracking-wider leading-none"
+                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
                     >
-                      <ArrowRight className="w-1/2 h-1/2 text-white" />
+                      ELEMENTOS CLAVE
                     </div>
-                  </button>
+                    <div className="grid grid-cols-3" style={{ gap: "clamp(3px, 1cqi, 8px)" }}>
+                      <div 
+                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                      >
+                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>🪄</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                          Pincel
+                        </div>
+                        <div className="text-[gray-400] text-[#FF5470] font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                          Mágico
+                        </div>
+                      </div>
+
+                      <div 
+                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                      >
+                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>🎨</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                          Creatividad
+                        </div>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                          & Inspiración
+                        </div>
+                      </div>
+
+                      <div 
+                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                      >
+                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>💖</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                          Empatía
+                        </div>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                          & Pasión
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 5: Botón Ver Presentación 60FPS */}
+                  <div className="w-full">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setActiveVideo({
+                          title: "Sofía",
+                          role: "Dirección UI/UX & Creatividad",
+                          subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                          videoSrc: "/videos/sofia_presentacion.mp4",
+                          themeColor: "#FF3858",
+                          secondaryColor: "#FF7A00",
+                          avatarImg: "/images/sofia_seated_art.jpg",
+                          icon: "🖌️",
+                        })
+                      }
+                      className="w-full px-2.5 py-1.5 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/40 text-white font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_25px_rgba(255,56,88,0.65)] hover:shadow-[0_0_45px_rgba(255,56,88,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    >
+                      <div 
+                        className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
+                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                      >
+                        <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
+                      </div>
+                      <span 
+                        className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
+                        style={{ fontSize: "clamp(6.5px, 2.0cqi, 10.5px)" }}
+                      >
+                        VER PRESENTACIÓN (60FPS)
+                      </span>
+                      <div 
+                        className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
+                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                      >
+                        <ArrowRight className="w-1/2 h-1/2 text-white" />
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -174,10 +277,10 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (PNG TRANSPARENTE CON EFECTO DE CRISTAL) */}
+            {/* CARD 2: IVÁN (ARTE TRANSPARENTE + DIÁLOGOS DE CRISTAL INTERACTIVOS) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(0,209,255,0.25)] hover:drop-shadow-[0_20px_50px_rgba(0,209,255,0.45)]"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(0,209,255,0.25)] hover:drop-shadow-[0_25px_60px_rgba(0,209,255,0.45)]"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container - Totalmente Transparente */}
@@ -187,7 +290,7 @@ export default function AIPersonasSection() {
                 <div className="absolute bottom-4 left-4 w-60 h-60 bg-[#3A86FF]/15 rounded-full blur-[80px] pointer-events-none" />
 
                 <Image
-                  src="/images/ivan_transparent_user.png"
+                  src="/images/ivan_card_art_clean.png"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
                   className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
@@ -208,11 +311,11 @@ export default function AIPersonasSection() {
                       icon: "⚡",
                     })
                   }
-                  className="absolute top-0 left-0 bottom-0 w-[55%] z-20 cursor-pointer group/avatar"
+                  className="absolute top-0 left-0 bottom-0 w-[52%] z-20 cursor-pointer group/avatar"
                   title="Haz clic para ver el video de presentación de Iván"
                 >
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 transform scale-90 group-hover/avatar:scale-100">
-                    <div className="px-4 py-2.5 rounded-2xl bg-black/75 backdrop-blur-xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(0,209,255,0.7)] group-hover/avatar:border-[#00D1FF] transition-colors">
+                    <div className="px-4 py-2.5 rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(0,209,255,0.7)] group-hover/avatar:border-[#00D1FF] transition-colors">
                       <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
                         <Play className="w-4 h-4 fill-black text-black ml-0.5" />
                       </div>
@@ -224,63 +327,166 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
-                <div className="absolute top-[23.8%] left-[61.0%] right-[2.8%] h-[5.2%] flex items-center justify-center pointer-events-none z-20">
-                  <div 
-                    className="w-full h-full text-[#70D6FF] font-mono font-black uppercase tracking-normal flex items-center justify-center drop-shadow-[0_0_10px_rgba(112,214,255,0.95)] px-1 leading-none text-center"
-                    style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
-                  >
-                    SOFTWARE • ARQUITECTURA • CÓDIGO
+                {/* ========================================================== */}
+                {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS DIALOGUE SYSTEM */}
+                {/* ========================================================== */}
+                <div 
+                  className="absolute top-[23.5%] left-[54.5%] right-[3.2%] bottom-[2.2%] z-20 flex flex-col justify-between"
+                  style={{ gap: "clamp(4px, 1.2cqi, 8px)" }}
+                >
+                  {/* Row 1: Subtitle Pill & Hemisferio Badge */}
+                  <div className="flex flex-col items-center" style={{ gap: "clamp(2px, 0.7cqi, 5px)" }}>
+                    <div 
+                      className="w-full py-0.5 px-2 rounded-full bg-black/50 border border-[#70D6FF]/40 backdrop-blur-md text-[#70D6FF] font-mono font-black uppercase tracking-normal text-center drop-shadow-[0_0_8px_rgba(112,214,255,0.6)] flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(6.5px, 2.1cqi, 11px)" }}
+                    >
+                      SOFTWARE • ARQUITECTURA • CÓDIGO
+                    </div>
+                    <div 
+                      className="w-full py-0.5 px-2 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/50 backdrop-blur-md text-[#00D1FF] font-mono font-black uppercase tracking-widest text-center animate-pulse flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(6px, 1.8cqi, 9.5px)" }}
+                    >
+                      HEMISFERIO LÓGICO
+                    </div>
                   </div>
-                </div>
 
-                {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO LÓGICO") */}
-                <div className="absolute top-[30.0%] left-[67.9%] right-[9.7%] h-[5.0%] flex items-center justify-center pointer-events-none z-20">
+                  {/* Row 2: Misión / Descripción Card */}
                   <div 
-                    className="w-full h-full text-[#00D1FF] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_12px_rgba(0,209,255,0.98)] animate-pulse px-1 leading-none text-center"
-                    style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
+                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(0,209,255,0.15)] flex items-center"
+                    style={{ padding: "clamp(5px, 1.8cqi, 12px)" }}
                   >
-                    HEMISFERIO LÓGICO
+                    <p 
+                      className="text-gray-200 font-light leading-snug"
+                      style={{ fontSize: "clamp(6px, 1.75cqi, 10px)" }}
+                    >
+                      Representa la <strong className="text-[#00D1FF] font-semibold">lógica</strong>, la estructura y la tecnología. Transforma ideas en <strong className="text-[#70D6FF] font-semibold">soluciones sólidas, escalables</strong>, eficientes y seguras.
+                    </p>
                   </div>
-                </div>
 
-                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.4%] left-[64%] right-[3.8%] h-[6.8%] flex items-center z-30">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setActiveVideo({
-                        title: "Iván",
-                        role: "CEO & Arquitectura Tech",
-                        subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                        videoSrc: "/videos/ivan_presentacion.mp4",
-                        themeColor: "#00D1FF",
-                        secondaryColor: "#3A86FF",
-                        avatarImg: "/images/ivan_seated_tech.jpg",
-                        icon: "⚡",
-                      })
-                    }
-                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/40 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(0,209,255,0.65)] hover:shadow-[0_0_45px_rgba(0,209,255,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                  {/* Row 3: Personalidad Card */}
+                  <div 
+                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(0,209,255,0.15)] flex flex-col justify-center"
+                    style={{ padding: "clamp(5px, 1.8cqi, 12px)", gap: "clamp(2px, 0.8cqi, 6px)" }}
                   >
                     <div 
-                      className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
+                      className="inline-flex items-center font-mono font-bold text-[#00D1FF] uppercase tracking-wider leading-none"
+                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
                     >
-                      <Play className="w-1/2 h-1/2 fill-black text-black ml-0.5" />
+                      PERSONALIDAD
                     </div>
-                    <span 
-                      className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm leading-none"
-                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
-                    >
-                      VER PRESENTACIÓN (60FPS)
-                    </span>
+                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.6cqi, 4px)" }}>
+                      <div 
+                        className="flex items-center text-gray-200 font-medium leading-none"
+                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                      >
+                        <span className="text-[#00D1FF]">⚙️</span>
+                        <span>Lógico y analítico</span>
+                      </div>
+                      <div 
+                        className="flex items-center text-gray-200 font-medium leading-none"
+                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                      >
+                        <span className="text-[#70D6FF]">🛡️</span>
+                        <span>Responsable y confiable</span>
+                      </div>
+                      <div 
+                        className="flex items-center text-gray-200 font-medium leading-none"
+                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                      >
+                        <span className="text-[#FFD166]">⚡</span>
+                        <span>Innovador y enfocado</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 4: Elementos Clave (3 Micro Cards) */}
+                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.8cqi, 5px)" }}>
                     <div 
-                      className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
+                      className="font-mono font-bold text-[#00D1FF] uppercase tracking-wider leading-none"
+                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
                     >
-                      <ArrowRight className="w-1/2 h-1/2 text-black" />
+                      ELEMENTOS CLAVE
                     </div>
-                  </button>
+                    <div className="grid grid-cols-3" style={{ gap: "clamp(3px, 1cqi, 8px)" }}>
+                      <div 
+                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                      >
+                        <span className="font-mono text-[#00D1FF] font-black" style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>&lt;/&gt;</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                          Código
+                        </div>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                          & Estructura
+                        </div>
+                      </div>
+
+                      <div 
+                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                      >
+                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>🧊</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                          Arquitectura
+                        </div>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                          & Solidez
+                        </div>
+                      </div>
+
+                      <div 
+                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                      >
+                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>⚡</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                          Ingeniería
+                        </div>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                          & Eficiencia
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Row 5: Botón Ver Presentación 60FPS */}
+                  <div className="w-full">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setActiveVideo({
+                          title: "Iván",
+                          role: "CEO & Arquitectura Tech",
+                          subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                          videoSrc: "/videos/ivan_presentacion.mp4",
+                          themeColor: "#00D1FF",
+                          secondaryColor: "#3A86FF",
+                          avatarImg: "/images/ivan_seated_tech.jpg",
+                          icon: "⚡",
+                        })
+                      }
+                      className="w-full px-2.5 py-1.5 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/40 text-black font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_25px_rgba(0,209,255,0.65)] hover:shadow-[0_0_45px_rgba(0,209,255,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    >
+                      <div 
+                        className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
+                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                      >
+                        <Play className="w-1/2 h-1/2 fill-black text-black ml-0.5" />
+                      </div>
+                      <span 
+                        className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm leading-none"
+                        style={{ fontSize: "clamp(6.5px, 2.0cqi, 10.5px)" }}
+                      >
+                        VER PRESENTACIÓN (60FPS)
+                      </span>
+                      <div 
+                        className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
+                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                      >
+                        <ArrowRight className="w-1/2 h-1/2 text-black" />
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
 
