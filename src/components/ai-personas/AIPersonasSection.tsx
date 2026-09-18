@@ -35,7 +35,7 @@ export default function AIPersonasSection() {
       <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#FF3858]/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#00D1FF]/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/15 text-xs font-mono tracking-wider text-[#FF3858] uppercase shadow-lg">
@@ -45,35 +45,23 @@ export default function AIPersonasSection() {
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight uppercase">
             LAS DOS INTELIGENCIAS DE INNOCENTIA
           </h2>
-          <p className="text-gray-300 text-base font-light">
+          <p className="text-gray-300 text-sm sm:text-base font-light">
             Donde la imaginación se convierte en tecnología. Creatividad + Ingeniería trabajando en perfecta armonía.
           </p>
         </div>
 
-        {/* 2 Big Master Cards with Central Infinity Bridge */}
+        {/* 2 Big Master Cards */}
         <div className="relative">
-          {/* Central Infinity Bridge (Visible on large screens) */}
-          <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex-col items-center justify-center pointer-events-none">
-            <div className="w-14 h-14 rounded-full bg-[#07070F] border-2 border-[#00D1FF]/80 shadow-[0_0_35px_rgba(0,209,255,0.5)] flex items-center justify-center text-2xl backdrop-blur-2xl">
-              <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent font-black">
-                ♾️
-              </span>
-            </div>
-            <div className="mt-1.5 px-3 py-1 rounded-full bg-black/90 border border-white/25 text-[8px] font-mono font-bold text-center text-gray-200 uppercase tracking-tight leading-tight backdrop-blur-xl shadow-lg">
-              DOS MUNDOS<br />UNA MISMA VISIÓN
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
             {/* CARD 1: SOFÍA (3D MASTER PIECE CON OVERLAYS ANIMADOS) */}
             {/* ========================================================== */}
-            <div className="group relative rounded-[38px] bg-[#07070F] border-2 border-[#FF3858]/60 hover:border-[#FF3858] backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.22)] hover:shadow-[0_30px_90px_rgba(255,56,88,0.55)] transition-all duration-500 overflow-hidden select-none">
+            <div className="group relative rounded-[32px] sm:rounded-[36px] bg-[#07070F] border-2 border-[#FF3858]/60 hover:border-[#FF3858] backdrop-blur-2xl shadow-[0_20px_60px_rgba(255,56,88,0.22)] hover:shadow-[0_30px_90px_rgba(255,56,88,0.55)] transition-all duration-500 overflow-hidden select-none">
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[110px] pointer-events-none" />
 
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/828] overflow-hidden rounded-[36px]">
+              <div className="relative w-full aspect-[1024/828] overflow-hidden rounded-[30px] sm:rounded-[34px]">
                 <Image
                   src="/images/sofia_master_card.jpg"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
@@ -100,28 +88,28 @@ export default function AIPersonasSection() {
                   title="Haz clic para ver el video de presentación de Sofía"
                 >
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_35px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
-                      <Play className="w-6 h-6 fill-white ml-0.5" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_35px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                      <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-white ml-0.5" />
                     </div>
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
-                <div className="absolute top-[26.2%] left-[57.5%] right-[4.5%] flex items-center justify-center pointer-events-none z-10">
-                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-black/60 border border-[#FF7A00]/50 text-[#FF9E00] text-[9px] sm:text-[11px] md:text-xs font-mono font-bold uppercase tracking-wider text-center shadow-[0_0_10px_rgba(255,122,0,0.3)] backdrop-blur-sm truncate">
+                <div className="absolute top-[26%] left-[56.5%] right-[3.5%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-1.5 sm:px-2 rounded-full bg-black/65 border border-[#FF7A00]/50 text-[#FF9E00] text-[8px] sm:text-[9.5px] md:text-[11px] font-mono font-bold uppercase tracking-wider text-center shadow-[0_0_10px_rgba(255,122,0,0.3)] backdrop-blur-sm whitespace-nowrap">
                     DISEÑO • UX • CREATIVIDAD
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
-                <div className="absolute top-[32.2%] left-[62%] right-[11%] flex items-center justify-center pointer-events-none z-10">
-                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-[#FF3858]/25 border border-[#FF3858]/60 text-[#FF5470] text-[8px] sm:text-[10px] md:text-[11px] font-mono font-extrabold uppercase tracking-wider text-center shadow-[0_0_15px_rgba(255,56,88,0.4)] backdrop-blur-sm animate-pulse truncate">
+                <div className="absolute top-[32.2%] left-[61%] right-[10%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-1.5 sm:px-2 rounded-full bg-[#FF3858]/25 border border-[#FF3858]/60 text-[#FF5470] text-[7.5px] sm:text-[9px] md:text-[10px] font-mono font-extrabold uppercase tracking-wider text-center shadow-[0_0_15px_rgba(255,56,88,0.4)] backdrop-blur-sm animate-pulse whitespace-nowrap">
                     HEMISFERIO CREATIVO
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.5%] left-[48.5%] right-[2%] h-[8%] min-h-[30px] sm:min-h-[36px] flex items-center z-20">
+                <div className="absolute bottom-[2.4%] left-[47.5%] right-[2%] h-[8%] min-h-[28px] sm:min-h-[34px] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -136,16 +124,16 @@ export default function AIPersonasSection() {
                         icon: "🖌️",
                       })
                     }
-                    className="w-full h-full px-2 sm:px-3 rounded-full bg-gradient-to-r from-[#FF3858]/90 via-[#FF5470] to-[#FF7A00]/90 hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black text-[9px] sm:text-[10px] md:text-xs tracking-wider flex items-center justify-between gap-1.5 shadow-[0_0_25px_rgba(255,56,88,0.5)] hover:shadow-[0_0_40px_rgba(255,56,88,0.8)] transition-all cursor-pointer hover:scale-[1.02] active:scale-98 group/btn"
+                    className="w-full h-full px-2 sm:px-3 rounded-full bg-gradient-to-r from-[#FF3858]/90 via-[#FF5470] to-[#FF7A00]/90 hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black text-[8px] sm:text-[9.5px] md:text-[10.5px] tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(255,56,88,0.5)] hover:shadow-[0_0_40px_rgba(255,56,88,0.8)] transition-all cursor-pointer hover:scale-[1.02] active:scale-98 group/btn"
                   >
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform">
-                      <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-white text-white ml-0.5" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                      <Play className="w-2 h-2 sm:w-2.5 sm:h-2.5 fill-white text-white ml-0.5" />
                     </div>
-                    <span className="uppercase font-extrabold text-white truncate drop-shadow-md">
-                      VER VIDEO DE PRESENTACIÓN • SOFÍA (60FPS)
+                    <span className="uppercase font-black text-white whitespace-nowrap drop-shadow-md">
+                      VER PRESENTACIÓN (60FPS)
                     </span>
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
-                      <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                      <ArrowRight className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" />
                     </div>
                   </button>
                 </div>
@@ -163,12 +151,12 @@ export default function AIPersonasSection() {
             {/* ========================================================== */}
             {/* CARD 2: IVÁN (3D MASTER PIECE CON OVERLAYS ANIMADOS) */}
             {/* ========================================================== */}
-            <div className="group relative rounded-[38px] bg-[#07070F] border-2 border-[#00D1FF]/60 hover:border-[#00D1FF] backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.22)] hover:shadow-[0_30px_90px_rgba(0,209,255,0.55)] transition-all duration-500 overflow-hidden select-none">
+            <div className="group relative rounded-[32px] sm:rounded-[36px] bg-[#07070F] border-2 border-[#00D1FF]/60 hover:border-[#00D1FF] backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,209,255,0.22)] hover:shadow-[0_30px_90px_rgba(0,209,255,0.55)] transition-all duration-500 overflow-hidden select-none">
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/20 rounded-full blur-[110px] pointer-events-none" />
 
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/799] overflow-hidden rounded-[36px]">
+              <div className="relative w-full aspect-[1024/799] overflow-hidden rounded-[30px] sm:rounded-[34px]">
                 <Image
                   src="/images/ivan_master_card.jpg"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
@@ -195,28 +183,28 @@ export default function AIPersonasSection() {
                   title="Haz clic para ver el video de presentación de Iván"
                 >
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
-                    <div className="w-14 h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_35px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
-                      <Play className="w-6 h-6 fill-black ml-0.5" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_35px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                      <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-black ml-0.5" />
                     </div>
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
-                <div className="absolute top-[24.2%] left-[61%] right-[3%] flex items-center justify-center pointer-events-none z-10">
-                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-black/60 border border-[#3A86FF]/50 text-[#3A86FF] text-[9px] sm:text-[11px] md:text-xs font-mono font-bold uppercase tracking-wider text-center shadow-[0_0_10px_rgba(58,134,255,0.3)] backdrop-blur-sm truncate">
+                <div className="absolute top-[24%] left-[60%] right-[2.5%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-1 sm:px-1.5 rounded-full bg-black/65 border border-[#3A86FF]/50 text-[#3A86FF] text-[7.5px] sm:text-[8.5px] md:text-[10px] font-mono font-bold uppercase tracking-normal sm:tracking-wider text-center shadow-[0_0_10px_rgba(58,134,255,0.3)] backdrop-blur-sm whitespace-nowrap">
                     SOFTWARE • ARQUITECTURA • CÓDIGO
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO LÓGICO") */}
-                <div className="absolute top-[30.2%] left-[68.5%] right-[9.5%] flex items-center justify-center pointer-events-none z-10">
-                  <div className="w-full py-0.5 sm:py-1 px-2 rounded-full bg-[#00D1FF]/25 border border-[#00D1FF]/60 text-[#00D1FF] text-[8px] sm:text-[10px] md:text-[11px] font-mono font-extrabold uppercase tracking-wider text-center shadow-[0_0_15px_rgba(0,209,255,0.4)] backdrop-blur-sm animate-pulse truncate">
+                <div className="absolute top-[30.2%] left-[67%] right-[8.5%] flex items-center justify-center pointer-events-none z-10">
+                  <div className="w-full py-0.5 sm:py-1 px-1.5 sm:px-2 rounded-full bg-[#00D1FF]/25 border border-[#00D1FF]/60 text-[#00D1FF] text-[7.5px] sm:text-[9px] md:text-[10px] font-mono font-extrabold uppercase tracking-wider text-center shadow-[0_0_15px_rgba(0,209,255,0.4)] backdrop-blur-sm animate-pulse whitespace-nowrap">
                     HEMISFERIO LÓGICO
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.6%] left-[63.5%] right-[2%] h-[8%] min-h-[30px] sm:min-h-[36px] flex items-center z-20">
+                <div className="absolute bottom-[2.4%] left-[62%] right-[2%] h-[8%] min-h-[28px] sm:min-h-[34px] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -231,16 +219,16 @@ export default function AIPersonasSection() {
                         icon: "⚡",
                       })
                     }
-                    className="w-full h-full px-2 sm:px-3 rounded-full bg-gradient-to-r from-[#00D1FF]/90 via-[#00B4D8] to-[#3A86FF]/90 hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black text-[9px] sm:text-[10px] md:text-xs tracking-wider flex items-center justify-between gap-1.5 shadow-[0_0_25px_rgba(0,209,255,0.5)] hover:shadow-[0_0_40px_rgba(0,209,255,0.8)] transition-all cursor-pointer hover:scale-[1.02] active:scale-98 group/btn"
+                    className="w-full h-full px-2 sm:px-3 rounded-full bg-gradient-to-r from-[#00D1FF]/90 via-[#00B4D8] to-[#3A86FF]/90 hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black text-[8px] sm:text-[9.5px] md:text-[10.5px] tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(0,209,255,0.5)] hover:shadow-[0_0_40px_rgba(0,209,255,0.8)] transition-all cursor-pointer hover:scale-[1.02] active:scale-98 group/btn"
                   >
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-black/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform">
-                      <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-black text-black ml-0.5" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                      <Play className="w-2 h-2 sm:w-2.5 sm:h-2.5 fill-black text-black ml-0.5" />
                     </div>
-                    <span className="uppercase font-black text-black truncate drop-shadow-sm">
-                      VER VIDEO DE PRESENTACIÓN • IVÁN (60FPS)
+                    <span className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm">
+                      VER PRESENTACIÓN (60FPS)
                     </span>
-                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-black/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
-                      <ArrowRight className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-black" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                      <ArrowRight className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-black" />
                     </div>
                   </button>
                 </div>
