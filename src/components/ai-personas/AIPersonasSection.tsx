@@ -74,25 +74,25 @@ export default function AIPersonasSection() {
                     videoSrc: "/videos/sofia_presentacion.mp4",
                     themeColor: "#FF3858",
                     secondaryColor: "#FF7A00",
-                    avatarImg: "/images/sofia_standing_brush.png",
+                    avatarImg: "/images/sofia_seated_art.jpg",
                     icon: "🖌️",
                   })
                 }
-                className="sm:col-span-5 flex items-center justify-center relative py-4 cursor-pointer group/avatar"
+                className="sm:col-span-5 flex items-center justify-center relative py-2 cursor-pointer group/avatar"
                 title="Haz clic para ver el video de presentación de Sofía"
               >
-                <div className="relative w-52 h-72 sm:w-56 sm:h-84 flex items-center justify-center">
+                <div className="relative w-56 h-80 sm:w-64 sm:h-96 flex items-center justify-center">
                   {/* Glowing Neon Ring Pedestal */}
-                  <div className="absolute bottom-1 w-44 h-12 rounded-[100%] bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] opacity-75 blur-md -z-10 animate-pulse" />
-                  <div className="absolute bottom-2.5 w-40 h-8 rounded-[100%] border-2 border-[#FF3858] shadow-[0_0_20px_#FF3858] -z-10" />
-                  <div className="absolute -bottom-1 w-48 h-16 bg-[#FF3858]/30 rounded-[100%] blur-xl -z-10" />
+                  <div className="absolute bottom-1 w-48 h-12 rounded-[100%] bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] opacity-80 blur-md -z-10 animate-pulse" />
+                  <div className="absolute bottom-2.5 w-44 h-8 rounded-[100%] border-2 border-[#FF3858] shadow-[0_0_25px_#FF3858] -z-10" />
+                  <div className="absolute -bottom-1 w-52 h-16 bg-[#FF3858]/35 rounded-[100%] blur-xl -z-10" />
 
-                  {/* 100% Pure Transparent Sofía (No box background) */}
+                  {/* High Resolution Seated Sofía Art */}
                   <Image
-                    src="/images/sofia_standing_brush.png"
+                    src="/images/sofia_seated_art.jpg"
                     alt="Sofía - Diseño y UX"
                     fill
-                    className="object-contain filter drop-shadow-[0_0_25px_rgba(255,56,88,0.7)] group-hover/avatar:scale-105 transition-transform duration-500"
+                    className="object-contain filter drop-shadow-[0_0_25px_rgba(255,56,88,0.7)] group-hover/avatar:scale-105 transition-transform duration-500 rounded-3xl mix-blend-lighten"
                     priority
                   />
 
@@ -186,7 +186,7 @@ export default function AIPersonasSection() {
                     videoSrc: "/videos/sofia_presentacion.mp4",
                     themeColor: "#FF3858",
                     secondaryColor: "#FF7A00",
-                    avatarImg: "/images/sofia_standing_brush.png",
+                    avatarImg: "/images/sofia_seated_art.jpg",
                     icon: "🖌️",
                   })
                 }
@@ -218,25 +218,25 @@ export default function AIPersonasSection() {
                     videoSrc: "/videos/ivan_presentacion.mp4",
                     themeColor: "#00D1FF",
                     secondaryColor: "#3A86FF",
-                    avatarImg: "/images/ivan_standing_stylus.png",
+                    avatarImg: "/images/ivan_seated_tech.jpg",
                     icon: "⚡",
                   })
                 }
-                className="sm:col-span-5 flex items-center justify-center relative py-4 cursor-pointer group/avatar"
+                className="sm:col-span-5 flex items-center justify-center relative py-2 cursor-pointer group/avatar"
                 title="Haz clic para ver el video de presentación de Iván"
               >
-                <div className="relative w-52 h-72 sm:w-56 sm:h-84 flex items-center justify-center">
+                <div className="relative w-56 h-80 sm:w-64 sm:h-96 flex items-center justify-center">
                   {/* Glowing Cyber Ring Pedestal */}
-                  <div className="absolute bottom-1 w-44 h-12 rounded-[100%] bg-gradient-to-r from-[#00D1FF] via-[#3A86FF] to-[#8A2BE2] opacity-75 blur-md -z-10 animate-pulse" />
-                  <div className="absolute bottom-2.5 w-40 h-8 rounded-[100%] border-2 border-[#00D1FF] shadow-[0_0_20px_#00D1FF] -z-10" />
-                  <div className="absolute -bottom-1 w-48 h-16 bg-[#00D1FF]/30 rounded-[100%] blur-xl -z-10" />
+                  <div className="absolute bottom-1 w-48 h-12 rounded-[100%] bg-gradient-to-r from-[#00D1FF] via-[#3A86FF] to-[#8A2BE2] opacity-80 blur-md -z-10 animate-pulse" />
+                  <div className="absolute bottom-2.5 w-44 h-8 rounded-[100%] border-2 border-[#00D1FF] shadow-[0_0_25px_#00D1FF] -z-10" />
+                  <div className="absolute -bottom-1 w-52 h-16 bg-[#00D1FF]/35 rounded-[100%] blur-xl -z-10" />
 
-                  {/* 100% Pure Transparent Iván (No box background) */}
+                  {/* High Resolution Seated Iván Tech */}
                   <Image
-                    src="/images/ivan_standing_stylus.png"
+                    src="/images/ivan_seated_tech.jpg"
                     alt="Iván - Software y Arquitectura"
                     fill
-                    className="object-contain filter drop-shadow-[0_0_25px_rgba(0,209,255,0.7)] group-hover/avatar:scale-105 transition-transform duration-500"
+                    className="object-contain filter drop-shadow-[0_0_25px_rgba(0,209,255,0.7)] group-hover/avatar:scale-105 transition-transform duration-500 rounded-3xl mix-blend-lighten"
                     priority
                   />
 
@@ -330,7 +330,7 @@ export default function AIPersonasSection() {
                     videoSrc: "/videos/ivan_presentacion.mp4",
                     themeColor: "#00D1FF",
                     secondaryColor: "#3A86FF",
-                    avatarImg: "/images/ivan_standing_stylus.png",
+                    avatarImg: "/images/ivan_seated_tech.jpg",
                     icon: "⚡",
                   })
                 }
@@ -476,13 +476,18 @@ export default function AIPersonasSection() {
             <div className="flex items-center justify-between border-b border-white/10 pb-3 relative z-10">
               <div className="flex items-center gap-3">
                 <div
-                  className="w-10 h-10 rounded-2xl flex items-center justify-center border text-xl flex-shrink-0"
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center border text-xl flex-shrink-0 overflow-hidden relative"
                   style={{
                     borderColor: `${activeVideo.themeColor}60`,
                     backgroundColor: `${activeVideo.themeColor}20`,
                   }}
                 >
-                  <span>{activeVideo.icon}</span>
+                  <Image
+                    src={activeVideo.avatarImg}
+                    alt={activeVideo.title}
+                    fill
+                    className="object-cover object-top"
+                  />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
