@@ -1,10 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Sparkles } from "../../lib/icons";
+import { Sparkles, Play, X } from "../../lib/icons";
+
+interface PersonaVideoData {
+  title: string;
+  role: string;
+  subtitle: string;
+  videoSrc: string;
+  themeColor: string;
+  secondaryColor: string;
+  avatarImg: string;
+  icon: string;
+}
 
 export default function AIPersonasSection() {
+  const [activeVideo, setActiveVideo] = useState<PersonaVideoData | null>(null);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveVideo(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const characterLaws = [
     { icon: "😊", label: "Dan la bienvenida" },
     { icon: "🧭", label: "Guían al usuario" },
@@ -41,7 +65,22 @@ export default function AIPersonasSection() {
 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center relative z-10">
               {/* Left Column: Pure Transparent Figure on Holographic Neon Ring Pedestal */}
-              <div className="sm:col-span-5 flex items-center justify-center relative py-4">
+              <div
+                onClick={() =>
+                  setActiveVideo({
+                    title: "Sofía",
+                    role: "Dirección UI/UX & Creatividad",
+                    subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                    videoSrc: "/videos/sofia_presentacion.mp4",
+                    themeColor: "#FF3858",
+                    secondaryColor: "#FF7A00",
+                    avatarImg: "/images/sofia_standing_brush.png",
+                    icon: "🖌️",
+                  })
+                }
+                className="sm:col-span-5 flex items-center justify-center relative py-4 cursor-pointer group/avatar"
+                title="Haz clic para ver el video de presentación de Sofía"
+              >
                 <div className="relative w-52 h-72 sm:w-56 sm:h-84 flex items-center justify-center">
                   {/* Glowing Neon Ring Pedestal */}
                   <div className="absolute bottom-1 w-44 h-12 rounded-[100%] bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166] opacity-75 blur-md -z-10 animate-pulse" />
@@ -53,9 +92,16 @@ export default function AIPersonasSection() {
                     src="/images/sofia_standing_brush.png"
                     alt="Sofía - Diseño y UX"
                     fill
-                    className="object-contain filter drop-shadow-[0_0_25px_rgba(255,56,88,0.7)] group-hover:scale-105 transition-transform duration-500"
+                    className="object-contain filter drop-shadow-[0_0_25px_rgba(255,56,88,0.7)] group-hover/avatar:scale-105 transition-transform duration-500"
                     priority
                   />
+
+                  {/* Play badge overlay on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
+                    <div className="w-14 h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_30px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                      <Play className="w-6 h-6 fill-white ml-0.5" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -127,6 +173,31 @@ export default function AIPersonasSection() {
                 </div>
               </div>
             </div>
+
+            {/* PRESENTATION VIDEO BUTTON (SOFÍA) */}
+            <div className="pt-4 border-t border-white/10 relative z-10">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveVideo({
+                    title: "Sofía",
+                    role: "Dirección UI/UX & Creatividad",
+                    subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                    videoSrc: "/videos/sofia_presentacion.mp4",
+                    themeColor: "#FF3858",
+                    secondaryColor: "#FF7A00",
+                    avatarImg: "/images/sofia_standing_brush.png",
+                    icon: "🖌️",
+                  })
+                }
+                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,56,88,0.4)] hover:shadow-[0_0_40px_rgba(255,56,88,0.65)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98"
+              >
+                <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                  <Play className="w-3 h-3 fill-white text-white ml-0.5" />
+                </div>
+                <span>🎬 Ver Video de Presentación • Sofía (60FPS)</span>
+              </button>
+            </div>
           </div>
 
           {/* ========================================================== */}
@@ -138,7 +209,22 @@ export default function AIPersonasSection() {
 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center relative z-10">
               {/* Left Column: Pure Transparent Figure on Cyber Neon Ring Pedestal */}
-              <div className="sm:col-span-5 flex items-center justify-center relative py-4">
+              <div
+                onClick={() =>
+                  setActiveVideo({
+                    title: "Iván",
+                    role: "CEO & Arquitectura Tech",
+                    subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                    videoSrc: "/videos/ivan_presentacion.mp4",
+                    themeColor: "#00D1FF",
+                    secondaryColor: "#3A86FF",
+                    avatarImg: "/images/ivan_standing_stylus.png",
+                    icon: "⚡",
+                  })
+                }
+                className="sm:col-span-5 flex items-center justify-center relative py-4 cursor-pointer group/avatar"
+                title="Haz clic para ver el video de presentación de Iván"
+              >
                 <div className="relative w-52 h-72 sm:w-56 sm:h-84 flex items-center justify-center">
                   {/* Glowing Cyber Ring Pedestal */}
                   <div className="absolute bottom-1 w-44 h-12 rounded-[100%] bg-gradient-to-r from-[#00D1FF] via-[#3A86FF] to-[#8A2BE2] opacity-75 blur-md -z-10 animate-pulse" />
@@ -150,9 +236,16 @@ export default function AIPersonasSection() {
                     src="/images/ivan_standing_stylus.png"
                     alt="Iván - Software y Arquitectura"
                     fill
-                    className="object-contain filter drop-shadow-[0_0_25px_rgba(0,209,255,0.7)] group-hover:scale-105 transition-transform duration-500"
+                    className="object-contain filter drop-shadow-[0_0_25px_rgba(0,209,255,0.7)] group-hover/avatar:scale-105 transition-transform duration-500"
                     priority
                   />
+
+                  {/* Play badge overlay on hover */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
+                    <div className="w-14 h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_30px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
+                      <Play className="w-6 h-6 fill-black ml-0.5" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -223,6 +316,31 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* PRESENTATION VIDEO BUTTON (IVÁN) */}
+            <div className="pt-4 border-t border-white/10 relative z-10">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveVideo({
+                    title: "Iván",
+                    role: "CEO & Arquitectura Tech",
+                    subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                    videoSrc: "/videos/ivan_presentacion.mp4",
+                    themeColor: "#00D1FF",
+                    secondaryColor: "#3A86FF",
+                    avatarImg: "/images/ivan_standing_stylus.png",
+                    icon: "⚡",
+                  })
+                }
+                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.4)] hover:shadow-[0_0_40px_rgba(0,209,255,0.65)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98"
+              >
+                <div className="w-5 h-5 rounded-full bg-black/20 flex items-center justify-center">
+                  <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+                </div>
+                <span>⚡ Ver Video de Presentación • Iván (60FPS)</span>
+              </button>
             </div>
           </div>
         </div>
@@ -329,6 +447,110 @@ export default function AIPersonasSection() {
           </div>
         </div>
       </div>
+
+      {/* ========================================================== */}
+      {/* CINEMATIC DARK LUXURY VIDEO MODAL */}
+      {/* ========================================================== */}
+      {activeVideo && (
+        <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+          {/* Backdrop click to close */}
+          <div
+            className="absolute inset-0 z-0"
+            onClick={() => setActiveVideo(null)}
+          />
+
+          <div
+            className="relative z-10 w-full max-w-4xl rounded-[32px] sm:rounded-[36px] bg-[#07070D] border p-4 sm:p-6 shadow-[0_0_100px_rgba(0,0,0,0.95)] space-y-4 my-auto overflow-hidden animate-in zoom-in-95 duration-300"
+            style={{
+              borderColor: `${activeVideo.themeColor}60`,
+              boxShadow: `0 0 80px ${activeVideo.themeColor}30`,
+            }}
+          >
+            {/* Modal Ambient Glow */}
+            <div
+              className="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-40"
+              style={{ backgroundColor: activeVideo.themeColor }}
+            />
+
+            {/* Modal Header Bar */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 relative z-10">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center border text-xl flex-shrink-0"
+                  style={{
+                    borderColor: `${activeVideo.themeColor}60`,
+                    backgroundColor: `${activeVideo.themeColor}20`,
+                  }}
+                >
+                  <span>{activeVideo.icon}</span>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-black text-white uppercase font-mono tracking-tight">
+                      PRESENTACIÓN OFICIAL • {activeVideo.title}
+                    </h3>
+                    <span
+                      className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border uppercase hidden sm:inline-block"
+                      style={{
+                        color: activeVideo.themeColor,
+                        borderColor: `${activeVideo.themeColor}50`,
+                        backgroundColor: `${activeVideo.themeColor}15`,
+                      }}
+                    >
+                      60FPS HD
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-mono text-gray-400">
+                    {activeVideo.subtitle}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveVideo(null)}
+                aria-label="Cerrar video"
+                className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-gray-300 hover:text-white transition-all cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Video Player Container */}
+            <div
+              className="relative w-full rounded-2xl overflow-hidden bg-black border shadow-2xl aspect-video"
+              style={{ borderColor: `${activeVideo.themeColor}40` }}
+            >
+              <video
+                key={activeVideo.videoSrc}
+                src={activeVideo.videoSrc}
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-contain bg-black"
+              >
+                Tu navegador no soporta reproducción de video HTML5.
+              </video>
+            </div>
+
+            {/* Video Footer Info */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs font-mono text-gray-400 border-t border-white/5">
+              <span className="flex items-center gap-1.5 text-[11px]">
+                <Sparkles className="w-3.5 h-3.5" style={{ color: activeVideo.themeColor }} />
+                <span>Innocentia Tech • Dual Core Architecture</span>
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setActiveVideo(null)}
+                className="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-[11px] font-mono transition-all cursor-pointer"
+              >
+                Cerrar Video (Esc)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
