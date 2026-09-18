@@ -70,7 +70,7 @@ export default function AIPersonasSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/15 pointer-events-none" />
 
                 <Image
-                  src="/images/sofia_master_card_transparent.png"
+                  src="/images/sofia_master_card_v2.png"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
                   className="object-cover relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
@@ -187,7 +187,7 @@ export default function AIPersonasSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/15 pointer-events-none" />
 
                 <Image
-                  src="/images/ivan_master_card_transparent.png"
+                  src="/images/ivan_master_card_v2.png"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
                   className="object-cover relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
