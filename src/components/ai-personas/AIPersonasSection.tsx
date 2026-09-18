@@ -511,107 +511,101 @@ export default function AIPersonasSection() {
         </div>
 
         {/* ========================================================== */}
-        {/* BANNER MASTER: SIEMPRE PRESENTES, SIEMPRE LISTOS PARA CREAR */}
+        {/* BANNER MASTER: IDEAS SIN LÍMITES, SOLUCIONES REALES */}
         {/* ========================================================== */}
-        <div className="p-[1.5px] rounded-[34px] sm:rounded-[42px] bg-gradient-to-r from-[#FF3858]/80 via-purple-500/60 to-[#00D1FF]/80 shadow-[0_0_50px_rgba(255,56,88,0.25),0_0_50px_rgba(0,209,255,0.25)]">
-          <div className="relative rounded-[32px] sm:rounded-[40px] bg-[#06060C] p-6 sm:p-10 md:p-12 overflow-hidden text-left group">
-            {/* Ambient Lighting Halos Behind Content */}
-            <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[100px] pointer-events-none animate-pulse" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02)_0%,transparent_70%)] pointer-events-none" />
+        <div 
+          className="p-[1.5px] rounded-[30px] sm:rounded-[38px] md:rounded-[44px] bg-gradient-to-r from-[#FF3858]/90 via-purple-600/70 to-[#00D1FF]/90 shadow-[0_0_60px_rgba(255,56,88,0.3),0_0_60px_rgba(0,209,255,0.3)] select-none"
+          style={{ containerType: "inline-size" }}
+        >
+          <div className="relative w-full aspect-[1024/532] rounded-[28px] sm:rounded-[36px] md:rounded-[42px] overflow-hidden bg-[#07070E] group">
+            {/* Master Cinematic Artwork */}
+            <Image
+              src="/images/dual_synergy_master_banner.jpg"
+              alt="Ideas sin límites, Soluciones reales • Sofía & Iván • Innocentia Tech"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-[1.01]"
+              priority
+            />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-20">
-              {/* Left Column: Typography & Interactive Chips */}
-              <div className="lg:col-span-6 space-y-4 sm:space-y-6">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
-                  <span>LEYES DE USO DE LOS PERSONAJES</span>
-                </div>
+            {/* Ambient Lighting FX */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 pointer-events-none" />
 
-                <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1]">
-                  SIEMPRE PRESENTES, <br />
-                  SIEMPRE LISTOS <br />
-                  <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,56,88,0.4)]">
-                    PARA CREAR. ✦
-                  </span>
-                </h3>
+            {/* Clickable Interactive Hotspot: "DESCUBRE CÓMO CREAN JUNTOS" Button */}
+            <button
+              type="button"
+              onClick={() =>
+                setActiveVideo({
+                  title: "Sofía & Iván",
+                  role: "Dual Core Architecture",
+                  subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
+                  videoSrc: "/videos/sofia_presentacion.mp4",
+                  themeColor: "#FF3858",
+                  secondaryColor: "#00D1FF",
+                  avatarImg: "/images/sofia_seated_art.jpg",
+                  icon: "✨",
+                })
+              }
+              className="absolute bottom-[20.8%] left-[4.2%] w-[26.2%] h-[6.8%] rounded-full z-20 cursor-pointer group/btn transition-transform active:scale-95 flex items-center justify-between px-2 text-transparent"
+              title="Haz clic para ver cómo crean juntos en Innocentia Tech"
+            >
+              <div className="absolute inset-0 rounded-full border border-white/0 group-hover/btn:border-[#00D1FF]/80 group-hover/btn:bg-[#00D1FF]/10 group-hover/btn:shadow-[0_0_25px_rgba(0,209,255,0.6)] transition-all" />
+            </button>
 
-                <div className="space-y-1.5 text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-lg">
-                  <p>Sofía e Iván no son decoraciones estáticas.</p>
-                  <p>Son los guías vivos que te acompañan desde la primera idea hasta la entrega del código en producción.</p>
-                </div>
-
-                {/* 5 Chips with dark glassmorphism */}
-                <div className="flex flex-wrap gap-2 sm:gap-2.5 pt-1">
-                  <div className="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/20 hover:border-[#FF3858] text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-2 backdrop-blur-xl hover:shadow-[0_0_15px_rgba(255,56,88,0.4)] hover:scale-105 transition-all">
-                    <span>😃</span>
-                    <span>Dan la bienvenida</span>
-                  </div>
-                  <div className="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/20 hover:border-purple-400 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-2 backdrop-blur-xl hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:scale-105 transition-all">
-                    <span>🚀</span>
-                    <span>Guían al usuario</span>
-                  </div>
-                  <div className="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/20 hover:border-[#00D1FF] text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-2 backdrop-blur-xl hover:shadow-[0_0_15px_rgba(0,209,255,0.4)] hover:scale-105 transition-all">
-                    <span>💬</span>
-                    <span>Responden preguntas</span>
-                  </div>
-                  <div className="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/20 hover:border-[#FFD166] text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-2 backdrop-blur-xl hover:shadow-[0_0_15px_rgba(255,209,102,0.4)] hover:scale-105 transition-all">
-                    <span>💡</span>
-                    <span>Visualizan ideas</span>
-                  </div>
-                  <div className="px-3.5 py-1.5 rounded-full bg-black/60 border border-white/20 hover:border-emerald-400 text-[11px] sm:text-xs font-medium text-gray-200 flex items-center gap-2 backdrop-blur-xl hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:scale-105 transition-all">
-                    <span className="font-mono text-[10px] text-[#00D1FF] font-bold">&lt; &gt;</span>
-                    <span>Construyen soluciones</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: New Ultra-Detailed Master Artwork (Sofía & Iván) */}
-              <div className="lg:col-span-6 relative flex items-center justify-center">
-                {/* Luminous Neon Halos Behind Characters */}
-                <div className="absolute top-1/4 left-10 w-48 h-48 bg-[#FF3858]/35 rounded-full blur-[65px] pointer-events-none" />
-                <div className="absolute bottom-1/4 right-10 w-48 h-48 bg-[#00D1FF]/35 rounded-full blur-[65px] pointer-events-none" />
-
-                <div className="relative w-full aspect-[1740/904] max-h-[380px] transition-transform duration-700 group-hover:scale-[1.02] select-none">
-                  <Image
-                    src="/images/dual_kids_master_transparent.png"
-                    alt="Sofía e Iván creando juntos - Innocentia Tech"
-                    fill
-                    className="object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]"
-                    priority
-                  />
+            {/* Clickable Interactive Hotspot: Sofía Area */}
+            <div
+              onClick={() =>
+                setActiveVideo({
+                  title: "Sofía",
+                  role: "Dirección UI/UX & Creatividad",
+                  subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                  videoSrc: "/videos/sofia_presentacion.mp4",
+                  themeColor: "#FF3858",
+                  secondaryColor: "#FF7A00",
+                  avatarImg: "/images/sofia_seated_art.jpg",
+                  icon: "🖌️",
+                })
+              }
+              className="absolute top-[18%] left-[44%] w-[25%] h-[60%] z-20 cursor-pointer group/sofia"
+              title="Haz clic para ver la presentación de Sofía"
+            >
+              <div className="absolute inset-0 rounded-3xl opacity-0 group-hover/sofia:opacity-100 group-hover/sofia:bg-[#FF3858]/5 group-hover/sofia:shadow-[inset_0_0_40px_rgba(255,56,88,0.3)] transition-all flex items-center justify-center">
+                <div className="px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-[#FF3858]/60 text-white font-mono text-[10px] font-bold shadow-lg transform scale-90 group-hover/sofia:scale-100 transition-transform">
+                  ▶ Ver Sofía
                 </div>
               </div>
             </div>
 
-            {/* Bottom Triple Pillars Bar (Cleanly separated with dividers) */}
-            <div className="mt-8 sm:mt-12 pt-6 border-t border-white/15 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-medium relative z-20">
-              <div className="flex items-center justify-center sm:justify-start gap-3 text-gray-300">
-                <span className="w-7 h-7 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 flex items-center justify-center text-xs flex-shrink-0 shadow-[0_0_12px_rgba(255,56,88,0.4)]">
-                  💖
-                </span>
-                <span>
-                  Creatividad que <strong className="text-[#FF3858] font-bold">imagina.</strong>
-                </span>
+            {/* Clickable Interactive Hotspot: Iván Area */}
+            <div
+              onClick={() =>
+                setActiveVideo({
+                  title: "Iván",
+                  role: "CEO & Arquitectura Tech",
+                  subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                  videoSrc: "/videos/ivan_presentacion.mp4",
+                  themeColor: "#00D1FF",
+                  secondaryColor: "#3A86FF",
+                  avatarImg: "/images/ivan_seated_tech.jpg",
+                  icon: "⚡",
+                })
+              }
+              className="absolute top-[18%] left-[70%] w-[26%] h-[60%] z-20 cursor-pointer group/ivan"
+              title="Haz clic para ver la presentación de Iván"
+            >
+              <div className="absolute inset-0 rounded-3xl opacity-0 group-hover/ivan:opacity-100 group-hover/ivan:bg-[#00D1FF]/5 group-hover/ivan:shadow-[inset_0_0_40px_rgba(0,209,255,0.3)] transition-all flex items-center justify-center">
+                <div className="px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-[#00D1FF]/60 text-white font-mono text-[10px] font-bold shadow-lg transform scale-90 group-hover/ivan:scale-100 transition-transform">
+                  ▶ Ver Iván
+                </div>
               </div>
+            </div>
 
-              <div className="flex items-center justify-center gap-3 text-gray-300 sm:border-l sm:border-white/15 sm:pl-6">
-                <span className="w-7 h-7 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-xs flex-shrink-0 shadow-[0_0_12px_rgba(0,209,255,0.4)]">
-                  ⚡
-                </span>
-                <span>
-                  Tecnología que <strong className="text-[#00D1FF] font-bold">construye.</strong>
-                </span>
-              </div>
-
-              <div className="flex items-center justify-center sm:justify-end gap-3 text-gray-300 sm:border-l sm:border-white/15 sm:pl-6">
-                <span className="w-7 h-7 rounded-full bg-[#FFD166]/20 border border-[#FFD166]/40 flex items-center justify-center text-xs flex-shrink-0 shadow-[0_0_12px_rgba(255,209,102,0.4)]">
-                  ✨
-                </span>
-                <span>
-                  Juntos lo hacemos <strong className="text-[#FFD166] font-bold">real.</strong>
-                </span>
-              </div>
+            {/* Semantic SEO & Accessibility Info */}
+            <div className="sr-only">
+              <h3>IDEAS SIN LÍMITES, SOLUCIONES REALES</h3>
+              <p>Creatividad y tecnología trabajando juntas para un mundo más extraordinario.</p>
+              <p>Sofía: Imagina, Diseña, Conecta • Iván: Analiza, Construye, Optimiza</p>
+              <p>Juntos: Crean, Resuelven, Hacen posible.</p>
+              <p>Sofía imagina lo imposible (Arte, Emoción, Experiencias). Iván encuentra cómo hacerlo posible (Tecnología, Estructura, Resultados). Innocentia lo convierte en realidad.</p>
             </div>
           </div>
         </div>
