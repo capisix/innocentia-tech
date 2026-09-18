@@ -54,17 +54,20 @@ export default function AIPersonasSection() {
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (3D MASTER PIECE 100% TRANSPARENTE) */}
+            {/* CARD 1: SOFÍA (3D MASTER PIECE CON CRISTAL ILUMINADO MAGENTA) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none shadow-[0_20px_70px_rgba(255,56,88,0.35)] hover:shadow-[0_25px_90px_rgba(255,56,88,0.6)]"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
-                {/* Soft Ambient Glows Only (No dark background) */}
-                <div className="absolute -top-10 -left-10 w-72 h-72 bg-[#FF3858]/25 rounded-full blur-[80px] pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#FF7A00]/20 rounded-full blur-[70px] pointer-events-none" />
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] border-2 border-[#FF3858]/80 hover:border-[#FF3858]">
+                {/* VIVID LUMINOUS FROSTED GLASS BACKDROP (NO MORE FLAT BLACK) */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#80002A]/90 via-[#4A0018]/85 to-[#1A0009]/90 backdrop-blur-2xl shadow-[inset_0_0_90px_rgba(255,56,88,0.45)]" />
+                <div className="absolute -top-12 -left-12 w-96 h-96 bg-[#FF3858]/55 rounded-full blur-[75px] pointer-events-none animate-pulse" />
+                <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#FF7A00]/45 rounded-full blur-[70px] pointer-events-none" />
+                <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-[#FF1493]/35 rounded-full blur-[60px] pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/15 pointer-events-none" />
 
                 <Image
                   src="/images/sofia_master_card_transparent.png"
@@ -101,7 +104,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
                 <div className="absolute top-[26.0%] left-[57.5%] right-[5.0%] h-[5.5%] flex items-center justify-center pointer-events-none z-20">
                   <div 
-                    className="w-full h-full text-[#FF9E00] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_8px_rgba(255,158,0,0.9)] px-1 leading-none text-center"
+                    className="w-full h-full text-[#FFD166] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,209,102,0.95)] px-1 leading-none text-center"
                     style={{ fontSize: "clamp(6.5px, 2.1cqi, 10.5px)" }}
                   >
                     DISEÑO • UX • CREATIVIDAD
@@ -111,7 +114,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
                 <div className="absolute top-[32.8%] left-[62.0%] right-[11.5%] h-[5.0%] flex items-center justify-center pointer-events-none z-20">
                   <div 
-                    className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,84,112,0.95)] animate-pulse px-1 leading-none text-center"
+                    className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_12px_rgba(255,84,112,0.98)] animate-pulse px-1 leading-none text-center"
                     style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                   >
                     HEMISFERIO CREATIVO
@@ -134,7 +137,7 @@ export default function AIPersonasSection() {
                         icon: "🖌️",
                       })
                     }
-                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(255,56,88,0.55)] hover:shadow-[0_0_40px_rgba(255,56,88,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/40 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(255,56,88,0.65)] hover:shadow-[0_0_45px_rgba(255,56,88,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                   >
                     <div 
                       className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
@@ -168,17 +171,20 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (3D MASTER PIECE 100% TRANSPARENTE) */}
+            {/* CARD 2: IVÁN (3D MASTER PIECE CON CRISTAL ILUMINADO CYAN) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none shadow-[0_20px_70px_rgba(0,209,255,0.35)] hover:shadow-[0_25px_90px_rgba(0,209,255,0.6)]"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
-                {/* Soft Ambient Glows Only (No dark background) */}
-                <div className="absolute -top-10 -right-10 w-72 h-72 bg-[#00D1FF]/25 rounded-full blur-[80px] pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#3A86FF]/20 rounded-full blur-[70px] pointer-events-none" />
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] border-2 border-[#00D1FF]/80 hover:border-[#00D1FF]">
+                {/* VIVID LUMINOUS FROSTED GLASS BACKDROP (NO MORE FLAT BLACK) */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#004578]/90 via-[#002242]/85 to-[#001020]/90 backdrop-blur-2xl shadow-[inset_0_0_90px_rgba(0,209,255,0.45)]" />
+                <div className="absolute -top-12 -right-12 w-96 h-96 bg-[#00D1FF]/55 rounded-full blur-[75px] pointer-events-none animate-pulse" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#3A86FF]/45 rounded-full blur-[70px] pointer-events-none" />
+                <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-[#00F0FF]/35 rounded-full blur-[60px] pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/15 pointer-events-none" />
 
                 <Image
                   src="/images/ivan_master_card_transparent.png"
@@ -215,7 +221,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
                 <div className="absolute top-[23.8%] left-[61.0%] right-[2.8%] h-[5.2%] flex items-center justify-center pointer-events-none z-20">
                   <div 
-                    className="w-full h-full text-[#3A86FF] font-mono font-black uppercase tracking-normal flex items-center justify-center drop-shadow-[0_0_8px_rgba(58,134,255,0.9)] px-1 leading-none text-center"
+                    className="w-full h-full text-[#70D6FF] font-mono font-black uppercase tracking-normal flex items-center justify-center drop-shadow-[0_0_10px_rgba(112,214,255,0.95)] px-1 leading-none text-center"
                     style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                   >
                     SOFTWARE • ARQUITECTURA • CÓDIGO
@@ -225,7 +231,7 @@ export default function AIPersonasSection() {
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO LÓGICO") */}
                 <div className="absolute top-[30.0%] left-[67.9%] right-[9.7%] h-[5.0%] flex items-center justify-center pointer-events-none z-20">
                   <div 
-                    className="w-full h-full text-[#00D1FF] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(0,209,255,0.95)] animate-pulse px-1 leading-none text-center"
+                    className="w-full h-full text-[#00D1FF] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_12px_rgba(0,209,255,0.98)] animate-pulse px-1 leading-none text-center"
                     style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                   >
                     HEMISFERIO LÓGICO
@@ -248,7 +254,7 @@ export default function AIPersonasSection() {
                         icon: "⚡",
                       })
                     }
-                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(0,209,255,0.55)] hover:shadow-[0_0_40px_rgba(0,209,255,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/40 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(0,209,255,0.65)] hover:shadow-[0_0_45px_rgba(0,209,255,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                   >
                     <div 
                       className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
