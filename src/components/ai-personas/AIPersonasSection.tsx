@@ -54,20 +54,20 @@ export default function AIPersonasSection() {
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (ARTE TRANSPARENTE + DIÁLOGOS DE CRISTAL INTERACTIVOS) */}
+            {/* CARD 1: SOFÍA (DESKTOP & TABLET + MOBILE RESPONSIVE) */}
             {/* ========================================================== */}
             <div 
               className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(255,56,88,0.25)] hover:drop-shadow-[0_25px_60px_rgba(255,56,88,0.45)]"
               style={{ containerType: "inline-size" }}
             >
-              {/* High-Resolution 3D Master Artwork Container - Totalmente Transparente */}
-              <div className="relative w-full aspect-[1394/1128] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              {/* DESKTOP & TABLET VIEW (Horizontal Artwork + Native Glass Dialogues) */}
+              <div className="hidden sm:block relative w-full aspect-[1394/1128] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 {/* Ambient Soft Glow Behind Character */}
                 <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#FF3858]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 right-4 w-60 h-60 bg-[#FF7A00]/15 rounded-full blur-[80px] pointer-events-none" />
 
                 <Image
-                  src="/images/sofia_card_art_clean.png"
+                  src="/images/sofia_desktop.png"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
                   className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
@@ -104,9 +104,7 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ========================================================== */}
                 {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS DIALOGUE SYSTEM */}
-                {/* ========================================================== */}
                 <div 
                   className="absolute top-[23.5%] left-[54.5%] right-[3.2%] bottom-[2.2%] z-20 flex flex-col justify-between"
                   style={{ gap: "clamp(4px, 1.2cqi, 8px)" }}
@@ -193,7 +191,7 @@ export default function AIPersonasSection() {
                         <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
                           Pincel
                         </div>
-                        <div className="text-[gray-400] text-[#FF5470] font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-[#FF5470] font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
                           Mágico
                         </div>
                       </div>
@@ -267,6 +265,102 @@ export default function AIPersonasSection() {
                 </div>
               </div>
 
+              {/* MOBILE VIEW (Dedicated Vertical Artwork 4: Sofía Celular + Glass Info Panel) */}
+              <div className="block sm:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#FF3858]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(255,56,88,0.2)]">
+                {/* Vertical Portrait Artwork */}
+                <div 
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Sofía",
+                      role: "Dirección UI/UX & Creatividad",
+                      subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      themeColor: "#FF3858",
+                      secondaryColor: "#FF7A00",
+                      avatarImg: "/images/sofia_seated_art.jpg",
+                      icon: "🖌️",
+                    })
+                  }
+                  className="relative w-full aspect-[1024/1536] max-h-[460px] rounded-2xl overflow-hidden cursor-pointer group/mobart"
+                >
+                  <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/25 rounded-full blur-[60px] pointer-events-none" />
+                  <Image
+                    src="/images/sofia_mobile.png"
+                    alt="Sofía - Celular • Hemisferio Creativo"
+                    fill
+                    className="object-contain relative z-10 transition-transform duration-500 group-hover/mobart:scale-[1.02]"
+                    priority
+                  />
+                  {/* Floating Play Indicator */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 group-hover/mobart:opacity-100 transition-opacity">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_30px_#FF3858]">
+                      <Play className="w-6 h-6 fill-white text-white ml-1" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Info & Dialogue System */}
+                <div className="space-y-3 relative z-20">
+                  <div className="flex flex-col gap-1.5">
+                    <div className="w-full py-1 px-3 rounded-full bg-black/60 border border-[#FFD166]/40 text-[#FFD166] font-mono font-black text-xs uppercase tracking-wider text-center">
+                      DISEÑO • UX • CREATIVIDAD
+                    </div>
+                    <div className="w-full py-1 px-3 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/60 text-[#FF5470] font-mono font-black text-[11px] uppercase tracking-widest text-center animate-pulse">
+                      HEMISFERIO CREATIVO
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-black/60 border border-[#FF3858]/30">
+                    <p className="text-gray-200 text-xs font-light leading-relaxed">
+                      Representa la <strong className="text-[#FF5470] font-semibold">imaginación</strong>, la creatividad y la sensibilidad del diseño. Convierte ideas en <strong className="text-[#FFD166] font-semibold">experiencias memorables</strong>.
+                    </p>
+                  </div>
+
+                  {/* Mobile Personalities */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
+                      <div className="text-sm">🪄</div>
+                      <div className="text-[10px] font-bold text-white">Pincel</div>
+                      <div className="text-[9px] text-[#FF5470] font-mono">Mágico</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
+                      <div className="text-sm">🎨</div>
+                      <div className="text-[10px] font-bold text-white">Creatividad</div>
+                      <div className="text-[9px] text-gray-400 font-mono">Total</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
+                      <div className="text-sm">💖</div>
+                      <div className="text-[10px] font-bold text-white">Empatía</div>
+                      <div className="text-[9px] text-gray-400 font-mono">Pasión</div>
+                    </div>
+                  </div>
+
+                  {/* Mobile Action Button */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveVideo({
+                        title: "Sofía",
+                        role: "Dirección UI/UX & Creatividad",
+                        subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+                        videoSrc: "/videos/sofia_presentacion.mp4",
+                        themeColor: "#FF3858",
+                        secondaryColor: "#FF7A00",
+                        avatarImg: "/images/sofia_seated_art.jpg",
+                        icon: "🖌️",
+                      })
+                    }
+                    className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] border border-white/40 text-white font-mono text-xs font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(255,56,88,0.5)] cursor-pointer"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                      <Play className="w-3 h-3 fill-white text-white ml-0.5" />
+                    </div>
+                    <span className="uppercase font-black text-[11px]">VER PRESENTACIÓN (60FPS)</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
+
               {/* Hidden Semantic Metadata for Google SEO & Screen Readers */}
               <div className="sr-only">
                 <h3>SOFÍA • DISEÑO, UX Y CREATIVIDAD</h3>
@@ -277,20 +371,20 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (ARTE TRANSPARENTE + DIÁLOGOS DE CRISTAL INTERACTIVOS) */}
+            {/* CARD 2: IVÁN (DESKTOP & TABLET + MOBILE RESPONSIVE) */}
             {/* ========================================================== */}
             <div 
               className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(0,209,255,0.25)] hover:drop-shadow-[0_25px_60px_rgba(0,209,255,0.45)]"
               style={{ containerType: "inline-size" }}
             >
-              {/* High-Resolution 3D Master Artwork Container - Totalmente Transparente */}
-              <div className="relative w-full aspect-[1420/1108] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              {/* DESKTOP & TABLET VIEW (Horizontal Artwork + Native Glass Dialogues) */}
+              <div className="hidden sm:block relative w-full aspect-[1420/1108] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 {/* Ambient Soft Glow Behind Character */}
                 <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#00D1FF]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 left-4 w-60 h-60 bg-[#3A86FF]/15 rounded-full blur-[80px] pointer-events-none" />
 
                 <Image
-                  src="/images/ivan_card_art_clean.png"
+                  src="/images/ivan_desktop.png"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
                   className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
@@ -327,9 +421,7 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ========================================================== */}
                 {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS DIALOGUE SYSTEM */}
-                {/* ========================================================== */}
                 <div 
                   className="absolute top-[23.5%] left-[54.5%] right-[3.2%] bottom-[2.2%] z-20 flex flex-col justify-between"
                   style={{ gap: "clamp(4px, 1.2cqi, 8px)" }}
@@ -487,6 +579,102 @@ export default function AIPersonasSection() {
                       </div>
                     </button>
                   </div>
+                </div>
+              </div>
+
+              {/* MOBILE VIEW (Dedicated Vertical Artwork 3: Iván Celular + Glass Info Panel) */}
+              <div className="block sm:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#00D1FF]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(0,209,255,0.2)]">
+                {/* Vertical Portrait Artwork */}
+                <div 
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Iván",
+                      role: "CEO & Arquitectura Tech",
+                      subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                      videoSrc: "/videos/ivan_presentacion.mp4",
+                      themeColor: "#00D1FF",
+                      secondaryColor: "#3A86FF",
+                      avatarImg: "/images/ivan_seated_tech.jpg",
+                      icon: "⚡",
+                    })
+                  }
+                  className="relative w-full aspect-[1024/1536] max-h-[460px] rounded-2xl overflow-hidden cursor-pointer group/mobart"
+                >
+                  <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/25 rounded-full blur-[60px] pointer-events-none" />
+                  <Image
+                    src="/images/ivan_mobile.png"
+                    alt="Iván - Celular • Hemisferio Lógico"
+                    fill
+                    className="object-contain relative z-10 transition-transform duration-500 group-hover/mobart:scale-[1.02]"
+                    priority
+                  />
+                  {/* Floating Play Indicator */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 group-hover/mobart:opacity-100 transition-opacity">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_30px_#00D1FF]">
+                      <Play className="w-6 h-6 fill-black text-black ml-1" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Info & Dialogue System */}
+                <div className="space-y-3 relative z-20">
+                  <div className="flex flex-col gap-1.5">
+                    <div className="w-full py-1 px-3 rounded-full bg-black/60 border border-[#70D6FF]/40 text-[#70D6FF] font-mono font-black text-xs uppercase tracking-wider text-center">
+                      SOFTWARE • ARQUITECTURA • CÓDIGO
+                    </div>
+                    <div className="w-full py-1 px-3 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/60 text-[#00D1FF] font-mono font-black text-[11px] uppercase tracking-widest text-center animate-pulse">
+                      HEMISFERIO LÓGICO
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-black/60 border border-[#00D1FF]/30">
+                    <p className="text-gray-200 text-xs font-light leading-relaxed">
+                      Representa la <strong className="text-[#00D1FF] font-semibold">lógica</strong>, la estructura y la tecnología. Transforma ideas en <strong className="text-[#70D6FF] font-semibold">soluciones sólidas y escalables</strong>.
+                    </p>
+                  </div>
+
+                  {/* Mobile Personalities */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
+                      <div className="text-sm font-mono text-[#00D1FF] font-black">&lt;/&gt;</div>
+                      <div className="text-[10px] font-bold text-white">Código</div>
+                      <div className="text-[9px] text-[#00D1FF] font-mono">Estructura</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
+                      <div className="text-sm">🧊</div>
+                      <div className="text-[10px] font-bold text-white">Arquitectura</div>
+                      <div className="text-[9px] text-gray-400 font-mono">Solidez</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
+                      <div className="text-sm">⚡</div>
+                      <div className="text-[10px] font-bold text-white">Ingeniería</div>
+                      <div className="text-[9px] text-gray-400 font-mono">Eficiencia</div>
+                    </div>
+                  </div>
+
+                  {/* Mobile Action Button */}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveVideo({
+                        title: "Iván",
+                        role: "CEO & Arquitectura Tech",
+                        subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+                        videoSrc: "/videos/ivan_presentacion.mp4",
+                        themeColor: "#00D1FF",
+                        secondaryColor: "#3A86FF",
+                        avatarImg: "/images/ivan_seated_tech.jpg",
+                        icon: "⚡",
+                      })
+                    }
+                    className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] border border-white/40 text-black font-mono text-xs font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(0,209,255,0.5)] cursor-pointer"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-black/25 flex items-center justify-center">
+                      <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+                    </div>
+                    <span className="uppercase font-black text-[11px]">VER PRESENTACIÓN (60FPS)</span>
+                    <ArrowRight className="w-4 h-4 text-black" />
+                  </button>
                 </div>
               </div>
 
