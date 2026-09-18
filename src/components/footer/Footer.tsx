@@ -26,25 +26,25 @@ export default function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-[11px] w-full lg:w-auto">
             <a
               href="mailto:contacto@innocentia.tech"
-              className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-white transition-all flex items-center gap-2 group"
+              className="px-3 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-[#00D1FF] transition-all flex items-center gap-2 group whitespace-nowrap"
             >
-              <span className="w-2 h-2 rounded-full bg-[#00D1FF] group-hover:scale-125 transition-transform" />
+              <span className="w-2 h-2 rounded-full bg-[#00D1FF] group-hover:scale-125 transition-transform flex-shrink-0" />
               <span>contacto@innocentia.tech</span>
             </a>
 
             <a
               href="mailto:ventas@innocentia.tech"
-              className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-[#FF3858] transition-all flex items-center gap-2 group"
+              className="px-3 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-[#FF3858] transition-all flex items-center gap-2 group whitespace-nowrap"
             >
-              <span className="w-2 h-2 rounded-full bg-[#FF3858] group-hover:scale-125 transition-transform" />
+              <span className="w-2 h-2 rounded-full bg-[#FF3858] group-hover:scale-125 transition-transform flex-shrink-0" />
               <span>ventas@innocentia.tech</span>
             </a>
 
             <a
               href="mailto:soporte@innocentia.tech"
-              className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-emerald-400 transition-all flex items-center gap-2 group"
+              className="px-3 py-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-emerald-400 transition-all flex items-center gap-2 group whitespace-nowrap"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:scale-125 transition-transform" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 group-hover:scale-125 transition-transform flex-shrink-0" />
               <span>soporte@innocentia.tech</span>
             </a>
 
@@ -52,10 +52,15 @@ export default function Footer() {
               href="https://wa.me/529601771556"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 transition-all flex items-center gap-2 group"
+              className="px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:text-emerald-100 transition-all flex items-center gap-2.5 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:shadow-[0_0_25px_rgba(16,185,129,0.35)] whitespace-nowrap group cursor-pointer"
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse group-hover:scale-125 transition-transform" />
-              <span>WhatsApp: +52 960 177 1556</span>
+              <span className="relative flex h-2 w-2 flex-shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="font-mono text-xs font-semibold tracking-wide">
+                WhatsApp: <span className="text-white font-bold">+52 960 177 1556</span>
+              </span>
             </a>
           </div>
         </div>
