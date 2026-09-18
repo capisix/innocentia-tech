@@ -61,7 +61,7 @@ export default function AIPersonasSection() {
               style={{ containerType: "inline-size" }}
             >
               {/* DESKTOP & TABLET VIEW (Horizontal Artwork + Native Glass Dialogues) */}
-              <div className="hidden sm:block relative w-full aspect-[1394/1128] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              <div className="hidden sm:block relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 {/* Ambient Soft Glow Behind Character */}
                 <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#FF3858]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 right-4 w-60 h-60 bg-[#FF7A00]/15 rounded-full blur-[80px] pointer-events-none" />
@@ -106,20 +106,20 @@ export default function AIPersonasSection() {
 
                 {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS DIALOGUE SYSTEM */}
                 <div 
-                  className="absolute top-[23.5%] left-[54.5%] right-[3.2%] bottom-[2.2%] z-20 flex flex-col justify-between"
-                  style={{ gap: "clamp(4px, 1.2cqi, 8px)" }}
+                  className="absolute top-[27%] left-[54.5%] right-[3.2%] bottom-[2.5%] z-20 flex flex-col justify-between"
+                  style={{ gap: "clamp(3px, 1.1cqi, 7px)" }}
                 >
                   {/* Row 1: Subtitle Pill & Hemisferio Badge */}
-                  <div className="flex flex-col items-center" style={{ gap: "clamp(2px, 0.7cqi, 5px)" }}>
+                  <div className="flex flex-col items-center" style={{ gap: "clamp(2px, 0.6cqi, 4px)" }}>
                     <div 
-                      className="w-full py-0.5 px-2 rounded-full bg-black/50 border border-[#FFD166]/40 backdrop-blur-md text-[#FFD166] font-mono font-black uppercase tracking-wider text-center drop-shadow-[0_0_8px_rgba(255,209,102,0.6)] flex items-center justify-center leading-none"
-                      style={{ fontSize: "clamp(6.5px, 2.1cqi, 11px)" }}
+                      className="w-full py-0.5 px-2 rounded-full bg-black/55 border border-[#FFD166]/50 backdrop-blur-md text-[#FFD166] font-mono font-black uppercase tracking-wider text-center drop-shadow-[0_0_8px_rgba(255,209,102,0.5)] flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(6px, 1.95cqi, 10.5px)" }}
                     >
                       DISEÑO • UX • CREATIVIDAD
                     </div>
                     <div 
-                      className="w-full py-0.5 px-2 rounded-full bg-[#FF3858]/15 border border-[#FF3858]/50 backdrop-blur-md text-[#FF5470] font-mono font-black uppercase tracking-widest text-center animate-pulse flex items-center justify-center leading-none"
-                      style={{ fontSize: "clamp(6px, 1.8cqi, 9.5px)" }}
+                      className="w-full py-0.5 px-2 rounded-full bg-[#FF3858]/15 border border-[#FF3858]/60 backdrop-blur-md text-[#FF5470] font-mono font-black uppercase tracking-widest text-center animate-pulse flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(5.5px, 1.7cqi, 9px)" }}
                     >
                       HEMISFERIO CREATIVO
                     </div>
@@ -127,12 +127,12 @@ export default function AIPersonasSection() {
 
                   {/* Row 2: Misión / Descripción Card */}
                   <div 
-                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(255,56,88,0.15)] flex items-center"
-                    style={{ padding: "clamp(5px, 1.8cqi, 12px)" }}
+                    className="w-full rounded-[12px] sm:rounded-xl bg-black/65 backdrop-blur-xl border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(255,56,88,0.15)] flex items-center"
+                    style={{ padding: "clamp(4px, 1.6cqi, 10px)" }}
                   >
                     <p 
                       className="text-gray-200 font-light leading-snug"
-                      style={{ fontSize: "clamp(6px, 1.75cqi, 10px)" }}
+                      style={{ fontSize: "clamp(5.5px, 1.65cqi, 9.5px)" }}
                     >
                       Representa la <strong className="text-[#FF5470] font-semibold">imaginación</strong>, la creatividad y la sensibilidad del diseño. Convierte ideas en <strong className="text-[#FFD166] font-semibold">experiencias visuales memorables</strong>, intuitivas y emocionales.
                     </p>
@@ -140,33 +140,33 @@ export default function AIPersonasSection() {
 
                   {/* Row 3: Personalidad Card */}
                   <div 
-                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(255,56,88,0.15)] flex flex-col justify-center"
-                    style={{ padding: "clamp(5px, 1.8cqi, 12px)", gap: "clamp(2px, 0.8cqi, 6px)" }}
+                    className="w-full rounded-[12px] sm:rounded-xl bg-black/65 backdrop-blur-xl border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(255,56,88,0.15)] flex flex-col justify-center"
+                    style={{ padding: "clamp(4px, 1.6cqi, 10px)", gap: "clamp(2px, 0.7cqi, 5px)" }}
                   >
                     <div 
                       className="inline-flex items-center font-mono font-bold text-[#FF5470] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
+                      style={{ fontSize: "clamp(5.5px, 1.6cqi, 8.5px)" }}
                     >
                       PERSONALIDAD
                     </div>
-                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.6cqi, 4px)" }}>
+                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.5cqi, 3px)" }}>
                       <div 
                         className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                        style={{ fontSize: "clamp(5px, 1.5cqi, 9px)", gap: "clamp(3px, 0.9cqi, 5px)" }}
                       >
                         <span className="text-[#FF3858]">💖</span>
                         <span>Curiosa y entusiasta</span>
                       </div>
                       <div 
                         className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                        style={{ fontSize: "clamp(5px, 1.5cqi, 9px)", gap: "clamp(3px, 0.9cqi, 5px)" }}
                       >
                         <span className="text-[#FFD166]">⭐</span>
                         <span>Empática y cercana</span>
                       </div>
                       <div 
                         className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                        style={{ fontSize: "clamp(5px, 1.5cqi, 9px)", gap: "clamp(3px, 0.9cqi, 5px)" }}
                       >
                         <span className="text-[#FF5470]">✨</span>
                         <span>Imaginativa y detallista</span>
@@ -175,49 +175,49 @@ export default function AIPersonasSection() {
                   </div>
 
                   {/* Row 4: Elementos Clave (3 Micro Cards) */}
-                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.8cqi, 5px)" }}>
+                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.7cqi, 4px)" }}>
                     <div 
                       className="font-mono font-bold text-[#FF5470] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
+                      style={{ fontSize: "clamp(5.5px, 1.6cqi, 8.5px)" }}
                     >
                       ELEMENTOS CLAVE
                     </div>
-                    <div className="grid grid-cols-3" style={{ gap: "clamp(3px, 1cqi, 8px)" }}>
+                    <div className="grid grid-cols-3" style={{ gap: "clamp(2px, 0.9cqi, 6px)" }}>
                       <div 
-                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
-                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                        className="rounded-lg bg-black/65 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(2px, 1.0cqi, 6px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
                       >
-                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>🪄</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                        <span style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>🪄</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.5cqi, 8.5px)" }}>
                           Pincel
                         </div>
-                        <div className="text-[#FF5470] font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-[#FF5470] font-mono leading-none" style={{ fontSize: "clamp(4px, 1.2cqi, 7px)" }}>
                           Mágico
                         </div>
                       </div>
 
                       <div 
-                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
-                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                        className="rounded-lg bg-black/65 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(2px, 1.0cqi, 6px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
                       >
-                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>🎨</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                        <span style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>🎨</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.5cqi, 8.5px)" }}>
                           Creatividad
                         </div>
-                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.2cqi, 7px)" }}>
                           & Inspiración
                         </div>
                       </div>
 
                       <div 
-                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
-                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                        className="rounded-lg bg-black/65 backdrop-blur-xl border border-white/20 hover:border-[#FF3858] hover:bg-[#FF3858]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(2px, 1.0cqi, 6px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
                       >
-                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>💖</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                        <span style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>💖</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.5cqi, 8.5px)" }}>
                           Empatía
                         </div>
-                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.2cqi, 7px)" }}>
                           & Pasión
                         </div>
                       </div>
@@ -240,23 +240,23 @@ export default function AIPersonasSection() {
                           icon: "🖌️",
                         })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/40 text-white font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_25px_rgba(255,56,88,0.65)] hover:shadow-[0_0_45px_rgba(255,56,88,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                      className="w-full px-2.5 py-1 rounded-full bg-gradient-to-r from-black/80 via-[#FF3858]/35 to-black/80 hover:from-[#FF3858]/50 hover:to-[#FF7A00]/50 border border-[#FF3858]/60 hover:border-white text-white font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(255,56,88,0.45)] hover:shadow-[0_0_35px_rgba(255,56,88,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                     >
                       <div 
                         className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
                       >
                         <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
                       </div>
                       <span 
                         className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                        style={{ fontSize: "clamp(6.5px, 2.0cqi, 10.5px)" }}
+                        style={{ fontSize: "clamp(6px, 1.85cqi, 9.5px)" }}
                       >
                         VER PRESENTACIÓN (60FPS)
                       </span>
                       <div 
                         className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
                       >
                         <ArrowRight className="w-1/2 h-1/2 text-white" />
                       </div>
@@ -378,7 +378,7 @@ export default function AIPersonasSection() {
               style={{ containerType: "inline-size" }}
             >
               {/* DESKTOP & TABLET VIEW (Horizontal Artwork + Native Glass Dialogues) */}
-              <div className="hidden sm:block relative w-full aspect-[1420/1108] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              <div className="hidden sm:block relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 {/* Ambient Soft Glow Behind Character */}
                 <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#00D1FF]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 left-4 w-60 h-60 bg-[#3A86FF]/15 rounded-full blur-[80px] pointer-events-none" />
@@ -423,20 +423,20 @@ export default function AIPersonasSection() {
 
                 {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS DIALOGUE SYSTEM */}
                 <div 
-                  className="absolute top-[23.5%] left-[54.5%] right-[3.2%] bottom-[2.2%] z-20 flex flex-col justify-between"
-                  style={{ gap: "clamp(4px, 1.2cqi, 8px)" }}
+                  className="absolute top-[27%] left-[54.5%] right-[3.2%] bottom-[2.5%] z-20 flex flex-col justify-between"
+                  style={{ gap: "clamp(3px, 1.1cqi, 7px)" }}
                 >
                   {/* Row 1: Subtitle Pill & Hemisferio Badge */}
-                  <div className="flex flex-col items-center" style={{ gap: "clamp(2px, 0.7cqi, 5px)" }}>
+                  <div className="flex flex-col items-center" style={{ gap: "clamp(2px, 0.6cqi, 4px)" }}>
                     <div 
-                      className="w-full py-0.5 px-2 rounded-full bg-black/50 border border-[#70D6FF]/40 backdrop-blur-md text-[#70D6FF] font-mono font-black uppercase tracking-normal text-center drop-shadow-[0_0_8px_rgba(112,214,255,0.6)] flex items-center justify-center leading-none"
-                      style={{ fontSize: "clamp(6.5px, 2.1cqi, 11px)" }}
+                      className="w-full py-0.5 px-2 rounded-full bg-black/55 border border-[#70D6FF]/50 backdrop-blur-md text-[#70D6FF] font-mono font-black uppercase tracking-normal text-center drop-shadow-[0_0_8px_rgba(112,214,255,0.5)] flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(6px, 1.95cqi, 10.5px)" }}
                     >
                       SOFTWARE • ARQUITECTURA • CÓDIGO
                     </div>
                     <div 
-                      className="w-full py-0.5 px-2 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/50 backdrop-blur-md text-[#00D1FF] font-mono font-black uppercase tracking-widest text-center animate-pulse flex items-center justify-center leading-none"
-                      style={{ fontSize: "clamp(6px, 1.8cqi, 9.5px)" }}
+                      className="w-full py-0.5 px-2 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/60 backdrop-blur-md text-[#00D1FF] font-mono font-black uppercase tracking-widest text-center animate-pulse flex items-center justify-center leading-none"
+                      style={{ fontSize: "clamp(5.5px, 1.7cqi, 9px)" }}
                     >
                       HEMISFERIO LÓGICO
                     </div>
@@ -444,12 +444,12 @@ export default function AIPersonasSection() {
 
                   {/* Row 2: Misión / Descripción Card */}
                   <div 
-                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(0,209,255,0.15)] flex items-center"
-                    style={{ padding: "clamp(5px, 1.8cqi, 12px)" }}
+                    className="w-full rounded-[12px] sm:rounded-xl bg-black/65 backdrop-blur-xl border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(0,209,255,0.15)] flex items-center"
+                    style={{ padding: "clamp(4px, 1.6cqi, 10px)" }}
                   >
                     <p 
                       className="text-gray-200 font-light leading-snug"
-                      style={{ fontSize: "clamp(6px, 1.75cqi, 10px)" }}
+                      style={{ fontSize: "clamp(5.5px, 1.65cqi, 9.5px)" }}
                     >
                       Representa la <strong className="text-[#00D1FF] font-semibold">lógica</strong>, la estructura y la tecnología. Transforma ideas en <strong className="text-[#70D6FF] font-semibold">soluciones sólidas, escalables</strong>, eficientes y seguras.
                     </p>
@@ -457,33 +457,33 @@ export default function AIPersonasSection() {
 
                   {/* Row 3: Personalidad Card */}
                   <div 
-                    className="w-full rounded-[14px] sm:rounded-2xl bg-black/60 backdrop-blur-xl border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(0,209,255,0.15)] flex flex-col justify-center"
-                    style={{ padding: "clamp(5px, 1.8cqi, 12px)", gap: "clamp(2px, 0.8cqi, 6px)" }}
+                    className="w-full rounded-[12px] sm:rounded-xl bg-black/65 backdrop-blur-xl border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_20px_rgba(0,209,255,0.15)] flex flex-col justify-center"
+                    style={{ padding: "clamp(4px, 1.6cqi, 10px)", gap: "clamp(2px, 0.7cqi, 5px)" }}
                   >
                     <div 
                       className="inline-flex items-center font-mono font-bold text-[#00D1FF] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
+                      style={{ fontSize: "clamp(5.5px, 1.6cqi, 8.5px)" }}
                     >
                       PERSONALIDAD
                     </div>
-                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.6cqi, 4px)" }}>
+                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.5cqi, 3px)" }}>
                       <div 
                         className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                        style={{ fontSize: "clamp(5px, 1.5cqi, 9px)", gap: "clamp(3px, 0.9cqi, 5px)" }}
                       >
                         <span className="text-[#00D1FF]">⚙️</span>
                         <span>Lógico y analítico</span>
                       </div>
                       <div 
                         className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                        style={{ fontSize: "clamp(5px, 1.5cqi, 9px)", gap: "clamp(3px, 0.9cqi, 5px)" }}
                       >
                         <span className="text-[#70D6FF]">🛡️</span>
                         <span>Responsable y confiable</span>
                       </div>
                       <div 
                         className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5.5px, 1.6cqi, 9.5px)", gap: "clamp(3px, 1cqi, 6px)" }}
+                        style={{ fontSize: "clamp(5px, 1.5cqi, 9px)", gap: "clamp(3px, 0.9cqi, 5px)" }}
                       >
                         <span className="text-[#FFD166]">⚡</span>
                         <span>Innovador y enfocado</span>
@@ -492,49 +492,49 @@ export default function AIPersonasSection() {
                   </div>
 
                   {/* Row 4: Elementos Clave (3 Micro Cards) */}
-                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.8cqi, 5px)" }}>
+                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.7cqi, 4px)" }}>
                     <div 
                       className="font-mono font-bold text-[#00D1FF] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(6px, 1.7cqi, 9px)" }}
+                      style={{ fontSize: "clamp(5.5px, 1.6cqi, 8.5px)" }}
                     >
                       ELEMENTOS CLAVE
                     </div>
-                    <div className="grid grid-cols-3" style={{ gap: "clamp(3px, 1cqi, 8px)" }}>
+                    <div className="grid grid-cols-3" style={{ gap: "clamp(2px, 0.9cqi, 6px)" }}>
                       <div 
-                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
-                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                        className="rounded-lg bg-black/65 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(2px, 1.0cqi, 6px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
                       >
                         <span className="font-mono text-[#00D1FF] font-black" style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>&lt;/&gt;</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.5cqi, 8.5px)" }}>
                           Código
                         </div>
-                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.2cqi, 7px)" }}>
                           & Estructura
                         </div>
                       </div>
 
                       <div 
-                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
-                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                        className="rounded-lg bg-black/65 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(2px, 1.0cqi, 6px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
                       >
-                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>🧊</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                        <span style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>🧊</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.5cqi, 8.5px)" }}>
                           Arquitectura
                         </div>
-                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.2cqi, 7px)" }}>
                           & Solidez
                         </div>
                       </div>
 
                       <div 
-                        className="rounded-xl bg-black/60 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
-                        style={{ padding: "clamp(3px, 1.2cqi, 8px)", gap: "clamp(1px, 0.4cqi, 3px)" }}
+                        className="rounded-lg bg-black/65 backdrop-blur-xl border border-white/20 hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all duration-300 flex flex-col items-center justify-center text-center shadow-md cursor-default group/elem"
+                        style={{ padding: "clamp(2px, 1.0cqi, 6px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
                       >
-                        <span style={{ fontSize: "clamp(8px, 2.5cqi, 15px)" }}>⚡</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5.5px, 1.6cqi, 9px)" }}>
+                        <span style={{ fontSize: "clamp(7px, 2.2cqi, 13px)" }}>⚡</span>
+                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.5cqi, 8.5px)" }}>
                           Ingeniería
                         </div>
-                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4.5px, 1.3cqi, 7.5px)" }}>
+                        <div className="text-gray-400 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.2cqi, 7px)" }}>
                           & Eficiencia
                         </div>
                       </div>
@@ -557,25 +557,25 @@ export default function AIPersonasSection() {
                           icon: "⚡",
                         })
                       }
-                      className="w-full px-2.5 py-1.5 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/40 text-black font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_25px_rgba(0,209,255,0.65)] hover:shadow-[0_0_45px_rgba(0,209,255,0.95)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                      className="w-full px-2.5 py-1 rounded-full bg-gradient-to-r from-black/80 via-[#00D1FF]/35 to-black/80 hover:from-[#00D1FF]/50 hover:to-[#3A86FF]/50 border border-[#00D1FF]/60 hover:border-white text-white font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(0,209,255,0.45)] hover:shadow-[0_0_35px_rgba(0,209,255,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                     >
                       <div 
-                        className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                        className="rounded-full bg-black/35 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
+                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
                       >
-                        <Play className="w-1/2 h-1/2 fill-black text-black ml-0.5" />
+                        <Play className="w-1/2 h-1/2 fill-cyan-300 text-cyan-300 ml-0.5" />
                       </div>
                       <span 
-                        className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm leading-none"
-                        style={{ fontSize: "clamp(6.5px, 2.0cqi, 10.5px)" }}
+                        className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
+                        style={{ fontSize: "clamp(6px, 1.85cqi, 9.5px)" }}
                       >
                         VER PRESENTACIÓN (60FPS)
                       </span>
                       <div 
-                        className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                        style={{ width: "clamp(14px, 3.2cqi, 20px)", height: "clamp(14px, 3.2cqi, 20px)" }}
+                        className="rounded-full bg-black/35 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
+                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
                       >
-                        <ArrowRight className="w-1/2 h-1/2 text-black" />
+                        <ArrowRight className="w-1/2 h-1/2 text-cyan-300" />
                       </div>
                     </button>
                   </div>
