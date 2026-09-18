@@ -54,30 +54,27 @@ export default function AIPersonasSection() {
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (3D MASTER PIECE CON CRISTAL ILUMINADO MAGENTA) */}
+            {/* CARD 1: SOFÍA (3D MASTER PIECE TRANSPARENTE MAGENTA) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none shadow-[0_20px_70px_rgba(255,56,88,0.35)] hover:shadow-[0_25px_90px_rgba(255,56,88,0.6)]"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none shadow-[0_20px_70px_rgba(255,56,88,0.25)] hover:shadow-[0_25px_90px_rgba(255,56,88,0.5)]"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] border-2 border-[#FF3858]/80 hover:border-[#FF3858]">
-                {/* VIVID LUMINOUS FROSTED GLASS BACKDROP (NO MORE FLAT BLACK) */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#80002A]/90 via-[#4A0018]/85 to-[#1A0009]/90 backdrop-blur-2xl shadow-[inset_0_0_90px_rgba(255,56,88,0.45)]" />
-                <div className="absolute -top-12 -left-12 w-96 h-96 bg-[#FF3858]/55 rounded-full blur-[75px] pointer-events-none animate-pulse" />
-                <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#FF7A00]/45 rounded-full blur-[70px] pointer-events-none" />
-                <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-[#FF1493]/35 rounded-full blur-[60px] pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/15 pointer-events-none" />
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] border border-[#FF3858]/40 hover:border-[#FF3858]/80 bg-gradient-to-br from-[#FF3858]/10 via-black/20 to-transparent backdrop-blur-md transition-colors duration-500">
+                {/* Ambient Soft Glow Behind Character */}
+                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#FF3858]/30 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-4 right-4 w-60 h-60 bg-[#FF7A00]/25 rounded-full blur-[70px] pointer-events-none" />
 
                 <Image
-                  src="/images/sofia_master_card_v2.png"
+                  src="/images/sofia_pure_transparent.png"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
                   className="object-cover relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
                   priority
                 />
 
-                {/* Left Area Click Trigger (Avatar) */}
+                {/* Left Area Click Trigger (Avatar) - Sin círculos invasivos */}
                 <div
                   onClick={() =>
                     setActiveVideo({
@@ -91,15 +88,9 @@ export default function AIPersonasSection() {
                       icon: "🖌️",
                     })
                   }
-                  className="absolute top-0 left-0 bottom-0 w-[48%] z-20 cursor-pointer group/avatar"
+                  className="absolute top-0 left-0 bottom-0 w-[48%] z-20 cursor-pointer"
                   title="Haz clic para ver el video de presentación de Sofía"
-                >
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FF3858] text-white flex items-center justify-center shadow-[0_0_35px_#FF3858] transform scale-90 group-hover/avatar:scale-100 transition-transform">
-                      <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-white ml-0.5" />
-                    </div>
-                  </div>
-                </div>
+                />
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
                 <div className="absolute top-[26.0%] left-[57.5%] right-[5.0%] h-[5.5%] flex items-center justify-center pointer-events-none z-20">
@@ -171,30 +162,27 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (3D MASTER PIECE CON CRISTAL ILUMINADO CYAN) */}
+            {/* CARD 2: IVÁN (3D MASTER PIECE TRANSPARENTE CYAN) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none shadow-[0_20px_70px_rgba(0,209,255,0.35)] hover:shadow-[0_25px_90px_rgba(0,209,255,0.6)]"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none shadow-[0_20px_70px_rgba(0,209,255,0.25)] hover:shadow-[0_25px_90px_rgba(0,209,255,0.5)]"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] border-2 border-[#00D1FF]/80 hover:border-[#00D1FF]">
-                {/* VIVID LUMINOUS FROSTED GLASS BACKDROP (NO MORE FLAT BLACK) */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#004578]/90 via-[#002242]/85 to-[#001020]/90 backdrop-blur-2xl shadow-[inset_0_0_90px_rgba(0,209,255,0.45)]" />
-                <div className="absolute -top-12 -right-12 w-96 h-96 bg-[#00D1FF]/55 rounded-full blur-[75px] pointer-events-none animate-pulse" />
-                <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#3A86FF]/45 rounded-full blur-[70px] pointer-events-none" />
-                <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-[#00F0FF]/35 rounded-full blur-[60px] pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/15 pointer-events-none" />
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] border border-[#00D1FF]/40 hover:border-[#00D1FF]/80 bg-gradient-to-br from-[#00D1FF]/10 via-black/20 to-transparent backdrop-blur-md transition-colors duration-500">
+                {/* Ambient Soft Glow Behind Character */}
+                <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#00D1FF]/30 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-4 left-4 w-60 h-60 bg-[#3A86FF]/25 rounded-full blur-[70px] pointer-events-none" />
 
                 <Image
-                  src="/images/ivan_master_card_v2.png"
+                  src="/images/ivan_pure_transparent.png"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
                   className="object-cover relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
                   priority
                 />
 
-                {/* Left Area Click Trigger (Avatar) */}
+                {/* Left Area Click Trigger (Avatar) - Sin círculos invasivos */}
                 <div
                   onClick={() =>
                     setActiveVideo({
@@ -208,15 +196,9 @@ export default function AIPersonasSection() {
                       icon: "⚡",
                     })
                   }
-                  className="absolute top-0 left-0 bottom-0 w-[55%] z-20 cursor-pointer group/avatar"
+                  className="absolute top-0 left-0 bottom-0 w-[55%] z-20 cursor-pointer"
                   title="Haz clic para ver el video de presentación de Iván"
-                >
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#00D1FF] text-black flex items-center justify-center shadow-[0_0_35px_#00D1FF] transform scale-90 group-hover/avatar:scale-100 transition-transform">
-                      <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-black ml-0.5" />
-                    </div>
-                  </div>
-                </div>
+                />
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
                 <div className="absolute top-[23.8%] left-[61.0%] right-[2.8%] h-[5.2%] flex items-center justify-center pointer-events-none z-20">
