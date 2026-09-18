@@ -63,8 +63,8 @@ export default function AIPersonasSection() {
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3858]/20 rounded-full blur-[110px] pointer-events-none" />
 
-              {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              {/* High-Resolution 3D Master Artwork Container (Harmonized Aspect Ratio) */}
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 <Image
                   src="/images/sofia_master_card.jpg"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
@@ -98,7 +98,7 @@ export default function AIPersonasSection() {
                 </div>
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
-                <div className="absolute top-[26.0%] left-[57.1%] right-[5.3%] h-[5.6%] flex items-center justify-center pointer-events-none z-10">
+                <div className="absolute top-[26.0%] left-[57.5%] right-[5.0%] h-[5.5%] flex items-center justify-center pointer-events-none z-10">
                   <div 
                     className="w-full h-full text-[#FF9E00] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_8px_rgba(255,158,0,0.9)] px-1 leading-none text-center"
                     style={{ fontSize: "clamp(6.5px, 2.1cqi, 10.5px)" }}
@@ -108,7 +108,7 @@ export default function AIPersonasSection() {
                 </div>
 
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
-                <div className="absolute top-[32.8%] left-[61.5%] right-[11.6%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
+                <div className="absolute top-[32.8%] left-[62.0%] right-[11.5%] h-[5.0%] flex items-center justify-center pointer-events-none z-10">
                   <div 
                     className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,84,112,0.95)] animate-pulse px-1 leading-none text-center"
                     style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
@@ -117,8 +117,8 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[3.2%] left-[59%] right-[3.8%] h-[7%] flex items-center z-20">
+                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON (IDENTICAL POSITION & SIZE) */}
+                <div className="absolute bottom-[2.8%] left-[60%] right-[3.5%] h-[7.2%] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -133,7 +133,7 @@ export default function AIPersonasSection() {
                         icon: "🖌️",
                       })
                     }
-                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_20px_rgba(255,56,88,0.55)] hover:shadow-[0_0_35px_rgba(255,56,88,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(255,56,88,0.55)] hover:shadow-[0_0_40px_rgba(255,56,88,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                   >
                     <div 
                       className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
@@ -143,7 +143,7 @@ export default function AIPersonasSection() {
                     </div>
                     <span 
                       className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
+                      style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
                     >
                       VER PRESENTACIÓN (60FPS)
                     </span>
@@ -176,8 +176,8 @@ export default function AIPersonasSection() {
               {/* Top Ambient Glow */}
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#00D1FF]/20 rounded-full blur-[110px] pointer-events-none" />
 
-              {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/799] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              {/* High-Resolution 3D Master Artwork Container (Harmonized Aspect Ratio) */}
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 <Image
                   src="/images/ivan_master_card.jpg"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
@@ -230,8 +230,8 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.4%] left-[64%] right-[3.8%] h-[6.8%] flex items-center z-20">
+                {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON (IDENTICAL POSITION & SIZE) */}
+                <div className="absolute bottom-[2.8%] left-[60%] right-[3.5%] h-[7.2%] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -246,7 +246,7 @@ export default function AIPersonasSection() {
                         icon: "⚡",
                       })
                     }
-                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_20px_rgba(0,209,255,0.55)] hover:shadow-[0_0_35px_rgba(0,209,255,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_25px_rgba(0,209,255,0.55)] hover:shadow-[0_0_40px_rgba(0,209,255,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                   >
                     <div 
                       className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
@@ -256,7 +256,7 @@ export default function AIPersonasSection() {
                     </div>
                     <span 
                       className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm leading-none"
-                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
+                      style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
                     >
                       VER PRESENTACIÓN (60FPS)
                     </span>
