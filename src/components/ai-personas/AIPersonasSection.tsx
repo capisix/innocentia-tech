@@ -224,7 +224,7 @@ export default function AIPersonasSection() {
                     </div>
                   </div>
 
-                  {/* Row 4: Botón Ver Presentación 60FPS */}
+                  {/* Row 4: Botón Sofía presentación */}
                   <div className="w-full">
                     <button
                       type="button"
@@ -240,23 +240,23 @@ export default function AIPersonasSection() {
                           icon: "🖌️",
                         })
                       }
-                      className="w-full px-2.5 py-1 rounded-full bg-gradient-to-r from-black/80 via-[#FF3858]/35 to-black/80 hover:from-[#FF3858]/50 hover:to-[#FF7A00]/50 border border-[#FF3858]/60 hover:border-white text-white font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(255,56,88,0.45)] hover:shadow-[0_0_35px_rgba(255,56,88,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                      className="w-full px-3 py-1.5 rounded-full bg-[#0E070B]/95 hover:bg-[#1F0A15] backdrop-blur-2xl border border-[#FF3858]/75 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.4)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_35px_rgba(255,56,88,0.7)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                     >
                       <div 
-                        className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
+                        className="rounded-full bg-[#FF3858] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#FF3858] transition-transform"
+                        style={{ width: "clamp(14px, 3.0cqi, 20px)", height: "clamp(14px, 3.0cqi, 20px)" }}
                       >
                         <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
                       </div>
                       <span 
-                        className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                        style={{ fontSize: "clamp(6px, 1.85cqi, 9.5px)" }}
+                        className="font-bold text-white whitespace-nowrap drop-shadow-md leading-none"
+                        style={{ fontSize: "clamp(7px, 2.1cqi, 11px)" }}
                       >
-                        VER PRESENTACIÓN (60FPS)
+                        Sofía presentación
                       </span>
                       <div 
-                        className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
+                        className="rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
+                        style={{ width: "clamp(14px, 3.0cqi, 20px)", height: "clamp(14px, 3.0cqi, 20px)" }}
                       >
                         <ArrowRight className="w-1/2 h-1/2 text-white" />
                       </div>
@@ -350,12 +350,12 @@ export default function AIPersonasSection() {
                         icon: "🖌️",
                       })
                     }
-                    className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] border border-white/40 text-white font-mono text-xs font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(255,56,88,0.5)] cursor-pointer"
+                    className="w-full py-3 px-4 rounded-full bg-[#0E070B]/95 hover:bg-[#1F0A15] backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.4)] cursor-pointer"
                   >
-                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-[#FF3858] flex items-center justify-center shadow-[0_0_10px_#FF3858]">
                       <Play className="w-3 h-3 fill-white text-white ml-0.5" />
                     </div>
-                    <span className="uppercase font-black text-[11px]">VER PRESENTACIÓN (60FPS)</span>
+                    <span className="font-bold text-xs">Sofía presentación</span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </button>
                 </div>
@@ -541,7 +541,7 @@ export default function AIPersonasSection() {
                     </div>
                   </div>
 
-                  {/* Row 4: Botón Ver Presentación 60FPS */}
+                  {/* Row 4: Botón Iván presentación */}
                   <div className="w-full">
                     <button
                       type="button"
@@ -557,23 +557,23 @@ export default function AIPersonasSection() {
                           icon: "⚡",
                         })
                       }
-                      className="w-full px-2.5 py-1 rounded-full bg-gradient-to-r from-black/80 via-[#00D1FF]/35 to-black/80 hover:from-[#00D1FF]/50 hover:to-[#3A86FF]/50 border border-[#00D1FF]/60 hover:border-white text-white font-mono font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(0,209,255,0.45)] hover:shadow-[0_0_35px_rgba(0,209,255,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                      className="w-full px-3 py-1.5 rounded-full bg-[#060D18]/95 hover:bg-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/75 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.4)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_35px_rgba(0,209,255,0.7)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                     >
                       <div 
-                        className="rounded-full bg-black/35 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
+                        className="rounded-full bg-[#00D1FF] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#00D1FF] transition-transform"
+                        style={{ width: "clamp(14px, 3.0cqi, 20px)", height: "clamp(14px, 3.0cqi, 20px)" }}
                       >
-                        <Play className="w-1/2 h-1/2 fill-cyan-300 text-cyan-300 ml-0.5" />
+                        <Play className="w-1/2 h-1/2 fill-black text-black ml-0.5" />
                       </div>
                       <span 
-                        className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                        style={{ fontSize: "clamp(6px, 1.85cqi, 9.5px)" }}
+                        className="font-bold text-white whitespace-nowrap drop-shadow-md leading-none"
+                        style={{ fontSize: "clamp(7px, 2.1cqi, 11px)" }}
                       >
-                        VER PRESENTACIÓN (60FPS)
+                        Iván presentación
                       </span>
                       <div 
-                        className="rounded-full bg-black/35 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                        style={{ width: "clamp(13px, 2.8cqi, 18px)", height: "clamp(13px, 2.8cqi, 18px)" }}
+                        className="rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
+                        style={{ width: "clamp(14px, 3.0cqi, 20px)", height: "clamp(14px, 3.0cqi, 20px)" }}
                       >
                         <ArrowRight className="w-1/2 h-1/2 text-cyan-300" />
                       </div>
@@ -667,13 +667,13 @@ export default function AIPersonasSection() {
                         icon: "⚡",
                       })
                     }
-                    className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] border border-white/40 text-black font-mono text-xs font-black tracking-wide flex items-center justify-between shadow-[0_0_20px_rgba(0,209,255,0.5)] cursor-pointer"
+                    className="w-full py-3 px-4 rounded-full bg-[#060D18]/95 hover:bg-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.4)] cursor-pointer"
                   >
-                    <div className="w-6 h-6 rounded-full bg-black/25 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF]">
                       <Play className="w-3 h-3 fill-black text-black ml-0.5" />
                     </div>
-                    <span className="uppercase font-black text-[11px]">VER PRESENTACIÓN (60FPS)</span>
-                    <ArrowRight className="w-4 h-4 text-black" />
+                    <span className="font-bold text-xs">Iván presentación</span>
+                    <ArrowRight className="w-4 h-4 text-cyan-300" />
                   </button>
                 </div>
               </div>
