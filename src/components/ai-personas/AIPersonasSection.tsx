@@ -98,27 +98,27 @@ export default function AIPersonasSection() {
                 </div>
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("DISEÑO • UX • CREATIVIDAD") */}
-                <div className="absolute top-[26%] left-[57%] right-[4%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
+                <div className="absolute top-[26.0%] left-[57.1%] right-[5.3%] h-[5.6%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full text-[#FF9E00] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_8px_rgba(255,158,0,0.85)] px-1"
-                    style={{ fontSize: "clamp(7px, 2.2cqi, 11px)" }}
+                    className="w-full h-full text-[#FF9E00] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_8px_rgba(255,158,0,0.9)] px-1 leading-none text-center"
+                    style={{ fontSize: "clamp(6.5px, 2.1cqi, 10.5px)" }}
                   >
                     DISEÑO • UX • CREATIVIDAD
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO CREATIVO") */}
-                <div className="absolute top-[32%] left-[61.5%] right-[10.5%] h-[5%] flex items-center justify-center pointer-events-none z-10">
+                <div className="absolute top-[32.8%] left-[61.5%] right-[11.6%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,84,112,0.9)] animate-pulse px-1"
-                    style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
+                    className="w-full h-full text-[#FF5470] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(255,84,112,0.95)] animate-pulse px-1 leading-none text-center"
+                    style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                   >
                     HEMISFERIO CREATIVO
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.2%] left-[47.5%] right-[2%] h-[7.5%] flex items-center z-20">
+                <div className="absolute bottom-[3.2%] left-[59%] right-[3.8%] h-[7%] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -133,23 +133,23 @@ export default function AIPersonasSection() {
                         icon: "🖌️",
                       })
                     }
-                    className="w-full h-full px-1.5 sm:px-2.5 rounded-full bg-gradient-to-r from-[#FF3858]/90 via-[#FF5470] to-[#FF7A00]/90 hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_20px_rgba(255,56,88,0.5)] hover:shadow-[0_0_35px_rgba(255,56,88,0.8)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] border border-white/30 text-white font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_20px_rgba(255,56,88,0.55)] hover:shadow-[0_0_35px_rgba(255,56,88,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                   >
                     <div 
                       className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                      style={{ width: "clamp(12px, 3.2cqi, 20px)", height: "clamp(12px, 3.2cqi, 20px)" }}
+                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
                       <Play className="w-2/3 h-2/3 fill-white text-white ml-0.5" />
                     </div>
                     <span 
                       className="uppercase font-black text-white whitespace-nowrap drop-shadow-md leading-none"
-                      style={{ fontSize: "clamp(6.5px, 2.1cqi, 10.5px)" }}
+                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                     >
                       VER PRESENTACIÓN (60FPS)
                     </span>
                     <div 
                       className="rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                      style={{ width: "clamp(12px, 3.2cqi, 20px)", height: "clamp(12px, 3.2cqi, 20px)" }}
+                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
                       <ArrowRight className="w-2/3 h-2/3 text-white" />
                     </div>
@@ -211,27 +211,27 @@ export default function AIPersonasSection() {
                 </div>
 
                 {/* ANIMATED OVERLAY 1: SUBTITLE PILL ("SOFTWARE • ARQUITECTURA • CÓDIGO") */}
-                <div className="absolute top-[24%] left-[60.5%] right-[2.5%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
+                <div className="absolute top-[23.8%] left-[61.0%] right-[2.8%] h-[5.2%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full text-[#3A86FF] font-mono font-black uppercase tracking-normal flex items-center justify-center drop-shadow-[0_0_8px_rgba(58,134,255,0.85)] px-1"
-                    style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
+                    className="w-full h-full text-[#3A86FF] font-mono font-black uppercase tracking-normal flex items-center justify-center drop-shadow-[0_0_8px_rgba(58,134,255,0.9)] px-1 leading-none text-center"
+                    style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                   >
                     SOFTWARE • ARQUITECTURA • CÓDIGO
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 2: HEMISFERIO PILL ("HEMISFERIO LÓGICO") */}
-                <div className="absolute top-[30%] left-[67.5%] right-[8.5%] h-[5%] flex items-center justify-center pointer-events-none z-10">
+                <div className="absolute top-[30.0%] left-[67.9%] right-[9.7%] h-[5.0%] flex items-center justify-center pointer-events-none z-10">
                   <div 
-                    className="w-full h-full text-[#00D1FF] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(0,209,255,0.9)] animate-pulse px-1"
-                    style={{ fontSize: "clamp(6.5px, 2cqi, 10px)" }}
+                    className="w-full h-full text-[#00D1FF] font-mono font-black uppercase tracking-wider flex items-center justify-center drop-shadow-[0_0_10px_rgba(0,209,255,0.95)] animate-pulse px-1 leading-none text-center"
+                    style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                   >
                     HEMISFERIO LÓGICO
                   </div>
                 </div>
 
                 {/* ANIMATED OVERLAY 3: BOTTOM REAL GLOWING VIDEO BUTTON */}
-                <div className="absolute bottom-[2.2%] left-[62%] right-[2%] h-[7.5%] flex items-center z-20">
+                <div className="absolute bottom-[2.4%] left-[64%] right-[3.8%] h-[6.8%] flex items-center z-20">
                   <button
                     type="button"
                     onClick={() =>
@@ -246,23 +246,23 @@ export default function AIPersonasSection() {
                         icon: "⚡",
                       })
                     }
-                    className="w-full h-full px-1.5 sm:px-2.5 rounded-full bg-gradient-to-r from-[#00D1FF]/90 via-[#00B4D8] to-[#3A86FF]/90 hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_20px_rgba(0,209,255,0.5)] hover:shadow-[0_0_35px_rgba(0,209,255,0.8)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                    className="w-full h-full px-2 rounded-full bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] hover:from-[#00E5FF] hover:to-[#4D94FF] border border-white/30 text-black font-mono font-black tracking-wide flex items-center justify-between gap-1 shadow-[0_0_20px_rgba(0,209,255,0.55)] hover:shadow-[0_0_35px_rgba(0,209,255,0.85)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                   >
                     <div 
                       className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 transition-transform"
-                      style={{ width: "clamp(12px, 3.2cqi, 20px)", height: "clamp(12px, 3.2cqi, 20px)" }}
+                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
                       <Play className="w-2/3 h-2/3 fill-black text-black ml-0.5" />
                     </div>
                     <span 
                       className="uppercase font-black text-black whitespace-nowrap drop-shadow-sm leading-none"
-                      style={{ fontSize: "clamp(6.5px, 2.1cqi, 10.5px)" }}
+                      style={{ fontSize: "clamp(6px, 1.9cqi, 9.5px)" }}
                     >
                       VER PRESENTACIÓN (60FPS)
                     </span>
                     <div 
                       className="rounded-full bg-black/25 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                      style={{ width: "clamp(12px, 3.2cqi, 20px)", height: "clamp(12px, 3.2cqi, 20px)" }}
+                      style={{ width: "clamp(12px, 3cqi, 18px)", height: "clamp(12px, 3cqi, 18px)" }}
                     >
                       <ArrowRight className="w-2/3 h-2/3 text-black" />
                     </div>
