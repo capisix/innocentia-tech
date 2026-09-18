@@ -54,19 +54,17 @@ export default function AIPersonasSection() {
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (3D MASTER PIECE CON FONDO LUMINOSO) */}
+            {/* CARD 1: SOFÍA (3D MASTER PIECE 100% TRANSPARENTE) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] transition-all duration-500 overflow-hidden select-none"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px]">
-                {/* Rich Glowing Backdrop (Replaces flat black with vibrant magenta atmosphere) */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#3D0A1E]/95 via-[#220612]/95 to-[#0D0207] rounded-[26px] sm:rounded-[34px] border border-[#FF3858]/50 shadow-[0_0_50px_rgba(255,56,88,0.3)]" />
-                <div className="absolute -top-12 -left-12 w-80 h-80 bg-[#FF3858]/40 rounded-full blur-[85px] pointer-events-none animate-pulse" />
-                <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FF7A00]/30 rounded-full blur-[80px] pointer-events-none" />
-                <div className="absolute top-1/2 left-1/4 w-60 h-60 bg-[#FF007F]/25 rounded-full blur-[70px] pointer-events-none" />
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+                {/* Soft Ambient Glows Only (No dark background) */}
+                <div className="absolute -top-10 -left-10 w-72 h-72 bg-[#FF3858]/25 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#FF7A00]/20 rounded-full blur-[70px] pointer-events-none" />
 
                 <Image
                   src="/images/sofia_master_card_transparent.png"
@@ -170,19 +168,17 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (3D MASTER PIECE CON FONDO LUMINOSO) */}
+            {/* CARD 2: IVÁN (3D MASTER PIECE 100% TRANSPARENTE) */}
             {/* ========================================================== */}
             <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] transition-all duration-500 overflow-hidden select-none"
+              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 overflow-hidden select-none"
               style={{ containerType: "inline-size" }}
             >
               {/* High-Resolution 3D Master Artwork Container */}
-              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px]">
-                {/* Rich Glowing Backdrop (Replaces flat black with vibrant cyber cyan atmosphere) */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#06263D]/95 via-[#031424]/95 to-[#020A14] rounded-[26px] sm:rounded-[34px] border border-[#00D1FF]/50 shadow-[0_0_50px_rgba(0,209,255,0.3)]" />
-                <div className="absolute -top-12 -right-12 w-80 h-80 bg-[#00D1FF]/40 rounded-full blur-[85px] pointer-events-none animate-pulse" />
-                <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#3A86FF]/30 rounded-full blur-[80px] pointer-events-none" />
-                <div className="absolute top-1/2 right-1/4 w-60 h-60 bg-[#00F0FF]/25 rounded-full blur-[70px] pointer-events-none" />
+              <div className="relative w-full aspect-[1024/815] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+                {/* Soft Ambient Glows Only (No dark background) */}
+                <div className="absolute -top-10 -right-10 w-72 h-72 bg-[#00D1FF]/25 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#3A86FF]/20 rounded-full blur-[70px] pointer-events-none" />
 
                 <Image
                   src="/images/ivan_master_card_transparent.png"
