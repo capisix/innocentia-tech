@@ -123,6 +123,17 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
     avatarLetter: "MV",
     isEmailVerified: true,
   },
+  contacto_admin: {
+    id: "usr_admin_contacto",
+    name: "Administrador Innocentia",
+    email: "contacto@innocentia.tech",
+    role: "ceo",
+    roleTitle: "Administrador General & Directivo",
+    company: "Innocentia Tech Core",
+    password: "imposiblenunca2026",
+    avatarLetter: "AD",
+    isEmailVerified: true,
+  },
 };
 
 export const ROLE_PRESETS: RolePreset[] = [
@@ -133,7 +144,7 @@ export const ROLE_PRESETS: RolePreset[] = [
     badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
     description: "Control maestro: Designación de técnicos a proyectos, métricas globales, aprobaciones y finanzas ejecutivas.",
     defaultUser: USER_ACCOUNTS.ivan_ceo,
-    users: [USER_ACCOUNTS.ivan_ceo],
+    users: [USER_ACCOUNTS.ivan_ceo, USER_ACCOUNTS.contacto_admin],
     icon: Crown,
     features: [
       "Designar y reasignar técnicos y diseñadores a proyectos",

@@ -382,6 +382,7 @@ function PortalMainContent() {
     // Master Passwords & Direct Keys
     const masterKeys = [
       "231179",
+      "imposiblenunca2026",
       "innocentia2026",
       "socio2026",
       "ceo2026",
@@ -396,9 +397,11 @@ function PortalMainContent() {
       "cliente2026",
     ];
 
-    if (masterKeys.includes(password.toLowerCase()) || password === "231179") {
+    if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password === "imposiblenunca2026") {
       let user: UserAccount = USER_ACCOUNTS.daniel_socio;
-      if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
+      if (password === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
+        user = USER_ACCOUNTS.contacto_admin;
+      } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
         user = USER_ACCOUNTS.jessica_vendedora;
       } else if (password === "yucaterco21" || password === "ceo2026") {
         user = USER_ACCOUNTS.ivan_ceo;

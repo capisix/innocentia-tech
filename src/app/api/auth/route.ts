@@ -109,7 +109,11 @@ export async function POST(req: Request) {
       let roleTitle = "Socio Co-Fundador & Operaciones";
       let name = "Daniel Torre";
 
-      if (cleanEmail.includes("ivan") || cleanEmail.includes("ceo")) {
+      if (cleanEmail.includes("contacto") || cleanEmail.includes("admin")) {
+        role = "ceo";
+        roleTitle = "Administrador General & Directivo";
+        name = "Administrador Innocentia";
+      } else if (cleanEmail.includes("ivan") || cleanEmail.includes("ceo")) {
         role = "ceo";
         roleTitle = "Director General & CEO";
         name = "Iván Castillo";
