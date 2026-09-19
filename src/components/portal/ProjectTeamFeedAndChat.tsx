@@ -120,30 +120,42 @@ export default function ProjectTeamFeedAndChat({
   userRole = "socio",
   userName = "Daniel Torre",
 }: ProjectTeamFeedAndChatProps) {
-  // Available Projects - Limpio para inicio de operaciones reales
-  const projects: ProjectItem[] = [];
+  // Available Projects - Proyecto Activo Axana
+  const projects: ProjectItem[] = [
+    {
+      id: "proj-axana",
+      name: "Axana - Plataforma Digital & E-Commerce",
+      client: "Axana & Gabriel",
+      status: "En espera de revisión de demo",
+      leadDesigner: "Sofía (Innocentia Design)",
+      leadDev: "Ing. Rodrigo Pacheco & Iván Castillo (CEO)",
+      leadSales: "Jessica Torre (VEN-JESS-101)",
+      partnerLead: "Dirección General & Operaciones",
+      progress: 15,
+    },
+  ];
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("proj-axana");
   const [activeTab, setActiveTab] = useState<"leads" | "chat" | "blog">("leads");
 
-  // Incoming Leads State (solo prospectos reales, inicializado o sincronizado con localStorage)
+  // Incoming Leads State (Formulario contestado de Axana asignado a Jessica Torre)
   const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
     {
-      id: "PROJ-592160",
-      clientName: "Daniel Torre de Haro",
-      clientCompany: "Pro Acabados",
-      clientPhone: "9601771556",
-      clientEmail: "pro.acabados.mx@gmail.com",
-      vendorCode: "VEN-CARLOS-202",
-      vendorName: "Carlos Mendoza",
-      projectName: "App de Pedidos y entregas de producto",
+      id: "PROJ-AXANA-2026",
+      clientName: "Axana & Gabriel",
+      clientCompany: "Axana",
+      clientPhone: "+52 55 8421 0898",
+      clientEmail: "contacto@axana.mx",
+      vendorCode: "VEN-JESS-101",
+      vendorName: "Jessica Torre",
+      projectName: "Axana - Plataforma Digital & E-Commerce",
       projectType: "web_platform",
-      budgetRange: "50k_150k",
+      budgetRange: "80k_150k",
       timeline: "standard",
-      description: "Atención al cliente, manejo de cotizaciones y formulario de pedidos, cobro de pedidos, reparto de comisiones.",
-      date: "Hoy, Reciente",
-      status: "Nueva Solicitud",
-      assignedVendor: "Carlos Mendoza",
+      description: "Desarrollo de plataforma digital interactiva, catálogo dinámico con pasarela de pagos, gestión de pedidos y conexión automatizada por WhatsApp API. Formulario contestado y registrado con asesora comercial Jessica Torre. En espera de revisión de demo interactivo.",
+      date: "14 Sep 2026 (Reciente)",
+      status: "En Revisión",
+      assignedVendor: "Jessica Torre",
     },
   ]);
 

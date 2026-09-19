@@ -628,8 +628,27 @@ function PortalMainContent() {
   // SHARED DATABASE MOCK STATE
   // ==========================================
 
-  // Projects State - Limpio para inicio de operaciones reales
-  const [projects, setProjects] = useState<AssignedProject[]>([]);
+  // Projects State - Proyecto Activo Axana con Jessica Torre (En espera de revisión de demo)
+  const [projects, setProjects] = useState<AssignedProject[]>([
+    {
+      id: "PRJ-AXANA-01",
+      name: "Axana - Plataforma Digital & E-Commerce",
+      client: "Axana & Gabriel",
+      clientEmail: "contacto@axana.mx",
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre (VEN-JESS-101)",
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "En Revisión",
+      progress: 15,
+      currentSprint: "Fase 0: En espera de revisión y demostración de demo interactivo con cliente",
+      budget: 120000,
+      paidAmount: 0,
+      targetDate: "30 de Octubre de 2026",
+      unreadAlerts: 1,
+    },
+  ]);
 
   // Audit Logs State con Metadata de Estados de Pago y Fechas - Solo registros reales de infraestructura y setup
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([
