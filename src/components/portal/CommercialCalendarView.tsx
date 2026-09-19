@@ -35,6 +35,8 @@ export interface CommercialAppointment {
   meetUrl?: string;
   pin?: string;
   dialNumber?: string;
+  sellerId?: string;
+  sellerName?: string;
 }
 
 interface CommercialCalendarViewProps {

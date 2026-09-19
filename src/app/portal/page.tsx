@@ -134,10 +134,12 @@ interface SellerLead {
   clientName: string;
   company: string;
   phone: string;
-  status: "Formulario Enviado" | "En Cotización" | "Aprobado - En Desarrollo" | "Cerrado";
+  status: "Formulario Enviado" | "En Cotización" | "Aprobado - En Desarrollo" | "Cerrado" | "En Revisión";
   date: string;
   estimatedBudget: string;
   hasNewNotification: boolean;
+  sellerId?: string;
+  sellerName?: string;
 }
 
 function PortalMainContent() {
@@ -479,6 +481,8 @@ function PortalMainContent() {
   const handleAddSellerAppointment = (newApt: Omit<CommercialAppointment, "id">) => {
     const created: CommercialAppointment = {
       id: "APT-" + Math.floor(100 + Math.random() * 900),
+      sellerId: safeActiveUser.id,
+      sellerName: safeActiveUser.name,
       ...newApt,
     };
     setSellerAppointments((prev) => [created, ...prev]);
@@ -510,30 +514,8 @@ function PortalMainContent() {
       pin: "4192862301978",
       dialNumber: "+52 55 8421 0898",
       notes: "Junta hoy lunes 14 de sep · 3:30–5:00 p.m. Vínculo: https://meet.google.com/mnh-metd-fcn • PIN: 4192862301978. Asistentes: Iván Castillo (CEO), Jessica Torre, Gabriel, Axana.",
-    },
-    {
-      id: "APT-101",
-      clientName: "Daniel Torre de Haro",
-      company: "Pro Acabados",
-      clientPhone: "9601771556",
-      date: "2026-09-18",
-      time: "11:00",
-      meetingType: "Demostración de Plataforma & Cotización",
-      topic: "Revisión de arquitectura App Móvil y panel multi-sucursal",
-      status: "Confirmada",
-      notes: "Cliente interesado en integrar WhatsApp Cloud API y pasarela de cobro.",
-    },
-    {
-      id: "APT-102",
-      clientName: "Lic. Andrea Morales",
-      company: "Fintech Seguros MX",
-      clientPhone: "+52 55 111 8899",
-      date: "2026-09-22",
-      time: "16:30",
-      meetingType: "Videollamada Google Meet",
-      topic: "Presentación demo SaaS Avanzado & Automatización",
-      status: "Pendiente",
-      notes: "Enviar propuesta formal con alcance y tabla de comisiones antes de la llamada.",
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre",
     },
   ]);
 
@@ -552,7 +534,7 @@ function PortalMainContent() {
     e.preventDefault();
     if (!newAptClientName.trim()) return;
 
-    const newApt = {
+    const newApt: CommercialAppointment = {
       id: "APT-" + Math.floor(100 + Math.random() * 900),
       clientName: newAptClientName.trim(),
       company: newAptCompany.trim() || "Empresa Particular",
@@ -563,6 +545,8 @@ function PortalMainContent() {
       topic: newAptTopic.trim() || "Demostración de Software Innocentia Tech",
       status: "Confirmada" as const,
       notes: newAptNotes.trim() || "Cita agendada por asesor comercial.",
+      sellerId: safeActiveUser.id,
+      sellerName: safeActiveUser.name,
     };
 
     setSellerAppointments((prev) => [newApt, ...prev]);
@@ -1238,47 +1222,19 @@ function PortalMainContent() {
     },
   ]);
 
-  // Seller Leads & Linked Form System
+  // Seller Leads & Linked Form System (Proyecto Axana registrado)
   const [sellerLeads, setSellerLeads] = useState<SellerLead[]>([
     {
-      id: "PROJ-592160",
-      clientName: "Daniel Torre de Haro",
-      company: "Pro Acabados",
-      phone: "9601771556",
-      status: "Formulario Enviado",
-      date: "Hoy, Reciente (9 Sep 2026)",
-      estimatedBudget: "$50,000 - $150,000 MXN",
+      id: "PROJ-AXANA-2026",
+      clientName: "Axana & Gabriel",
+      company: "Axana (Junta Estratégica & Comercial)",
+      phone: "+52 55 8421 0898",
+      status: "En Cotización",
+      date: "14 Sep 2026 (Reciente)",
+      estimatedBudget: "$80,000 - $150,000 MXN",
       hasNewNotification: true,
-    },
-    {
-      id: "LEAD-101",
-      clientName: "Dra. Mariana Valdés",
-      company: "Clínica Médica AI",
-      phone: "+52 999 555 1234",
-      status: "Aprobado - En Desarrollo",
-      date: "Hace 3 días",
-      estimatedBudget: "$185,000 MXN",
-      hasNewNotification: true,
-    },
-    {
-      id: "LEAD-102",
-      clientName: "Lic. Roberto Garza",
-      company: "Gourmet Express Delivery",
-      phone: "+52 81 444 9876",
-      status: "Aprobado - En Desarrollo",
-      date: "Hace 1 semana",
-      estimatedBudget: "$240,000 MXN",
-      hasNewNotification: false,
-    },
-    {
-      id: "LEAD-103",
-      clientName: "Lic. Andrea Morales",
-      company: "Fintech Seguros MX",
-      phone: "+52 55 111 8899",
-      status: "Formulario Enviado",
-      date: "Hoy, 10:15 AM",
-      estimatedBudget: "$150,000 MXN",
-      hasNewNotification: true,
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre",
     },
   ]);
 
@@ -1485,6 +1441,44 @@ function PortalMainContent() {
   const maxTimelineVal = timelineList.length > 0
     ? Math.max(...timelineList.map((t) => Math.max(t.ingreso || 0, (t.gasto || 0) + (t.automatico || 0) + (t.pendiente || 0))), 100000)
     : 100000;
+
+  // Advisor Dynamic Computations (Leads, Appointments, Projects & Commissions)
+  const advisorProjects = (projects || []).filter((proj) => {
+    if (safeActiveUser.role !== "asesor") return true;
+    if (safeActiveUser.id === "usr_sales_jess") {
+      return !proj.sellerId || proj.sellerId === "usr_sales_jess" || proj.sellerName?.toLowerCase().includes("jess");
+    }
+    if (safeActiveUser.id === "usr_sales_farid" || safeActiveUser.email?.includes("farid") || safeActiveUser.email?.includes("majestic")) {
+      return proj.sellerId === "usr_sales_farid" || proj.sellerName?.toLowerCase().includes("farid");
+    }
+    return proj.sellerId === safeActiveUser.id;
+  });
+
+  const advisorAppointments = (sellerAppointments || []).filter((apt) => {
+    if (safeActiveUser.role !== "asesor") return true;
+    if (safeActiveUser.id === "usr_sales_jess") {
+      return !apt.sellerId || apt.sellerId === "usr_sales_jess" || apt.sellerName?.toLowerCase().includes("jess");
+    }
+    if (safeActiveUser.id === "usr_sales_farid" || safeActiveUser.email?.includes("farid") || safeActiveUser.email?.includes("majestic")) {
+      return apt.sellerId === "usr_sales_farid" || apt.sellerName?.toLowerCase().includes("farid");
+    }
+    return apt.sellerId === safeActiveUser.id;
+  });
+
+  const advisorSellerLeads = (sellerLeads || []).filter((lead) => {
+    if (safeActiveUser.role !== "asesor") return true;
+    if (safeActiveUser.id === "usr_sales_jess") {
+      return !lead.sellerId || lead.sellerId === "usr_sales_jess" || lead.sellerName?.toLowerCase().includes("jess");
+    }
+    if (safeActiveUser.id === "usr_sales_farid" || safeActiveUser.email?.includes("farid") || safeActiveUser.email?.includes("majestic")) {
+      return lead.sellerId === "usr_sales_farid" || lead.sellerName?.toLowerCase().includes("farid");
+    }
+    return lead.sellerId === safeActiveUser.id;
+  });
+
+  const advisorActiveProjectsCount = advisorProjects.length;
+  const advisorBilledProjects = advisorProjects.filter((p) => (p.paidAmount && p.paidAmount > 0) || p.status === "Completado");
+  const advisorTotalCommissions = advisorBilledProjects.reduce((sum, p) => sum + ((p.paidAmount || p.budget) * 0.12), 0);
 
   return (
     <main className="relative min-h-screen bg-[#040407] text-[#F3F4F6] overflow-x-hidden selection:bg-[#00E5FF]/30 selection:text-white pb-24">
@@ -1888,7 +1882,9 @@ function PortalMainContent() {
             <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
               <div className="px-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 backdrop-blur-md">
                 <span className="text-[10px] font-mono text-gray-400 block uppercase">Proyectos Activos</span>
-                <span className="text-lg font-black text-white">{projects.filter((p) => p.status === "En Desarrollo").length}</span>
+                <span className="text-lg font-black text-white">
+                  {activeRole === "asesor" ? advisorActiveProjectsCount : projects.filter((p) => p.status === "En Desarrollo" || p.status === "En Revisión").length}
+                </span>
               </div>
 
               {activeRole === "ceo" || activeRole === "socio" ? (
@@ -1899,7 +1895,9 @@ function PortalMainContent() {
               ) : activeRole === "asesor" ? (
                 <div className="px-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 backdrop-blur-md">
                   <span className="text-[10px] font-mono text-gray-400 block uppercase">Comisiones Acumuladas</span>
-                  <span className="text-lg font-black text-[#FF3858]">$64,200 MXN</span>
+                  <span className={`text-lg font-black ${advisorTotalCommissions > 0 ? "text-emerald-400" : "text-[#FF3858]"}`}>
+                    ${advisorTotalCommissions.toLocaleString()} MXN
+                  </span>
                 </div>
               ) : (
                 <div className="px-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 backdrop-blur-md">
@@ -6000,40 +5998,47 @@ function PortalMainContent() {
                       <Users className="w-4 h-4 text-[#00D1FF]" />
                       <span>Clientes que han llenado tu formulario</span>
                     </h3>
-                    <span className="text-xs font-mono text-gray-400">Total: {sellerLeads.length} prospectos</span>
+                    <span className="text-xs font-mono text-gray-400">Total: {advisorSellerLeads.length} prospectos</span>
                   </div>
 
-                  <div className="divide-y divide-white/10">
-                    {sellerLeads.map((lead) => (
-                      <div key={lead.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/[0.02] px-2 rounded-xl transition-all">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-white">{lead.clientName}</span>
-                            <span className="text-xs font-mono text-purple-300">({lead.company})</span>
+                  {advisorSellerLeads.length > 0 ? (
+                    <div className="divide-y divide-white/10">
+                      {advisorSellerLeads.map((lead) => (
+                        <div key={lead.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-white/[0.02] px-2 rounded-xl transition-all">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-bold text-white">{lead.clientName}</span>
+                              <span className="text-xs font-mono text-purple-300">({lead.company})</span>
+                            </div>
+                            <span className="text-xs font-mono text-gray-400">📱 {lead.phone} • 📅 {lead.date} • 💰 Presupuesto: {lead.estimatedBudget}</span>
                           </div>
-                          <span className="text-xs font-mono text-gray-400">📱 {lead.phone} • 📅 {lead.date} • 💰 Presupuesto: {lead.estimatedBudget}</span>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold border ${
+                              lead.status.includes("Aprobado") || lead.status.includes("Revisión")
+                                ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                                : "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                            }`}>
+                              {lead.status}
+                            </span>
+                            <a
+                              href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${lead.clientName}, soy ${safeActiveUser.name} de Innocentia Tech. Recibí tu solicitud para el proyecto de ${lead.company}. ¿Podemos agendar una llamada rápida para mostrarte una demo?`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-1.5 transition-all"
+                              title="Contactar por WhatsApp"
+                            >
+                              <span>💬 WhatsApp</span>
+                            </a>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold border ${
-                            lead.status.includes("Aprobado")
-                              ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
-                              : "bg-amber-500/20 text-amber-300 border-amber-500/30"
-                          }`}>
-                            {lead.status}
-                          </span>
-                          <a
-                            href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hola ${lead.clientName}, soy ${safeActiveUser.name} de Innocentia Tech. Recibí tu solicitud para el proyecto de ${lead.company}. ¿Podemos agendar una llamada rápida para mostrarte una demo?`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-1.5 transition-all"
-                            title="Contactar por WhatsApp"
-                          >
-                            <span>💬 WhatsApp</span>
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-8 rounded-2xl bg-white/[0.01] border border-dashed border-white/10 text-center space-y-2">
+                      <p className="text-xs text-gray-400 font-mono">No hay prospectos registrados con tu enlace todavía.</p>
+                      <p className="text-[11px] text-gray-500">Comparte tu link exclusivo arriba para comenzar a recibir solicitudes.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -6041,7 +6046,7 @@ function PortalMainContent() {
             {/* TAB 2: APPOINTMENTS & GOOGLE CALENDAR SYNC (CALENDAR VIEW) */}
             {advisorTab === "citas_calendario" && (
               <CommercialCalendarView
-                appointments={sellerAppointments}
+                appointments={advisorAppointments}
                 onAddAppointment={handleAddSellerAppointment}
                 onUpdateAppointment={handleUpdateSellerAppointment}
                 onDeleteAppointment={handleDeleteSellerAppointment}
@@ -6063,73 +6068,83 @@ function PortalMainContent() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {projects.map((proj) => (
-                    <div
-                      key={proj.id}
-                      className="p-6 sm:p-7 rounded-[32px] bg-[#07070E] border border-white/15 space-y-5 shadow-2xl hover:border-[#00D1FF]/40 transition-all text-left"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <span className="text-[10px] font-mono text-[#00D1FF] font-bold px-2.5 py-1 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30 uppercase">
-                            {proj.id}
+                {advisorProjects.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {advisorProjects.map((proj) => (
+                      <div
+                        key={proj.id}
+                        className="p-6 sm:p-7 rounded-[32px] bg-[#07070E] border border-white/15 space-y-5 shadow-2xl hover:border-[#00D1FF]/40 transition-all text-left"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <span className="text-[10px] font-mono text-[#00D1FF] font-bold px-2.5 py-1 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30 uppercase">
+                              {proj.id}
+                            </span>
+                            <h4 className="text-lg font-black text-white mt-2">{proj.name}</h4>
+                            <p className="text-xs text-gray-300 font-mono">Cliente: <strong>{proj.client}</strong></p>
+                          </div>
+                          <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 shrink-0">
+                            {proj.status}
                           </span>
-                          <h4 className="text-lg font-black text-white mt-2">{proj.name}</h4>
-                          <p className="text-xs text-gray-300 font-mono">Cliente: <strong>{proj.client}</strong></p>
                         </div>
-                        <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
-                          {proj.status}
-                        </span>
-                      </div>
 
-                      {/* Progress Bar */}
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-mono">
-                          <span className="text-gray-400">Progreso General:</span>
-                          <strong className="text-emerald-400">{proj.progress}%</strong>
+                        {/* Progress Bar */}
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between text-xs font-mono">
+                            <span className="text-gray-400">Progreso General:</span>
+                            <strong className="text-emerald-400">{proj.progress}%</strong>
+                          </div>
+                          <div className="w-full h-3 rounded-full bg-white/5 border border-white/10 overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-[#FF3858] via-purple-500 to-[#00D1FF] rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(0,209,255,0.6)]"
+                              style={{ width: `${proj.progress}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="w-full h-3 rounded-full bg-white/5 border border-white/10 overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-[#FF3858] via-purple-500 to-[#00D1FF] rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(0,209,255,0.6)]"
-                            style={{ width: `${proj.progress}%` }}
-                          />
-                        </div>
-                      </div>
 
-                      {/* Sprint Details & Tech Team */}
-                      <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs font-mono">
-                        <div className="flex justify-between border-b border-white/5 pb-2">
-                          <span className="text-gray-400">Sprint Activo:</span>
-                          <strong className="text-white">{proj.currentSprint}</strong>
+                        {/* Sprint Details & Tech Team */}
+                        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-xs font-mono">
+                          <div className="flex justify-between border-b border-white/5 pb-2">
+                            <span className="text-gray-400">Sprint Activo:</span>
+                            <strong className="text-white">{proj.currentSprint}</strong>
+                          </div>
+                          <div className="flex justify-between border-b border-white/5 pb-2">
+                            <span className="text-gray-400">Entrega Estimada:</span>
+                            <strong className="text-[#00D1FF]">{proj.targetDate}</strong>
+                          </div>
+                          <div className="flex justify-between border-b border-white/5 pb-2">
+                            <span className="text-gray-400">Diseño UI/UX:</span>
+                            <span className="text-pink-300">{proj.uxLead}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Arquitectura & Código:</span>
+                            <span className="text-cyan-300">{proj.devLead}</span>
+                          </div>
                         </div>
-                        <div className="flex justify-between border-b border-white/5 pb-2">
-                          <span className="text-gray-400">Entrega Estimada:</span>
-                          <strong className="text-[#00D1FF]">{proj.targetDate}</strong>
-                        </div>
-                        <div className="flex justify-between border-b border-white/5 pb-2">
-                          <span className="text-gray-400">Diseño UI/UX:</span>
-                          <span className="text-pink-300">{proj.leadDesigner}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Arquitectura & Código:</span>
-                          <span className="text-cyan-300">{proj.devLead}</span>
-                        </div>
-                      </div>
 
-                      {/* Commission & Budget */}
-                      <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs font-mono">
-                        <div>
-                          <span className="text-gray-400 block text-[10px]">Valor del Proyecto:</span>
-                          <strong className="text-white text-sm">${proj.budget.toLocaleString()} MXN</strong>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-gray-400 block text-[10px]">Comisión Vendedor (12%):</span>
-                          <strong className="text-emerald-400 text-sm">+${(proj.budget * 0.12).toLocaleString()} MXN</strong>
+                        {/* Commission & Budget */}
+                        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs font-mono">
+                          <div>
+                            <span className="text-gray-400 block text-[10px]">Valor del Proyecto:</span>
+                            <strong className="text-white text-sm">${proj.budget.toLocaleString()} MXN</strong>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-gray-400 block text-[10px]">Comisión Vendedor (12%):</span>
+                            <strong className="text-emerald-400 text-sm">+${(proj.budget * 0.12).toLocaleString()} MXN</strong>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-12 rounded-[32px] bg-[#07070E] border border-dashed border-white/15 text-center space-y-3">
+                    <Layers className="w-10 h-10 text-gray-500 mx-auto" />
+                    <h4 className="text-base font-bold text-white">No tienes proyectos asignados en desarrollo todavía</h4>
+                    <p className="text-xs text-gray-400 max-w-md mx-auto">
+                      Cuando compartas tu enlace exclusivo y un cliente cierre su contratación, aquí verás el avance técnico y sprints en tiempo real.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -6150,24 +6165,49 @@ function PortalMainContent() {
                   </div>
                   <div className="text-left sm:text-right">
                     <span className="text-[10px] font-mono text-gray-400 uppercase block">Total Acumulado a Cobrar:</span>
-                    <span className="text-3xl sm:text-4xl font-black text-emerald-400">$64,200 MXN</span>
+                    <span className={`text-3xl sm:text-4xl font-black ${advisorTotalCommissions > 0 ? "text-emerald-400" : "text-white"}`}>
+                      ${advisorTotalCommissions.toLocaleString()} MXN
+                    </span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
                     <span className="text-[10px] font-mono text-gray-400 block uppercase">Proyectos Facturados</span>
-                    <span className="text-2xl font-black text-white">2 Proyectos</span>
+                    <span className="text-2xl font-black text-white">{advisorBilledProjects.length} {advisorBilledProjects.length === 1 ? "Proyecto" : "Proyectos"}</span>
                   </div>
                   <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-[10px] font-mono text-gray-400 block uppercase">En Cotización Activa</span>
-                    <span className="text-2xl font-black text-amber-300">3 Propuestas</span>
+                    <span className="text-[10px] font-mono text-gray-400 block uppercase">En Proceso / Cotización</span>
+                    <span className="text-2xl font-black text-amber-300">{advisorProjects.length} {advisorProjects.length === 1 ? "Proyecto" : "Proyectos"}</span>
                   </div>
                   <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
                     <span className="text-[10px] font-mono text-gray-400 block uppercase">Comisión Promedio</span>
                     <span className="text-2xl font-black text-[#00D1FF]">12.0%</span>
                   </div>
                 </div>
+
+                {advisorProjects.length > 0 ? (
+                  <div className="space-y-3 pt-4">
+                    <h4 className="text-xs font-mono uppercase text-gray-400 tracking-wider">Desglose por Proyecto:</h4>
+                    {advisorProjects.map((p) => (
+                      <div key={p.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
+                        <div>
+                          <strong className="text-white text-sm block">{p.name}</strong>
+                          <span className="text-gray-400">Cliente: {p.client} • Estatus: <span className="text-amber-300 font-bold">{p.status}</span></span>
+                        </div>
+                        <div className="text-left sm:text-right">
+                          <span className="text-gray-400 block text-[10px]">Comisión 12%:</span>
+                          <strong className="text-emerald-400 text-sm">+${(p.budget * 0.12).toLocaleString()} MXN</strong>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-8 rounded-2xl bg-white/[0.01] border border-dashed border-white/10 text-center space-y-2">
+                    <p className="text-xs text-gray-400 font-mono">Aún no tienes proyectos facturados o cerrados registrados a tu cuenta.</p>
+                    <p className="text-[11px] text-gray-500">Comparte tu enlace exclusivo de cotización para registrar clientes y comisiones automáticamente.</p>
+                  </div>
+                )}
               </div>
             )}
 
