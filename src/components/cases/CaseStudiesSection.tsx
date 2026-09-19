@@ -31,13 +31,128 @@ export default function CaseStudiesSection({
     accentBtn: string;
   })[] = [
     {
-      id: "multisistema",
-      title: "MULTISISTEMA / MULTIAPP",
+      id: "safely",
+      title: "EXPERIENCE SAFELY",
       subtitle:
-        "Plataforma multinegocio y multiambiente. Selecciona y gestiona múltiples giros comerciales desde un único core empresarial.",
+        "Plataforma de reservas de alta gama para cenotes, catamaranes, haciendas y tours VIP en Yucatán y Riviera Maya. Desarrollada y operada por Innocentia Tech.",
+      image: "/images/apps/app_experiencesafely.png",
+      tag: "CASO INSIGNIA • PROYECTO PROPIO",
+      stats: "Operación en Vivo",
+      primaryColor: "#10B981",
+      badgeColor: "#10B981",
+      cardBg: "from-[#10B981]/25 via-[#10B981]/10 to-black/90",
+      borderColor: "border-[#10B981]/60 hover:border-[#10B981]",
+      glowColor:
+        "shadow-[0_20px_50px_rgba(16,185,129,0.25)] hover:shadow-[0_25px_70px_rgba(16,185,129,0.45)]",
+      auraColor: "bg-[#10B981]/30",
+      tagBadge: "bg-[#10B981]/20 text-[#10B981] border-[#10B981]/50",
+      accentBtn: "text-[#10B981] hover:text-white",
+
+      clientProblem:
+        "Los operadores turísticos y de experiencias locales dependían de intermediarios que cobraban comisiones de hasta 30% por boleto, sufrían de sobreventas por WhatsApp y no podían cobrar en dólares a turistas extranjeros de forma segura.",
+      solutionOverview:
+        "Innocentia Tech construyó una plataforma propia de reservaciones directas con pasarela de pagos internacional (Stripe), control automático de cupos por horario, boletos con código QR dinámico y concierge de atención rápida.",
+      keyFeatures: [
+        "Motor de reservaciones en vivo con aforo automático y bloqueo de fechas agotadas.",
+        "Cobros internacionales con tarjeta (USD / MXN / EUR) directamente a la cuenta del negocio.",
+        "Emisión automática de boletos digitales con código QR seguro para escanear en taquilla.",
+        "Envío instantáneo de confirmación y mapa de llegada directo al WhatsApp del cliente.",
+        "Panel de administración para consultar ingresos, validar accesos y gestionar guías.",
+      ],
+      costSavings: [
+        {
+          stat: "0%",
+          label: "Comisiones a Terceros",
+          description: "Ventas 100% directas sin intermediarios turísticos abusivos.",
+        },
+        {
+          stat: "100%",
+          label: "Control de Aforo",
+          description: "Cero sobreventas de cupos en cenotes o embarcaciones.",
+        },
+        {
+          stat: "+85%",
+          label: "Ventas a Extranjeros",
+          description: "Facilidad de pago en dólares con tarjeta antes de llegar al destino.",
+        },
+      ],
+      processAutomation: [
+        "Generación y envío automático del ticket con código QR al confirmar el pago.",
+        "Validación de acceso en menos de 1 segundo escaneando el QR con el celular.",
+        "Recordatorios automáticos por WhatsApp con ubicación de Google Maps 24h antes del tour.",
+      ],
+      designAdvantages: [
+        "Diseño visual de lujo inmersivo con fotos de alta resolución que transmiten exclusividad.",
+        "Proceso de reserva ultrarrápido en 3 pasos optimizado para celulares de turistas.",
+        "Carga instantánea en menos de 0.8 segundos incluso con señal móvil moderada.",
+      ],
+      techStack: ["Next.js 15", "Stripe Checkout", "PostgreSQL", "QR Security Engine", "WhatsApp Cloud API"],
+    },
+    {
+      id: "axana",
+      title: "AXANA • TIENDA & CATÁLOGO",
+      subtitle:
+        "Tienda digital interactiva y catálogo e-commerce para marcas y comercios locales. Pedidos por WhatsApp y pagos con tarjeta.",
       image: "/images/apps/app_multisistema.png",
-      tag: "ECOSISTEMA MULTIAPP",
-      stats: "V2.0 PRO • Cloud",
+      tag: "TIENDA & E-COMMERCE",
+      stats: "Catálogo en Vivo",
+      primaryColor: "#FF3858",
+      badgeColor: "#FF3858",
+      cardBg: "from-[#FF3858]/15 via-[#FF3858]/5 to-black/90",
+      borderColor: "border-[#FF3858]/35 hover:border-[#FF3858]",
+      glowColor:
+        "shadow-[0_20px_50px_rgba(255,56,88,0.18)] hover:shadow-[0_25px_70px_rgba(255,56,88,0.38)]",
+      auraColor: "bg-[#FF3858]/20",
+      tagBadge: "bg-[#FF3858]/20 text-[#FF3858] border-[#FF3858]/40",
+      accentBtn: "text-[#FF3858] hover:text-white",
+
+      clientProblem:
+        "Las marcas y tiendas locales perdían ventas enviando archivos PDF pesados o fotos desordenadas por chat. No tenían inventario sincronizado y los clientes tardaban en concretar el pago.",
+      solutionOverview:
+        "Diseñamos una tienda digital de alta velocidad donde el cliente navega productos en una interfaz táctil a 60 FPS, arma su carrito y finaliza la compra pagando en línea o enviando su pedido formateado directo al WhatsApp.",
+      keyFeatures: [
+        "Catálogo interactivo con fotos en alta definición, filtros rápidos y variantes.",
+        "Pasarela de pago con tarjeta integrada o botón de pedido directo a WhatsApp.",
+        "Panel de administración para subir productos, cambiar precios y ver pedidos.",
+        "Diseño responsive perfecto para navegar y comprar cómodamente desde el celular.",
+      ],
+      costSavings: [
+        {
+          stat: "+45%",
+          label: "Cierre de Pedidos",
+          description: "Proceso de compra fluido sin fricciones ni esperas.",
+        },
+        {
+          stat: "75%",
+          label: "Menos Tiempo en Chat",
+          description: "El cliente llega con su pedido listo y productos seleccionados.",
+        },
+        {
+          stat: "100%",
+          label: "Control de Stock",
+          description: "Los productos agotados se ocultan automáticamente.",
+        },
+      ],
+      processAutomation: [
+        "Notificación instantánea de nueva compra al WhatsApp y correo del comercio.",
+        "Descuento automático de stock de producto al procesar la venta.",
+        "Generación de ticket de compra digital para el cliente.",
+      ],
+      designAdvantages: [
+        "Dirección de arte estética que resalta la calidad y prestigio de la marca.",
+        "Navegación ultra fluida tipo aplicación móvil sin recargas molestas.",
+        "Botones de compra grandes y cómodos para tocar con una sola mano en el celular.",
+      ],
+      techStack: ["Next.js 15", "PostgreSQL", "Mercado Pago / Stripe", "WhatsApp API", "Tailwind CSS"],
+    },
+    {
+      id: "multisistema",
+      title: "MULTISISTEMA EMPRESARIAL",
+      subtitle:
+        "Panel administrativo para negocios y empresas con múltiples sucursales, control de ventas, compras e inventarios.",
+      image: "/images/apps/app_multisistema.png",
+      tag: "GESTIÓN EMPRESARIAL",
+      stats: "V2.0 Cloud",
       primaryColor: "#00D1FF",
       badgeColor: "#00D1FF",
       cardBg: "from-[#00D1FF]/15 via-[#00D1FF]/5 to-black/90",
@@ -49,166 +164,52 @@ export default function CaseStudiesSection({
       accentBtn: "text-[#00D1FF] hover:text-white",
 
       clientProblem:
-        "El cliente administraba 3 empresas con giros distintos usando hojas de cálculo separadas y 3 sistemas SaaS diferentes, lo que generaba duplicidad de costos, pérdida de información y más de 40 horas al mes consolidando reportes.",
+        "La empresa operaba con hojas de cálculo dispersas y sistemas lentos que provocaban descuadres en almacén, pérdida de tiempo consolidando números y falta de reportes claros.",
       solutionOverview:
-        "Innocentia diseñó una arquitectura Multi-Tenant con un único centro de acceso donde el usuario cambia de empresa y ambiente en 1 clic, compartiendo catálogos pero manteniendo contabilidades e inventarios independientes.",
+        "Creamos un panel centralizado en la nube donde la dirección y los colaboradores registran ventas, controlan almacén por sucursal y consultan ganancias en tiempo real desde cualquier dispositivo.",
       keyFeatures: [
-        "Switch instantáneo de ambiente comercial en menos de 0.2 segundos.",
-        "Módulos configurables de ventas, compras, finanzas y almacén por empresa.",
-        "Panel ejecutivo con métricas consolidadas en tiempo real.",
-        "Gestión de permisos y roles granulares por sucursal.",
+        "Panel con métricas de ventas diarias, ingresos y productos más vendidos.",
+        "Control de inventario por sucursal con alertas de poco stock.",
+        "Módulos configurables de clientes, facturación y cuentas por cobrar.",
+        "Acceso seguro con roles personalizados para administradores y vendedores.",
       ],
       costSavings: [
         {
           stat: "65%",
-          label: "Ahorro en Licencias",
-          description: "Eliminación de 3 suscripciones SaaS externas costosas.",
+          label: "Ahorro en Software",
+          description: "Sustitución de múltiples suscripciones costosas por un sistema propio.",
         },
         {
           stat: "40 hrs",
-          label: "Ahorro Mensual",
-          description: "De trabajo manual consolidando reportes contables.",
+          label: "Tiempo Ahorrado",
+          description: "Al mes en reportes manuales y conciliaciones.",
         },
         {
           stat: "100%",
           label: "Trazabilidad",
-          description: "Cero discrepancias entre compras y stock de almacén.",
+          description: "Control exacto de entradas y salidas de mercancía.",
         },
       ],
       processAutomation: [
-        "Sincronización automática de inventarios entre bodegas centrales y sucursales.",
-        "Cierre contable automático al final del día con exportación a Excel y PDF.",
-        "Alertas por correo y WhatsApp cuando un producto baja del stock mínimo.",
+        "Reportes ejecutivos automáticos al cierre de cada jornada.",
+        "Alertas automáticas por WhatsApp cuando se requiere reabastecer stock.",
+        "Cálculo automático de comisiones para el equipo de ventas.",
       ],
       designAdvantages: [
-        "Sofía creó un sistema de diseño con paletas cromáticas diferenciadas para que el usuario nunca confunda en qué empresa está operando.",
-        "Microinteracciones fluidas a 60fps que hacen la carga de datos veloz y sin curva de aprendizaje.",
-        "Diseño 100% responsivo para operar en laptops de oficina o celulares de campo.",
+        "Tableros limpios de alto contraste fáciles de leer sin saturación visual.",
+        "Flujos de trabajo simplificados para que el personal aprenda a usarlo en 15 minutos.",
+        "100% adaptable a computadoras, tablets y celulares.",
       ],
       techStack: ["Next.js 15", "PostgreSQL Multi-Tenant", "Prisma ORM", "Redis Caching", "Tailwind CSS"],
-    },
-    {
-      id: "ikal",
-      title: "IKAL CHUKUM",
-      subtitle:
-        "Panel de operaciones integral con cotizador en tiempo real, inventarios por bodega, alertas críticas de stock y bitácora de pedidos.",
-      image: "/images/apps/app_ikalchukum.png",
-      tag: "OPERACIONES & CRM",
-      stats: "Cotizador en Vivo",
-      primaryColor: "#F59E0B",
-      badgeColor: "#F59E0B",
-      cardBg: "from-[#F59E0B]/15 via-[#F59E0B]/5 to-black/90",
-      borderColor: "border-[#F59E0B]/35 hover:border-[#F59E0B]",
-      glowColor:
-        "shadow-[0_20px_50px_rgba(245,158,11,0.18)] hover:shadow-[0_25px_70px_rgba(245,158,11,0.38)]",
-      auraColor: "bg-[#F59E0B]/20",
-      tagBadge: "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/40",
-      accentBtn: "text-[#F59E0B] hover:text-white",
-
-      clientProblem:
-        "Los asesores tardaban hasta 4 horas en calcular m2 de material, flete y descuentos para enviar una cotización formal. Muchas ventas se perdían por demoras y los errores de cálculo provocaban pérdidas de margen.",
-      solutionOverview:
-        "Desarrollamos un Cotizador Inteligente en Vivo que calcula m2, rendimiento de materiales, flete por zona geográfica y margen comercial en solo 30 segundos, generando el PDF oficial al instante.",
-      keyFeatures: [
-        "Motor de cálculo de m2 con optimización de mermas y aditivos.",
-        "Generador de presupuestos oficiales en PDF con marca de agua y validez.",
-        "Control de inventarios por bodega con alertas de reabastecimiento.",
-        "Bitácora histórica de pedidos y estatus de entrega en ruta.",
-      ],
-      costSavings: [
-        {
-          stat: "85%",
-          label: "Reducción de Tiempo",
-          description: "De 4 horas de espera por cotización a 30 segundos en vivo.",
-        },
-        {
-          stat: "0%",
-          label: "Margen de Error",
-          description: "Cálculos matemáticos exactos en m2, fletes y descuentos.",
-        },
-        {
-          stat: "+38%",
-          label: "Cierre de Ventas",
-          description: "Mayor tasa de conversión al entregar presupuestos al instante.",
-        },
-      ],
-      processAutomation: [
-        "Generación automática de PDF con formato oficial listo para firmar.",
-        "Envío con un clic directo al WhatsApp del cliente con el PDF adjunto.",
-        "Descuento automático de inventario en bodega al momento de confirmar el anticipo.",
-      ],
-      designAdvantages: [
-        "Sofía diseñó un panel oscuro de alto contraste que facilita la lectura de números grandes sin fatiga visual.",
-        "Formularios inteligentes con validación inmediata y sliders táctiles para ajustar metros cuadrados rápidamente.",
-        "Botones de acción rápida optimizados para que los vendedores coticen desde su celular frente al cliente.",
-      ],
-      techStack: ["Next.js 15", "PostgreSQL", "PDF Engine", "WhatsApp Cloud API", "Tailwind CSS"],
-    },
-    {
-      id: "safely",
-      title: "EXPERIENCE SAFELY",
-      subtitle:
-        "Plataforma turística oficial en Yucatán y Riviera Maya con motor de reservas de cenotes, catamaranes y eventos VIP exclusivos.",
-      image: "/images/apps/app_experiencesafely.png",
-      tag: "TURISMO & EXPERIENCIAS",
-      stats: "Concierge VIP 24/7",
-      primaryColor: "#10B981",
-      badgeColor: "#10B981",
-      cardBg: "from-[#10B981]/15 via-[#10B981]/5 to-black/90",
-      borderColor: "border-[#10B981]/35 hover:border-[#10B981]",
-      glowColor:
-        "shadow-[0_20px_50px_rgba(16,185,129,0.18)] hover:shadow-[0_25px_70px_rgba(16,185,129,0.38)]",
-      auraColor: "bg-[#10B981]/20",
-      tagBadge: "bg-[#10B981]/20 text-[#10B981] border-[#10B981]/40",
-      accentBtn: "text-[#10B981] hover:text-white",
-
-      clientProblem:
-        "La empresa dependía de plataformas intermediarias que cobraban comisiones del 25% al 30% por cada reserva, además de sufrir problemas de sobreventa y falta de cobros en dólares para turistas extranjeros.",
-      solutionOverview:
-        "Creamos una plataforma de reservas directa de alta gama con pasarela de pagos internacional (Stripe), calendario de cupos en tiempo real y confirmación con código QR de acceso.",
-      keyFeatures: [
-        "Motor de reservaciones en vivo con control estricto de aforos por horario.",
-        "Pasarela de cobro internacional multidivisa (USD / MXN / EUR) con Stripe.",
-        "Generador de pases de acceso con código QR dinámico antifraude.",
-        "Módulo de Concierge VIP 24/7 para atención personalizada a turistas.",
-      ],
-      costSavings: [
-        {
-          stat: "70%",
-          label: "Ahorro en Comisiones",
-          description: "Al vender directamente sin intermediarios turísticos.",
-        },
-        {
-          stat: "0%",
-          label: "Sobreventa de Cupos",
-          description: "Bloqueo instantáneo de horarios una vez lleno el aforo.",
-        },
-        {
-          stat: "+120%",
-          label: "Ingreso Promedio",
-          description: "Incremento en ventas de paquetes VIP y tours privados.",
-        },
-      ],
-      processAutomation: [
-        "Envío automático del ticket y código QR al correo y WhatsApp del turista.",
-        "Lectura rápida de QR en la entrada del cenote o catamarán para validar acceso.",
-        "Recordatorio automatizado 24 horas antes del tour con ubicación en Google Maps.",
-      ],
-      designAdvantages: [
-        "Sofía concibió una dirección de arte visual inmersiva con fotografía de alta resolución y colores esmeralda/turquesa que evocan el agua de los cenotes.",
-        "Flujo de compra sin fricciones de solo 3 pasos para maximizar la conversión en celulares.",
-        "Microanimaciones elegantes que transmiten exclusividad, lujo y seguridad.",
-      ],
-      techStack: ["Next.js 15", "Stripe Checkout", "PostgreSQL", "QR Security Engine", "Framer Motion"],
     },
     {
       id: "help2win",
       title: "HELP 2 WIN",
       subtitle:
-        "App móvil con autenticación segura, salas interactivas de aprendizaje, documentales en streaming y gestión comunitaria.",
+        "App móvil para comunidades, academias y creadores de contenido. Salas interactivas, cursos en video y notificaciones.",
       image: "/images/apps/app_help2win.png",
-      tag: "APP MÓVIL & STREAMING",
-      stats: "v2.2 Mobile Native",
+      tag: "APP MÓVIL & COMUNIDAD",
+      stats: "iOS & Android",
       primaryColor: "#8A2BE2",
       badgeColor: "#C084FC",
       cardBg: "from-[#8A2BE2]/15 via-[#8A2BE2]/5 to-black/90",
@@ -220,7 +221,7 @@ export default function CaseStudiesSection({
       accentBtn: "text-[#C084FC] hover:text-white",
 
       clientProblem:
-        "La comunidad de aprendizaje estaba dispersa en grupos de redes sociales sin privacidad, sufriendo altos costos de servidores para transmitir videos y sin poder medir el progreso real de los estudiantes.",
+        "La academia tenía a sus alumnos dispersos en grupos de redes sociales sin privacidad, sufriendo altos costos de servidores para transmitir videos y sin poder medir el progreso real de los estudiantes.",
       solutionOverview:
         "Desarrollamos una App Móvil nativa con salas interactivas de aprendizaje, reproductor de streaming optimizado en la nube (HLS), gamificación y foros de discusión en tiempo real.",
       keyFeatures: [
@@ -302,12 +303,12 @@ export default function CaseStudiesSection({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
             {projects.map((project) => {
               const slugMap: Record<string, string> = {
-                multisistema: "multisistema",
-                ikal: "ikal-chukum",
                 safely: "experience-safely",
+                axana: "axana",
+                multisistema: "multisistema",
                 help2win: "help-2-win",
               };
-              const projectSlug = slugMap[project.id] || "multisistema";
+              const projectSlug = slugMap[project.id] || "experience-safely";
 
               return (
                 <div

@@ -161,23 +161,23 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-gray-400">
               <li>
+                <Link href="/proyectos/experience-safely" className="hover:text-emerald-400 text-emerald-300 font-bold transition-colors">
+                  ★ Experience Safely • Motor de Reservas
+                </Link>
+              </li>
+              <li>
+                <Link href="/proyectos/axana" className="hover:text-white transition-colors">
+                  Axana • Tienda Digital & Catálogo
+                </Link>
+              </li>
+              <li>
                 <Link href="/proyectos/multisistema" className="hover:text-white transition-colors">
-                  Multisistema • Ecosistema SaaS
-                </Link>
-              </li>
-              <li>
-                <Link href="/proyectos/ikal-chukum" className="hover:text-white transition-colors">
-                  Ikal Chukum • Cotizador en Tiempo Real
-                </Link>
-              </li>
-              <li>
-                <Link href="/proyectos/experience-safely" className="hover:text-white transition-colors">
-                  Experience Safely • Motor de Reservas
+                  Multisistema • Gestión Empresarial
                 </Link>
               </li>
               <li>
                 <Link href="/proyectos/help-2-win" className="hover:text-white transition-colors">
-                  Help 2 Win • Streaming & App Móvil
+                  Help 2 Win • App Móvil & Comunidad
                 </Link>
               </li>
               <li className="pt-1">

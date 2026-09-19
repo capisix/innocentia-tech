@@ -59,8 +59,7 @@ export default function HeroSection({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-sm sm:text-base md:text-lg text-gray-300 font-light leading-relaxed max-w-xl"
           >
-            No desarrollamos aplicaciones por desarrollar software. Transformamos la
-            curiosidad en soluciones útiles, elegantes y significativas.
+            Diseñamos plataformas de reservas, tiendas en línea y aplicaciones móviles de alta gama. Hacemos que tu negocio se vea increíble, cobre con tarjeta al instante y venda más en automático sin depender de intermediarios.
           </motion.p>
 
           {/* Dual Action Buttons */}
