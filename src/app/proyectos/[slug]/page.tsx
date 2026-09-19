@@ -172,6 +172,20 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           <p className="text-lg sm:text-xl text-gray-300 font-light leading-relaxed">
             {project.subtitle}
           </p>
+
+          {project.demoUrl && (
+            <div className="pt-2">
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#00D1FF] via-emerald-500 to-[#00D1FF] hover:from-[#38e0ff] hover:to-[#10b981] text-black font-black text-sm uppercase tracking-wider shadow-xl shadow-cyan-500/20 hover:scale-105 transition-all"
+              >
+                <Sparkles className="w-5 h-5 text-black" />
+                <span>Probar Demo en Vivo de {project.title} →</span>
+              </a>
+            </div>
+          )}
         </header>
 
         {/* Impact ROI Metrics 3-Column */}
