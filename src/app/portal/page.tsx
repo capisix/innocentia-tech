@@ -382,6 +382,8 @@ function PortalMainContent() {
     // Master Passwords & Direct Keys
     const masterKeys = [
       "231179",
+      "369innocentia",
+      "369Innocentia",
       "imposiblenunca2026",
       "innocentia2026",
       "socio2026",
@@ -397,12 +399,14 @@ function PortalMainContent() {
       "cliente2026",
     ];
 
-    if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password === "imposiblenunca2026") {
+    if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password === "369Innocentia" || password === "imposiblenunca2026") {
       let user: UserAccount = USER_ACCOUNTS.daniel_socio;
       if (password === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
         user = USER_ACCOUNTS.contacto_admin;
       } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
         user = USER_ACCOUNTS.jessica_vendedora;
+      } else if (password === "369Innocentia" || password.toLowerCase() === "369innocentia" || identifier.includes("farid") || identifier.includes("majestic") || identifier === "majesticalchemy123@gmail.com") {
+        user = USER_ACCOUNTS.farid_asesor;
       } else if (password === "yucaterco21" || password === "ceo2026") {
         user = USER_ACCOUNTS.ivan_ceo;
       } else if (password === "nadaesimposible2026" || identifier.includes("jorge") || identifier.includes("jorgeluis")) {
@@ -5965,7 +5969,7 @@ function PortalMainContent() {
                       <span>Tu Enlace Exclusivo para Cotización de Clientes</span>
                     </h3>
                     <span className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-mono font-bold w-fit">
-                      Código: {safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}
+                      Código: {safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}
                     </span>
                   </div>
                   <p className="text-xs text-gray-300 leading-relaxed">
@@ -5976,13 +5980,13 @@ function PortalMainContent() {
                     <input
                       type="text"
                       readOnly
-                      value={`https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`}
+                      value={`https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`}
                       className="flex-1 px-4 py-3.5 bg-black/70 border border-white/20 rounded-2xl text-xs font-mono text-[#00D1FF] font-bold focus:outline-none"
                     />
                     <button
                       type="button"
                       onClick={() => {
-                        const link = `https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`;
+                        const link = `https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`;
                         navigator.clipboard.writeText(link);
                         setCopiedLink(true);
                         setTimeout(() => setCopiedLink(false), 2500);
@@ -5993,7 +5997,7 @@ function PortalMainContent() {
                       <span>{copiedLink ? "¡Enlace Copiado!" : "Copiar Enlace"}</span>
                     </button>
                     <a
-                      href={`https://wa.me/?text=${encodeURIComponent(`Hola! Te comparto nuestro enlace oficial de cotización en Innocentia Tech para diseñar y desarrollar tu proyecto: https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`)}`}
+                      href={`https://wa.me/?text=${encodeURIComponent(`Hola! Te comparto nuestro enlace oficial de cotización en Innocentia Tech para diseñar y desarrollar tu proyecto: https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] cursor-pointer"

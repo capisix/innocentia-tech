@@ -90,6 +90,17 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
     avatarLetter: "JT",
     isEmailVerified: true,
   },
+  farid_asesor: {
+    id: "usr_sales_farid",
+    name: "Farid Abdul Oziel",
+    email: "majesticalchemy123@gmail.com",
+    role: "asesor",
+    roleTitle: "Asesor Comercial & Vendedor",
+    company: "Innocentia Tech Sales",
+    password: "369Innocentia",
+    avatarLetter: "FA",
+    isEmailVerified: true,
+  },
   carlos_asesor: {
     id: "usr_sales_01",
     name: "Carlos Mendoza",
@@ -176,7 +187,7 @@ export const ROLE_PRESETS: RolePreset[] = [
     badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
     description: "Panel de ventas: Generación de enlaces con código de vendedor, seguimiento de leads propios y cálculo de comisiones.",
     defaultUser: USER_ACCOUNTS.jessica_vendedora,
-    users: [USER_ACCOUNTS.jessica_vendedora, USER_ACCOUNTS.carlos_asesor],
+    users: [USER_ACCOUNTS.jessica_vendedora, USER_ACCOUNTS.farid_asesor, USER_ACCOUNTS.carlos_asesor],
     icon: Briefcase,
     features: [
       "Enlace único para compartir formulario vinculado al vendedor",
@@ -287,6 +298,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         resolvedUser = USER_ACCOUNTS.jorge_socio;
       } else if (email.includes("jess") || email.includes("boldberry")) {
         resolvedUser = USER_ACCOUNTS.jessica_vendedora;
+      } else if (email.includes("farid") || email.includes("majestic") || email === "majesticalchemy123@gmail.com") {
+        resolvedUser = USER_ACCOUNTS.farid_asesor;
       } else if (email.includes("carlos") || email.includes("ventas")) {
         resolvedUser = USER_ACCOUNTS.carlos_asesor;
       } else if (email.includes("rodrigo") || email.includes("dev")) {
@@ -383,6 +396,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
             ? USER_ACCOUNTS.jorge_socio
             : email.includes("jess") || email.includes("boldberry")
             ? USER_ACCOUNTS.jessica_vendedora
+            : email.includes("farid") || email.includes("majestic") || email === "majesticalchemy123@gmail.com"
+            ? USER_ACCOUNTS.farid_asesor
             : USER_ACCOUNTS.daniel_socio;
           handleCompleteSuccess(user);
         } else {
@@ -398,6 +413,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         ? USER_ACCOUNTS.jorge_socio
         : email.includes("jess") || email.includes("boldberry")
         ? USER_ACCOUNTS.jessica_vendedora
+        : email.includes("farid") || email.includes("majestic") || email === "majesticalchemy123@gmail.com"
+        ? USER_ACCOUNTS.farid_asesor
         : USER_ACCOUNTS.daniel_socio;
       handleCompleteSuccess(user);
     }
@@ -423,6 +440,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
       const masterKeys = [
         "imposiblenunca2026",
         "231179",
+        "369innocentia",
+        "369Innocentia",
         "innocentia2026",
         "socio2026",
         "ceo2026",
@@ -437,12 +456,14 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         "cliente2026",
       ];
 
-      if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password.toLowerCase() === "imposiblenunca2026") {
+      if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password === "369Innocentia" || password.toLowerCase() === "imposiblenunca2026") {
         let user: UserAccount = USER_ACCOUNTS.contacto_admin;
         if (password.toLowerCase() === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
           user = USER_ACCOUNTS.contacto_admin;
         } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
           user = USER_ACCOUNTS.jessica_vendedora;
+        } else if (password === "369Innocentia" || password.toLowerCase() === "369innocentia" || identifier.includes("farid") || identifier.includes("majestic") || identifier === "majesticalchemy123@gmail.com") {
+          user = USER_ACCOUNTS.farid_asesor;
         } else if (password === "yucaterco21" || password === "ceo2026") {
           user = USER_ACCOUNTS.ivan_ceo;
         } else if (password === "nadaesimposible2026") {

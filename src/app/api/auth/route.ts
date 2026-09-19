@@ -125,6 +125,10 @@ export async function POST(req: Request) {
         role = "asesor";
         roleTitle = "Asesora Comercial & Vendedora";
         name = "Jessica Torre";
+      } else if (cleanEmail.includes("farid") || cleanEmail.includes("majestic") || cleanEmail === "majesticalchemy123@gmail.com") {
+        role = "asesor";
+        roleTitle = "Asesor Comercial & Vendedor";
+        name = "Farid Abdul Oziel";
       } else if (cleanEmail.includes("carlos") || cleanEmail.includes("ventas")) {
         role = "asesor";
         roleTitle = "Asesor Comercial Certificado";
