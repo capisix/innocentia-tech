@@ -832,18 +832,18 @@ export default function AIPersonasSection() {
                 </button>
               </div>
 
-              {/* Right Column: Clean Realistic Kids Artwork (Desktop only, hidden on mobile for clean UX) */}
-              <div className="hidden lg:flex lg:col-span-6 relative w-full min-h-[400px] lg:min-h-[440px] items-center justify-center">
-                <div className="relative w-full h-full min-h-[360px] lg:min-h-[420px] max-w-[560px]">
+              {/* Right Column: New Adult Dual Core Artwork (Desktop + Mobile) */}
+              <div className="flex col-span-1 lg:col-span-6 relative w-full items-center justify-center">
+                <div className="relative w-full aspect-[1024/387] max-w-[640px] min-h-[200px] sm:min-h-[260px] lg:min-h-[320px]">
                   {/* Subtle Character Halo Glows */}
-                  <div className="absolute top-1/4 left-1/6 w-44 h-44 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
-                  <div className="absolute bottom-1/4 right-1/6 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
+                  <div className="absolute top-1/4 left-1/6 w-48 sm:w-60 h-48 sm:h-60 bg-[#FF3858]/25 rounded-full blur-[70px] pointer-events-none" />
+                  <div className="absolute bottom-1/4 right-1/6 w-48 sm:w-60 h-48 sm:h-60 bg-[#00D1FF]/25 rounded-full blur-[70px] pointer-events-none" />
 
                   <Image
-                    src="/images/dual_kids_master_transparent.png"
+                    src="/images/dual_adults_master_transparent.png"
                     alt="Sofía e Iván • Dual Core Innocentia Tech"
                     fill
-                    className="object-contain object-center drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] transition-transform duration-700 group-hover:scale-[1.03]"
+                    className="object-contain object-center drop-shadow-[0_15px_40px_rgba(0,0,0,0.9)] transition-transform duration-700 group-hover:scale-[1.02]"
                     priority
                   />
                 </div>
