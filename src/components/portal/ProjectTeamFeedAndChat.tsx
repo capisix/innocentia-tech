@@ -591,10 +591,11 @@ ${pricingText}
                           className="px-3 py-1.5 rounded-xl bg-black border border-purple-400 text-xs font-mono text-purple-200 focus:outline-none cursor-pointer"
                         >
                           <option value="Sin Asesor (Por Canalizar por Dirección)">Por Canalizar (Sin Asesor)</option>
+                          <option value="Jessica Torre">Asignar a Jessica Torre</option>
+                          <option value="Farid Abdul Oziel">Asignar a Farid Abdul Oziel</option>
                           <option value="Carlos Mendoza">Asignar a Carlos Mendoza</option>
                           <option value="Iván Castillo (CEO)">Atender por Iván Castillo (CEO)</option>
                           <option value="Daniel Torre (Socio)">Atender por Daniel Torre</option>
-                          <option value="Jorge Pérez (Socio)">Atender por Jorge Pérez</option>
                         </select>
                       )}
                     </div>
@@ -1007,7 +1008,7 @@ ${pricingText}
                 Mesa de Discusión en Vivo • {activeProject.name}
               </h3>
               <p className="text-xs text-gray-400 font-mono">
-                Coordinación en tiempo real entre Iván (CEO), Daniel/Jorge (Socios), Rodrigo (Dev) y Carlos (Ventas).
+                Coordinación en tiempo real entre Iván (CEO), Daniel (Socio), Rodrigo (Dev) y Jessica/Farid/Carlos (Ventas).
               </p>
             </div>
 

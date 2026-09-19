@@ -68,17 +68,6 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
     avatarLetter: "DT",
     isEmailVerified: true,
   },
-  jorge_socio: {
-    id: "usr_partner_jorge",
-    name: "Jorge Pérez",
-    email: "jorgeluis626@gmail.com",
-    role: "socio",
-    roleTitle: "Socio Co-Fundador & Estrategia",
-    company: "Innocentia Tech",
-    password: "nadaesimposible2026",
-    avatarLetter: "JP",
-    isEmailVerified: true,
-  },
   jessica_vendedora: {
     id: "usr_sales_jess",
     name: "Jessica Torre",
@@ -171,7 +160,7 @@ export const ROLE_PRESETS: RolePreset[] = [
     badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/40",
     description: "Gestión financiera integral: Control de ingresos, gastos, fechas de corte, caducidad de servidores y proyectos.",
     defaultUser: USER_ACCOUNTS.daniel_socio,
-    users: [USER_ACCOUNTS.daniel_socio, USER_ACCOUNTS.jorge_socio],
+    users: [USER_ACCOUNTS.daniel_socio],
     icon: Building2,
     features: [
       "Registro y supervisión de cobros a clientes y pagos a proveedores",
@@ -294,8 +283,6 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         resolvedUser = USER_ACCOUNTS.ivan_ceo;
       } else if (email.includes("daniel") || email.includes("socio")) {
         resolvedUser = USER_ACCOUNTS.daniel_socio;
-      } else if (email.includes("jorge") || email.includes("jorgeluis") || email.includes("jorgeluis626")) {
-        resolvedUser = USER_ACCOUNTS.jorge_socio;
       } else if (email.includes("jess") || email.includes("boldberry")) {
         resolvedUser = USER_ACCOUNTS.jessica_vendedora;
       } else if (email.includes("farid") || email.includes("majestic") || email === "majesticalchemy123@gmail.com") {
@@ -392,8 +379,6 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           const email = otpEmail.trim().toLowerCase();
           const user: UserAccount = email.includes("ivan")
             ? USER_ACCOUNTS.ivan_ceo
-            : email.includes("jorge")
-            ? USER_ACCOUNTS.jorge_socio
             : email.includes("jess") || email.includes("boldberry")
             ? USER_ACCOUNTS.jessica_vendedora
             : email.includes("farid") || email.includes("majestic") || email === "majesticalchemy123@gmail.com"
@@ -409,8 +394,6 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
       const email = otpEmail.trim().toLowerCase();
       const user: UserAccount = email.includes("ivan")
         ? USER_ACCOUNTS.ivan_ceo
-        : email.includes("jorge")
-        ? USER_ACCOUNTS.jorge_socio
         : email.includes("jess") || email.includes("boldberry")
         ? USER_ACCOUNTS.jessica_vendedora
         : email.includes("farid") || email.includes("majestic") || email === "majesticalchemy123@gmail.com"
@@ -447,7 +430,6 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         "ceo2026",
         "yucaterco21",
         "abuelover2026",
-        "nadaesimposible2026",
         "admin",
         "admin2026",
         "ventas2026",
@@ -466,8 +448,6 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           user = USER_ACCOUNTS.farid_asesor;
         } else if (password === "yucaterco21" || password === "ceo2026") {
           user = USER_ACCOUNTS.ivan_ceo;
-        } else if (password === "nadaesimposible2026") {
-          user = USER_ACCOUNTS.jorge_socio;
         } else if (password === "abuelover2026") {
           user = USER_ACCOUNTS.daniel_socio;
         } else if (password === "ventas2026" || password === "carlos2026") {

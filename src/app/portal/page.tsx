@@ -390,7 +390,6 @@ function PortalMainContent() {
       "ceo2026",
       "yucaterco21",
       "abuelover2026",
-      "nadaesimposible2026",
       "admin",
       "admin2026",
       "ventas2026",
@@ -409,8 +408,6 @@ function PortalMainContent() {
         user = USER_ACCOUNTS.farid_asesor;
       } else if (password === "yucaterco21" || password === "ceo2026") {
         user = USER_ACCOUNTS.ivan_ceo;
-      } else if (password === "nadaesimposible2026" || identifier.includes("jorge") || identifier.includes("jorgeluis")) {
-        user = USER_ACCOUNTS.jorge_socio;
       } else if (password === "ventas2026" || password === "carlos2026") {
         user = USER_ACCOUNTS.carlos_asesor;
       } else if (password === "dev2026") {
@@ -893,8 +890,8 @@ function PortalMainContent() {
       dueDate: "30 de Septiembre de 2026",
       provider: "OpenAI LLC",
       sourceAccount: "Santander Corporativa (Innocentia Tech)",
-      registeredBy: "Jorge Pérez (Socio)",
-      paidBy: "Jorge Pérez (Socio)",
+      registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Daniel Torre (Socio)",
     },
     {
       id: "FIN-04",
@@ -1236,8 +1233,8 @@ function PortalMainContent() {
       paymentAccount: "Pagado por Daniel Torre (Socio Operaciones) • Tarjeta",
       paidBy: "Daniel Torre (Socio)",
       alertLeadDays: 3,
-      reminderNotice: "🔔 Alerta programada: Notificar 3 días antes de cada corte (Día 7 de cada mes) a Iván (CEO), Daniel Torre y Jorge Pérez.",
-      notifyRecipients: ["Iván Castillo (CEO)", "Daniel Torre (Socio)", "Jorge Pérez (Socio)"],
+      reminderNotice: "🔔 Alerta programada: Notificar 3 días antes de cada corte (Día 7 de cada mes) a Iván (CEO) y Daniel Torre (Socio).",
+      notifyRecipients: ["Iván Castillo (CEO)", "Daniel Torre (Socio)"],
     },
   ]);
 
@@ -1875,17 +1872,6 @@ function PortalMainContent() {
                       >
                         Daniel Torre
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => handleRoleChange("socio", USER_ACCOUNTS.jorge_socio)}
-                        className={`px-2 py-0.5 rounded-lg transition-all cursor-pointer ${
-                          activeUser.id === USER_ACCOUNTS.jorge_socio.id
-                            ? "bg-purple-600 text-white font-bold shadow-md"
-                            : "text-purple-300 hover:text-white"
-                        }`}
-                      >
-                        Jorge Pérez
-                      </button>
                     </div>
                   )}
                 </div>
@@ -2379,7 +2365,7 @@ function PortalMainContent() {
                           )}
                         </h4>
                         <p className="text-[11px] text-gray-400 font-mono">
-                          Filtra por quién cubrió el pago (Daniel, Jorge, Iván, Bancos, etc.), mes de corte o busca conceptos específicos.
+                          Filtra por quién cubrió el pago (Daniel, Iván, Bancos, etc.), mes de corte o busca conceptos específicos.
                         </p>
                       </div>
                     </div>
@@ -2416,7 +2402,6 @@ function PortalMainContent() {
                       >
                         <option value="all">✨ Todos los Pagadores / Orígenes</option>
                         <option value="Daniel Torre">Daniel Torre (Socio)</option>
-                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
                         <option value="Iván Castillo">Iván Castillo (CEO)</option>
                         <option value="Santander Corporativa">Santander Corporativa (Innocentia Tech)</option>
                         <option value="BBVA Operativa">BBVA Operativa & Nómina</option>
@@ -2487,7 +2472,6 @@ function PortalMainContent() {
                     {[
                       { label: "Todos", value: "all" },
                       { label: "👤 Daniel Torre", value: "Daniel Torre" },
-                      { label: "👤 Jorge Pérez", value: "Jorge Pérez" },
                       { label: "👤 Iván Castillo", value: "Iván Castillo" },
                       { label: "💳 Santander Corp", value: "Santander Corporativa" },
                       { label: "💳 BBVA Nómina", value: "BBVA Operativa" },
@@ -3410,7 +3394,6 @@ function PortalMainContent() {
                         <option value="all">Todos los Socios</option>
                         <option value="Iván Castillo">Iván Castillo (CEO)</option>
                         <option value="Daniel Torre">Daniel Torre (Socio)</option>
-                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
                       </select>
                     </div>
 
@@ -4059,7 +4042,7 @@ function PortalMainContent() {
                           )}
                         </h4>
                         <p className="text-[11px] text-gray-400 font-mono">
-                          Filtra por quién cubrió el pago (Daniel, Jorge, Iván, Bancos, etc.), mes de corte o busca conceptos específicos.
+                          Filtra por quién cubrió el pago (Daniel, Iván, Bancos, etc.), mes de corte o busca conceptos específicos.
                         </p>
                       </div>
                     </div>
@@ -4096,7 +4079,6 @@ function PortalMainContent() {
                       >
                         <option value="all">✨ Todos los Pagadores / Orígenes</option>
                         <option value="Daniel Torre">Daniel Torre (Socio)</option>
-                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
                         <option value="Iván Castillo">Iván Castillo (CEO)</option>
                         <option value="Santander Corporativa">Santander Corporativa (Innocentia Tech)</option>
                         <option value="BBVA Operativa">BBVA Operativa & Nómina</option>
@@ -4167,7 +4149,6 @@ function PortalMainContent() {
                     {[
                       { label: "Todos", value: "all" },
                       { label: "👤 Daniel Torre", value: "Daniel Torre" },
-                      { label: "👤 Jorge Pérez", value: "Jorge Pérez" },
                       { label: "👤 Iván Castillo", value: "Iván Castillo" },
                       { label: "💳 Santander Corp", value: "Santander Corporativa" },
                       { label: "💳 BBVA Nómina", value: "BBVA Operativa" },
@@ -5082,7 +5063,6 @@ function PortalMainContent() {
                         <option value="all">Todos los Socios</option>
                         <option value="Iván Castillo">Iván Castillo (CEO)</option>
                         <option value="Daniel Torre">Daniel Torre (Socio)</option>
-                        <option value="Jorge Pérez">Jorge Pérez (Socio)</option>
                       </select>
                     </div>
 
@@ -5497,7 +5477,7 @@ function PortalMainContent() {
                           Programador de Recordatorios Mensuales & Pagos Recurrentes
                         </h2>
                         <p className="text-xs text-gray-300 font-mono mt-0.5">
-                          Notificación automatizada a Iván (CEO) y a los socios (Daniel Torre, Jorge Pérez) antes del corte mensual.
+                          Notificación automatizada a Iván (CEO) y Daniel Torre (Socio) antes del corte mensual.
                         </p>
                       </div>
                     </div>
@@ -5509,7 +5489,7 @@ function PortalMainContent() {
                           handleTriggerTestReminder(
                             "ChatGPT Pro (OpenAI)",
                             3,
-                            ["Iván Castillo (CEO)", "Daniel Torre (Socio)", "Jorge Pérez (Socio)"],
+                            ["Iván Castillo (CEO)", "Daniel Torre (Socio)"],
                             846.01
                           )
                         }
@@ -5546,7 +5526,6 @@ function PortalMainContent() {
                       <div className="space-y-0.5 mt-1 text-[11px] text-gray-300">
                         <div>• Iván Castillo (CEO)</div>
                         <div>• Daniel Torre (Socio)</div>
-                        <div>• Jorge Pérez (Socio)</div>
                       </div>
                     </div>
                   </div>
@@ -5639,7 +5618,7 @@ function PortalMainContent() {
                                   handleTriggerTestReminder(
                                     srv.name,
                                     srv.alertLeadDays || 3,
-                                    srv.notifyRecipients || ["Iván Castillo (CEO)", "Daniel Torre (Socio)", "Jorge Pérez (Socio)"],
+                                    srv.notifyRecipients || ["Iván Castillo (CEO)", "Daniel Torre (Socio)"],
                                     srv.costMonthly
                                   )
                                 }
@@ -6655,7 +6634,6 @@ function PortalMainContent() {
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {[
                     "Daniel Torre (Socio)",
-                    "Jorge Pérez (Socio)",
                     "Iván Castillo (CEO)",
                     "Santander Corporativa (Innocentia Tech)",
                     "BBVA Operativa & Nómina",
@@ -6835,7 +6813,6 @@ function PortalMainContent() {
                 <div className="flex flex-wrap gap-1.5">
                   {[
                     "Daniel Torre (Socio)",
-                    "Jorge Pérez (Socio)",
                     "Iván Castillo (CEO)",
                     "Santander Corporativa (Innocentia Tech)",
                     "BBVA Operativa & Nómina",
@@ -6860,7 +6837,7 @@ function PortalMainContent() {
                   type="text"
                   value={editFinPaidBy}
                   onChange={(e) => setEditFinPaidBy(e.target.value)}
-                  placeholder="ej: Daniel Torre (Socio), Jorge Pérez, Iván Castillo, Cliente X, Santander..."
+                  placeholder="ej: Daniel Torre (Socio), Iván Castillo, Cliente X, Santander..."
                   className="w-full px-4 py-2.5 rounded-xl bg-black/70 border border-purple-500/30 text-white focus:outline-none focus:border-purple-400 text-xs font-mono font-medium"
                 />
                 <span className="text-[10px] text-gray-400 block">

@@ -324,8 +324,6 @@ export default function PaymentsCalendarView({
 
         if (filterPaidBy === "daniel") {
           if (!pLower.includes("daniel") && !bLower.includes("daniel")) return false;
-        } else if (filterPaidBy === "jorge") {
-          if (!pLower.includes("jorge") && !bLower.includes("jorge")) return false;
         } else if (filterPaidBy === "ivan") {
           if (!pLower.includes("iván") && !pLower.includes("ivan") && !bLower.includes("ivan")) return false;
         } else if (filterPaidBy === "santander") {
@@ -734,7 +732,6 @@ export default function PaymentsCalendarView({
             >
               <option value="all">👥 Todos los Orígenes</option>
               <option value="daniel">👤 Daniel Torre (Socio)</option>
-              <option value="jorge">👤 Jorge Pérez (Socio)</option>
               <option value="ivan">👤 Iván Castillo (CEO)</option>
               <option value="santander">🏛️ Santander Corporativa</option>
               <option value="bbva">🏛️ BBVA Operativa</option>
