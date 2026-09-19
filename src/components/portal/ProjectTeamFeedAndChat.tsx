@@ -120,47 +120,13 @@ export default function ProjectTeamFeedAndChat({
   userRole = "socio",
   userName = "Daniel Torre",
 }: ProjectTeamFeedAndChatProps) {
-  // Available Projects
-  const projects: ProjectItem[] = [
-    {
-      id: "proj-1",
-      name: "App Móvil Delivery & Reservas en Tiempo Real",
-      client: "Gourmet Express S.A. (Lic. Roberto Garza)",
-      status: "En Desarrollo (Sprint 4)",
-      leadDesigner: "Sofía (UX/UI & Colorimetría)",
-      leadDev: "Ing. Rodrigo Pacheco & Iván Castillo (CEO)",
-      leadSales: "Carlos Mendoza (Comercial)",
-      partnerLead: "Daniel Torre & Jorge Pérez",
-      progress: 75,
-    },
-    {
-      id: "proj-2",
-      name: "Plataforma Clínica Médica con Diagnóstico AI",
-      client: "Clínica Médica AI (Dra. Mariana Valdés)",
-      status: "Sprint 4 Activo",
-      leadDesigner: "Sofía (UX/UI Lead)",
-      leadDev: "Ing. Rodrigo Pacheco (Tech Lead)",
-      leadSales: "Carlos Mendoza (Comercial)",
-      partnerLead: "Dirección General",
-      progress: 68,
-    },
-    {
-      id: "proj-3",
-      name: "Fintech Seguros MX - Portal B2B",
-      client: "Fintech Seguros MX (Lic. Andrea Morales)",
-      status: "Por Iniciar (Fase 0)",
-      leadDesigner: "Sofía (UX/UI Lead)",
-      leadDev: "Por Asignar (CEO)",
-      leadSales: "Carlos Mendoza (Comercial)",
-      partnerLead: "Dirección General",
-      progress: 10,
-    },
-  ];
+  // Available Projects - Limpio para inicio de operaciones reales
+  const projects: ProjectItem[] = [];
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("proj-1");
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"leads" | "chat" | "blog">("leads");
 
-  // Incoming Leads State (populated from localStorage or default mocks)
+  // Incoming Leads State (solo prospectos reales, inicializado o sincronizado con localStorage)
   const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
     {
       id: "PROJ-592160",
@@ -175,42 +141,8 @@ export default function ProjectTeamFeedAndChat({
       budgetRange: "50k_150k",
       timeline: "standard",
       description: "Atención al cliente, manejo de cotizaciones y formulario de pedidos, cobro de pedidos, reparto de comisiones.",
-      date: "Hoy, Reciente (9 Sep 2026)",
+      date: "Hoy, Reciente",
       status: "Nueva Solicitud",
-      assignedVendor: "Carlos Mendoza",
-    },
-    {
-      id: "PROJ-894120",
-      clientName: "Lic. Andrea Morales",
-      clientCompany: "Fintech Seguros MX",
-      clientPhone: "+52 55 4123 9876",
-      clientEmail: "andrea@fintechseguros.mx",
-      vendorCode: "SIN-ASESOR",
-      vendorName: "Sin Asesor (Por Canalizar por Dirección General)",
-      projectName: "Portal de Cotizaciones y Emisión de Pólizas B2B",
-      projectType: "web_platform",
-      budgetRange: "150k_350k",
-      timeline: "express",
-      description: "Requerimos una plataforma web rápida donde brokers puedan cotizar seguros y emitir carátulas en PDF con firma digital.",
-      date: "Hoy, 10:15 AM",
-      status: "Nueva Solicitud",
-      assignedVendor: "Sin Asignar",
-    },
-    {
-      id: "PROJ-719302",
-      clientName: "Arq. Valentina Suárez",
-      clientCompany: "Ikal Chukum Acabados",
-      clientPhone: "+52 999 123 4567",
-      clientEmail: "valentina@ikalchukum.com",
-      vendorCode: "VEN-CARLOS-202",
-      vendorName: "Carlos Mendoza",
-      projectName: "E-Commerce Exclusivo y Calculadora de Metros Cuadrados",
-      projectType: "mobile_app",
-      budgetRange: "80k_150k",
-      timeline: "standard",
-      description: "Catálogo de lujo para distribución nacional con cotizador en tiempo real según el metraje de obra.",
-      date: "Ayer, 04:20 PM",
-      status: "En Revisión",
       assignedVendor: "Carlos Mendoza",
     },
   ]);
@@ -245,7 +177,7 @@ export default function ProjectTeamFeedAndChat({
   }, []);
 
   // Unread messages state & notification counter
-  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(3);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(0);
   const [selectedLeadForAnswers, setSelectedLeadForAnswers] = useState<IncomingLead | null>(null);
   const [copiedAnswers, setCopiedAnswers] = useState(false);
   const [calculatorBridgeNotice, setCalculatorBridgeNotice] = useState<string | null>(null);
@@ -303,74 +235,11 @@ export default function ProjectTeamFeedAndChat({
     }
   };
 
-  // Blog Posts State
-  const [posts, setPosts] = useState<BlogPost[]>([
-    {
-      id: "p-1",
-      projectId: "proj-1",
-      authorRole: "designer",
-      authorName: "Sofía",
-      authorTitle: "Lead UX/UI & Colorimetría",
-      date: "Hoy, 10:15 AM",
-      title: "🎨 Entregable de Figma: Flujo de Carrito y Checkout a 60fps",
-      content:
-        "Subimos la versión definitiva de las 18 pantallas de pedidos. Optimizamos la paleta de colores para modo nocturno con contrastes accesibles y micro-interacciones táctiles listas para maquetación.",
-      category: "UI / UX",
-      attachment: {
-        label: "figma.com/file/gourmet-express-v4",
-        type: "figma",
-      },
-      commentsCount: 3,
-    },
-    {
-      id: "p-2",
-      projectId: "proj-1",
-      authorRole: "dev",
-      authorName: "Ing. Rodrigo Pacheco & Iván Castillo",
-      authorTitle: "Dev Lead & Software Architect",
-      date: "Hoy, 11:30 AM",
-      title: "⚡ Staging Desplegado: WebSockets GPS & PostgreSQL Conectados",
-      content:
-        "El cluster de geolocalización en tiempo real ya emite coordenadas cada 1.5s sin sobrecargar el servidor. El webhook de Stripe para retenciones de anticipo está probado en staging con latencia de 18ms.",
-      category: "Arquitectura & Dev",
-      attachment: {
-        label: "staging.gourmetexpress.mx/build-402",
-        type: "github",
-      },
-      commentsCount: 2,
-    },
-  ]);
+  // Blog Updates Feed State - Limpio para inicio de operaciones
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
 
-  // Chat Messages State
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "m-1",
-      projectId: "proj-1",
-      authorRole: "sales",
-      authorName: "Carlos Mendoza",
-      authorTitle: "Asesor Comercial",
-      text: "Equipo, el cliente acaba de enviar su requerimiento. Ya revisé la cotización base y les compartí el demo de la plataforma conectada.",
-      time: "10:00 AM",
-    },
-    {
-      id: "m-2",
-      projectId: "proj-1",
-      authorRole: "dev",
-      authorName: "Ing. Rodrigo Pacheco",
-      authorTitle: "Tech Lead",
-      text: "Excelente. La arquitectura está modularizada en Next.js y WebSockets, listos para arrancar Sprint 1 en cuanto validen el anticipo.",
-      time: "10:18 AM",
-    },
-    {
-      id: "m-3",
-      projectId: "proj-1",
-      authorRole: "partner",
-      authorName: "Daniel Torre",
-      authorTitle: "Socio Operaciones",
-      text: "Recibido. Movimiento conciliado en bitácora de finanzas y cuenta de origen validada.",
-      time: "10:30 AM",
-    },
-  ]);
+  // Chat Messages State - Limpio para inicio de operaciones
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   const [chatText, setChatText] = useState("");
 
