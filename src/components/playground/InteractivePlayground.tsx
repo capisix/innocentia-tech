@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { ArrowRight, Sparkles, Send, RefreshCw, CheckCircle2, Cpu, Palette } from "../../lib/icons";
+import LiveTelemetryMap from "../common/LiveTelemetryMap";
 
 interface ChatMessage {
   id: string;
@@ -22,6 +23,7 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
   const [activeTab, setActiveTab] = useState<"chat" | "arch">("chat");
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState<"sofia" | "ivan" | "both" | null>(null);
+  const [phoneTelemetryTab, setPhoneTelemetryTab] = useState<"grafica" | "mapa">("grafica");
 
   // 6 Visual Suggested Topics requested by User
   const visualTopics = [
@@ -605,47 +607,72 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
                 </div>
 
                 {/* App Analytics & Live Telemetry Dashboard */}
-                <div className="p-3.5 rounded-2xl bg-black/60 border border-white/15 space-y-3 shadow-inner">
+                <div className="p-3 rounded-2xl bg-black/60 border border-white/15 space-y-2.5 shadow-inner">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-ping" />
                       <span className="text-xs text-white font-bold font-mono">Telemetría de la App</span>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-                      ▲ +34.8% hoy
-                    </span>
-                  </div>
-
-                  {/* Dynamic Activity Bar Chart with Labels */}
-                  <div className="space-y-1">
-                    <div className="w-full h-20 flex items-end gap-1.5 pt-2">
-                      {[
-                        { label: "08:00", h: 45, val: "1.2k" },
-                        { label: "11:00", h: 75, val: "2.8k" },
-                        { label: "14:00", h: 95, val: "4.1k" },
-                        { label: "17:00", h: 80, val: "3.4k" },
-                        { label: "20:00", h: 100, val: "5.2k" },
-                        { label: "23:00", h: 65, val: "2.1k" },
-                      ].map((bar, i) => (
-                        <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group cursor-pointer">
-                          <div
-                            className="w-full rounded-t-md transition-all duration-500 hover:brightness-125"
-                            style={{
-                              height: `${bar.h}%`,
-                              background: i % 2 === 0 
-                                ? "linear-gradient(to top, #FF3B5C, #FF8800)" 
-                                : "linear-gradient(to top, #00E5FF, #8A2BE2)",
-                              boxShadow: i === 4 ? "0 0 12px rgba(0,229,255,0.5)" : "none",
-                            }}
-                          />
-                          <span className="text-[8px] font-mono text-gray-500">{bar.label}</span>
-                        </div>
-                      ))}
+                    {/* View Switcher: Gráfica vs Mapa */}
+                    <div className="inline-flex p-0.5 rounded-lg bg-white/10 border border-white/10 font-mono text-[9px]">
+                      <button
+                        type="button"
+                        onClick={() => setPhoneTelemetryTab("grafica")}
+                        className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                          phoneTelemetryTab === "grafica" ? "bg-white/20 text-white font-bold" : "text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        Tráfico
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPhoneTelemetryTab("mapa")}
+                        className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                          phoneTelemetryTab === "mapa" ? "bg-[#00E5FF]/20 text-[#00E5FF] font-bold" : "text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        Mapa Nodos
+                      </button>
                     </div>
                   </div>
 
+                  {phoneTelemetryTab === "grafica" ? (
+                    /* Dynamic Activity Bar Chart with Labels */
+                    <div className="space-y-1">
+                      <div className="w-full h-20 flex items-end gap-1.5 pt-2">
+                        {[
+                          { label: "08:00", h: 45, val: "1.2k" },
+                          { label: "11:00", h: 75, val: "2.8k" },
+                          { label: "14:00", h: 95, val: "4.1k" },
+                          { label: "17:00", h: 80, val: "3.4k" },
+                          { label: "20:00", h: 100, val: "5.2k" },
+                          { label: "23:00", h: 65, val: "2.1k" },
+                        ].map((bar, i) => (
+                          <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group cursor-pointer">
+                            <div
+                              className="w-full rounded-t-md transition-all duration-500 hover:brightness-125"
+                              style={{
+                                height: `${bar.h}%`,
+                                background: i % 2 === 0 
+                                  ? "linear-gradient(to top, #FF3B5C, #FF8800)" 
+                                  : "linear-gradient(to top, #00E5FF, #8A2BE2)",
+                                boxShadow: i === 4 ? "0 0 12px rgba(0,229,255,0.5)" : "none",
+                              }}
+                            />
+                            <span className="text-[8px] font-mono text-gray-500">{bar.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    /* Live Cyber Map View for Mobile */
+                    <div className="py-1">
+                      <LiveTelemetryMap variant="compact" showStats={false} className="p-2 border-0 bg-transparent" />
+                    </div>
+                  )}
+
                   {/* Realtime Live App Activity Feed */}
-                  <div className="pt-2 border-t border-white/10 space-y-1.5 text-[10px] font-mono">
+                  <div className="pt-2 border-t border-white/10 space-y-1 text-[10px] font-mono">
                     <div className="flex items-center justify-between text-gray-300 bg-white/[0.03] p-1.5 rounded-lg border border-white/5">
                       <span className="flex items-center gap-1.5 text-white">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />

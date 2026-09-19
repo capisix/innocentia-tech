@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node -r ./patch-readlink.cjs ./node_modules/next/dist/bin/next dev",
     "build:css": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./public/tailwind.css",
-    "build": "next build",
+    "build": "node -r ./patch-readlink.cjs ./node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "next lint"
   },

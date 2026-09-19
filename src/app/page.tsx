@@ -18,6 +18,7 @@ import TechStackSection from "../components/tech/TechStackSection";
 import CommunitySection from "../components/community/CommunitySection";
 import PromptCTASection from "../components/cta/PromptCTASection";
 import Footer from "../components/footer/Footer";
+import PublicTelemetryHUD from "../components/common/PublicTelemetryHUD";
 
 function HomeContent() {
   const [introFinished, setIntroFinished] = useState(() => {
@@ -113,7 +114,8 @@ function HomeContent() {
       {/* Footer */}
       <Footer />
 
-
+      {/* Floating Realtime Telemetry HUD (Público: Solo mapa de nodos sin datos privados) */}
+      <PublicTelemetryHUD />
 
       {/* Ventana Flotante de Creación de Proyecto (Se abre como modal y se cierra al terminar) */}
       <ProjectCreationModal

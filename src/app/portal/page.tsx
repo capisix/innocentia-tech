@@ -12,6 +12,7 @@ import InternalPricingMatrix from "../../components/portal/InternalPricingMatrix
 import UserProfileModal from "../../components/portal/UserProfileModal";
 import CommercialCalendarView, { CommercialAppointment } from "../../components/portal/CommercialCalendarView";
 import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
+import ExecutiveTelemetryDashboard from "../../components/portal/ExecutiveTelemetryDashboard";
 import {
   Sparkles,
   ArrowRight,
@@ -464,8 +465,8 @@ function PortalMainContent() {
   const PresetIcon = currentPreset?.icon || Crown;
 
   // Tab States per Role
-  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "chat">("proyectos");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "chat">("finanzas");
+  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "telemetria" | "chat">("proyectos");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "telemetria" | "chat">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "citas_calendario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
@@ -2355,6 +2356,18 @@ function PortalMainContent() {
               </button>
 
               <button
+                onClick={() => setCeoTab("telemetria")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  ceoTab === "telemetria"
+                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span>Telemetría en Vivo (GA4)</span>
+              </button>
+
+              <button
                 onClick={() => setCeoTab("chat")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   ceoTab === "chat"
@@ -4055,9 +4068,12 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* CEO Tab 5: Chats */}
             {ceoTab === "tabulador" && (
               <InternalPricingMatrix userRole="ceo" userName={activeUser.name} />
+            )}
+
+            {ceoTab === "telemetria" && (
+              <ExecutiveTelemetryDashboard />
             )}
 
             {ceoTab === "chat" && (
@@ -4143,6 +4159,18 @@ function PortalMainContent() {
               >
                 <DollarSign className="w-4 h-4" />
                 <span>Tabulador y Cotizador Base</span>
+              </button>
+
+              <button
+                onClick={() => setPartnerTab("telemetria")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  partnerTab === "telemetria"
+                    ? "bg-purple-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]"
+                    : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span>Telemetría en Vivo (GA4)</span>
               </button>
 
               <button
@@ -5929,9 +5957,12 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* Partner Tab 5: Chats */}
             {partnerTab === "tabulador" && (
               <InternalPricingMatrix userRole="socio" userName={activeUser.name} />
+            )}
+
+            {partnerTab === "telemetria" && (
+              <ExecutiveTelemetryDashboard />
             )}
 
             {partnerTab === "chat" && (
