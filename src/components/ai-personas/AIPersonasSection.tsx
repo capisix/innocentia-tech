@@ -800,7 +800,7 @@ export default function AIPersonasSection() {
                     </div>
                     <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#00D1FF]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
                       <span>🚀</span>
-                      <span className="text-[11px] sm:text-xs whitespace-nowrap">Hacen posible</span>
+                      <span className="text-[11px] sm:text-xs">Evolucionan</span>
                     </div>
                   </div>
                 </div>
