@@ -282,15 +282,15 @@ export default function CommercialCalendarView({
   return (
     <div className="space-y-6 text-left animate-in fade-in duration-300">
       {/* Top Header Card */}
-      <div className="p-6 sm:p-7 rounded-[32px] bg-gradient-to-r from-[#00D1FF]/20 via-purple-950/40 to-black border-2 border-[#00D1FF]/40 shadow-[0_0_35px_rgba(0,209,255,0.2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="p-4 sm:p-7 rounded-[24px] sm:rounded-[32px] bg-gradient-to-r from-[#00D1FF]/20 via-purple-950/40 to-black border-2 border-[#00D1FF]/40 shadow-[0_0_35px_rgba(0,209,255,0.2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <span className="text-[10px] font-mono text-[#00D1FF] uppercase font-bold tracking-widest flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
-            Agenda Comercial & Sincronización Google Calendar
+            Agenda Comercial &amp; Sincronización Google Calendar
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight mt-1 flex items-center gap-2">
-            <Calendar className="w-6 h-6 text-[#00D1FF]" />
-            <span>Calendario de Citas & Demostraciones</span>
+            <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-[#00D1FF]" />
+            <span>Calendario de Citas &amp; Demos</span>
           </h2>
           <p className="text-xs text-gray-300 mt-1">
             Haz clic en cualquier fecha para consultar la información completa, editar citas o entrar a la videollamada.
@@ -298,12 +298,12 @@ export default function CommercialCalendarView({
         </div>
 
         {/* View Toggle & New Appointment Button */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap w-full md:w-auto justify-between md:justify-end">
           <div className="flex items-center gap-1 p-1 rounded-2xl bg-black/60 border border-white/20">
             <button
               type="button"
               onClick={() => setViewMode("calendario")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 viewMode === "calendario"
                   ? "bg-[#00D1FF] text-black shadow-md shadow-cyan-500/20"
                   : "text-gray-400 hover:text-white"
@@ -315,7 +315,7 @@ export default function CommercialCalendarView({
             <button
               type="button"
               onClick={() => setViewMode("lista")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 viewMode === "lista"
                   ? "bg-purple-600 text-white shadow-md shadow-purple-600/30"
                   : "text-gray-400 hover:text-white"
@@ -328,10 +328,10 @@ export default function CommercialCalendarView({
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00D1FF] via-purple-500 to-[#FF3858] hover:scale-105 text-black font-black text-xs uppercase font-mono tracking-wider flex items-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.5)] transition-all cursor-pointer"
+            className="flex-1 md:flex-none px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-gradient-to-r from-[#00D1FF] via-purple-500 to-[#FF3858] hover:scale-105 text-black font-black text-xs uppercase font-mono tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.5)] transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 text-black stroke-[3]" />
-            <span>+ Agendar Nueva Cita</span>
+            <span>+ Nueva Cita</span>
           </button>
         </div>
       </div>
@@ -342,30 +342,30 @@ export default function CommercialCalendarView({
       {viewMode === "calendario" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* CALENDAR GRID (8 COLS) */}
-          <div className="lg:col-span-8 p-5 sm:p-6 rounded-[32px] bg-[#07070E] border border-white/15 space-y-5 shadow-2xl backdrop-blur-xl">
+          <div className="lg:col-span-8 p-3 sm:p-6 rounded-[24px] sm:rounded-[32px] bg-[#07070E] border border-white/15 space-y-4 sm:space-y-5 shadow-2xl backdrop-blur-xl">
             {/* Month Navigation Controls */}
-            <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2 bg-black/60 border border-white/20 rounded-2xl p-1">
+            <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3 sm:pb-4 flex-wrap sm:flex-nowrap">
+              <div className="flex items-center gap-1 sm:gap-2 bg-black/60 border border-white/20 rounded-2xl p-1">
                 <button
                   type="button"
                   onClick={handlePrevMonth}
-                  className="p-2 rounded-xl hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
+                  className="p-1.5 sm:p-2 rounded-xl hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
                   title="Mes Anterior"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
-                <div className="px-3 py-1 text-center min-w-[150px]">
-                  <span className="text-sm font-black text-white uppercase tracking-wider block">
+                <div className="px-2 sm:px-3 py-1 text-center min-w-[120px] sm:min-w-[150px]">
+                  <span className="text-xs sm:text-sm font-black text-white uppercase tracking-wider block">
                     {MONTH_NAMES[selectedMonth - 1]} {selectedYear}
                   </span>
-                  <span className="text-[10px] font-mono text-[#00D1FF] font-bold">
-                    {appointments.filter((a) => a.date.startsWith(`${selectedYear}-${selectedMonth.toString().padStart(2, "0")}`)).length} citas este mes
+                  <span className="text-[9px] sm:text-[10px] font-mono text-[#00D1FF] font-bold">
+                    {appointments.filter((a) => a.date.startsWith(`${selectedYear}-${selectedMonth.toString().padStart(2, "0")}`)).length} citas
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={handleNextMonth}
-                  className="p-2 rounded-xl hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
+                  className="p-1.5 sm:p-2 rounded-xl hover:bg-white/10 text-gray-300 hover:text-white transition-all cursor-pointer"
                   title="Mes Siguiente"
                 >
                   <ArrowRight className="w-4 h-4" />
@@ -375,24 +375,24 @@ export default function CommercialCalendarView({
               <button
                 type="button"
                 onClick={handleGoToToday}
-                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer border border-white/15"
+                className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white text-[11px] sm:text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer border border-white/15"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-[#00D1FF]" />
-                <span>Hoy (14 Sep)</span>
+                <span>Hoy</span>
               </button>
             </div>
 
             {/* Weekdays Header */}
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center text-xs font-mono font-bold text-gray-400 uppercase">
+            <div className="grid grid-cols-7 gap-1 text-center text-[10px] sm:text-xs font-mono font-bold text-gray-400 uppercase">
               {WEEK_DAYS.map((wd, i) => (
-                <div key={wd} className={`py-1.5 ${i >= 5 ? "text-purple-400" : ""}`}>
+                <div key={wd} className={`py-1 ${i >= 5 ? "text-purple-400" : ""}`}>
                   {wd}
                 </div>
               ))}
             </div>
 
             {/* Days Matrix */}
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
               {calendarMatrix.map((cell, idx) => {
                 const isSelected = cell.isCurrentMonth && selectedDay === cell.dayNumber;
                 const isToday = cell.isCurrentMonth && cell.dayNumber === 14 && cell.month === 9 && cell.year === 2026;
@@ -414,7 +414,7 @@ export default function CommercialCalendarView({
                         setSelectedAptId(cell.apts[0].id);
                       }
                     }}
-                    className={`min-h-[86px] sm:min-h-[96px] p-2 rounded-2xl border text-left transition-all flex flex-col justify-between group relative cursor-pointer ${
+                    className={`min-h-[58px] sm:min-h-[96px] p-1 sm:p-2 rounded-xl sm:rounded-2xl border text-left transition-all flex flex-col justify-between group relative cursor-pointer ${
                       !cell.isCurrentMonth
                         ? "bg-white/[0.01] border-white/5 opacity-30 hover:opacity-70"
                         : isSelected
@@ -429,7 +429,7 @@ export default function CommercialCalendarView({
                     {/* Day number & Today Badge */}
                     <div className="flex items-center justify-between w-full">
                       <span
-                        className={`text-xs font-mono font-black px-1.5 py-0.5 rounded-lg ${
+                        className={`text-[10px] sm:text-xs font-mono font-black px-1 py-0.5 sm:px-1.5 rounded-md sm:rounded-lg ${
                           isToday
                             ? "bg-[#00D1FF] text-black"
                             : isSelected
@@ -441,30 +441,31 @@ export default function CommercialCalendarView({
                       </span>
 
                       {isToday && (
-                        <span className="text-[9px] font-mono font-bold text-[#00D1FF] uppercase">
+                        <span className="text-[8px] sm:text-[9px] font-mono font-bold text-[#00D1FF] uppercase hidden sm:inline">
                           Hoy
                         </span>
                       )}
                     </div>
 
                     {/* Resumed Appointments inside Cell */}
-                    <div className="space-y-1 my-1 w-full overflow-hidden">
+                    <div className="space-y-0.5 sm:space-y-1 my-0.5 sm:my-1 w-full overflow-hidden">
                       {cell.apts.slice(0, 2).map((apt) => (
                         <div
                           key={apt.id}
-                          className={`text-[9px] font-mono px-1.5 py-0.5 rounded truncate font-bold flex items-center justify-between gap-1 border ${
+                          className={`text-[8px] sm:text-[9px] font-mono px-1 py-0.5 rounded truncate font-bold flex items-center justify-between gap-1 border ${
                             apt.status === "Confirmada"
                               ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
                               : "bg-amber-500/20 text-amber-300 border-amber-500/40"
                           }`}
                           title={`${apt.time} - ${apt.clientName} (${apt.company})`}
                         >
-                          <span className="truncate">{apt.time} {apt.company}</span>
+                          <span className="hidden sm:inline truncate">{apt.time} {apt.company}</span>
+                          <span className="sm:hidden text-[8px] font-mono truncate">{apt.time}</span>
                         </div>
                       ))}
                       {cell.apts.length > 2 && (
-                        <span className="text-[8px] font-mono text-gray-400 block text-right">
-                          +{cell.apts.length - 2} más
+                        <span className="text-[7px] sm:text-[8px] font-mono text-gray-400 block text-right">
+                          +{cell.apts.length - 2}
                         </span>
                       )}
                     </div>

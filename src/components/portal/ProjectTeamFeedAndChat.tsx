@@ -274,10 +274,23 @@ export default function ProjectTeamFeedAndChat({
   };
 
   const handleAssignVendor = (leadId: string, vendorName: string) => {
+    const code = vendorName.includes("Jessica") ? "VEN-JESS-101" : vendorName.includes("Farid") ? "VEN-FARID-303" : "INN-DIRECT-01";
     setIncomingLeads((prev) =>
-      prev.map((l) => (l.id === leadId ? { ...l, vendorName, vendorCode: vendorName.includes("Carlos") ? "VEN-CARLOS-202" : "INN-DIRECT-01", status: "En Revisión" } : l))
+      prev.map((l) => (l.id === leadId ? { ...l, vendorName, vendorCode: code, status: "En Revisión" } : l))
     );
   };
+
+  const visibleIncomingLeads = incomingLeads.filter((l) => {
+    if (userRole === "ceo" || userRole === "socio") return true;
+    if (userRole === "asesor") {
+      const u = (userName || "").toLowerCase();
+      const v = (l.vendorName || "").toLowerCase();
+      if (u.includes("jess")) return v.includes("jess") || l.vendorCode?.includes("JESS");
+      if (u.includes("farid")) return v.includes("farid") || l.vendorCode?.includes("FARID");
+      return v.includes(u);
+    }
+    return true;
+  });
 
   // Generate Formal Proposal Message
   const getProposalFormattedMessage = (lead: IncomingLead) => {
@@ -513,92 +526,94 @@ ${pricingText}
           <div className="pt-2">
             <div className="flex items-center justify-between pb-3">
               <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-wider">
-                Historial de Todas las Solicitudes Entrantes ({incomingLeads.length}):
+                {userRole === "asesor"
+                  ? `Tus Solicitudes Asignadas (${visibleIncomingLeads.length}):`
+                  : `Historial de Todas las Solicitudes Entrantes (${incomingLeads.length}):`}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {incomingLeads.map((lead) => {
-                const isUnassigned = lead.vendorCode === "SIN-ASESOR" || lead.vendorName.includes("Sin Asesor");
-                return (
-                  <div
-                    key={lead.id}
-                    className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/40 transition-all shadow-xl text-left"
-                  >
-                    <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-bold">
-                            {lead.id}
-                          </span>
-                          <span
-                            className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border font-bold ${
-                              isUnassigned
-                                ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
-                                : "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
-                            }`}
+            {visibleIncomingLeads.length > 0 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {visibleIncomingLeads.map((lead) => {
+                  const isUnassigned = lead.vendorCode === "SIN-ASESOR" || lead.vendorName.includes("Sin Asesor");
+                  return (
+                    <div
+                      key={lead.id}
+                      className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4 hover:border-[#00D1FF]/40 transition-all shadow-xl text-left"
+                    >
+                      <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-bold">
+                              {lead.id}
+                            </span>
+                            <span
+                              className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border font-bold ${
+                                isUnassigned
+                                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                                  : "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                              }`}
+                            >
+                              {isUnassigned ? "⚠️ Por Canalizar (CEO)" : "✓ Asesor Asignado"}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-black text-white">{lead.clientName}</h3>
+                          <p className="text-xs font-mono text-[#00D1FF]">{lead.clientCompany}</p>
+                        </div>
+
+                        <div className="text-right text-[10px] font-mono text-gray-400">
+                          <span>{lead.date}</span>
+                        </div>
+                      </div>
+
+                      {/* Project Specs */}
+                      <div className="space-y-2 text-xs font-mono">
+                        <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1">
+                          <span className="text-gray-400 block text-[10px] uppercase font-bold">Proyecto Solicitado:</span>
+                          <strong className="text-white text-sm block">{lead.projectName}</strong>
+                          <p className="text-gray-300 font-light leading-relaxed mt-1">"{lead.description}"</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 text-[11px]">
+                          <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
+                            <span className="text-gray-400 block text-[9px] uppercase">WhatsApp:</span>
+                            <a
+                              href={"https://wa.me/" + lead.clientPhone.replace(/[^0-9]/g, "")}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-emerald-400 font-bold hover:underline"
+                            >
+                              {lead.clientPhone}
+                            </a>
+                          </div>
+                          <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
+                            <span className="text-gray-400 block text-[9px] uppercase">Correo:</span>
+                            <span className="text-gray-200 truncate block">{lead.clientEmail}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Vendor Routing Dropdown for CEO / Socios */}
+                      <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/30 flex items-center justify-between gap-3 text-xs font-mono">
+                        <div>
+                          <span className="text-purple-300 text-[10px] uppercase block font-bold">Asesor a Cargo:</span>
+                          <span className="text-white font-bold">{lead.vendorName}</span>
+                        </div>
+
+                        {(userRole === "ceo" || userRole === "socio") && (
+                          <select
+                            value={lead.vendorName}
+                            onChange={(e) => handleAssignVendor(lead.id, e.target.value)}
+                            className="px-3 py-1.5 rounded-xl bg-black border border-purple-400 text-xs font-mono text-purple-200 focus:outline-none cursor-pointer"
                           >
-                            {isUnassigned ? "⚠️ Por Canalizar (CEO)" : "✓ Asesor Asignado"}
-                          </span>
-                        </div>
-                        <h3 className="text-lg font-black text-white">{lead.clientName}</h3>
-                        <p className="text-xs font-mono text-[#00D1FF]">{lead.clientCompany}</p>
+                            <option value="Sin Asesor (Por Canalizar por Dirección)">Por Canalizar (Sin Asesor)</option>
+                            <option value="Jessica Torre">Asignar a Jessica Torre</option>
+                            <option value="Farid Abdul Oziel">Asignar a Farid Abdul Oziel</option>
+                            <option value="Iván Castillo (CEO)">Atender por Iván Castillo (CEO)</option>
+                            <option value="Daniel Torre (Socio)">Atender por Daniel Torre</option>
+                          </select>
+                        )}
                       </div>
-
-                      <div className="text-right text-[10px] font-mono text-gray-400">
-                        <span>{lead.date}</span>
-                      </div>
-                    </div>
-
-                    {/* Project Specs */}
-                    <div className="space-y-2 text-xs font-mono">
-                      <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-1">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Proyecto Solicitado:</span>
-                        <strong className="text-white text-sm block">{lead.projectName}</strong>
-                        <p className="text-gray-300 font-light leading-relaxed mt-1">"{lead.description}"</p>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2 text-[11px]">
-                        <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
-                          <span className="text-gray-400 block text-[9px] uppercase">WhatsApp:</span>
-                          <a
-                            href={"https://wa.me/" + lead.clientPhone.replace(/[^0-9]/g, "")}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-emerald-400 font-bold hover:underline"
-                          >
-                            {lead.clientPhone}
-                          </a>
-                        </div>
-                        <div className="p-2.5 rounded-xl bg-black/50 border border-white/10">
-                          <span className="text-gray-400 block text-[9px] uppercase">Correo:</span>
-                          <span className="text-gray-200 truncate block">{lead.clientEmail}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Vendor Routing Dropdown for CEO / Socios */}
-                    <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/30 flex items-center justify-between gap-3 text-xs font-mono">
-                      <div>
-                        <span className="text-purple-300 text-[10px] uppercase block font-bold">Asesor a Cargo:</span>
-                        <span className="text-white font-bold">{lead.vendorName}</span>
-                      </div>
-
-                      {(userRole === "ceo" || userRole === "socio") && (
-                        <select
-                          value={lead.vendorName}
-                          onChange={(e) => handleAssignVendor(lead.id, e.target.value)}
-                          className="px-3 py-1.5 rounded-xl bg-black border border-purple-400 text-xs font-mono text-purple-200 focus:outline-none cursor-pointer"
-                        >
-                          <option value="Sin Asesor (Por Canalizar por Dirección)">Por Canalizar (Sin Asesor)</option>
-                          <option value="Jessica Torre">Asignar a Jessica Torre</option>
-                          <option value="Farid Abdul Oziel">Asignar a Farid Abdul Oziel</option>
-                          <option value="Carlos Mendoza">Asignar a Carlos Mendoza</option>
-                          <option value="Iván Castillo (CEO)">Atender por Iván Castillo (CEO)</option>
-                          <option value="Daniel Torre (Socio)">Atender por Daniel Torre</option>
-                        </select>
-                      )}
-                    </div>
 
                     {/* Action Buttons: View Answers/PDF & Proposal */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
@@ -628,9 +643,19 @@ ${pricingText}
                 );
               })}
             </div>
-          </div>
+          ) : (
+            <div className="p-8 rounded-[24px] bg-[#07070E] border border-dashed border-white/15 text-center space-y-3">
+              <p className="text-gray-400 text-sm font-mono">
+                No hay prospectos asignados actualmente para tu perfil.
+              </p>
+              <p className="text-xs text-gray-500 font-mono">
+                Tus nuevos prospectos capturados a través de tu enlace de afiliado aparecerán aquí automáticamente.
+              </p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
+    )}
 
       {/* ======================================================== */}
       {/* MODAL / PANEL DE PROPUESTA CON 3 OPCIONES DE DEMO */}
@@ -1008,7 +1033,7 @@ ${pricingText}
                 Mesa de Discusión en Vivo • {activeProject.name}
               </h3>
               <p className="text-xs text-gray-400 font-mono">
-                Coordinación en tiempo real entre Iván (CEO), Daniel (Socio), Rodrigo (Dev) y Jessica/Farid/Carlos (Ventas).
+                Coordinación en tiempo real entre Iván (CEO), Daniel (Socio), Rodrigo (Dev) y Jessica / Farid (Ventas).
               </p>
             </div>
 

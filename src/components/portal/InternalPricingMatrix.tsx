@@ -640,65 +640,79 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
       {/* TAB 4: CALCULADORA DE COTIZACIÓN INTERACTIVA (CON EDICIÓN DIRECTA POR ELEMENTO) */}
       {activeTab === "calculadora" && (
         <div className="space-y-4">
-          {/* Recent Form Lead Quick-Banner */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black/80 to-[#00D1FF]/10 border border-[#00D1FF]/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center flex-shrink-0 text-lg">
-                📋
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 font-bold">
-                    SOLICITUD RECIENTE • PROJ-592160
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400">
-                    9 Sep 2026
-                  </span>
+          {/* Recent Form Lead Quick-Banner (Dynamic for Assigned Seller) */}
+          {userName?.toLowerCase().includes("jess") ? (
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black/80 to-[#00D1FF]/10 border border-[#00D1FF]/40 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center flex-shrink-0 text-lg">
+                  📋
                 </div>
-                <h4 className="text-sm font-bold text-white mt-0.5">
-                  Daniel Torre de Haro • <span className="text-gray-300">Pro Acabados</span>
-                </h4>
-                <p className="text-[11px] font-mono text-gray-400">
-                  App de Pedidos y Entregas • Asesor: Carlos Mendoza (VEN-CARLOS-202)
-                </p>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 font-bold">
+                      PROYECTO ACTIVO • PROJ-AXANA-2026
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400">
+                      14 Sep 2026
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-bold text-white mt-0.5">
+                    Axana & Gabriel • <span className="text-gray-300">Axana</span>
+                  </h4>
+                  <p className="text-[11px] font-mono text-gray-400">
+                    Plataforma Digital & E-Commerce • Asesora: Jessica Torre (VEN-JESS-101)
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-stretch sm:self-auto flex-wrap sm:flex-nowrap">
+                <button
+                  type="button"
+                  onClick={() => setIsLeadModalOpen(true)}
+                  className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <span>👁️ Ver Ficha Oficial</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCalcClientName("Axana & Gabriel (Axana)");
+                    setCalcModalidad("proyecto");
+                    setCalcTier("mvp");
+                    setCalcDiseno("personalizado");
+                    setSelectedExtras({
+                      whatsapp_bot: true,
+                      stripe_payments: true,
+                      cloud_infra: true,
+                      pwa_mobile: false,
+                      audit_reports: false,
+                      support_247: false,
+                      multi_language: false,
+                      domain_ssl: false,
+                    });
+                    setPreloadedLeadNotice("✓ Requerimientos de Axana cargados en la calculadora.");
+                  }}
+                  className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] hover:scale-105 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>⚡ Cargar en Cotizador</span>
+                </button>
               </div>
             </div>
-
-            <div className="flex items-center gap-2 self-stretch sm:self-auto">
-              <button
-                type="button"
-                onClick={() => setIsLeadModalOpen(true)}
-                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <span>👁️ Ver Ficha Oficial</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setCalcClientName("Daniel Torre de Haro (Pro Acabados)");
-                  setCalcModalidad("proyecto");
-                  setCalcTier("mvp");
-                  setCalcDiseno("personalizado");
-                  setSelectedExtras({
-                    whatsapp_bot: true,
-                    stripe_payments: true,
-                    cloud_infra: false,
-                    pwa_mobile: false,
-                    audit_reports: false,
-                    support_247: false,
-                    multi_language: false,
-                    domain_ssl: false,
-                  });
-                  setPreloadedLeadNotice("✓ Requerimientos de Daniel Torre (Pro Acabados) cargados en la calculadora.");
-                }}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] hover:scale-105 text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_20px_rgba(0,209,255,0.4)] transition-all cursor-pointer"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>⚡ Cargar en Cotizador</span>
-              </button>
+          ) : (
+            <div className="p-4 rounded-2xl bg-[#07070E] border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+                  ⚡
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white">Cotizador Rápido para Clientes</h4>
+                  <p className="text-gray-400 text-[11px]">Calcula presupuestos a medida y genera propuestas comerciales oficiales en tiempo real.</p>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
           {preloadedLeadNotice && (
             <div className="p-3.5 rounded-2xl bg-[#00D1FF]/15 border border-[#00D1FF]/40 text-[#00D1FF] text-xs font-mono font-bold flex items-center justify-between shadow-lg animate-in fade-in">
@@ -1356,50 +1370,48 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/10">
                 <div>
                   <span className="text-[10px] text-gray-400 uppercase block font-bold">Cliente Registrado:</span>
-                  <p className="text-sm font-bold text-white mt-0.5">Daniel Torre de Haro</p>
-                  <p className="text-gray-300">Empresa: <strong>Pro Acabados</strong></p>
-                  <p className="text-[#00D1FF]">📱 WhatsApp: 9601771556</p>
-                  <p className="text-gray-400">✉️ pro.acabados.mx@gmail.com</p>
-                  <p className="text-gray-400">📍 Mérida / Yucatán / México</p>
+                  <p className="text-sm font-bold text-white mt-0.5">Axana &amp; Gabriel</p>
+                  <p className="text-gray-300">Empresa: <strong>Axana</strong></p>
+                  <p className="text-[#00D1FF]">📱 WhatsApp: +52 55 8421 0898</p>
+                  <p className="text-gray-400">✉️ contacto@axana.mx</p>
+                  <p className="text-gray-400">📍 México</p>
                 </div>
                 <div>
                   <span className="text-[10px] text-gray-400 uppercase block font-bold">Asesor Comercial Vinculado:</span>
-                  <p className="text-sm font-bold text-amber-300 mt-0.5">Carlos Mendoza</p>
-                  <p className="text-gray-300">Código: <strong>VEN-CARLOS-202</strong></p>
-                  <p className="text-gray-400">Atribución: Bolsa 20% Máx (24 Meses)</p>
-                  <p className="text-emerald-400 mt-2">Status: 🟢 Nueva Solicitud</p>
+                  <p className="text-sm font-bold text-amber-300 mt-0.5">{userName || "Jessica Torre"}</p>
+                  <p className="text-gray-300">Código: <strong>{userName?.toLowerCase().includes("farid") ? "VEN-FARID-303" : "VEN-JESS-101"}</strong></p>
+                  <p className="text-gray-400">Atribución: Comisión 12% Cierre</p>
+                  <p className="text-amber-300 mt-2">Status: 🟡 En Revisión de Demo</p>
                 </div>
               </div>
 
               {/* Proyecto & Requerimientos */}
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
                 <span className="text-[10px] text-gray-400 uppercase block font-bold">Detalles del Proyecto:</span>
-                <p className="text-sm font-bold text-white">App de Pedidos y entregas de producto</p>
+                <p className="text-sm font-bold text-white">Axana - Plataforma Digital &amp; E-Commerce</p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   <span className="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px]">
-                    Plataforma Web / SaaS
+                    Plataforma Web / E-Commerce
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
-                    Presupuesto: $50,000 - $150,000 MXN
+                    Presupuesto: $80,000 - $150,000 MXN
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/30 text-[10px]">
-                    Plazo: 1 a 3 meses (Completo)
+                    Plazo: 4 a 6 semanas
                   </span>
                 </div>
               </div>
 
               {/* Módulos Solicitados */}
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
-                <span className="text-[10px] text-gray-400 uppercase block font-bold">Módulos & Alcance Solicitado:</span>
+                <span className="text-[10px] text-gray-400 uppercase block font-bold">Módulos &amp; Alcance Solicitado:</span>
                 <ul className="space-y-1 text-gray-300">
                   <li>✓ 🎨 Diseño UI/UX interactivo de alta fidelidad en Figma (Sofía)</li>
-                  <li>✓ 🎬 Microanimaciones e interfaz fluida a 60fps</li>
-                  <li>✓ 🔐 Autenticación y base de datos PostgreSQL cifrada</li>
-                  <li>✓ 💳 Pasarela de pagos en línea (Stripe / MercadoPago)</li>
-                  <li>✓ 📍 Rastreo GPS en vivo y WebSockets en tiempo real</li>
-                  <li>✓ 🤖 Integración de IA conversacional (OpenAI / Claude)</li>
-                  <li>✓ 📲 Notificaciones automáticas por WhatsApp API</li>
-                  <li>✓ 📊 Panel administrativo con métricas y exportación de datos</li>
+                  <li>✓ 🎬 Catálogo interactivo de productos y microanimaciones 60fps</li>
+                  <li>✓ 🔐 Autenticación y base de datos cifrada</li>
+                  <li>✓ 💳 Pasarela de pagos con Stripe y Checkout automatizado</li>
+                  <li>✓ 📲 Conexión automatizada por WhatsApp API</li>
+                  <li>✓ 📊 Panel administrativo con métricas y exportación de pedidos</li>
                 </ul>
               </div>
 
@@ -1407,14 +1419,14 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
               <div className="p-4 rounded-2xl bg-black/60 border border-white/15 space-y-1">
                 <span className="text-[10px] text-gray-400 uppercase block font-bold">Descripción del Cliente:</span>
                 <p className="text-gray-200 italic">
-                  "Atención al cliente, manejo de cotizaciones y formulario de pedidos, cobro de pedidos, reparto de comisiones."
+                  "Desarrollo de plataforma digital interactiva, catálogo dinámico con pasarela de pagos, gestión de pedidos y conexión automatizada por WhatsApp API."
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-white/10">
               <a
-                href="https://wa.me/529601771556?text=Hola%20Daniel,%20recibimos%20tu%20solicitud%20para%20el%20proyecto%20de%20App%20de%20Pedidos%20en%20Innocentia%20Tech."
+                href={`https://wa.me/525584210898?text=${encodeURIComponent(`Hola Axana y Gabriel, soy ${userName || "Jessica Torre"} de Innocentia Tech. Te comparto la propuesta y avances de tu proyecto.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all"
@@ -1426,15 +1438,15 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                 type="button"
                 onClick={() => {
                   handleOpenDispatchModal({
-                    folio: "PROJ-592160",
-                    clientId: "CLI-72746",
-                    projectName: "App de Pedidos y Entregas",
-                    clientCompany: "Pro Acabados",
-                    clientName: "Daniel Torre de Haro",
-                    clientEmail: "pro.acabados.mx@gmail.com",
-                    clientPhone: "9601771556",
-                    vendorName: "Carlos Mendoza",
-                    vendorCode: "VEN-CARLOS-202",
+                    folio: "PROJ-AXANA-2026",
+                    clientId: "CLI-AXANA-01",
+                    projectName: "Axana - Plataforma Digital & E-Commerce",
+                    clientCompany: "Axana",
+                    clientName: "Axana & Gabriel",
+                    clientEmail: "contacto@axana.mx",
+                    clientPhone: "+52 55 8421 0898",
+                    vendorName: userName || "Jessica Torre",
+                    vendorCode: userName?.toLowerCase().includes("farid") ? "VEN-FARID-303" : "VEN-JESS-101",
                   });
                   setIsLeadModalOpen(false);
                 }}
@@ -1447,21 +1459,21 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
               <button
                 type="button"
                 onClick={() => {
-                  setCalcClientName("Daniel Torre de Haro (Pro Acabados)");
+                  setCalcClientName("Axana & Gabriel (Axana)");
                   setCalcModalidad("proyecto");
                   setCalcTier("mvp");
                   setCalcDiseno("personalizado");
                   setSelectedExtras({
                     whatsapp_bot: true,
                     stripe_payments: true,
-                    cloud_infra: false,
+                    cloud_infra: true,
                     pwa_mobile: false,
                     audit_reports: false,
                     support_247: false,
                     multi_language: false,
                     domain_ssl: false,
                   });
-                  setPreloadedLeadNotice("✓ Requerimientos de Daniel Torre (Pro Acabados) cargados en la calculadora.");
+                  setPreloadedLeadNotice("✓ Requerimientos de Axana cargados en la calculadora.");
                   setIsLeadModalOpen(false);
                 }}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#FF3858] to-[#00D1FF] text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"

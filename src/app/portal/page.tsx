@@ -142,6 +142,20 @@ interface SellerLead {
   sellerName?: string;
 }
 
+export function getSellerCode(user: { id?: string; email?: string; name?: string }): string {
+  const email = (user.email || "").toLowerCase();
+  const id = (user.id || "").toLowerCase();
+  const name = (user.name || "").toLowerCase();
+
+  if (id === "usr_sales_jess" || email.includes("jess") || name.includes("jessica")) {
+    return "VEN-JESS-101";
+  }
+  if (id === "usr_sales_farid" || email.includes("farid") || email.includes("majestic") || name.includes("farid")) {
+    return "VEN-FARID-303";
+  }
+  return "VEN-" + (name.slice(0, 4).toUpperCase() || "ASESOR") + "-101";
+}
+
 function PortalMainContent() {
   const searchParams = useSearchParams();
   const urlRole = searchParams.get("role") as RoleType | null;
@@ -2554,7 +2568,7 @@ function PortalMainContent() {
                     </div>
                     <h3 className="text-xl font-black text-amber-400 font-mono">${totalComisionesVendedores.toLocaleString()} MXN</h3>
                     <span className="text-[11px] text-gray-400 block mt-1">
-                      {comisionesVendedores.length} asignadas (Carlos M.)
+                      {comisionesVendedores.length} registradas
                     </span>
                   </div>
 
@@ -4231,7 +4245,7 @@ function PortalMainContent() {
                     </div>
                     <h3 className="text-xl font-black text-amber-400 font-mono">${totalComisionesVendedores.toLocaleString()} MXN</h3>
                     <span className="text-[11px] text-gray-400 block mt-1">
-                      {comisionesVendedores.length} asignadas (Carlos M.)
+                      {comisionesVendedores.length} registradas
                     </span>
                   </div>
 
@@ -4606,7 +4620,7 @@ function PortalMainContent() {
                             comisionesVendedores.map((r) => (
                             <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
-                                <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
+                                <strong className="text-white block font-bold">{r.beneficiary || "Asesor Comercial"}</strong>
                                 <div className="flex flex-wrap items-center gap-1 mt-0.5">
                                   <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
                                   {r.paidBy ? (
@@ -5862,63 +5876,63 @@ function PortalMainContent() {
         {activeRole === "asesor" && (
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
             {/* Advisor Subnav Tabs */}
-            <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-1.5 sm:gap-2 border-b border-white/10 pb-3 sm:pb-4 overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
               <button
                 type="button"
                 onClick={() => setAdvisorTab("leads_formulario")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                className={`px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 flex-shrink-0 whitespace-nowrap ${
                   advisorTab === "leads_formulario"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
                 <Link2 className="w-4 h-4" />
-                <span>Link & Leads</span>
+                <span>Link &amp; Leads</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setAdvisorTab("citas_calendario")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                className={`px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 flex-shrink-0 whitespace-nowrap ${
                   advisorTab === "citas_calendario"
                     ? "bg-[#00D1FF] text-black font-black shadow-[0_0_25px_rgba(0,209,255,0.6)] ring-2 ring-white"
                     : "bg-white/10 text-white hover:bg-white/20 border border-white/20"
                 }`}
               >
                 <Calendar className={`w-4 h-4 ${advisorTab === "citas_calendario" ? "text-black" : "text-[#00D1FF]"}`} />
-                <span>Calendario de Citas & Google Meet</span>
+                <span>Citas &amp; Meet</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setAdvisorTab("status_proyectos")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                className={`px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 flex-shrink-0 whitespace-nowrap ${
                   advisorTab === "status_proyectos"
                     ? "bg-[#00D1FF] text-black font-extrabold shadow-[0_0_20px_rgba(0,209,255,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                <span>Estatus de Proyectos</span>
+                <span>Proyectos</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setAdvisorTab("tabulador")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                className={`px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 flex-shrink-0 whitespace-nowrap ${
                   advisorTab === "tabulador"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
                 <DollarSign className="w-4 h-4" />
-                <span>Tabulador y Cotizador Base</span>
+                <span>Tabulador</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setAdvisorTab("comisiones")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                className={`px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 flex-shrink-0 whitespace-nowrap ${
                   advisorTab === "comisiones"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
@@ -5931,14 +5945,14 @@ function PortalMainContent() {
               <button
                 type="button"
                 onClick={() => setAdvisorTab("chat")}
-                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 flex-shrink-0 ${
+                className={`px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 flex-shrink-0 whitespace-nowrap ${
                   advisorTab === "chat"
                     ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.4)]"
                     : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
                 }`}
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>Chat Comercial</span>
+                <span>Chat</span>
               </button>
             </div>
 
@@ -5946,53 +5960,55 @@ function PortalMainContent() {
             {advisorTab === "leads_formulario" && (
               <div className="space-y-6">
                 {/* Dynamic Referral Link Generator */}
-                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-r from-pink-500/15 via-purple-950/40 to-[#00D1FF]/15 border border-white/20 space-y-4 shadow-xl">
+                <div className="p-4 sm:p-8 rounded-[24px] sm:rounded-[32px] bg-gradient-to-r from-pink-500/15 via-purple-950/40 to-[#00D1FF]/15 border border-white/20 space-y-4 shadow-xl">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <h3 className="text-xl font-black text-white uppercase flex items-center gap-2">
-                      <Share2 className="w-5 h-5 text-pink-400" />
-                      <span>Tu Enlace Exclusivo para Cotización de Clientes</span>
+                    <h3 className="text-lg sm:text-xl font-black text-white uppercase flex items-center gap-2">
+                      <Share2 className="w-5 h-5 text-pink-400 shrink-0" />
+                      <span>Tu Enlace Exclusivo de Cotización</span>
                     </h3>
                     <span className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-mono font-bold w-fit">
-                      Código: {safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}
+                      Código: {getSellerCode(safeActiveUser)}
                     </span>
                   </div>
                   <p className="text-xs text-gray-300 leading-relaxed">
                     Envía este link a tus prospectos. Cuando un cliente llena el formulario, el proyecto queda registrado automáticamente con tu código y recibes alertas al instante.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
                     <input
                       type="text"
                       readOnly
-                      value={`https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`}
-                      className="flex-1 px-4 py-3.5 bg-black/70 border border-white/20 rounded-2xl text-xs font-mono text-[#00D1FF] font-bold focus:outline-none"
+                      value={`https://innocentia.tech/crear-proyecto?ref=${getSellerCode(safeActiveUser)}&vendedor=${encodeURIComponent(safeActiveUser.name)}`}
+                      className="flex-1 px-3.5 py-3 sm:px-4 sm:py-3.5 bg-black/70 border border-white/20 rounded-xl sm:rounded-2xl text-[11px] sm:text-xs font-mono text-[#00D1FF] font-bold focus:outline-none truncate"
                     />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const link = `https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`;
-                        navigator.clipboard.writeText(link);
-                        setCopiedLink(true);
-                        setTimeout(() => setCopiedLink(false), 2500);
-                      }}
-                      className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-[#FF3858] hover:scale-105 text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(255,56,88,0.4)] cursor-pointer"
-                    >
-                      {copiedLink ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
-                      <span>{copiedLink ? "¡Enlace Copiado!" : "Copiar Enlace"}</span>
-                    </button>
-                    <a
-                      href={`https://wa.me/?text=${encodeURIComponent(`Hola! Te comparto nuestro enlace oficial de cotización en Innocentia Tech para diseñar y desarrollar tu proyecto: https://innocentia.tech/crear-proyecto?ref=${safeActiveUser.email.includes("jess") ? "VEN-JESS-301" : safeActiveUser.email.includes("majestic") || safeActiveUser.email.includes("farid") ? "VEN-FARID-303" : "VEN-CARLOS-202"}&vendedor=${encodeURIComponent(safeActiveUser.name)}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] cursor-pointer"
-                    >
-                      <span>💬 Compartir por WhatsApp</span>
-                    </a>
+                    <div className="flex items-center gap-2 flex-col sm:flex-row">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const link = `https://innocentia.tech/crear-proyecto?ref=${getSellerCode(safeActiveUser)}&vendedor=${encodeURIComponent(safeActiveUser.name)}`;
+                          navigator.clipboard.writeText(link);
+                          setCopiedLink(true);
+                          setTimeout(() => setCopiedLink(false), 2500);
+                        }}
+                        className="w-full sm:w-auto px-5 py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-pink-500 to-[#FF3858] hover:scale-105 text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(255,56,88,0.4)] cursor-pointer"
+                      >
+                        {copiedLink ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
+                        <span>{copiedLink ? "¡Copiado!" : "Copiar Enlace"}</span>
+                      </button>
+                      <a
+                        href={`https://wa.me/?text=${encodeURIComponent(`Hola! Te comparto nuestro enlace oficial de cotización en Innocentia Tech para diseñar y desarrollar tu proyecto: https://innocentia.tech/crear-proyecto?ref=${getSellerCode(safeActiveUser)}&vendedor=${encodeURIComponent(safeActiveUser.name)}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto px-5 py-3 rounded-xl sm:rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)] cursor-pointer"
+                      >
+                        <span>💬 WhatsApp</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
 
                 {/* Leads Table */}
-                <div className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
+                <div className="p-4 sm:p-6 rounded-[24px] sm:rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-base font-black text-white uppercase flex items-center gap-2">
                       <Users className="w-4 h-4 text-[#00D1FF]" />
@@ -6648,7 +6664,7 @@ function PortalMainContent() {
                       type="text"
                       value={finBeneficiary}
                       onChange={(e) => setFinBeneficiary(e.target.value)}
-                      placeholder={finSection === "comision_vendedor" ? "ej: Carlos Mendoza" : "ej: Ing. Rodrigo Pacheco"}
+                      placeholder={finSection === "comision_vendedor" ? "ej: Jessica Torre / Farid Abdul Oziel" : "ej: Ing. Rodrigo Pacheco"}
                       className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
                     />
                   </div>
@@ -6992,7 +7008,7 @@ function PortalMainContent() {
                       type="text"
                       value={editFinBeneficiary}
                       onChange={(e) => setEditFinBeneficiary(e.target.value)}
-                      placeholder={editFinSection === "comision_vendedor" ? "ej: Carlos Mendoza" : "ej: Ing. Rodrigo Pacheco"}
+                      placeholder={editFinSection === "comision_vendedor" ? "ej: Jessica Torre / Farid Abdul Oziel" : "ej: Ing. Rodrigo Pacheco"}
                       className="w-full px-4 py-2 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none text-xs"
                     />
                   </div>

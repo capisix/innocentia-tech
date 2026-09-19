@@ -176,7 +176,7 @@ export const ROLE_PRESETS: RolePreset[] = [
     badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
     description: "Panel de ventas: Generación de enlaces con código de vendedor, seguimiento de leads propios y cálculo de comisiones.",
     defaultUser: USER_ACCOUNTS.jessica_vendedora,
-    users: [USER_ACCOUNTS.jessica_vendedora, USER_ACCOUNTS.farid_asesor, USER_ACCOUNTS.carlos_asesor],
+    users: [USER_ACCOUNTS.jessica_vendedora, USER_ACCOUNTS.farid_asesor],
     icon: Briefcase,
     features: [
       "Enlace único para compartir formulario vinculado al vendedor",

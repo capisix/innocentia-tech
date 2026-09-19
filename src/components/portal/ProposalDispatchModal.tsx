@@ -37,32 +37,32 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
 
   if (!isOpen) return null;
 
-  const total = proposalData.total || proposalData.subtotal || 172500;
-  const folio = proposalData.folio || "PROJ-592160";
-  const clientName = proposalData.clientName || "Daniel Torre de Haro";
-  const company = proposalData.clientCompany || proposalData.projectName || "Pro Acabados";
-  const phoneClean = (proposalData.clientPhone || "").replace(/[^0-9]/g, "") || "9601771556";
-  const email = proposalData.clientEmail || "pro.acabados.mx@gmail.com";
-  const vendor = proposalData.vendorName || "Carlos Mendoza";
-  const vendorCode = proposalData.vendorCode || "VEN-CARLOS-202";
-  const proposalUrl = `https://innocentia.tech/crear-proyecto?ref=${folio}&cli=${proposalData.clientId || "CLI-72746"}`;
+  const total = proposalData.total || proposalData.subtotal || 0;
+  const folio = proposalData.folio || "PROP-" + Date.now().toString().slice(-4);
+  const clientName = proposalData.clientName || "Cliente Particular";
+  const company = proposalData.clientCompany || proposalData.projectName || "Empresa";
+  const phoneClean = (proposalData.clientPhone || "").replace(/[^0-9]/g, "");
+  const email = proposalData.clientEmail || "";
+  const vendor = proposalData.vendorName || "Asesor Comercial";
+  const vendorCode = proposalData.vendorCode || "INN-COM-01";
+  const proposalUrl = `https://innocentia.tech/crear-proyecto?ref=${folio}&cli=${proposalData.clientId || "CLI-01"}`;
 
   // WhatsApp formatted copy
   const whatsappMessage = `🚀 *PROPUESTA COMERCIAL OFICIAL • INNOCENTIA TECH*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 *Folio de Proyecto:* ${folio}
-🆔 *ID de Cliente:* ${proposalData.clientId || "CLI-72746"}
-📅 *Fecha:* ${proposalData.date || "9 de septiembre de 2026"}
+🆔 *ID de Cliente:* ${proposalData.clientId || "CLI-01"}
+📅 *Fecha:* ${proposalData.date || new Date().toLocaleDateString("es-MX")}
 
 👤 *CLIENTE REGISTRADO:*
 • *Nombre:* ${clientName}
 • *Empresa / Marca:* ${company}
-• *Teléfono / WhatsApp:* ${proposalData.clientPhone || "9601771556"}
-• *Correo:* ${email}
+• *Teléfono / WhatsApp:* ${proposalData.clientPhone || "No especificado"}
+• *Correo:* ${email || "No especificado"}
 
 📌 *PROYECTO & MODALIDAD:*
-• *Proyecto:* ${proposalData.projectName || "App de Pedidos y Entregas"}
-• *Modalidad:* ${proposalData.modalityTag || "Desarrollo por Proyecto / MVP a Medida"}
+• *Proyecto:* ${proposalData.projectName || "Plataforma Digital & Software"}
+• *Modalidad:* ${proposalData.modalityTag || "Desarrollo por Proyecto a Medida"}
 
 💰 *INVERSIÓN ESTIMADA:*
 • *Total Cotizado:* $${total.toLocaleString()} MXN
