@@ -15,8 +15,44 @@ interface PersonaVideoData {
   icon: string;
 }
 
+const HASHTAG_SETS = [
+  {
+    category: "DISEÑO & EXPERIENCIA",
+    color: "#FF3858",
+    badge: "🎨 SOFÍA",
+    tags: ["#DiseñoUXUI", "#DesignSystems", "#MicroInteracciones", "#FigmaToCode", "#Prototipos60FPS"],
+  },
+  {
+    category: "INGENIERÍA & IA",
+    color: "#00D1FF",
+    badge: "⚡ IVÁN",
+    tags: ["#InteligenciaArtificial", "#NextJS15", "#CloudArchitecture", "#APIsEscalables", "#FullStack"],
+  },
+  {
+    category: "PRODUCTO & ESCALABILIDAD",
+    color: "#FFD166",
+    badge: "🚀 DUAL CORE",
+    tags: ["#SaaSEnterprise", "#AppsMóviles", "#CotizadoresOnline", "#Automatización", "#AltaVelocidad"],
+  },
+  {
+    category: "TRANSFORMACIÓN DIGITAL",
+    color: "#A855F7",
+    badge: "♾️ INNOCENTIA",
+    tags: ["#TransformaciónDigital", "#CleanArchitecture", "#BasesDeDatos", "#Seguridad", "#WebApps"],
+  },
+];
+
 export default function AIPersonasSection() {
   const [activeVideo, setActiveVideo] = useState<PersonaVideoData | null>(null);
+  const [activeTagSet, setActiveTagSet] = useState(0);
+
+  // Rotate hashtag sets every 3.2 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveTagSet((prev) => (prev + 1) % HASHTAG_SETS.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, []);
 
   // Close modal on Escape key
   useEffect(() => {
@@ -896,14 +932,60 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* Bottom Synergy Bridge Chip */}
-                <div className="mt-3 z-30 flex items-center justify-center">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF3858]/15 via-black/80 to-[#00D1FF]/15 backdrop-blur-xl border border-white/20 text-[10px] sm:text-xs font-mono text-gray-300 shadow-md">
-                    <span className="text-[#FF5470] font-bold">Sofía</span>
-                    <span className="text-gray-500">conecta el arte</span>
-                    <span className="text-[#00D1FF] font-bold">•</span>
-                    <span className="text-[#00D1FF] font-bold">Iván</span>
-                    <span className="text-gray-500">construye el código</span>
+                {/* Dynamic Rotating Hashtags Rectangle Console */}
+                <div className="w-full mt-3 p-[1px] rounded-2xl bg-gradient-to-r from-[#FF3858]/35 via-purple-500/25 to-[#00D1FF]/35 shadow-[0_4px_25px_rgba(0,0,0,0.8)] z-30">
+                  <div className="rounded-[15px] bg-[#0A0A16]/90 backdrop-blur-2xl p-3 sm:p-3.5 space-y-2 border border-white/10">
+                    {/* Header Row: Live indicator & Category Title */}
+                    <div className="flex items-center justify-between text-[10px] sm:text-xs font-mono">
+                      <div className="flex items-center gap-2">
+                        <span 
+                          className="w-2 h-2 rounded-full animate-pulse transition-colors duration-500" 
+                          style={{ backgroundColor: HASHTAG_SETS[activeTagSet].color }} 
+                        />
+                        <span className="font-bold uppercase tracking-wider text-white">CAPACIDADES EN TIEMPO REAL</span>
+                        <span className="text-gray-500">•</span>
+                        <span 
+                          className="font-bold tracking-wide transition-colors duration-500"
+                          style={{ color: HASHTAG_SETS[activeTagSet].color }}
+                        >
+                          {HASHTAG_SETS[activeTagSet].badge}
+                        </span>
+                      </div>
+                      
+                      {/* Pagination Dots */}
+                      <div className="flex items-center gap-1.5">
+                        {HASHTAG_SETS.map((set, idx) => (
+                          <button
+                            key={set.category}
+                            type="button"
+                            onClick={() => setActiveTagSet(idx)}
+                            className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                              activeTagSet === idx
+                                ? "w-5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+                                : "w-1.5 bg-white/25 hover:bg-white/50"
+                            }`}
+                            aria-label={`Ver conjunto ${set.category}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Dynamic Hashtag Chips */}
+                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2 pt-0.5 min-h-[30px] transition-all duration-500">
+                      {HASHTAG_SETS[activeTagSet].tags.map((tag, tagIdx) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 hover:border-white/30 text-[10px] sm:text-xs font-mono font-medium text-gray-200 transition-all duration-300 transform hover:scale-105 cursor-default shadow-sm"
+                          style={{
+                            borderColor: tagIdx === 0 ? `${HASHTAG_SETS[activeTagSet].color}60` : undefined,
+                            color: tagIdx === 0 ? HASHTAG_SETS[activeTagSet].color : undefined,
+                            boxShadow: tagIdx === 0 ? `0 0 12px ${HASHTAG_SETS[activeTagSet].color}30` : undefined,
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
