@@ -699,30 +699,13 @@ export default function AIPersonasSection() {
         </div>
 
         {/* ========================================================== */}
-        {/* BANNER MASTER: IDEAS SIN LÍMITES, SOLUCIONES REALES (CINEMATIC MASTERPIECE) */}
-        {/* ========================================================== */}
-        {/* ========================================================== */}
         {/* BANNER MASTER: IDEAS SIN LÍMITES, SOLUCIONES REALES (CINEMATIC INTERACTIVE UI) */}
         {/* ========================================================== */}
         <div className="p-[1.5px] rounded-[32px] sm:rounded-[44px] bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] shadow-[0_0_60px_rgba(255,56,88,0.3),0_0_60px_rgba(0,209,255,0.3)]">
           <div className="relative rounded-[30px] sm:rounded-[42px] bg-[#07070E] p-6 sm:p-8 md:p-10 lg:p-12 overflow-hidden text-left group">
-            {/* Clean Realistic Background Artwork (Image 2 - Kids with Holograms & Gear) */}
-            <div className="absolute inset-0 z-0 overflow-hidden">
-              <Image
-                src="/images/synergy_kids_art.jpg"
-                alt="Sofía e Iván • Ideas sin límites, Soluciones reales • Innocentia Tech"
-                fill
-                className="object-contain object-right md:object-right-bottom scale-100 md:scale-105 transition-transform duration-700 group-hover:scale-[1.06]"
-                priority
-              />
-              {/* Strategic Contrast Gradient Masks (Keeps text on left 100% sharp while letting kids shine on right) */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#07070E] via-[#07070E]/90 via-40% to-transparent z-10 pointer-events-none hidden md:block" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07070E] via-[#07070E]/75 to-transparent z-10 pointer-events-none md:hidden" />
-            </div>
-
             {/* Ambient Halos Behind Content */}
-            <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[100px] pointer-events-none animate-pulse z-10" />
-            <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[100px] pointer-events-none z-10" />
+            <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[100px] pointer-events-none animate-pulse z-0" />
+            <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[100px] pointer-events-none z-0" />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-20">
               {/* Left Column: Typography, Synergy Glass Cards & Interactive Button */}
@@ -849,8 +832,22 @@ export default function AIPersonasSection() {
                 </button>
               </div>
 
-              {/* Right Column: Visual Spatial Area for the Kids Artwork */}
-              <div className="lg:col-span-6 min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] pointer-events-none" />
+              {/* Right Column: Clean Realistic Kids Artwork (Transparent PNG with Ambient Halo) */}
+              <div className="lg:col-span-6 relative w-full min-h-[300px] sm:min-h-[380px] lg:min-h-[440px] flex items-center justify-center">
+                <div className="relative w-full h-full min-h-[280px] sm:min-h-[360px] lg:min-h-[420px] max-w-[560px]">
+                  {/* Subtle Character Halo Glows */}
+                  <div className="absolute top-1/4 left-1/6 w-44 h-44 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
+                  <div className="absolute bottom-1/4 right-1/6 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
+
+                  <Image
+                    src="/images/dual_kids_master_transparent.png"
+                    alt="Sofía e Iván • Dual Core Innocentia Tech"
+                    fill
+                    className="object-contain object-center drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] transition-transform duration-700 group-hover:scale-[1.03]"
+                    priority
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Bottom Row: The 3 Core Pillars + Official Innocentia Brand Logo */}
@@ -887,12 +884,12 @@ export default function AIPersonasSection() {
 
               {/* Official Innocentia Brand Logo Column */}
               <div className="flex flex-col items-start md:items-end justify-center md:border-l md:border-white/20 md:pl-4 text-left md:text-right gap-1">
-                <div className="relative h-7 w-36">
+                <div className="relative h-8 w-40">
                   <Image
-                    src="/images/innocentia_logo_official.png"
+                    src="/images/logo_official_header.png?v=2"
                     alt="Innocentia Tech Official Logo"
                     fill
-                    className="object-contain object-left md:object-right filter brightness-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                    className="object-contain object-left md:object-right filter brightness-110 drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]"
                   />
                 </div>
                 <div className="text-[9px] font-mono text-gray-400">
