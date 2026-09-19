@@ -707,17 +707,19 @@ export default function AIPersonasSection() {
             <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[100px] pointer-events-none animate-pulse z-0" />
             <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[100px] pointer-events-none z-0" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-20">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-20">
               {/* Left Column: Typography, Synergy Glass Cards & Interactive Button */}
-              <div className="lg:col-span-6 space-y-4 sm:space-y-5">
+              <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
                 {/* Top Badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/25 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
-                  <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
-                  <span>CUANDO DOS FORMAS DE PENSAR SE ENCUENTRAN</span>
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
+                    <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+                    <span>CUANDO DOS FORMAS DE PENSAR SE ENCUENTRAN</span>
+                  </div>
                 </div>
 
                 {/* Headline */}
-                <h3 className="text-2xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.1]">
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight leading-[1.15]">
                   IDEAS SIN LÍMITES, <br />
                   <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,56,88,0.4)]">
                     SOLUCIONES REALES.
@@ -725,19 +727,22 @@ export default function AIPersonasSection() {
                 </h3>
 
                 {/* Subtitle */}
-                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed max-w-md">
-                  Creatividad y tecnología trabajando juntas para un mundo más extraordinario.
+                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                  Creatividad y tecnología trabajando juntas para transformar visiones complejas en productos de clase mundial.
                 </p>
 
                 {/* Twin Synergy Cards: Sofía + Iván */}
-                <div className="flex items-stretch gap-2.5 sm:gap-3 pt-1">
+                <div className="flex items-stretch gap-2.5 pt-0.5">
                   {/* Sofía Card */}
-                  <div className="flex-1 rounded-2xl bg-black/75 backdrop-blur-2xl border border-[#FF3858]/50 hover:border-[#FF3858] transition-all p-3 sm:p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(255,56,88,0.2)] group/sofia">
-                    <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-white/10 text-xs font-mono font-black text-[#FF3858] uppercase">
-                      <Paintbrush className="w-3.5 h-3.5" />
-                      <span>SOFÍA</span>
+                  <div className="flex-1 rounded-2xl bg-black/80 backdrop-blur-2xl border border-[#FF3858]/40 hover:border-[#FF3858] transition-all p-3 shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(255,56,88,0.15)] group/sofia flex flex-col justify-between">
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+                      <div className="flex items-center gap-1.5 text-xs font-mono font-black text-[#FF3858] uppercase">
+                        <Paintbrush className="w-3.5 h-3.5" />
+                        <span>SOFÍA</span>
+                      </div>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#FF3858]/20 text-[#FF5470] border border-[#FF3858]/30">UI / UX</span>
                     </div>
-                    <div className="space-y-1.5 text-xs text-gray-200 font-medium">
+                    <div className="space-y-1.5 text-[11px] sm:text-xs text-gray-200 font-medium">
                       <div className="flex items-center gap-2">
                         <span className="text-[#FF3858]">💖</span>
                         <span>Imagina</span>
@@ -754,17 +759,20 @@ export default function AIPersonasSection() {
                   </div>
 
                   {/* Connecting Plus Sign */}
-                  <div className="flex items-center justify-center text-xl font-mono text-white/60 px-0.5 font-bold select-none drop-shadow">
+                  <div className="flex items-center justify-center text-lg font-mono text-white/50 px-0.5 font-bold select-none">
                     +
                   </div>
 
                   {/* Iván Card */}
-                  <div className="flex-1 rounded-2xl bg-black/75 backdrop-blur-2xl border border-[#00D1FF]/50 hover:border-[#00D1FF] transition-all p-3 sm:p-3.5 shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(0,209,255,0.2)] group/ivan">
-                    <div className="flex items-center gap-1.5 pb-2 mb-2 border-b border-white/10 text-xs font-mono font-black text-[#00D1FF] uppercase">
-                      <span className="font-mono font-black text-[#00D1FF]">&lt;/&gt;</span>
-                      <span>IVÁN</span>
+                  <div className="flex-1 rounded-2xl bg-black/80 backdrop-blur-2xl border border-[#00D1FF]/40 hover:border-[#00D1FF] transition-all p-3 shadow-[0_4px_20px_rgba(0,0,0,0.7),0_0_20px_rgba(0,209,255,0.15)] group/ivan flex flex-col justify-between">
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+                      <div className="flex items-center gap-1.5 text-xs font-mono font-black text-[#00D1FF] uppercase">
+                        <span className="font-mono font-black text-[#00D1FF]">&lt;/&gt;</span>
+                        <span>IVÁN</span>
+                      </div>
+                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/30">DEV / IA</span>
                     </div>
-                    <div className="space-y-1.5 text-xs text-gray-200 font-medium">
+                    <div className="space-y-1.5 text-[11px] sm:text-xs text-gray-200 font-medium">
                       <div className="flex items-center gap-2">
                         <span className="text-[#00D1FF]">🧊</span>
                         <span>Analiza</span>
@@ -782,25 +790,28 @@ export default function AIPersonasSection() {
                 </div>
 
                 {/* JUNTOS Synergy Card */}
-                <div className="w-full rounded-2xl bg-black/75 backdrop-blur-2xl border border-white/20 p-3 sm:p-3.5 space-y-2 shadow-xl">
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider">
-                    <span className="text-base text-[#00D1FF]">♾️</span>
-                    <span className="bg-gradient-to-r from-[#FF3858] via-purple-400 to-[#00D1FF] bg-clip-text text-transparent font-black">
-                      JUNTOS
-                    </span>
+                <div className="w-full rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/15 p-3 space-y-2 shadow-xl">
+                  <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm text-[#00D1FF]">♾️</span>
+                      <span className="bg-gradient-to-r from-[#FF3858] via-purple-400 to-[#00D1FF] bg-clip-text text-transparent font-black">
+                        SINERGIA DUAL CORE
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-gray-400 font-normal">DE CONCEPTO A PRODUCCIÓN</span>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs font-medium text-gray-200">
-                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#FF3858]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
+                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FF3858]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
                       <span>👥</span>
-                      <span className="text-[11px] sm:text-xs">Crean</span>
+                      <span className="text-[11px]">Crean</span>
                     </div>
-                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#FFD166]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
+                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#FFD166]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
                       <span>💡</span>
-                      <span className="text-[11px] sm:text-xs">Resuelven</span>
+                      <span className="text-[11px]">Resuelven</span>
                     </div>
-                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.05] border border-white/15 hover:border-[#00D1FF]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
+                    <div className="px-2 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-[#00D1FF]/60 flex items-center justify-center gap-1.5 text-center transition-colors">
                       <span>🚀</span>
-                      <span className="text-[11px] sm:text-xs">Evolucionan</span>
+                      <span className="text-[11px]">Evolucionan</span>
                     </div>
                   </div>
                 </div>
@@ -820,7 +831,7 @@ export default function AIPersonasSection() {
                       icon: "✨",
                     })
                   }
-                  className="w-full px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/30 via-black/90 to-[#FF3858]/30 hover:from-[#00D1FF]/50 hover:to-[#FF3858]/50 border border-[#00D1FF]/70 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_35px_rgba(0,209,255,0.35)] hover:shadow-[0_0_50px_rgba(0,209,255,0.65)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                  className="w-full px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black/90 to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 border border-[#00D1FF]/60 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_30px_rgba(0,209,255,0.25)] hover:shadow-[0_0_45px_rgba(0,209,255,0.5)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
                     <Play className="w-3 h-3 fill-black text-black ml-0.5" />
@@ -832,20 +843,68 @@ export default function AIPersonasSection() {
                 </button>
               </div>
 
-              {/* Right Column: New Adult Dual Core Artwork (Desktop + Mobile) */}
-              <div className="flex col-span-1 lg:col-span-6 relative w-full items-center justify-center">
-                <div className="relative w-full aspect-[1024/387] max-w-[640px] min-h-[200px] sm:min-h-[260px] lg:min-h-[320px]">
+              {/* Right Column: Hero Artwork with Glowing Badges & Ambient Aura */}
+              <div className="lg:col-span-7 relative w-full flex flex-col items-center justify-center">
+                {/* Floating Holographic Labels */}
+                <div className="w-full flex items-center justify-between px-2 sm:px-6 mb-2 z-30">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#FF3858]/40 text-[10px] sm:text-xs font-mono font-bold text-[#FF5470] shadow-[0_0_15px_rgba(255,56,88,0.3)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-ping" />
+                    <span>DIRECCIÓN UI/UX</span>
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#00D1FF]/40 text-[10px] sm:text-xs font-mono font-bold text-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.3)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-ping" />
+                    <span>ARQUITECTURA & IA</span>
+                  </div>
+                </div>
+
+                {/* Main Illustration Container */}
+                <div 
+                  onClick={() =>
+                    setActiveVideo({
+                      title: "Sofía & Iván",
+                      role: "Dual Core Architecture",
+                      subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
+                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      themeColor: "#00D1FF",
+                      secondaryColor: "#FF3858",
+                      avatarImg: "/images/sofia_seated_art.jpg",
+                      icon: "✨",
+                    })
+                  }
+                  className="relative w-full aspect-[1024/387] max-w-[700px] cursor-pointer group/art transition-transform duration-500 hover:scale-[1.02]"
+                  title="Haz clic para ver cómo trabajan juntos Sofía e Iván"
+                >
                   {/* Subtle Character Halo Glows */}
-                  <div className="absolute top-1/4 left-1/6 w-48 sm:w-60 h-48 sm:h-60 bg-[#FF3858]/25 rounded-full blur-[70px] pointer-events-none" />
-                  <div className="absolute bottom-1/4 right-1/6 w-48 sm:w-60 h-48 sm:h-60 bg-[#00D1FF]/25 rounded-full blur-[70px] pointer-events-none" />
+                  <div className="absolute top-1/4 left-1/10 w-56 h-56 bg-[#FF3858]/30 rounded-full blur-[80px] pointer-events-none" />
+                  <div className="absolute top-1/4 right-1/10 w-56 h-56 bg-[#00D1FF]/30 rounded-full blur-[80px] pointer-events-none" />
+                  <div className="absolute inset-x-1/4 top-1/3 w-48 h-48 bg-purple-500/20 rounded-full blur-[70px] pointer-events-none" />
 
                   <Image
                     src="/images/dual_adults_master_transparent.png"
                     alt="Sofía e Iván • Dual Core Innocentia Tech"
                     fill
-                    className="object-contain object-center drop-shadow-[0_15px_40px_rgba(0,0,0,0.9)] transition-transform duration-700 group-hover:scale-[1.02]"
+                    className="object-contain object-center drop-shadow-[0_20px_45px_rgba(0,0,0,0.95)] transition-transform duration-700 group-hover/art:scale-[1.03]"
                     priority
                   />
+
+                  {/* Hover Overlay Badge */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/art:opacity-100 transition-all duration-300">
+                    <div className="px-4 py-2 rounded-2xl bg-black/85 backdrop-blur-2xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-2 shadow-[0_0_40px_rgba(0,209,255,0.7)]">
+                      <Play className="w-3.5 h-3.5 fill-[#00D1FF] text-[#00D1FF]" />
+                      <span>VER PRESENTACIÓN DUAL CORE</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Synergy Bridge Chip */}
+                <div className="mt-3 z-30 flex items-center justify-center">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF3858]/15 via-black/80 to-[#00D1FF]/15 backdrop-blur-xl border border-white/20 text-[10px] sm:text-xs font-mono text-gray-300 shadow-md">
+                    <span className="text-[#FF5470] font-bold">Sofía</span>
+                    <span className="text-gray-500">conecta el arte</span>
+                    <span className="text-[#00D1FF] font-bold">•</span>
+                    <span className="text-[#00D1FF] font-bold">Iván</span>
+                    <span className="text-gray-500">construye el código</span>
+                  </div>
                 </div>
               </div>
             </div>
