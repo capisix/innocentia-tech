@@ -133,6 +133,10 @@ export async function POST(req: Request) {
         role = "dev";
         roleTitle = "Senior Fullstack & AI Engineer";
         name = "Ing. Rodrigo Pacheco";
+      } else if (cleanEmail.includes("eduardo") || cleanEmail.includes("caceres") || cleanEmail.includes("openhouse")) {
+        role = "usuario";
+        roleTitle = "Cliente Titular • Open House Yucatán";
+        name = "Eduardo Cáceres";
       } else if (cleanEmail.includes("mariana") || cleanEmail.includes("cliente")) {
         role = "usuario";
         roleTitle = "Cliente Titular";

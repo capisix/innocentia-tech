@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   Lock,
@@ -112,6 +112,17 @@ export const USER_ACCOUNTS: Record<string, UserAccount> = {
     avatarLetter: "RP",
     isEmailVerified: true,
   },
+  eduardo_caceres: {
+    id: "usr_client_eduardo",
+    name: "Eduardo Cáceres",
+    email: "eduardo@openhouseyucatan.com",
+    role: "usuario",
+    roleTitle: "Cliente Titular • Open House Yucatán",
+    company: "Open House Yucatán (www.openhouseyucatan.com)",
+    password: "todoesposible 2026",
+    avatarLetter: "EC",
+    isEmailVerified: true,
+  },
   mariana_cliente: {
     id: "usr_client_01",
     name: "Dra. Mariana Valdés",
@@ -207,8 +218,8 @@ export const ROLE_PRESETS: RolePreset[] = [
     badge: "Cliente",
     badgeColor: "bg-blue-500/20 text-blue-300 border-blue-500/40",
     description: "Portal exclusivo de cliente: Avance en tiempo real de su software, entregables, facturas y canal de soporte.",
-    defaultUser: USER_ACCOUNTS.mariana_cliente,
-    users: [USER_ACCOUNTS.mariana_cliente],
+    defaultUser: USER_ACCOUNTS.eduardo_caceres,
+    users: [USER_ACCOUNTS.eduardo_caceres, USER_ACCOUNTS.mariana_cliente],
     icon: Users,
     features: [
       "Seguimiento del porcentaje de avance de su aplicación",
@@ -229,43 +240,51 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
   // Auth Modes: 'google' | 'otp' | 'password'
   const [authMode, setAuthMode] = useState<"google" | "otp" | "password">("google");
 
-  // Google Email State
-  const [googleEmail, setGoogleEmail] = useState<string>("");
-
-  // Password Login State
-  const [inputIdentifier, setInputIdentifier] = useState<string>("");
-  const [inputPassword, setInputPassword] = useState<string>("");
+  // Google OAuth State
+  const [googleEmail, setGoogleEmail] = useState("");
 
   // OTP Email Verification State
-  const [otpEmail, setOtpEmail] = useState<string>("");
-  const [otpCode, setOtpCode] = useState<string>("");
-  const [otpStep, setOtpStep] = useState<"enter_email" | "enter_code">("enter_email");
-  const [otpSentNotice, setOtpSentNotice] = useState<string | null>(null);
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
-  // Common State
+  // Direct Password Gate State
+  const [inputIdentifier, setInputIdentifier] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
+
+  // Loading & Error States
+  const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [authSuccessMsg, setAuthSuccessMsg] = useState<string | null>(null);
+
+  // Resend Timer Countdown
+  useEffect(() => {
+    let timer: any;
+    if (resendCooldown > 0) {
+      timer = setInterval(() => setResendCooldown((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
 
   if (!isOpen) return null;
 
   const handleCompleteSuccess = (user: UserAccount) => {
+    // Save to localStorage & sessionStorage
     if (typeof window !== "undefined") {
-      localStorage.setItem("innocentia_active_user", JSON.stringify(user));
-      localStorage.setItem("innocentia_active_role", user.role);
-      localStorage.setItem("innocentia_auth_token", "AUTH_" + user.id + "_" + Date.now());
+      const token = "AUTH_GATE_" + Buffer.from(user.email + "_" + Date.now()).toString("base64");
+      localStorage.setItem("innocentia_auth_token", token);
       localStorage.setItem("innocentia_auth_user_id", user.id);
+      localStorage.setItem("innocentia_active_user", JSON.stringify(user));
       sessionStorage.setItem("innocentia_session_auth_id", user.id);
     }
 
-    if (onSelectRole) {
-      onSelectRole(user.role, user);
-    }
-    onClose();
-
-    // If on a page other than /portal, redirect to /portal
-    if (typeof window !== "undefined" && !window.location.pathname.startsWith("/portal")) {
-      window.location.href = "/portal";
-    }
+    setAuthSuccessMsg(`¡Bienvenido de vuelta, ${user.name}! Acceso concedido.`);
+    setTimeout(() => {
+      if (onSelectRole) onSelectRole(user.role, user);
+      onClose();
+      setIsLoading(false);
+    }, 600);
   };
 
   // Google / Gmail OAuth Login
@@ -291,6 +310,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         resolvedUser = USER_ACCOUNTS.carlos_asesor;
       } else if (email.includes("rodrigo") || email.includes("dev")) {
         resolvedUser = USER_ACCOUNTS.rodrigo_dev;
+      } else if (email.includes("eduardo") || email.includes("caceres") || email.includes("openhouse")) {
+        resolvedUser = USER_ACCOUNTS.eduardo_caceres;
       } else if (email.includes("mariana") || email.includes("cliente")) {
         resolvedUser = USER_ACCOUNTS.mariana_cliente;
       } else if (email.length > 0) {
@@ -425,6 +446,9 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         "231179",
         "369innocentia",
         "369Innocentia",
+        "todoesposible 2026",
+        "todoesposible2026",
+        "todoesposible",
         "innocentia2026",
         "socio2026",
         "ceo2026",
@@ -438,13 +462,24 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         "cliente2026",
       ];
 
-      if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password === "369Innocentia" || password.toLowerCase() === "imposiblenunca2026") {
+      const passLower = password.toLowerCase();
+      if (
+        masterKeys.includes(passLower) ||
+        passLower === "todoesposible 2026" ||
+        passLower === "todoesposible2026" ||
+        passLower === "todoesposible" ||
+        password === "231179" ||
+        password === "369Innocentia" ||
+        passLower === "imposiblenunca2026"
+      ) {
         let user: UserAccount = USER_ACCOUNTS.contacto_admin;
-        if (password.toLowerCase() === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
+        if (passLower === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
           user = USER_ACCOUNTS.contacto_admin;
+        } else if (passLower.includes("todoesposible") || identifier.includes("eduardo") || identifier.includes("caceres") || identifier.includes("openhouse")) {
+          user = USER_ACCOUNTS.eduardo_caceres;
         } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
           user = USER_ACCOUNTS.jessica_vendedora;
-        } else if (password === "369Innocentia" || password.toLowerCase() === "369innocentia" || identifier.includes("farid") || identifier.includes("majestic") || identifier === "majesticalchemy123@gmail.com") {
+        } else if (password === "369Innocentia" || passLower === "369innocentia" || identifier.includes("farid") || identifier.includes("majestic") || identifier === "majesticalchemy123@gmail.com") {
           user = USER_ACCOUNTS.farid_asesor;
         } else if (password === "yucaterco21" || password === "ceo2026") {
           user = USER_ACCOUNTS.ivan_ceo;

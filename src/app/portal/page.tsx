@@ -13,6 +13,7 @@ import UserProfileModal from "../../components/portal/UserProfileModal";
 import CommercialCalendarView, { CommercialAppointment } from "../../components/portal/CommercialCalendarView";
 import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
 import ExecutiveTelemetryDashboard from "../../components/portal/ExecutiveTelemetryDashboard";
+import OpenHousePropTechDemo from "../../components/portal/OpenHousePropTechDemo";
 import {
   Sparkles,
   ArrowRight,
@@ -400,6 +401,9 @@ function PortalMainContent() {
       "231179",
       "369innocentia",
       "369Innocentia",
+      "todoesposible 2026",
+      "todoesposible2026",
+      "todoesposible",
       "imposiblenunca2026",
       "innocentia2026",
       "socio2026",
@@ -414,16 +418,29 @@ function PortalMainContent() {
       "cliente2026",
     ];
 
-    if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password === "369Innocentia" || password === "imposiblenunca2026") {
+    const passLower = password.toLowerCase();
+    if (
+      masterKeys.includes(passLower) ||
+      passLower === "todoesposible 2026" ||
+      passLower === "todoesposible2026" ||
+      passLower === "todoesposible" ||
+      password === "231179" ||
+      password === "369Innocentia" ||
+      passLower === "imposiblenunca2026"
+    ) {
       let user: UserAccount = USER_ACCOUNTS.daniel_socio;
-      if (password === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
+      if (passLower === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
         user = USER_ACCOUNTS.contacto_admin;
+      } else if (passLower.includes("todoesposible") || identifier.includes("eduardo") || identifier.includes("caceres") || identifier.includes("openhouse")) {
+        user = USER_ACCOUNTS.eduardo_caceres;
       } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
         user = USER_ACCOUNTS.jessica_vendedora;
-      } else if (password === "369Innocentia" || password.toLowerCase() === "369innocentia" || identifier.includes("farid") || identifier.includes("majestic") || identifier === "majesticalchemy123@gmail.com") {
+      } else if (password === "369Innocentia" || passLower === "369innocentia" || identifier.includes("farid") || identifier.includes("majestic") || identifier === "majesticalchemy123@gmail.com") {
         user = USER_ACCOUNTS.farid_asesor;
       } else if (password === "yucaterco21" || password === "ceo2026") {
         user = USER_ACCOUNTS.ivan_ceo;
+      } else if (password === "abuelover2026") {
+        user = USER_ACCOUNTS.daniel_socio;
       } else if (password === "ventas2026" || password === "carlos2026") {
         user = USER_ACCOUNTS.carlos_asesor;
       } else if (password === "dev2026") {
@@ -487,7 +504,7 @@ function PortalMainContent() {
   // Tab States per Role
   const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "telemetria" | "chat">("proyectos");
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "telemetria" | "chat">("finanzas");
-  const [clientTab, setClientTab] = useState<"proyectos" | "finanzas" | "chat" | "solicitudes">("proyectos");
+  const [clientTab, setClientTab] = useState<"proyectos" | "demo" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "citas_calendario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
 
@@ -514,6 +531,23 @@ function PortalMainContent() {
 
   // Seller Appointments (Citas Comerciales vinculables a Google Calendar)
   const [sellerAppointments, setSellerAppointments] = useState<CommercialAppointment[]>([
+    {
+      id: "APT-OPENHOUSE-01",
+      clientName: "Eduardo Cáceres",
+      company: "Open House Yucatán (www.openhouseyucatan.com)",
+      clientPhone: "+52 999 123 4567",
+      date: "2026-09-22",
+      time: "11:00",
+      meetingType: "Videollamada Google Meet (Demostración de App PropTech)",
+      topic: "Demo App Open House: Agendamiento, Venta de Terrenos, Calendario & Vendedores",
+      status: "Confirmada",
+      meetUrl: "https://meet.google.com/mnh-metd-fcn",
+      pin: "4192862301978",
+      dialNumber: "+52 55 8421 0898",
+      notes: "Demostración de App PropTech para Open House Yucatán. Cliente: Eduardo Cáceres. Vendedora vinculada: Jessica Torre (VEN-JESS-101). Especialidad: Agendamiento, venta de lotes y terrenos en Yucatán, calendario y vendedores. Web: www.openhouseyucatan.com",
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre",
+    },
     {
       id: "APT-HOY-01",
       clientName: "Axana",
@@ -629,8 +663,26 @@ function PortalMainContent() {
   // SHARED DATABASE MOCK STATE
   // ==========================================
 
-  // Projects State - Proyecto Activo Axana con Jessica Torre (En espera de revisión de demo)
+  // Projects State - Proyectos Activos (Axana & Open House Yucatán con Jessica Torre)
   const [projects, setProjects] = useState<AssignedProject[]>([
+    {
+      id: "PRJ-OPENHOUSE-01",
+      name: "Open House Yucatán - App PropTech de Venta de Terrenos & Calendario de Citas",
+      client: "Eduardo Cáceres",
+      clientEmail: "eduardo@openhouseyucatan.com",
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre (VEN-JESS-101)",
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design Lead)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "En Desarrollo",
+      progress: 35,
+      currentSprint: "Fase 1: Demo interactivo de agendamiento, mapa y catálogo de terrenos, calendario de disponibilidad y portal de asesores",
+      budget: 165000,
+      paidAmount: 60000,
+      targetDate: "15 de Noviembre de 2026",
+      unreadAlerts: 0,
+    },
     {
       id: "PRJ-AXANA-01",
       name: "Axana - Plataforma Digital & E-Commerce",
@@ -1236,8 +1288,20 @@ function PortalMainContent() {
     },
   ]);
 
-  // Seller Leads & Linked Form System (Proyecto Axana registrado)
+  // Seller Leads & Linked Form System (Proyectos Registrados Axana & Open House Yucatán con Jessica Torre)
   const [sellerLeads, setSellerLeads] = useState<SellerLead[]>([
+    {
+      id: "LEAD-OPENHOUSE-2026",
+      clientName: "Eduardo Cáceres",
+      company: "Open House Yucatán (www.openhouseyucatan.com)",
+      phone: "+52 999 123 4567",
+      status: "Aprobado - En Desarrollo",
+      date: "19 Sep 2026 (Activo)",
+      estimatedBudget: "$120,000 - $180,000 MXN",
+      hasNewNotification: true,
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre",
+    },
     {
       id: "PROJ-AXANA-2026",
       clientName: "Axana",
@@ -5699,6 +5763,7 @@ function PortalMainContent() {
           <div className="space-y-8 animate-in fade-in duration-300 text-left">
             <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
               <button
+                type="button"
                 onClick={() => setClientTab("proyectos")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   clientTab === "proyectos"
@@ -5711,6 +5776,20 @@ function PortalMainContent() {
               </button>
 
               <button
+                type="button"
+                onClick={() => setClientTab("demo")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  clientTab === "demo"
+                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-[#00D1FF] hover:bg-[#00D1FF]/10 border border-[#00D1FF]/30"
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Demo App PropTech (Open House)</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setClientTab("finanzas")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   clientTab === "finanzas"
@@ -5723,6 +5802,7 @@ function PortalMainContent() {
               </button>
 
               <button
+                type="button"
                 onClick={() => setClientTab("chat")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   clientTab === "chat"
@@ -5735,68 +5815,165 @@ function PortalMainContent() {
               </button>
             </div>
 
+            {/* TAB: DEMO INTERACTIVO OPEN HOUSE PROPTECH */}
+            {clientTab === "demo" && (
+              <OpenHousePropTechDemo />
+            )}
+
+            {/* TAB: PROYECTO PRINCIPAL */}
             {clientTab === "proyectos" && (
               <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                  <div>
-                    <span className="text-xs font-mono text-emerald-400 font-bold">PROYECTO PRINCIPAL #PRJ-01</span>
-                    <h2 className="text-2xl font-black text-white mt-1">Clínica Médica AI - Sistema de Triaje</h2>
-                    <p className="text-xs text-gray-400">Titular: Dra. Mariana Valdés • Clínica Médica AI</p>
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-mono font-bold">
-                    68% Completado
-                  </span>
-                </div>
+                {safeActiveUser.id === "usr_client_eduardo" || safeActiveUser.email?.includes("openhouse") || safeActiveUser.name?.includes("Eduardo") ? (
+                  <>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono text-[#00D1FF] font-bold">PROYECTO PRINCIPAL #PRJ-OPENHOUSE-01</span>
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-mono font-bold">Vendedora: Jessica Torre</span>
+                        </div>
+                        <h2 className="text-2xl font-black text-white mt-1">Open House Yucatán - App PropTech de Venta de Terrenos & Citas</h2>
+                        <p className="text-xs text-gray-400">Titular: Eduardo Cáceres • Open House Yucatán (www.openhouseyucatan.com)</p>
+                      </div>
+                      <span className="px-3 py-1 rounded-full bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/40 text-xs font-mono font-bold">
+                        35% Completado (Fase 1)
+                      </span>
+                    </div>
 
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                  <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-emerald-400 to-[#00D1FF] rounded-full" style={{ width: "68%" }} />
-                  </div>
-                  <div className="flex justify-between text-xs font-mono text-gray-400">
-                    <span>Sprint Actual: Diagnóstico LLM & Triaje</span>
-                    <span className="text-white font-bold">Entrega estimada: 15 de Octubre 2026</span>
-                  </div>
-                </div>
+                    {/* Progress Bar */}
+                    <div className="space-y-2">
+                      <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-[#00D1FF] to-emerald-400 rounded-full" style={{ width: "35%" }} />
+                      </div>
+                      <div className="flex justify-between text-xs font-mono text-gray-400">
+                        <span>Sprint Actual: Demo interactivo de agendamiento, catálogo de terrenos, calendario y vendedores</span>
+                        <span className="text-white font-bold">Entrega estimada: 15 de Noviembre 2026</span>
+                      </div>
+                    </div>
 
-                {/* Assigned Team */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                    <span className="text-[10px] font-mono text-gray-400 block uppercase">Ingeniero Tech Lead Asignado:</span>
-                    <span className="text-sm font-bold text-white block mt-1">Ing. Rodrigo Pacheco</span>
-                    <span className="text-xs font-mono text-[#00D1FF]">rodrigo.dev@innocentia.tech</span>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                    <span className="text-[10px] font-mono text-gray-400 block uppercase">Líder de Diseño UI/UX:</span>
-                    <span className="text-sm font-bold text-white block mt-1">Sofía (Innocentia Design Lead)</span>
-                    <span className="text-xs font-mono text-purple-400">sofia.design@innocentia.tech</span>
-                  </div>
-                </div>
+                    {/* Assigned Team */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Asesora Comercial Asignada:</span>
+                        <span className="text-sm font-bold text-white block mt-1">Jessica Torre (VEN-JESS-101)</span>
+                        <span className="text-xs font-mono text-emerald-400">jess@boldberry.mx</span>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Ingeniero Tech Lead Asignado:</span>
+                        <span className="text-sm font-bold text-white block mt-1">Ing. Rodrigo Pacheco</span>
+                        <span className="text-xs font-mono text-[#00D1FF]">rodrigo.dev@innocentia.tech</span>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Líder de Diseño UI/UX:</span>
+                        <span className="text-sm font-bold text-white block mt-1">Sofía (Innocentia Design Lead)</span>
+                        <span className="text-xs font-mono text-purple-400">sofia.design@innocentia.tech</span>
+                      </div>
+                    </div>
+
+                    {/* Quick Launch Demo Button */}
+                    <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00D1FF]/10 to-transparent border border-[#00D1FF]/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <Sparkles className="w-5 h-5 text-[#00D1FF] flex-shrink-0" />
+                        <div>
+                          <h4 className="text-sm font-bold text-white">Prueba interactiva del Demo en Vivo</h4>
+                          <p className="text-xs text-gray-400">Interactúa con el catálogo de lotes, simulador financiero, agendador y portal de asesores.</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setClientTab("demo")}
+                        className="px-4 py-2 rounded-xl bg-[#00D1FF] text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,209,255,0.4)] cursor-pointer"
+                      >
+                        <span>Abrir Demo PropTech</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                      <div>
+                        <span className="text-xs font-mono text-emerald-400 font-bold">PROYECTO PRINCIPAL #PRJ-01</span>
+                        <h2 className="text-2xl font-black text-white mt-1">Clínica Médica AI - Sistema de Triaje</h2>
+                        <p className="text-xs text-gray-400">Titular: Dra. Mariana Valdés • Clínica Médica AI</p>
+                      </div>
+                      <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-mono font-bold">
+                        68% Completado
+                      </span>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="space-y-2">
+                      <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-emerald-400 to-[#00D1FF] rounded-full" style={{ width: "68%" }} />
+                      </div>
+                      <div className="flex justify-between text-xs font-mono text-gray-400">
+                        <span>Sprint Actual: Diagnóstico LLM & Triaje</span>
+                        <span className="text-white font-bold">Entrega estimada: 15 de Octubre 2026</span>
+                      </div>
+                    </div>
+
+                    {/* Assigned Team */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Ingeniero Tech Lead Asignado:</span>
+                        <span className="text-sm font-bold text-white block mt-1">Ing. Rodrigo Pacheco</span>
+                        <span className="text-xs font-mono text-[#00D1FF]">rodrigo.dev@innocentia.tech</span>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <span className="text-[10px] font-mono text-gray-400 block uppercase">Líder de Diseño UI/UX:</span>
+                        <span className="text-sm font-bold text-white block mt-1">Sofía (Innocentia Design Lead)</span>
+                        <span className="text-xs font-mono text-purple-400">sofia.design@innocentia.tech</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
+            {/* TAB: FINANZAS & FACTURACIÓN */}
             {clientTab === "finanzas" && (
               <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-white/15 space-y-6">
                 <h3 className="text-lg font-black text-white uppercase">Resumen de Pagos del Proyecto</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 block">Total Cotizado</span>
-                    <span className="text-xl font-black text-white mt-1 block">$185,000 MXN</span>
+                {safeActiveUser.id === "usr_client_eduardo" || safeActiveUser.email?.includes("openhouse") || safeActiveUser.name?.includes("Eduardo") ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                      <span className="text-xs font-mono text-gray-400 block">Total Cotizado (PropTech)</span>
+                      <span className="text-xl font-black text-white mt-1 block">$165,000 MXN</span>
+                      <span className="text-[10px] font-mono text-gray-400 mt-1 block">Vendedora: Jessica Torre</span>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                      <span className="text-xs font-mono text-gray-400 block">Anticipo Pagado</span>
+                      <span className="text-xl font-black text-emerald-400 mt-1 block">$60,000 MXN</span>
+                      <span className="text-[10px] font-mono text-emerald-400 mt-1 block">Fase 0 & Fase 1 Cubierta</span>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                      <span className="text-xs font-mono text-gray-400 block">Saldo Contra-Entrega</span>
+                      <span className="text-xl font-black text-amber-400 mt-1 block">$105,000 MXN</span>
+                      <span className="text-[10px] font-mono text-amber-400 mt-1 block">A la entrega final en producción</span>
+                    </div>
                   </div>
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 block">Monto Pagado</span>
-                    <span className="text-xl font-black text-emerald-400 mt-1 block">$120,000 MXN</span>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                      <span className="text-xs font-mono text-gray-400 block">Total Cotizado</span>
+                      <span className="text-xl font-black text-white mt-1 block">$185,000 MXN</span>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                      <span className="text-xs font-mono text-gray-400 block">Monto Pagado</span>
+                      <span className="text-xl font-black text-emerald-400 mt-1 block">$120,000 MXN</span>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
+                      <span className="text-xs font-mono text-gray-400 block">Saldo Pendiente</span>
+                      <span className="text-xl font-black text-amber-400 mt-1 block">$65,000 MXN</span>
+                    </div>
                   </div>
-                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10">
-                    <span className="text-xs font-mono text-gray-400 block">Saldo Pendiente</span>
-                    <span className="text-xl font-black text-amber-400 mt-1 block">$65,000 MXN</span>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 
+            {/* TAB: CHAT DE EQUIPO */}
             {clientTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="cliente" userName={activeUser.name} />
+              <ProjectTeamFeedAndChat userRole="cliente" userName={safeActiveUser.name} />
             )}
           </div>
         )}
