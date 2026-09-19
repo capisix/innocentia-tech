@@ -657,7 +657,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                     </span>
                   </div>
                   <h4 className="text-sm font-bold text-white mt-0.5">
-                    Axana & Gabriel • <span className="text-gray-300">Axana</span>
+                    Axana • <span className="text-gray-300">Axana</span>
                   </h4>
                   <p className="text-[11px] font-mono text-gray-400">
                     Plataforma Digital & E-Commerce • Asesora: Jessica Torre (VEN-JESS-101)
@@ -677,7 +677,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                 <button
                   type="button"
                   onClick={() => {
-                    setCalcClientName("Axana & Gabriel (Axana)");
+                    setCalcClientName("Axana");
                     setCalcModalidad("proyecto");
                     setCalcTier("mvp");
                     setCalcDiseno("personalizado");
@@ -1370,7 +1370,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/10">
                 <div>
                   <span className="text-[10px] text-gray-400 uppercase block font-bold">Cliente Registrado:</span>
-                  <p className="text-sm font-bold text-white mt-0.5">Axana &amp; Gabriel</p>
+                  <p className="text-sm font-bold text-white mt-0.5">Axana</p>
                   <p className="text-gray-300">Empresa: <strong>Axana</strong></p>
                   <p className="text-[#00D1FF]">📱 WhatsApp: +52 55 8421 0898</p>
                   <p className="text-gray-400">✉️ contacto@axana.mx</p>
@@ -1426,7 +1426,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-3 border-t border-white/10">
               <a
-                href={`https://wa.me/525584210898?text=${encodeURIComponent(`Hola Axana y Gabriel, soy ${userName || "Jessica Torre"} de Innocentia Tech. Te comparto la propuesta y avances de tu proyecto.`)}`}
+                href={`https://wa.me/525584210898?text=${encodeURIComponent(`Hola Axana, soy ${userName || "Jessica Torre"} de Innocentia Tech. Te comparto la propuesta y avances de tu proyecto.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all"
@@ -1442,7 +1442,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                     clientId: "CLI-AXANA-01",
                     projectName: "Axana - Plataforma Digital & E-Commerce",
                     clientCompany: "Axana",
-                    clientName: "Axana & Gabriel",
+                    clientName: "Axana",
                     clientEmail: "contacto@axana.mx",
                     clientPhone: "+52 55 8421 0898",
                     vendorName: userName || "Jessica Torre",
@@ -1459,7 +1459,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
               <button
                 type="button"
                 onClick={() => {
-                  setCalcClientName("Axana & Gabriel (Axana)");
+                  setCalcClientName("Axana");
                   setCalcModalidad("proyecto");
                   setCalcTier("mvp");
                   setCalcDiseno("personalizado");

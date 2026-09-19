@@ -19,7 +19,7 @@ export async function GET() {
       {
         id: "LEAD-AXANA",
         folio: "PROJ-AXANA-2026",
-        clientName: "Axana & Gabriel",
+        clientName: "Axana",
         company: "Axana",
         phone: "+52 55 8421 0898",
         email: "contacto@axana.mx",

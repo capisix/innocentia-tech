@@ -516,7 +516,7 @@ function PortalMainContent() {
   const [sellerAppointments, setSellerAppointments] = useState<CommercialAppointment[]>([
     {
       id: "APT-HOY-01",
-      clientName: "Axana & Gabriel (con Jessica Torre e Iván Castillo)",
+      clientName: "Axana",
       company: "Axana (Junta Estratégica & Comercial)",
       clientPhone: "+52 55 8421 0898",
       date: "2026-09-14",
@@ -634,7 +634,7 @@ function PortalMainContent() {
     {
       id: "PRJ-AXANA-01",
       name: "Axana - Plataforma Digital & E-Commerce",
-      client: "Axana & Gabriel",
+      client: "Axana",
       clientEmail: "contacto@axana.mx",
       sellerId: "usr_sales_jess",
       sellerName: "Jessica Torre (VEN-JESS-101)",
@@ -1240,7 +1240,7 @@ function PortalMainContent() {
   const [sellerLeads, setSellerLeads] = useState<SellerLead[]>([
     {
       id: "PROJ-AXANA-2026",
-      clientName: "Axana & Gabriel",
+      clientName: "Axana",
       company: "Axana (Junta Estratégica & Comercial)",
       phone: "+52 55 8421 0898",
       status: "En Cotización",

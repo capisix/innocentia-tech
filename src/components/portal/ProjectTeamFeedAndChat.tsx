@@ -125,7 +125,7 @@ export default function ProjectTeamFeedAndChat({
     {
       id: "proj-axana",
       name: "Axana - Plataforma Digital & E-Commerce",
-      client: "Axana & Gabriel",
+      client: "Axana",
       status: "En espera de revisión de demo",
       leadDesigner: "Sofía (Innocentia Design)",
       leadDev: "Ing. Rodrigo Pacheco & Iván Castillo (CEO)",
@@ -142,7 +142,7 @@ export default function ProjectTeamFeedAndChat({
   const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
     {
       id: "PROJ-AXANA-2026",
-      clientName: "Axana & Gabriel",
+      clientName: "Axana",
       clientCompany: "Axana",
       clientPhone: "+52 55 8421 0898",
       clientEmail: "contacto@axana.mx",
