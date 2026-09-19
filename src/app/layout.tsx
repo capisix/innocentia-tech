@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import FloatingChatWidget from "../components/common/FloatingChatWidget";
 
@@ -114,6 +115,26 @@ export default function RootLayout({
           }}
         />
         <link rel="stylesheet" href="/tailwind.css" />
+
+        {/* Google tag (gtag.js) - Google Analytics 4 Oficial */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-N2Q3NC7MZ2"
+        />
+        <Script
+          id="google-analytics-ga4"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-N2Q3NC7MZ2', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
       </head>
       <body className="bg-[#040407] text-[#F3F4F6] antialiased selection:bg-[#00E5FF]/30 selection:text-white min-h-screen relative">
         {children}
