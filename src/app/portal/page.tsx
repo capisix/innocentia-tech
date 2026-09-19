@@ -604,6 +604,8 @@ function PortalMainContent() {
   const [financeSearchQuery, setFinanceSearchQuery] = useState<string>("");
 
   // Filters for Audit Log & Bitácora de Movimientos
+  const [auditViewMode, setAuditViewMode] = useState<"ambas" | "grafica" | "lista">("ambas");
+  const [auditChartMetric, setAuditChartMetric] = useState<"flujo" | "cuentas" | "estados">("flujo");
   const [auditFilterPaymentStatus, setAuditFilterPaymentStatus] = useState<string>("all"); // "all" | "realizado" | "pendiente" | "automatico"
   const [auditFilterYear, setAuditFilterYear] = useState<string>("all"); // "all" | "2026" | "2025"
   const [auditFilterMonth, setAuditFilterMonth] = useState<string>("all"); // "all" | "1".."12"
