@@ -209,7 +209,7 @@ export default function ProjectTeamFeedAndChat({
 
   // Helper to open official Proposal Dispatch Modal
   const handleOpenDispatchForLead = (lead: IncomingLead) => {
-    const isProAcabados = lead.id === "PROJ-592160" || lead.clientCompany?.toLowerCase().includes("pro acabados");
+    const isProAcabados = lead.id === "PROJ-592160" || (lead.clientCompany || "").toLowerCase().includes("pro acabados");
     const data: ProjectPdfData = {
       folio: lead.id,
       clientId: isProAcabados ? "CLI-72746" : undefined,

@@ -1297,20 +1297,22 @@ function PortalMainContent() {
   };
 
   // Filtered Finance Records (Filtros por quién hace el pago, fecha, mes, año y término de búsqueda)
-  const filteredFinanceRecords = financeRecords.filter((r) => {
+  const filteredFinanceRecords = (financeRecords || []).filter((r) => {
+    if (!r) return false;
     // 1. Paid By Filter
     if (financeFilterPaidBy !== "all") {
+      const paidByLower = (r.paidBy || "").toLowerCase();
       if (financeFilterPaidBy === "sin_asignar") {
         if (r.paidBy && r.paidBy.trim() !== "") return false;
       } else if (financeFilterPaidBy === "clientes") {
-        if (!r.paidBy?.toLowerCase().includes("cliente") && r.section !== "ingreso_proyecto") return false;
+        if (!paidByLower.includes("cliente") && r.section !== "ingreso_proyecto") return false;
       } else {
-        if (!r.paidBy?.toLowerCase().includes(financeFilterPaidBy.toLowerCase())) return false;
+        if (!paidByLower.includes(financeFilterPaidBy.toLowerCase())) return false;
       }
     }
 
     // 2. Date / Period Quick Filter
-    const combinedDateText = `${r.date} ${r.dueDate || ""}`.toLowerCase();
+    const combinedDateText = `${r.date || ""} ${r.dueDate || ""}`.toLowerCase();
     if (financeFilterDate !== "all") {
       if (financeFilterDate === "hoy") {
         if (!combinedDateText.includes("09 de septiembre") && !combinedDateText.includes("10 de septiembre") && !combinedDateText.includes("12 de septiembre")) return false;
@@ -1353,14 +1355,14 @@ function PortalMainContent() {
     // 5. Search Query
     if (financeSearchQuery.trim() !== "") {
       const q = financeSearchQuery.toLowerCase();
-      const matchConcept = r.concept.toLowerCase().includes(q);
-      const matchCategory = r.category.toLowerCase().includes(q);
-      const matchProvider = r.provider?.toLowerCase().includes(q) || false;
-      const matchBeneficiary = r.beneficiary?.toLowerCase().includes(q) || false;
-      const matchProject = r.projectRef?.toLowerCase().includes(q) || false;
-      const matchAccount = r.sourceAccount.toLowerCase().includes(q);
-      const matchPaidBy = r.paidBy?.toLowerCase().includes(q) || false;
-      const matchRegisteredBy = r.registeredBy.toLowerCase().includes(q);
+      const matchConcept = (r.concept || "").toLowerCase().includes(q);
+      const matchCategory = (r.category || "").toLowerCase().includes(q);
+      const matchProvider = (r.provider || "").toLowerCase().includes(q);
+      const matchBeneficiary = (r.beneficiary || "").toLowerCase().includes(q);
+      const matchProject = (r.projectRef || "").toLowerCase().includes(q);
+      const matchAccount = (r.sourceAccount || "").toLowerCase().includes(q);
+      const matchPaidBy = (r.paidBy || "").toLowerCase().includes(q);
+      const matchRegisteredBy = (r.registeredBy || "").toLowerCase().includes(q);
       if (!matchConcept && !matchCategory && !matchProvider && !matchBeneficiary && !matchProject && !matchAccount && !matchPaidBy && !matchRegisteredBy) {
         return false;
       }
@@ -1371,16 +1373,16 @@ function PortalMainContent() {
 
   // Categorized Financial Calculations on filtered set
   const ingresosProyectos = filteredFinanceRecords.filter((r) => r.section === "ingreso_proyecto" || r.type === "ingreso");
-  const totalIngresosProyectos = ingresosProyectos.reduce((sum, r) => sum + r.amount, 0);
+  const totalIngresosProyectos = ingresosProyectos.reduce((sum, r) => sum + (r.amount || 0), 0);
 
   const gastosOperativos = filteredFinanceRecords.filter((r) => r.section === "gasto_operativo" || (r.type === "servicio" && r.section !== "nomina_sueldo" && r.section !== "comision_vendedor"));
-  const totalGastosOperativos = gastosOperativos.reduce((sum, r) => sum + r.amount, 0);
+  const totalGastosOperativos = gastosOperativos.reduce((sum, r) => sum + (r.amount || 0), 0);
 
   const comisionesVendedores = filteredFinanceRecords.filter((r) => r.section === "comision_vendedor");
-  const totalComisionesVendedores = comisionesVendedores.reduce((sum, r) => sum + r.amount, 0);
+  const totalComisionesVendedores = comisionesVendedores.reduce((sum, r) => sum + (r.amount || 0), 0);
 
   const sueldosNomina = filteredFinanceRecords.filter((r) => r.section === "nomina_sueldo");
-  const totalSueldosNomina = sueldosNomina.reduce((sum, r) => sum + r.amount, 0);
+  const totalSueldosNomina = sueldosNomina.reduce((sum, r) => sum + (r.amount || 0), 0);
 
   const totalIncome = totalIngresosProyectos;
   const totalExpenses = totalGastosOperativos + totalComisionesVendedores + totalSueldosNomina;
@@ -1394,11 +1396,11 @@ function PortalMainContent() {
   const distComisionesPct = totalComisionesVendedores > 0 ? Math.round((totalComisionesVendedores / distTotal) * 100) : 0;
 
   // Bank account distribution metrics
-  const santanderSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("santander")).reduce((s, r) => s + r.amount, 0);
-  const bbvaSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("bbva")).reduce((s, r) => s + r.amount, 0);
-  const stripeSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("stripe")).reduce((s, r) => s + r.amount, 0);
-  const danielSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("daniel") || r.paidBy?.toLowerCase().includes("daniel")).reduce((s, r) => s + r.amount, 0);
-  const cajaChicaSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("caja chica") || r.sourceAccount.toLowerCase().includes("efectivo")).reduce((s, r) => s + r.amount, 0);
+  const santanderSum = filteredFinanceRecords.filter((r) => (r.sourceAccount || "").toLowerCase().includes("santander")).reduce((s, r) => s + (r.amount || 0), 0);
+  const bbvaSum = filteredFinanceRecords.filter((r) => (r.sourceAccount || "").toLowerCase().includes("bbva")).reduce((s, r) => s + (r.amount || 0), 0);
+  const stripeSum = filteredFinanceRecords.filter((r) => (r.sourceAccount || "").toLowerCase().includes("stripe")).reduce((s, r) => s + (r.amount || 0), 0);
+  const danielSum = filteredFinanceRecords.filter((r) => (r.sourceAccount || "").toLowerCase().includes("daniel") || (r.paidBy || "").toLowerCase().includes("daniel")).reduce((s, r) => s + (r.amount || 0), 0);
+  const cajaChicaSum = filteredFinanceRecords.filter((r) => (r.sourceAccount || "").toLowerCase().includes("caja chica") || (r.sourceAccount || "").toLowerCase().includes("efectivo")).reduce((s, r) => s + (r.amount || 0), 0);
   const accountsTotal = (santanderSum + bbvaSum + stripeSum + danielSum + cajaChicaSum) || 1;
   const santanderPct = santanderSum > 0 ? Math.round((santanderSum / accountsTotal) * 100) : 0;
   const bbvaPct = bbvaSum > 0 ? Math.round((bbvaSum / accountsTotal) * 100) : 0;
@@ -1407,7 +1409,8 @@ function PortalMainContent() {
   const cajaChicaPct = cajaChicaSum > 0 ? Math.round((cajaChicaSum / accountsTotal) * 100) : 0;
 
   // Filtered Audit Logs with Rich Filters (Estado de Pago, Año, Mes, Día/Rango, Cuenta, Autor)
-  const filteredAuditLogs = auditLogs.filter((log) => {
+  const filteredAuditLogs = (auditLogs || []).filter((log) => {
+    if (!log) return false;
     // 1. Payment Status Filter
     if (auditFilterPaymentStatus !== "all" && log.paymentStatus !== auditFilterPaymentStatus) {
       return false;
@@ -1462,9 +1465,11 @@ function PortalMainContent() {
 
   // Grouped Timeline Data for Bar Chart
   const timelineGroups = filteredAuditLogs
-    .filter((l) => l.amount && l.amount > 0)
+    .filter((l) => l && typeof l.amount === "number" && !isNaN(l.amount) && l.amount > 0)
     .reduce((acc, log) => {
-      const key = `${log.day || 1} ${log.month === 9 ? 'Sep' : log.month === 8 ? 'Ago' : 'Jul'}`;
+      const dayVal = log.day || 1;
+      const monthLabel = log.month === 9 ? 'Sep' : log.month === 8 ? 'Ago' : log.month === 7 ? 'Jul' : 'Mes';
+      const key = `${dayVal} ${monthLabel}`;
       if (!acc[key]) {
         acc[key] = { label: key, ingreso: 0, gasto: 0, pendiente: 0, automatico: 0, total: 0 };
       }
@@ -1480,7 +1485,9 @@ function PortalMainContent() {
     }, {} as Record<string, { label: string; ingreso: number; gasto: number; pendiente: number; automatico: number; total: number }>);
 
   const timelineList = Object.values(timelineGroups);
-  const maxTimelineVal = Math.max(...timelineList.map((t) => Math.max(t.ingreso, t.gasto + t.automatico + t.pendiente)), 100000);
+  const maxTimelineVal = timelineList.length > 0
+    ? Math.max(...timelineList.map((t) => Math.max(t.ingreso || 0, (t.gasto || 0) + (t.automatico || 0) + (t.pendiente || 0))), 100000)
+    : 100000;
 
   return (
     <main className="relative min-h-screen bg-[#040407] text-[#F3F4F6] overflow-x-hidden selection:bg-[#00E5FF]/30 selection:text-white pb-24">
