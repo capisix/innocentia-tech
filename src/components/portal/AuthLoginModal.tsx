@@ -421,6 +421,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
     setTimeout(() => {
       // Master Passwords & Direct Seller Keys
       const masterKeys = [
+        "imposiblenunca2026",
         "231179",
         "innocentia2026",
         "socio2026",
@@ -436,14 +437,18 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         "cliente2026",
       ];
 
-      if (masterKeys.includes(password.toLowerCase()) || password === "231179") {
-        let user: UserAccount = USER_ACCOUNTS.daniel_socio;
-        if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
+      if (masterKeys.includes(password.toLowerCase()) || password === "231179" || password.toLowerCase() === "imposiblenunca2026") {
+        let user: UserAccount = USER_ACCOUNTS.contacto_admin;
+        if (password.toLowerCase() === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
+          user = USER_ACCOUNTS.contacto_admin;
+        } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
           user = USER_ACCOUNTS.jessica_vendedora;
         } else if (password === "yucaterco21" || password === "ceo2026") {
           user = USER_ACCOUNTS.ivan_ceo;
         } else if (password === "nadaesimposible2026") {
           user = USER_ACCOUNTS.jorge_socio;
+        } else if (password === "abuelover2026") {
+          user = USER_ACCOUNTS.daniel_socio;
         } else if (password === "ventas2026" || password === "carlos2026") {
           user = USER_ACCOUNTS.carlos_asesor;
         } else if (password === "dev2026") {
@@ -457,6 +462,15 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
         return;
       }
 
+      // Check localStorage custom passwords
+      let savedPassDict: Record<string, string> = {};
+      if (typeof window !== "undefined") {
+        try {
+          const raw = localStorage.getItem("innocentia_custom_passwords");
+          if (raw) savedPassDict = JSON.parse(raw);
+        } catch (e) {}
+      }
+
       // Check specific user database
       const foundEntry = Object.entries(USER_ACCOUNTS).find(([key, u]) => {
         const matchesIdentifier =
@@ -467,7 +481,8 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
           u.name.toLowerCase().split(" ")[0] === identifier ||
           u.name.toLowerCase() === identifier;
 
-        return matchesIdentifier && u.password === password;
+        const effectivePassword = savedPassDict[u.id] || savedPassDict[u.email.toLowerCase()] || u.password;
+        return matchesIdentifier && (effectivePassword?.toLowerCase() === password.toLowerCase() || u.password?.toLowerCase() === password.toLowerCase());
       });
 
       setIsLoading(false);

@@ -439,7 +439,7 @@ function PortalMainContent() {
 
       const userSavedPass = savedPassDict[u.id] || savedPassDict[u.email.toLowerCase()] || u.password;
 
-      return matchesIdentifier && (userSavedPass === password || u.password === password);
+      return matchesIdentifier && (userSavedPass?.toLowerCase() === password.toLowerCase() || u.password?.toLowerCase() === password.toLowerCase());
     });
 
     if (!foundEntry) {
