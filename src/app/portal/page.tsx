@@ -1380,6 +1380,26 @@ function PortalMainContent() {
   const totalExpenses = totalGastosOperativos + totalComisionesVendedores + totalSueldosNomina;
   const netProfit = totalIncome - totalExpenses;
 
+  // Dynamic Distribution Metrics for Audit Charts
+  const distTotal = (totalIngresosProyectos + totalSueldosNomina + totalGastosOperativos + totalComisionesVendedores) || 1;
+  const distIngresosPct = totalIncome > 0 ? Math.round((totalIngresosProyectos / distTotal) * 100) : 0;
+  const distSueldosPct = totalSueldosNomina > 0 ? Math.round((totalSueldosNomina / distTotal) * 100) : 0;
+  const distGastosPct = totalGastosOperativos > 0 ? Math.round((totalGastosOperativos / distTotal) * 100) : 0;
+  const distComisionesPct = totalComisionesVendedores > 0 ? Math.round((totalComisionesVendedores / distTotal) * 100) : 0;
+
+  // Bank account distribution metrics
+  const santanderSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("santander")).reduce((s, r) => s + r.amount, 0);
+  const bbvaSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("bbva")).reduce((s, r) => s + r.amount, 0);
+  const stripeSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("stripe")).reduce((s, r) => s + r.amount, 0);
+  const danielSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("daniel") || r.paidBy?.toLowerCase().includes("daniel")).reduce((s, r) => s + r.amount, 0);
+  const cajaChicaSum = filteredFinanceRecords.filter((r) => r.sourceAccount.toLowerCase().includes("caja chica") || r.sourceAccount.toLowerCase().includes("efectivo")).reduce((s, r) => s + r.amount, 0);
+  const accountsTotal = (santanderSum + bbvaSum + stripeSum + danielSum + cajaChicaSum) || 1;
+  const santanderPct = santanderSum > 0 ? Math.round((santanderSum / accountsTotal) * 100) : 0;
+  const bbvaPct = bbvaSum > 0 ? Math.round((bbvaSum / accountsTotal) * 100) : 0;
+  const stripePct = stripeSum > 0 ? Math.round((stripeSum / accountsTotal) * 100) : 0;
+  const danielPct = danielSum > 0 ? Math.round((danielSum / accountsTotal) * 100) : 0;
+  const cajaChicaPct = cajaChicaSum > 0 ? Math.round((cajaChicaSum / accountsTotal) * 100) : 0;
+
   // Filtered Audit Logs with Rich Filters (Estado de Pago, Año, Mes, Día/Rango, Cuenta, Autor)
   const filteredAuditLogs = auditLogs.filter((log) => {
     // 1. Payment Status Filter
@@ -2673,7 +2693,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {ingresosProyectos.map((r) => (
+                          {ingresosProyectos.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                No hay ingresos por proyectos registrados ni cobros pendientes.
+                              </td>
+                            </tr>
+                          ) : (
+                            ingresosProyectos.map((r) => (
                             <tr key={r.id} className="hover:bg-emerald-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.projectRef || r.concept}</strong>
@@ -2731,7 +2758,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -2779,7 +2806,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {gastosOperativos.map((r) => (
+                          {gastosOperativos.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                No hay gastos operativos registrados.
+                              </td>
+                            </tr>
+                          ) : (
+                            gastosOperativos.map((r) => (
                             <tr key={r.id} className="hover:bg-rose-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.provider || r.concept}</strong>
@@ -2842,7 +2876,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -2890,10 +2924,17 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {comisionesVendedores.map((r) => (
+                          {comisionesVendedores.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                Sin comisiones de vendedores registradas ni pendientes de dispersión.
+                              </td>
+                            </tr>
+                          ) : (
+                            comisionesVendedores.map((r) => (
                             <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
-                                <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
+                                <strong className="text-white block font-bold">{r.beneficiary || "Asesor Comercial"}</strong>
                                 <div className="flex flex-wrap items-center gap-1 mt-0.5">
                                   <span className="text-[10px] text-amber-400 font-mono">Asesor Oficial</span>
                                   {r.paidBy ? (
@@ -2954,7 +2995,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -3002,7 +3043,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {sueldosNomina.map((r) => (
+                          {sueldosNomina.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                No hay pagos de nómina o sueldos registrados.
+                              </td>
+                            </tr>
+                          ) : (
+                            sueldosNomina.map((r) => (
                             <tr key={r.id} className="hover:bg-cyan-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || r.concept}</strong>
@@ -3032,7 +3080,13 @@ function PortalMainContent() {
                               <td className="py-3.5 px-3 text-gray-300 font-mono text-[11px]">{r.sourceAccount}</td>
                               <td className="py-3.5 px-3 text-gray-400">{r.date}</td>
                               <td className="py-3.5 px-3">
-                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                                    r.status === "pagado"
+                                      ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                                      : "bg-cyan-500/20 text-cyan-400 border-cyan-500/40"
+                                  }`}
+                                >
                                   {r.status}
                                 </span>
                               </td>
@@ -3060,7 +3114,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -3490,21 +3544,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-gray-300">🏦 Santander Corporativa</span>
-                              <span className="text-white font-bold">$221,696 MXN (64%)</span>
+                              <span className="text-white font-bold">${santanderSum.toLocaleString()} MXN ({santanderPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full" style={{ width: "64%" }} />
-                            </div>
-                          </div>
-
-                          {/* BBVA */}
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono">
-                              <span className="text-gray-300">🏦 BBVA Operativa & Nómina</span>
-                              <span className="text-white font-bold">$149,800 MXN (28%)</span>
-                            </div>
-                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-blue-600 to-[#00D1FF] rounded-full" style={{ width: "28%" }} />
+                              <div className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full transition-all duration-500" style={{ width: `${Math.max(santanderPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -3512,10 +3555,21 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-gray-300">💳 Stripe Gateway / Tarjeta</span>
-                              <span className="text-white font-bold">$6,200 MXN (6%)</span>
+                              <span className="text-white font-bold">${stripeSum.toLocaleString()} MXN ({stripePct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full" style={{ width: "6%" }} />
+                              <div className="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full transition-all duration-500" style={{ width: `${Math.max(stripePct, 2)}%` }} />
+                            </div>
+                          </div>
+
+                          {/* Daniel Torre */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">👤 Daniel Torre (Socio)</span>
+                              <span className="text-white font-bold">${danielSum.toLocaleString()} MXN ({danielPct}%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-cyan-600 to-[#00D1FF] rounded-full transition-all duration-500" style={{ width: `${Math.max(danielPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -3523,10 +3577,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-gray-300">💵 Caja Chica Efectivo</span>
-                              <span className="text-white font-bold">$230 MXN (2%)</span>
+                              <span className="text-white font-bold">${cajaChicaSum.toLocaleString()} MXN ({cajaChicaPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" style={{ width: "2%" }} />
+                              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style={{ width: `${Math.max(cajaChicaPct, 2)}%` }} />
                             </div>
                           </div>
                         </div>
@@ -3538,10 +3592,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-emerald-400">📈 Proyectos Software</span>
-                              <span className="text-white font-bold">$250,000 MXN (67%)</span>
+                              <span className="text-white font-bold">${totalIngresosProyectos.toLocaleString()} MXN ({distIngresosPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-emerald-500 rounded-full" style={{ width: "67%" }} />
+                              <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distIngresosPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -3549,10 +3603,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-cyan-400">👥 Pago o Sueldos</span>
-                              <span className="text-white font-bold">$47,000 MXN (13%)</span>
+                              <span className="text-white font-bold">${totalSueldosNomina.toLocaleString()} MXN ({distSueldosPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-cyan-500 rounded-full" style={{ width: "13%" }} />
+                              <div className="h-full bg-cyan-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distSueldosPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -3560,10 +3614,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-rose-400">📉 Gastos Cloud & Ops</span>
-                              <span className="text-white font-bold">$38,626 MXN (10%)</span>
+                              <span className="text-white font-bold">${totalGastosOperativos.toLocaleString()} MXN ({distGastosPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-rose-500 rounded-full" style={{ width: "10%" }} />
+                              <div className="h-full bg-rose-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distGastosPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -3571,10 +3625,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-amber-400">💼 Comisiones Vendedores</span>
-                              <span className="text-white font-bold">$37,800 MXN (10%)</span>
+                              <span className="text-white font-bold">${totalComisionesVendedores.toLocaleString()} MXN ({distComisionesPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-amber-500 rounded-full" style={{ width: "10%" }} />
+                              <div className="h-full bg-amber-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distComisionesPct, 2)}%` }} />
                             </div>
                           </div>
                         </div>
@@ -4319,7 +4373,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {ingresosProyectos.map((r) => (
+                          {ingresosProyectos.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                No hay ingresos por proyectos registrados ni cobros pendientes.
+                              </td>
+                            </tr>
+                          ) : (
+                            ingresosProyectos.map((r) => (
                             <tr key={r.id} className="hover:bg-emerald-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.projectRef || r.concept}</strong>
@@ -4377,7 +4438,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -4425,7 +4486,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {gastosOperativos.map((r) => (
+                          {gastosOperativos.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                No hay gastos operativos registrados.
+                              </td>
+                            </tr>
+                          ) : (
+                            gastosOperativos.map((r) => (
                             <tr key={r.id} className="hover:bg-rose-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.provider || r.concept}</strong>
@@ -4488,7 +4556,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -4536,7 +4604,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {comisionesVendedores.map((r) => (
+                          {comisionesVendedores.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                Sin comisiones de vendedores registradas ni pendientes de dispersión.
+                              </td>
+                            </tr>
+                          ) : (
+                            comisionesVendedores.map((r) => (
                             <tr key={r.id} className="hover:bg-amber-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || "Carlos Mendoza"}</strong>
@@ -4600,7 +4675,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -4648,7 +4723,14 @@ function PortalMainContent() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-white/10">
-                          {sueldosNomina.map((r) => (
+                          {sueldosNomina.length === 0 ? (
+                            <tr>
+                              <td colSpan={8} className="py-8 text-center text-gray-500 font-sans italic text-xs">
+                                No hay pagos de nómina o sueldos registrados.
+                              </td>
+                            </tr>
+                          ) : (
+                            sueldosNomina.map((r) => (
                             <tr key={r.id} className="hover:bg-cyan-500/[0.03] transition-colors">
                               <td className="py-3.5 px-3">
                                 <strong className="text-white block font-bold">{r.beneficiary || r.concept}</strong>
@@ -4706,7 +4788,7 @@ function PortalMainContent() {
                                 </div>
                               </td>
                             </tr>
-                          ))}
+                          )))}
                         </tbody>
                       </table>
                     </div>
@@ -5132,21 +5214,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-gray-300">🏦 Santander Corporativa</span>
-                              <span className="text-white font-bold">$221,696 MXN (64%)</span>
+                              <span className="text-white font-bold">${santanderSum.toLocaleString()} MXN ({santanderPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full" style={{ width: "64%" }} />
-                            </div>
-                          </div>
-
-                          {/* BBVA */}
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono">
-                              <span className="text-gray-300">🏦 BBVA Operativa & Nómina</span>
-                              <span className="text-white font-bold">$149,800 MXN (28%)</span>
-                            </div>
-                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-blue-600 to-[#00D1FF] rounded-full" style={{ width: "28%" }} />
+                              <div className="h-full bg-gradient-to-r from-red-600 to-rose-400 rounded-full transition-all duration-500" style={{ width: `${Math.max(santanderPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -5154,10 +5225,21 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-gray-300">💳 Stripe Gateway / Tarjeta</span>
-                              <span className="text-white font-bold">$6,200 MXN (6%)</span>
+                              <span className="text-white font-bold">${stripeSum.toLocaleString()} MXN ({stripePct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full" style={{ width: "6%" }} />
+                              <div className="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full transition-all duration-500" style={{ width: `${Math.max(stripePct, 2)}%` }} />
+                            </div>
+                          </div>
+
+                          {/* Daniel Torre */}
+                          <div className="space-y-1">
+                            <div className="flex justify-between text-xs font-mono">
+                              <span className="text-gray-300">👤 Daniel Torre (Socio)</span>
+                              <span className="text-white font-bold">${danielSum.toLocaleString()} MXN ({danielPct}%)</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-full bg-gradient-to-r from-cyan-600 to-[#00D1FF] rounded-full transition-all duration-500" style={{ width: `${Math.max(danielPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -5165,10 +5247,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-gray-300">💵 Caja Chica Efectivo</span>
-                              <span className="text-white font-bold">$230 MXN (2%)</span>
+                              <span className="text-white font-bold">${cajaChicaSum.toLocaleString()} MXN ({cajaChicaPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full" style={{ width: "2%" }} />
+                              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style={{ width: `${Math.max(cajaChicaPct, 2)}%` }} />
                             </div>
                           </div>
                         </div>
@@ -5180,10 +5262,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-emerald-400">📈 Proyectos Software</span>
-                              <span className="text-white font-bold">$250,000 MXN (67%)</span>
+                              <span className="text-white font-bold">${totalIngresosProyectos.toLocaleString()} MXN ({distIngresosPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-emerald-500 rounded-full" style={{ width: "67%" }} />
+                              <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distIngresosPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -5191,10 +5273,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-cyan-400">👥 Pago o Sueldos</span>
-                              <span className="text-white font-bold">$47,000 MXN (13%)</span>
+                              <span className="text-white font-bold">${totalSueldosNomina.toLocaleString()} MXN ({distSueldosPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-cyan-500 rounded-full" style={{ width: "13%" }} />
+                              <div className="h-full bg-cyan-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distSueldosPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -5202,10 +5284,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-rose-400">📉 Gastos Cloud & Ops</span>
-                              <span className="text-white font-bold">$38,626 MXN (10%)</span>
+                              <span className="text-white font-bold">${totalGastosOperativos.toLocaleString()} MXN ({distGastosPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-rose-500 rounded-full" style={{ width: "10%" }} />
+                              <div className="h-full bg-rose-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distGastosPct, 2)}%` }} />
                             </div>
                           </div>
 
@@ -5213,10 +5295,10 @@ function PortalMainContent() {
                           <div className="space-y-1">
                             <div className="flex justify-between text-xs font-mono">
                               <span className="text-amber-400">💼 Comisiones Vendedores</span>
-                              <span className="text-white font-bold">$37,800 MXN (10%)</span>
+                              <span className="text-white font-bold">${totalComisionesVendedores.toLocaleString()} MXN ({distComisionesPct}%)</span>
                             </div>
                             <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                              <div className="h-full bg-amber-500 rounded-full" style={{ width: "10%" }} />
+                              <div className="h-full bg-amber-500 rounded-full transition-all duration-500" style={{ width: `${Math.max(distComisionesPct, 2)}%` }} />
                             </div>
                           </div>
                         </div>
