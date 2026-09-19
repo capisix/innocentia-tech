@@ -860,10 +860,10 @@ export default function AIPersonasSection() {
                       title: "Sofía & Iván",
                       role: "Dual Core Architecture",
                       subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
-                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      videoSrc: "/videos/sofia_ivan_dual.mp4",
                       themeColor: "#00D1FF",
                       secondaryColor: "#FF3858",
-                      avatarImg: "/images/sofia_seated_art.jpg",
+                      avatarImg: "/images/dual_adults_master_transparent.png",
                       icon: "✨",
                     })
                   }
@@ -900,10 +900,10 @@ export default function AIPersonasSection() {
                       title: "Sofía & Iván",
                       role: "Dual Core Architecture",
                       subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
-                      videoSrc: "/videos/sofia_presentacion.mp4",
+                      videoSrc: "/videos/sofia_ivan_dual.mp4",
                       themeColor: "#00D1FF",
                       secondaryColor: "#FF3858",
-                      avatarImg: "/images/sofia_seated_art.jpg",
+                      avatarImg: "/images/dual_adults_master_transparent.png",
                       icon: "✨",
                     })
                   }
