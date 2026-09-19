@@ -322,9 +322,9 @@ export const PROJECTS_DATA: ProjectCaseStudy[] = [
     stats: "Cierre de Ventas 24/7",
     category: "PropTech, Terrenos & Bienes Raíces",
     location: "Mérida & Costa de Yucatán, México",
-    primaryColor: "#00D1FF",
-    badgeColor: "#00D1FF",
-    demoUrl: "https://www.openhouseyucatan.com",
+    primaryColor: "#E87512",
+    badgeColor: "#E87512",
+    demoUrl: "/demo/openhouse",
     clientProblem: "La comercialización de terrenos y lotes de inversión requería coordinar citas manuales por WhatsApp, no existía visualización clara de lotes disponibles/apartados y el seguimiento de comisiones para la fuerza de ventas inmobiliaria era disperso.",
     solutionOverview: "Innocentia Tech diseñó una aplicación PropTech inteligente con agendador de citas físicas y virtuales con Google Meet, mapa interactivo de disponibilidad de terrenos con simulador de mensualidades, calendario de recorridos y portal de comisiones para asesores inmobiliarios.",
     keyFeatures: [

@@ -128,6 +128,7 @@ interface AssignedProject {
   paidAmount: number;
   targetDate: string;
   unreadAlerts: number;
+  demoUrl?: string;
 }
 
 interface SellerLead {
@@ -682,6 +683,7 @@ function PortalMainContent() {
       paidAmount: 60000,
       targetDate: "15 de Noviembre de 2026",
       unreadAlerts: 0,
+      demoUrl: "/demo/openhouse",
     },
     {
       id: "PRJ-AXANA-01",
@@ -2180,6 +2182,18 @@ function PortalMainContent() {
                         Presupuesto: <strong className="text-emerald-400">${proj.budget.toLocaleString()} MXN</strong>
                       </span>
                       <div className="flex items-center gap-2">
+                        {proj.demoUrl && (
+                          <Link
+                            href={proj.demoUrl}
+                            target="_blank"
+                            className="px-3 py-2 rounded-xl bg-[#E87512]/20 hover:bg-[#E87512] text-[#E87512] hover:text-black border border-[#E87512]/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(232,117,18,0.2)]"
+                          >
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Demo App</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        )}
+
                         <button
                           type="button"
                           onClick={() => setCeoTab("chat")}
@@ -5896,22 +5910,33 @@ function PortalMainContent() {
                     </div>
 
                     {/* Quick Launch Demo Button */}
-                    <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00D1FF]/10 to-transparent border border-[#00D1FF]/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <Sparkles className="w-5 h-5 text-[#00D1FF] flex-shrink-0" />
+                    <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#E87512]/15 via-[#1A110B] to-transparent border border-[#E87512]/40 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-[0_0_25px_rgba(232,117,18,0.15)]">
+                      <div className="flex items-center gap-3 text-left">
+                        <div className="w-10 h-10 rounded-xl bg-[#E87512] text-black font-black flex items-center justify-center flex-shrink-0 shadow-md">
+                          <Sparkles className="w-5 h-5" />
+                        </div>
                         <div>
-                          <h4 className="text-sm font-bold text-white">Prueba interactiva del Demo en Vivo</h4>
-                          <p className="text-xs text-gray-400">Interactúa con el catálogo de lotes, simulador financiero, agendador y portal de asesores.</p>
+                          <h4 className="text-sm font-bold text-white">Demo Interactivo PropTech Open House</h4>
+                          <p className="text-xs text-[#FAE3D1]/80 font-mono">Prueba el catálogo de terrenos, cotizador financiero y agendador en tiempo real.</p>
                         </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setClientTab("demo")}
-                        className="px-4 py-2 rounded-xl bg-[#00D1FF] text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,209,255,0.4)] cursor-pointer"
-                      >
-                        <span>Abrir Demo PropTech</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                      <div className="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto">
+                        <button
+                          type="button"
+                          onClick={() => setClientTab("demo")}
+                          className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/20 font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                        >
+                          <span>Ver en Portal</span>
+                        </button>
+                        <Link
+                          href="/demo/openhouse"
+                          target="_blank"
+                          className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(232,117,18,0.4)] cursor-pointer"
+                        >
+                          <span>Abrir Demo Completo</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -6352,6 +6377,21 @@ function PortalMainContent() {
                             <strong className="text-emerald-400 text-sm">+${(proj.budget * 0.12).toLocaleString()} MXN</strong>
                           </div>
                         </div>
+
+                        {/* Demo App Direct Link for Seller */}
+                        {proj.demoUrl && (
+                          <div className="pt-2 border-t border-white/5 flex items-center justify-between">
+                            <span className="text-[10px] font-mono text-[#E87512] font-bold">✨ Demo Interactivo Listo</span>
+                            <Link
+                              href={proj.demoUrl}
+                              target="_blank"
+                              className="px-3 py-1.5 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(232,117,18,0.4)]"
+                            >
+                              <span>Ver Demo (Cliente)</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
