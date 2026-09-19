@@ -700,10 +700,10 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
                     </div>
                     <div className="flex items-center -space-x-1.5">
                       <div className="w-4 h-4 rounded-full overflow-hidden border border-[#FF3B5C] bg-black">
-                        <img src="/images/sofia_pink_beanbag.png" alt="S" className="w-full h-full object-contain" />
+                        <img src="/images/sofia_pink_beanbag.png" alt="Sofía - Diseño UX" className="w-full h-full object-contain" />
                       </div>
                       <div className="w-4 h-4 rounded-full overflow-hidden border border-[#00E5FF] bg-black">
-                        <img src="/images/ivan_standing_stylus.png" alt="I" className="w-full h-full object-contain" />
+                        <img src="/images/ivan_standing_stylus.png" alt="Iván - Arquitectura de Software" className="w-full h-full object-contain" />
                       </div>
                     </div>
                   </div>

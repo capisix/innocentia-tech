@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Globe, Menu, X, ArrowRight, Lock } from "../../lib/icons";
 import AuthLoginModal, { RoleType } from "../portal/AuthLoginModal";
 
@@ -24,13 +25,12 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
   }, []);
 
   const navLinks = [
-    { name: "Inicio", href: "#hero" },
-    { name: "Filosofía", href: "#filosofia" },
-    { name: "Capacidades", href: "#servicios" },
-    { name: "Proyectos", href: "#proyectos" },
-    { name: "Laboratorio", href: "#playground" },
-    { name: "Identidad", href: "#ai-personas" },
-    { name: "Preguntas", href: "/faq" },
+    { name: "Inicio", href: "/#hero" },
+    { name: "Capacidades", href: "/#servicios" },
+    { name: "Proyectos", href: "/proyectos" },
+    { name: "Blog & Precios", href: "/blog" },
+    { name: "Laboratorio", href: "/#playground" },
+    { name: "Preguntas (FAQ)", href: "/faq" },
   ];
 
   return (
@@ -44,13 +44,13 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
       >
         <div className="max-w-[1440px] mx-auto px-6 sm:px-8 flex items-center justify-between">
           {/* Official Innocentia Logo */}
-          <a href="#hero" className="flex items-center group cursor-pointer">
+          <Link href="/" className="flex items-center group cursor-pointer">
             <img
               src="/images/logo_official_header.png?v=2"
-              alt="INNOCENTIA"
+              alt="INNOCENTIA TECH"
               className="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[240px] object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform duration-300"
             />
-          </a>
+          </Link>
 
           {/* Clean Navigation Menu (Single Line, No Awkward Wrap) */}
           <nav className="hidden lg:flex items-center gap-5 xl:gap-7">

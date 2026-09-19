@@ -125,7 +125,7 @@ export default function AboutUsSection() {
                   <div className="relative w-full h-56 flex items-center justify-center">
                     <Image
                       src="/images/sofia_ivan_chars.png"
-                      alt="Innocentia Characters"
+                      alt="Sofía e Iván - Equipo Fundador de Innocentia Tech"
                       width={340}
                       height={240}
                       className="object-contain filter drop-shadow-[0_0_30px_rgba(255,69,0,0.5)] animate-float"

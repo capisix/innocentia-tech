@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { ArrowUpRight, MessageSquare, Mail, ShieldCheck, Sparkles } from "../../lib/icons";
+import Link from "next/link";
+import { ArrowUpRight, MessageSquare, Mail, ShieldCheck, Sparkles, MapPin } from "../../lib/icons";
 
 export default function Footer() {
   const contactChannels = [
@@ -147,6 +148,130 @@ export default function Footer() {
                 </div>
               </a>
             ))}
+          </div>
+        </div>
+
+        {/* Structured Site Directory & Local SEO Links */}
+        <div className="pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left text-xs font-mono">
+          {/* Col 1: Proyectos */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF]" />
+              <span>Casos de Estudio</span>
+            </h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <Link href="/proyectos/multisistema" className="hover:text-white transition-colors">
+                  Multisistema • Ecosistema SaaS
+                </Link>
+              </li>
+              <li>
+                <Link href="/proyectos/ikal-chukum" className="hover:text-white transition-colors">
+                  Ikal Chukum • Cotizador en Tiempo Real
+                </Link>
+              </li>
+              <li>
+                <Link href="/proyectos/experience-safely" className="hover:text-white transition-colors">
+                  Experience Safely • Motor de Reservas
+                </Link>
+              </li>
+              <li>
+                <Link href="/proyectos/help-2-win" className="hover:text-white transition-colors">
+                  Help 2 Win • Streaming & App Móvil
+                </Link>
+              </li>
+              <li className="pt-1">
+                <Link href="/proyectos" className="text-[#00D1FF] hover:underline font-bold">
+                  Ver todos los proyectos →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 2: Blog & Guías de Precios */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858]" />
+              <span>Guías & Precios 2026</span>
+            </h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <Link href="/blog/cuanto-cuesta-desarrollar-una-app-mexico" className="hover:text-white transition-colors">
+                  ¿Cuánto cuesta una app en México?
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/agencia-desarrollo-software-ia-merida-yucatan" className="hover:text-white transition-colors">
+                  Software e IA en Mérida, Yucatán
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/desarrollo-web-nextjs-empresas-saas" className="hover:text-white transition-colors">
+                  Next.js 15 para Empresas y SaaS
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog/cotizador-en-tiempo-real-automatizacion-ventas" className="hover:text-white transition-colors">
+                  Automatizar Cotizaciones (+38% Ventas)
+                </Link>
+              </li>
+              <li className="pt-1">
+                <Link href="/blog" className="text-[#FF3858] hover:underline font-bold">
+                  Ver blog completo →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Capacidades & Empresa */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Soluciones & Acceso</span>
+            </h4>
+            <ul className="space-y-2 text-gray-400">
+              <li>
+                <Link href="/crear-proyecto" className="hover:text-white transition-colors">
+                  Cotizador Oficial de Proyectos
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="hover:text-white transition-colors">
+                  Preguntas Frecuentes (FAQ)
+                </Link>
+              </li>
+              <li>
+                <Link href="/#servicios" className="hover:text-white transition-colors">
+                  Capacidades & Red Neuronal
+                </Link>
+              </li>
+              <li>
+                <Link href="/#playground" className="hover:text-white transition-colors">
+                  Laboratorio Interactivo Sofía & Iván
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: SEO Local & Sede */}
+          <div className="space-y-3">
+            <h4 className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span>Sede & Cobertura</span>
+            </h4>
+            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2 text-[11px] text-gray-300">
+              <div className="flex items-center gap-1.5 text-white font-bold">
+                <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                <span>Mérida, Yucatán, México</span>
+              </div>
+              <p className="text-gray-400 leading-relaxed">
+                Desarrollo de software de alta gama para México, Riviera Maya, Estados Unidos y Latinoamérica.
+              </p>
+              <div className="pt-1 text-[10px] text-emerald-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Atención Presencial & Remota 24/7</span>
+              </div>
+            </div>
           </div>
         </div>
 

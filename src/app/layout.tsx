@@ -4,26 +4,16 @@ import "./globals.css";
 import FloatingChatWidget from "../components/common/FloatingChatWidget";
 
 export const metadata: Metadata = {
-  title: "Innocentia Tech • Laboratorio de Software & IA",
-  description: "Donde la imaginación se convierte en tecnología. Creamos aplicaciones móviles, plataformas SaaS y agentes de Inteligencia Artificial.",
+  title: "Innocentia Tech • Desarrollo de Software, Apps Móviles e IA en México",
+  description: "Laboratorio de ingeniería de software de alto impacto. Creamos aplicaciones móviles iOS/Android, plataformas web SaaS a medida y agentes de Inteligencia Artificial en México.",
   metadataBase: new URL("https://innocentia.tech"),
   alternates: {
     canonical: "https://innocentia.tech",
   },
-  keywords: [
-    "INNOCENTIA",
-    "Innocentia Tech",
-    "Laboratorio de Software",
-    "Desarrollo de Apps",
-    "Inteligencia Artificial",
-    "Next.js 15",
-    "Diseño UX",
-    "Sofía e Iván",
-  ],
   authors: [{ name: "Innocentia Tech", url: "https://innocentia.tech" }],
   openGraph: {
-    title: "Innocentia Tech • Laboratorio de Software & IA",
-    description: "Donde la imaginación se convierte en tecnología. Apps móviles, desarrollo web de alta escala y soluciones con IA.",
+    title: "Innocentia Tech • Desarrollo de Software, Apps Móviles e IA en México",
+    description: "Donde la imaginación se convierte en tecnología. Apps móviles nativas, plataformas web SaaS de alta escala y agentes inteligentes.",
     url: "https://innocentia.tech",
     siteName: "Innocentia Tech",
     images: [
@@ -33,7 +23,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: "image/png",
-        alt: "Innocentia Tech - Laboratorio de Software & IA",
+        alt: "Innocentia Tech - Desarrollo de Software, Apps Móviles e Inteligencia Artificial",
       },
     ],
     locale: "es_MX",
@@ -41,8 +31,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Innocentia Tech • Laboratorio de Software & IA",
-    description: "Donde la imaginación se convierte en tecnología. Apps móviles, plataformas web y agentes inteligentes.",
+    title: "Innocentia Tech • Desarrollo de Software, Apps Móviles e IA",
+    description: "Ingeniería de software a medida, apps móviles fluidas a 60 FPS y soluciones con Inteligencia Artificial.",
     images: ["https://innocentia.tech/images/og_preview.png?v=11"],
   },
   icons: {
@@ -115,6 +105,144 @@ export default function RootLayout({
           }}
         />
         <link rel="stylesheet" href="/tailwind.css" />
+
+        {/* Schema.org Structured Data (JSON-LD) para Google & SEO Local */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://innocentia.tech/#organization",
+                  "name": "Innocentia Tech",
+                  "legalName": "Innocentia Tech Core",
+                  "url": "https://innocentia.tech",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://innocentia.tech/images/innocentia_logo_official.png",
+                    "width": "512",
+                    "height": "512",
+                  },
+                  "description":
+                    "Laboratorio de ingeniería de software, desarrollo de aplicaciones móviles iOS/Android, plataformas web SaaS y agentes de Inteligencia Artificial.",
+                  "contactPoint": [
+                    {
+                      "@type": "ContactPoint",
+                      "telephone": "+52-960-177-1556",
+                      "contactType": "sales",
+                      "areaServed": ["MX", "US", "LATAM"],
+                      "availableLanguage": ["Spanish", "English"],
+                    },
+                    {
+                      "@type": "ContactPoint",
+                      "email": "contacto@innocentia.tech",
+                      "contactType": "customer service",
+                    },
+                  ],
+                  "sameAs": ["https://wa.me/529601771556"],
+                },
+                {
+                  "@type": "ProfessionalService",
+                  "@id": "https://innocentia.tech/#localbusiness",
+                  "name": "Innocentia Tech • Desarrollo de Software e IA en Mérida Yucatán",
+                  "image": "https://innocentia.tech/images/og_preview.png?v=11",
+                  "url": "https://innocentia.tech",
+                  "telephone": "+529601771556",
+                  "priceRange": "$$$",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Mérida",
+                    "addressRegion": "Yucatán",
+                    "postalCode": "97000",
+                    "addressCountry": "MX",
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 20.9674,
+                    "longitude": -89.5926,
+                  },
+                  "openingHoursSpecification": {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                    ],
+                    "opens": "09:00",
+                    "closes": "20:00",
+                  },
+                  "areaServed": [
+                    "Mérida",
+                    "Yucatán",
+                    "Riviera Maya",
+                    "Cancún",
+                    "Quintana Roo",
+                    "México",
+                    "Estados Unidos",
+                    "Latinoamérica",
+                  ],
+                  "hasOfferCatalog": {
+                    "@type": "OfferCatalog",
+                    "name": "Servicios de Software e IA",
+                    "itemListElement": [
+                      {
+                        "@type": "Offer",
+                        "itemOffered": {
+                          "@type": "Service",
+                          "name": "Desarrollo de Aplicaciones Móviles iOS & Android",
+                          "description":
+                            "Creación de apps nativas e híbridas con rendimiento a 60 FPS, pasarelas de pago y notificaciones push.",
+                        },
+                      },
+                      {
+                        "@type": "Offer",
+                        "itemOffered": {
+                          "@type": "Service",
+                          "name": "Desarrollo Web y Plataformas SaaS",
+                          "description":
+                            "Arquitectura en Next.js 15, bases de datos PostgreSQL multi-tenant y microservicios serverless.",
+                        },
+                      },
+                      {
+                        "@type": "Offer",
+                        "itemOffered": {
+                          "@type": "Service",
+                          "name": "Agentes y Soluciones de Inteligencia Artificial",
+                          "description":
+                            "Implementación de LLMs, automatizaciones con IA y procesamiento de datos en tiempo real.",
+                        },
+                      },
+                      {
+                        "@type": "Offer",
+                        "itemOffered": {
+                          "@type": "Service",
+                          "name": "Cotizadores en Tiempo Real y Paneles de Control",
+                          "description":
+                            "Sistemas interactivos para cálculo de m2, presupuestos automáticos en PDF y sincronización con WhatsApp.",
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://innocentia.tech/#website",
+                  "url": "https://innocentia.tech",
+                  "name": "Innocentia Tech",
+                  "publisher": {
+                    "@id": "https://innocentia.tech/#organization",
+                  },
+                  "inLanguage": "es-MX",
+                },
+              ],
+            }),
+          }}
+        />
 
         {/* Google tag (gtag.js) - Google Analytics 4 Oficial */}
         <Script

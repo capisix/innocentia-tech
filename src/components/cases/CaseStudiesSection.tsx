@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, Sparkles } from "../../lib/icons";
 import ProjectCaseStudyModal, { ProjectDetail } from "./ProjectCaseStudyModal";
 
@@ -278,81 +279,109 @@ export default function CaseStudiesSection({
               </p>
             </div>
 
-            <button
-              onClick={onOpenProjectModal}
-              className="inline-flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white uppercase tracking-wider group cursor-pointer"
-            >
-              <span>Crear un nuevo proyecto</span>
-              <ArrowRight className="w-4 h-4 text-[#FF3858] group-hover:translate-x-1 transition-transform" />
-            </button>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/proyectos"
+                className="inline-flex items-center gap-2 text-xs font-bold text-[#00D1FF] hover:text-white uppercase tracking-wider group cursor-pointer"
+              >
+                <span>Ver Portafolio Completo</span>
+                <ArrowRight className="w-4 h-4 text-[#00D1FF] group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <button
+                onClick={onOpenProjectModal}
+                className="inline-flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white uppercase tracking-wider group cursor-pointer"
+              >
+                <span>Crear un nuevo proyecto</span>
+                <ArrowRight className="w-4 h-4 text-[#FF3858] group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
           </div>
 
           {/* 4 Cards Grid with Rich Visual Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                onClick={() => setSelectedProject(project)}
-                className={`group relative rounded-[32px] bg-gradient-to-b ${project.cardBg} border ${project.borderColor} p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:-translate-y-2 backdrop-blur-2xl ${project.glowColor} space-y-5 cursor-pointer`}
-              >
-                {/* Volumetric Glow */}
+            {projects.map((project) => {
+              const slugMap: Record<string, string> = {
+                multisistema: "multisistema",
+                ikal: "ikal-chukum",
+                safely: "experience-safely",
+                help2win: "help-2-win",
+              };
+              const projectSlug = slugMap[project.id] || "multisistema";
+
+              return (
                 <div
-                  className={`absolute top-0 right-0 w-48 h-48 ${project.auraColor} rounded-full blur-[80px] pointer-events-none group-hover:scale-125 transition-transform duration-500`}
-                />
-
-                {/* Screenshot Container */}
-                <div className="w-full h-48 rounded-2xl bg-black/90 border border-white/15 relative overflow-hidden group-hover:border-white/30 transition-all shadow-2xl z-10">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  key={project.id}
+                  onClick={() => setSelectedProject(project)}
+                  className={`group relative rounded-[32px] bg-gradient-to-b ${project.cardBg} border ${project.borderColor} p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 hover:-translate-y-2 backdrop-blur-2xl ${project.glowColor} space-y-5 cursor-pointer`}
+                >
+                  {/* Volumetric Glow */}
+                  <div
+                    className={`absolute top-0 right-0 w-48 h-48 ${project.auraColor} rounded-full blur-[80px] pointer-events-none group-hover:scale-125 transition-transform duration-500`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
-                  {/* Badges on top */}
-                  <div className="absolute top-3 left-3 z-10">
-                    <span
-                      className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border backdrop-blur-md ${project.tagBadge}`}
+                  {/* Screenshot Container */}
+                  <div className="w-full h-48 rounded-2xl bg-black/90 border border-white/15 relative overflow-hidden group-hover:border-white/30 transition-all shadow-2xl z-10">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Badges on top */}
+                    <div className="absolute top-3 left-3 z-10">
+                      <span
+                        className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full border backdrop-blur-md ${project.tagBadge}`}
+                      >
+                        {project.tag}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-2.5 right-3 z-10">
+                      <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-gray-200 font-bold backdrop-blur-md">
+                        {project.stats}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Title & Description */}
+                  <div className="space-y-2 text-left flex-1 relative z-10">
+                    <h3 className="text-xl font-extrabold text-white tracking-wide uppercase">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs text-gray-300 font-light leading-relaxed">
+                      {project.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Action Button & Direct URL Link */}
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between relative z-10">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setSelectedProject(project);
+                      }}
+                      className={`inline-flex items-center gap-1.5 text-xs font-bold ${project.accentBtn} transition-colors uppercase tracking-wider cursor-pointer`}
                     >
-                      {project.tag}
-                    </span>
+                      <span>Detalles</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+
+                    <Link
+                      href={`/proyectos/${projectSlug}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-[10px] font-mono text-gray-400 hover:text-white uppercase transition-colors px-2 py-1 rounded-md bg-white/5 border border-white/10"
+                    >
+                      Página →
+                    </Link>
                   </div>
-
-                  <div className="absolute bottom-2.5 right-3 z-10">
-                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-black/80 border border-white/20 text-gray-200 font-bold backdrop-blur-md">
-                      {project.stats}
-                    </span>
-                  </div>
                 </div>
-
-                {/* Title & Description */}
-                <div className="space-y-2 text-left flex-1 relative z-10">
-                  <h3 className="text-xl font-extrabold text-white tracking-wide uppercase">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs text-gray-300 font-light leading-relaxed">
-                    {project.subtitle}
-                  </p>
-                </div>
-
-                {/* Action Button */}
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between relative z-10">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setSelectedProject(project);
-                    }}
-                    className={`inline-flex items-center gap-2 text-xs font-bold ${project.accentBtn} transition-colors uppercase tracking-wider cursor-pointer`}
-                  >
-                    <span>Ver caso de estudio</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

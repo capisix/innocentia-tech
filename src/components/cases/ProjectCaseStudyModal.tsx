@@ -323,7 +323,7 @@ export default function ProjectCaseStudyModal({
               className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-full bg-[#FF3858]/15 hover:bg-[#FF3858]/25 border border-[#FF3858]/40 text-[#FF3858] hover:text-white font-bold text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0">
-                <Image src="/images/sofia_pink_beanbag.png" alt="S" width={16} height={16} className="object-contain" />
+                <Image src="/images/sofia_pink_beanbag.png" alt="Sofía - Asesora Creativa" width={16} height={16} className="object-contain" />
               </div>
               <span>Duda de Diseño (Sofía)</span>
             </button>
@@ -337,7 +337,7 @@ export default function ProjectCaseStudyModal({
               className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-full bg-[#00D1FF]/15 hover:bg-[#00D1FF]/25 border border-[#00D1FF]/40 text-[#00D1FF] hover:text-white font-bold text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0">
-                <Image src="/images/ivan_standing_stylus.png" alt="I" width={16} height={16} className="object-contain" />
+                <Image src="/images/ivan_standing_stylus.png" alt="Iván - Arquitecto de Software" width={16} height={16} className="object-contain" />
               </div>
               <span>Duda Técnica (Iván)</span>
             </button>

@@ -697,10 +697,10 @@ export default function FloatingChatWidget({
             >
               <div className="flex items-center -space-x-1.5">
                 <div className="w-5 h-5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center overflow-hidden">
-                  <Image src="/images/sofia_pink_beanbag.png" alt="S" width={16} height={16} className="object-contain" />
+                  <Image src="/images/sofia_pink_beanbag.png" alt="Sofía - Asesora de Diseño" width={16} height={16} className="object-contain" />
                 </div>
                 <div className="w-5 h-5 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 flex items-center justify-center overflow-hidden">
-                  <Image src="/images/ivan_standing_stylus.png" alt="I" width={16} height={16} className="object-contain" />
+                  <Image src="/images/ivan_standing_stylus.png" alt="Iván - Asesor de Software" width={16} height={16} className="object-contain" />
                 </div>
               </div>
               <div className="text-left whitespace-nowrap">
