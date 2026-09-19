@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/proyectos/experience-safely`,
       lastModified: now,
       changeFrequency: "monthly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/proyectos/ikal-chukum`,
+      lastModified: now,
+      changeFrequency: "monthly",
       priority: 0.9,
     },
     {

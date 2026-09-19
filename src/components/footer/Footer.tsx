@@ -166,6 +166,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/proyectos/ikal-chukum" className="hover:text-amber-400 text-amber-300 font-bold transition-colors">
+                  ✓ Ikal Chukum • Automatización & Bodega
+                </Link>
+              </li>
+              <li>
                 <Link href="/proyectos/axana" className="hover:text-white transition-colors">
                   Axana • Tienda Digital & Catálogo
                 </Link>

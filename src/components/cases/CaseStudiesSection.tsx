@@ -34,9 +34,9 @@ export default function CaseStudiesSection({
       id: "safely",
       title: "EXPERIENCE SAFELY",
       subtitle:
-        "Plataforma de reservas de alta gama para cenotes, catamaranes, haciendas y tours VIP en Yucatán y Riviera Maya. Desarrollada y operada por Innocentia Tech.",
+        "Plataforma de reservas de alta gama para cenotes, catamaranes, haciendas y tours VIP en Yucatán y Riviera Maya. Proyecto desarrollado y operado por Innocentia Tech.",
       image: "/images/apps/app_experiencesafely.png",
-      tag: "CASO INSIGNIA • PROYECTO PROPIO",
+      tag: "PROYECTO OPERADO POR INNOCENTIA TECH",
       stats: "Operación en Vivo",
       primaryColor: "#10B981",
       badgeColor: "#10B981",
@@ -45,7 +45,7 @@ export default function CaseStudiesSection({
       glowColor:
         "shadow-[0_20px_50px_rgba(16,185,129,0.25)] hover:shadow-[0_25px_70px_rgba(16,185,129,0.45)]",
       auraColor: "bg-[#10B981]/30",
-      tagBadge: "bg-[#10B981]/20 text-[#10B981] border-[#10B981]/50",
+      tagBadge: "bg-[#10B981]/20 text-[#10B981] border-[#10B981]/50 font-bold",
       accentBtn: "text-[#10B981] hover:text-white",
 
       clientProblem:
@@ -87,6 +87,64 @@ export default function CaseStudiesSection({
         "Carga instantánea en menos de 0.8 segundos incluso con señal móvil moderada.",
       ],
       techStack: ["Next.js 15", "Stripe Checkout", "PostgreSQL", "QR Security Engine", "WhatsApp Cloud API"],
+    },
+    {
+      id: "ikal",
+      title: "IKAL CHUKUM",
+      subtitle:
+        "Caso de éxito comprobado: +38% de incremento en ventas con cotizador inteligente en 30s y sistema de verificación de estatus de entregas e inventarios en bodega.",
+      image: "/images/apps/app_ikalchukum.png",
+      tag: "CASO DE ÉXITO • AUTOMATIZACIÓN",
+      stats: "+38% Cierre de Ventas",
+      primaryColor: "#F59E0B",
+      badgeColor: "#F59E0B",
+      cardBg: "from-[#F59E0B]/20 via-[#F59E0B]/5 to-black/90",
+      borderColor: "border-[#F59E0B]/40 hover:border-[#F59E0B]",
+      glowColor:
+        "shadow-[0_20px_50px_rgba(245,158,11,0.2)] hover:shadow-[0_25px_70px_rgba(245,158,11,0.4)]",
+      auraColor: "bg-[#F59E0B]/25",
+      tagBadge: "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/50 font-bold",
+      accentBtn: "text-[#F59E0B] hover:text-white",
+
+      clientProblem:
+        "Los asesores tardaban hasta 4 horas en calcular metros cuadrados, mermas y fletes para enviar una cotización formal, perdiendo cierres frente a la competencia. Además, no había trazabilidad sobre el estatus de las entregas en bodega ni del stock en tiempo real.",
+      solutionOverview:
+        "Desarrollamos una solución integral 100% automatizada: Cotizador Inteligente que calcula m2 y fletes en 30 segundos emitiendo PDF oficial al instante, más un Módulo de Verificación de Estatus de Entregas que rastrea salidas de bodega y entregas en ruta en vivo.",
+      keyFeatures: [
+        "Cotizador inteligente que calcula metros cuadrados, aditivos y fletes en 30 segundos.",
+        "Generador automático de presupuestos oficiales en PDF con formato formal y validez comercial.",
+        "Sistema de Verificación de Estatus de Entregas en Bodega (Preparando / En Bodega / En Ruta / Entregado).",
+        "Control de inventarios por bodega con alertas críticas automáticas de reabastecimiento.",
+        "Envío directo de cotizaciones y estatus de pedido al WhatsApp del cliente con 1 clic.",
+      ],
+      costSavings: [
+        {
+          stat: "+38%",
+          label: "Aumento en Ventas",
+          description: "Disparo en el cierre de ventas al entregar cotizaciones al instante.",
+        },
+        {
+          stat: "30 seg",
+          label: "Tiempo de Cotización",
+          description: "Reducción drástica de 4 horas de espera manual a solo 30 segundos.",
+        },
+        {
+          stat: "100%",
+          label: "Control de Entregas",
+          description: "Verificación exacta del estatus de pedidos y salidas de bodega.",
+        },
+      ],
+      processAutomation: [
+        "Generación automática de presupuestos en PDF con formato oficial listo para firmar.",
+        "Actualización automática del inventario en bodega al momento de confirmar el anticipo.",
+        "Notificación automática al cliente y chofer cuando el material sale de bodega a entrega.",
+      ],
+      designAdvantages: [
+        "Panel oscuro de alto contraste diseñado para consulta rápida y números grandes sin fatiga.",
+        "Sliders táctiles para ajustar metros cuadrados y fletes rápidamente frente al cliente en celular.",
+        "Tablero de estatus de entregas visual con semáforo de colores por pedido.",
+      ],
+      techStack: ["Next.js 15", "PostgreSQL", "PDF Engine", "WhatsApp Cloud API", "Tailwind CSS"],
     },
     {
       id: "axana",
@@ -144,63 +202,6 @@ export default function CaseStudiesSection({
         "Botones de compra grandes y cómodos para tocar con una sola mano en el celular.",
       ],
       techStack: ["Next.js 15", "PostgreSQL", "Mercado Pago / Stripe", "WhatsApp API", "Tailwind CSS"],
-    },
-    {
-      id: "multisistema",
-      title: "MULTISISTEMA EMPRESARIAL",
-      subtitle:
-        "Panel administrativo para negocios y empresas con múltiples sucursales, control de ventas, compras e inventarios.",
-      image: "/images/apps/app_multisistema.png",
-      tag: "GESTIÓN EMPRESARIAL",
-      stats: "V2.0 Cloud",
-      primaryColor: "#00D1FF",
-      badgeColor: "#00D1FF",
-      cardBg: "from-[#00D1FF]/15 via-[#00D1FF]/5 to-black/90",
-      borderColor: "border-[#00D1FF]/35 hover:border-[#00D1FF]",
-      glowColor:
-        "shadow-[0_20px_50px_rgba(0,209,255,0.18)] hover:shadow-[0_25px_70px_rgba(0,209,255,0.38)]",
-      auraColor: "bg-[#00D1FF]/20",
-      tagBadge: "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]/40",
-      accentBtn: "text-[#00D1FF] hover:text-white",
-
-      clientProblem:
-        "La empresa operaba con hojas de cálculo dispersas y sistemas lentos que provocaban descuadres en almacén, pérdida de tiempo consolidando números y falta de reportes claros.",
-      solutionOverview:
-        "Creamos un panel centralizado en la nube donde la dirección y los colaboradores registran ventas, controlan almacén por sucursal y consultan ganancias en tiempo real desde cualquier dispositivo.",
-      keyFeatures: [
-        "Panel con métricas de ventas diarias, ingresos y productos más vendidos.",
-        "Control de inventario por sucursal con alertas de poco stock.",
-        "Módulos configurables de clientes, facturación y cuentas por cobrar.",
-        "Acceso seguro con roles personalizados para administradores y vendedores.",
-      ],
-      costSavings: [
-        {
-          stat: "65%",
-          label: "Ahorro en Software",
-          description: "Sustitución de múltiples suscripciones costosas por un sistema propio.",
-        },
-        {
-          stat: "40 hrs",
-          label: "Tiempo Ahorrado",
-          description: "Al mes en reportes manuales y conciliaciones.",
-        },
-        {
-          stat: "100%",
-          label: "Trazabilidad",
-          description: "Control exacto de entradas y salidas de mercancía.",
-        },
-      ],
-      processAutomation: [
-        "Reportes ejecutivos automáticos al cierre de cada jornada.",
-        "Alertas automáticas por WhatsApp cuando se requiere reabastecer stock.",
-        "Cálculo automático de comisiones para el equipo de ventas.",
-      ],
-      designAdvantages: [
-        "Tableros limpios de alto contraste fáciles de leer sin saturación visual.",
-        "Flujos de trabajo simplificados para que el personal aprenda a usarlo en 15 minutos.",
-        "100% adaptable a computadoras, tablets y celulares.",
-      ],
-      techStack: ["Next.js 15", "PostgreSQL Multi-Tenant", "Prisma ORM", "Redis Caching", "Tailwind CSS"],
     },
     {
       id: "help2win",
@@ -304,6 +305,7 @@ export default function CaseStudiesSection({
             {projects.map((project) => {
               const slugMap: Record<string, string> = {
                 safely: "experience-safely",
+                ikal: "ikal-chukum",
                 axana: "axana",
                 multisistema: "multisistema",
                 help2win: "help-2-win",
