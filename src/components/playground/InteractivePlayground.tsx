@@ -133,6 +133,12 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
+      id: "user-0",
+      sender: "user",
+      text: currentTopic.prompt,
+      time: "Ahora",
+    },
+    {
       id: "1",
       sender: "sofia",
       text: currentTopic.responseSofia,
@@ -153,14 +159,20 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
   useEffect(() => {
     setMessages([
       {
-        id: "1",
+        id: `user-${activeChipIndex}`,
+        sender: "user",
+        text: currentTopic.prompt,
+        time: "Ahora",
+      },
+      {
+        id: `sofia-${activeChipIndex}`,
         sender: "sofia",
         text: currentTopic.responseSofia,
         topic: "design",
         time: "Ahora",
       },
       {
-        id: "2",
+        id: `ivan-${activeChipIndex}`,
         sender: "ivan",
         text: currentTopic.responseIvan,
         topic: "tech",
@@ -351,24 +363,25 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
         </div>
 
         {/* 6 Visual Suggested Topics */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block text-left">
             PREGUNTAS SUGERIDAS (SELECCIONA UN TEMA):
           </span>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3 items-stretch">
             {visualTopics.map((topic, idx) => {
               const isSelected = activeChipIndex === idx;
               return (
                 <button
                   key={topic.id}
+                  type="button"
                   onClick={() => handleChipSelect(idx)}
-                  className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-1 ${
+                  className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-1 h-full min-h-[72px] ${
                     isSelected
-                      ? "bg-white/[0.12] border-white/40 shadow-[0_0_20px_rgba(0,229,255,0.3)] scale-[1.03]"
+                      ? "bg-white/[0.14] border-[#00E5FF]/70 shadow-[0_0_20px_rgba(0,229,255,0.35)] scale-[1.02]"
                       : "bg-white/[0.03] border-white/10 hover:border-white/25 text-gray-300 hover:bg-white/[0.06]"
                   }`}
                 >
-                  <span className="text-sm font-bold text-white block">{topic.label}</span>
+                  <span className="text-xs sm:text-sm font-bold text-white block leading-tight">{topic.label}</span>
                   <span className="text-[10px] font-mono text-gray-400 block">{topic.short}</span>
                 </button>
               );
@@ -379,7 +392,7 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
         {/* Studio Grid: Perfectly aligned 2-column cards */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: Interactive Chat & Specs Console */}
-          <div className="lg:col-span-7 bg-black/75 border border-white/20 rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl flex flex-col justify-between space-y-6 shadow-2xl h-[560px]">
+          <div className="lg:col-span-7 bg-black/75 border border-white/20 rounded-[32px] p-5 sm:p-7 backdrop-blur-2xl flex flex-col justify-between space-y-4 shadow-2xl h-[580px]">
             {/* Top Bar: Assistant Selector & Mode Switch */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
               <div>
@@ -445,14 +458,8 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
             {activeTab === "chat" ? (
               <div
                 ref={chatContainerRef}
-                className="space-y-4 text-left overflow-y-auto pr-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-1"
+                className="space-y-4 text-left overflow-y-auto pr-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden flex-1 scroll-smooth"
               >
-                {/* Active Prompt Bubble */}
-                <div className="flex gap-3 justify-end">
-                  <div className="bg-purple-900/80 border border-purple-500/50 rounded-2xl rounded-tr-none p-4 text-xs sm:text-sm text-white leading-relaxed max-w-lg shadow-lg">
-                    {currentTopic.prompt}
-                  </div>
-                </div>
 
                 {/* Messages Feed with Custom Painting vs Compiling Effects */}
                 {messages.map((msg) => (
@@ -562,7 +569,7 @@ export default function InteractivePlayground({ onOpenProjectModal }: Interactiv
 
           {/* Right Column: Live App Preview Smartphone Device */}
           <div className="lg:col-span-5 flex justify-center items-center">
-            <div className="relative w-full max-w-sm h-[560px] rounded-[40px] bg-black border-4 border-white/20 shadow-2xl p-4 flex flex-col justify-between overflow-hidden">
+            <div className="relative w-full max-w-sm h-[580px] rounded-[40px] bg-black border-4 border-white/20 shadow-2xl p-4 flex flex-col justify-between overflow-hidden">
               {/* Speaker Notch */}
               <div className="w-24 h-4 bg-white/15 rounded-full mx-auto mb-3" />
 
