@@ -832,9 +832,9 @@ export default function AIPersonasSection() {
                 </button>
               </div>
 
-              {/* Right Column: Clean Realistic Kids Artwork (Transparent PNG with Ambient Halo) */}
-              <div className="lg:col-span-6 relative w-full min-h-[300px] sm:min-h-[380px] lg:min-h-[440px] flex items-center justify-center">
-                <div className="relative w-full h-full min-h-[280px] sm:min-h-[360px] lg:min-h-[420px] max-w-[560px]">
+              {/* Right Column: Clean Realistic Kids Artwork (Desktop only, hidden on mobile for clean UX) */}
+              <div className="hidden lg:flex lg:col-span-6 relative w-full min-h-[400px] lg:min-h-[440px] items-center justify-center">
+                <div className="relative w-full h-full min-h-[360px] lg:min-h-[420px] max-w-[560px]">
                   {/* Subtle Character Halo Glows */}
                   <div className="absolute top-1/4 left-1/6 w-44 h-44 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
                   <div className="absolute bottom-1/4 right-1/6 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
