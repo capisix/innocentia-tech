@@ -5780,13 +5780,23 @@ function PortalMainContent() {
                 onClick={() => setClientTab("demo")}
                 className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                   clientTab === "demo"
-                    ? "bg-[#00D1FF] text-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
-                    : "bg-white/5 text-[#00D1FF] hover:bg-[#00D1FF]/10 border border-[#00D1FF]/30"
+                    ? "bg-[#E87512] text-black shadow-[0_0_20px_rgba(232,117,18,0.5)]"
+                    : "bg-white/5 text-[#E87512] hover:bg-[#E87512]/15 border border-[#E87512]/40"
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Demo App PropTech (Open House)</span>
+                <span>Demo PropTech (Open House)</span>
               </button>
+
+              <Link
+                href="/demo/openhouse"
+                target="_blank"
+                className="px-4 py-2.5 rounded-2xl text-xs font-mono font-bold uppercase tracking-wider bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 flex items-center gap-2 transition-all cursor-pointer"
+                title="Abrir demo en pantalla completa como cliente final"
+              >
+                <span>Link Cliente Final</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#E87512]" />
+              </Link>
 
               <button
                 type="button"
@@ -5817,7 +5827,23 @@ function PortalMainContent() {
 
             {/* TAB: DEMO INTERACTIVO OPEN HOUSE PROPTECH */}
             {clientTab === "demo" && (
-              <OpenHousePropTechDemo />
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#E87512]/10 border border-[#E87512]/30 text-xs font-mono">
+                  <div className="flex items-center gap-2 text-[#FAE3D1]">
+                    <Sparkles className="w-4 h-4 text-[#E87512]" />
+                    <span>Estás previsualizando la <strong>3ra App Multiplataforma (Citas & Terrenos)</strong> de Open House Yucatán.</span>
+                  </div>
+                  <Link
+                    href="/demo/openhouse"
+                    target="_blank"
+                    className="px-3 py-1 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-black uppercase tracking-wider text-[11px] flex items-center gap-1.5 shadow-md"
+                  >
+                    <span>Abrir en Nueva Pestaña</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+                <OpenHousePropTechDemo />
+              </div>
             )}
 
             {/* TAB: PROYECTO PRINCIPAL */}
