@@ -1,0 +1,17 @@
+name: Supabase Keep-Alive Ping
+
+on:
+  schedule:
+    # Runs every 2 days at 06:00 UTC
+    - cron: '0 6 */2 * *'
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Innocentia Keep-Alive Endpoint
+        run: |
+          echo "Sending keep-alive ping to Innocentia API..."
+          curl -s -f -X GET "https://innocentia.tech/api/cron/keepalive" || curl -s -f -X GET "https://ckqbxgntxpalwanfkusq.supabase.co/auth/v1/health" || true
+          echo "Keep-alive ping completed."
