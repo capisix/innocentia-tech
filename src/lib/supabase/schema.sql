@@ -128,3 +128,41 @@ CREATE INDEX IF NOT EXISTS idx_finance_status ON finance_records(status);
 CREATE INDEX IF NOT EXISTS idx_finance_section ON finance_records(section);
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_leads_folio ON leads(folio);
+
+-- =============================================================================
+-- ROW LEVEL SECURITY (RLS) POLICIES
+-- =============================================================================
+
+-- 1. Enable RLS on all tables
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.finance_records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.server_services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+
+-- 2. Profiles Policies
+CREATE POLICY "Allow public read access on profiles" ON public.profiles FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated insert/update on profiles" ON public.profiles FOR ALL USING (true);
+
+-- 3. Projects Policies
+CREATE POLICY "Allow public read access on projects" ON public.projects FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated write on projects" ON public.projects FOR ALL USING (true);
+
+-- 4. Finance Records Policies
+CREATE POLICY "Allow public read access on finance_records" ON public.finance_records FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated write on finance_records" ON public.finance_records FOR ALL USING (true);
+
+-- 5. Server Services Policies
+CREATE POLICY "Allow public read access on server_services" ON public.server_services FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated write on server_services" ON public.server_services FOR ALL USING (true);
+
+-- 6. Leads & Proposals Policies (Public can insert contact leads, read allowed)
+CREATE POLICY "Allow public insert on leads" ON public.leads FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public read on leads" ON public.leads FOR SELECT USING (true);
+CREATE POLICY "Allow public update on leads" ON public.leads FOR UPDATE USING (true);
+
+-- 7. Audit Logs Policies
+CREATE POLICY "Allow public read on audit_logs" ON public.audit_logs FOR SELECT USING (true);
+CREATE POLICY "Allow public insert on audit_logs" ON public.audit_logs FOR INSERT WITH CHECK (true);
+
