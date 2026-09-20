@@ -156,9 +156,9 @@ BEGIN
     END LOOP;
 END $$;
 
--- 3. LEADS TABLE (Formularios web & Cotizaciones)
+-- 3. LEADS TABLE (Formularios web & Cotizaciones con validación de campos)
 CREATE POLICY "leads_anon_read" ON public.leads FOR SELECT TO anon USING (true);
-CREATE POLICY "leads_anon_create" ON public.leads FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "leads_anon_create" ON public.leads FOR INSERT TO anon WITH CHECK (client_name IS NOT NULL AND phone IS NOT NULL);
 CREATE POLICY "leads_auth_manage" ON public.leads FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
 -- 4. PROFILES TABLE (Usuarios & Roles)
@@ -177,8 +177,8 @@ CREATE POLICY "finance_auth_manage" ON public.finance_records FOR ALL TO authent
 CREATE POLICY "services_anon_read" ON public.server_services FOR SELECT TO anon USING (true);
 CREATE POLICY "services_auth_manage" ON public.server_services FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
--- 8. AUDIT LOGS TABLE (Bitácora)
+-- 8. AUDIT LOGS TABLE (Bitácora con validación de acción)
 CREATE POLICY "audit_anon_read" ON public.audit_logs FOR SELECT TO anon USING (true);
-CREATE POLICY "audit_anon_create" ON public.audit_logs FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "audit_anon_create" ON public.audit_logs FOR INSERT TO anon WITH CHECK (action IS NOT NULL AND target IS NOT NULL);
 CREATE POLICY "audit_auth_manage" ON public.audit_logs FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
