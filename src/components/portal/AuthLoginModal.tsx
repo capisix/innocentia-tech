@@ -285,7 +285,11 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
     }
 
     setAuthSuccessMsg(`¡Bienvenido de vuelta, ${user.name}! Acceso concedido.`);
-    if (onSelectRole) onSelectRole(user.role, user);
+    if (onSelectRole) {
+      onSelectRole(user.role, user);
+    } else if (typeof window !== "undefined" && !window.location.pathname.startsWith("/portal")) {
+      window.location.href = user.id === "usr_client_eduardo" || user.email?.includes("openhouse") ? "/portal?user=eduardo" : `/portal?role=${user.role}`;
+    }
     onClose();
     setIsLoading(false);
   };

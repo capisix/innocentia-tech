@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Globe, Menu, X, ArrowRight, Lock } from "../../lib/icons";
 import AuthLoginModal, { RoleType } from "../portal/AuthLoginModal";
 
@@ -11,6 +12,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onOpenProjectModal }: NavbarProps) {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -168,6 +170,16 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
       <AuthLoginModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
+        onSelectRole={(role, user) => {
+          setIsAuthModalOpen(false);
+          if (user?.id === "usr_client_eduardo" || user?.email?.includes("openhouse")) {
+            router.push("/portal?user=eduardo");
+          } else if (role) {
+            router.push(`/portal?role=${role}`);
+          } else {
+            router.push("/portal");
+          }
+        }}
       />
     </>
   );
