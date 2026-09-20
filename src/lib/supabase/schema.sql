@@ -159,26 +159,26 @@ END $$;
 -- 3. LEADS TABLE (Formularios web & Cotizaciones)
 CREATE POLICY "leads_anon_read" ON public.leads FOR SELECT TO anon USING (true);
 CREATE POLICY "leads_anon_create" ON public.leads FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "leads_auth_manage" ON public.leads FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "leads_auth_manage" ON public.leads FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
 -- 4. PROFILES TABLE (Usuarios & Roles)
 CREATE POLICY "profiles_anon_read" ON public.profiles FOR SELECT TO anon USING (true);
-CREATE POLICY "profiles_auth_manage" ON public.profiles FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "profiles_auth_manage" ON public.profiles FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
 -- 5. PROJECTS TABLE (Proyectos)
 CREATE POLICY "projects_anon_read" ON public.projects FOR SELECT TO anon USING (true);
-CREATE POLICY "projects_auth_manage" ON public.projects FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "projects_auth_manage" ON public.projects FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
 -- 6. FINANCE RECORDS TABLE (Finanzas & Comisiones)
 CREATE POLICY "finance_anon_read" ON public.finance_records FOR SELECT TO anon USING (true);
-CREATE POLICY "finance_auth_manage" ON public.finance_records FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "finance_auth_manage" ON public.finance_records FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
 -- 7. SERVER SERVICES TABLE (Servidores Cloud)
 CREATE POLICY "services_anon_read" ON public.server_services FOR SELECT TO anon USING (true);
-CREATE POLICY "services_auth_manage" ON public.server_services FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "services_auth_manage" ON public.server_services FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
 -- 8. AUDIT LOGS TABLE (Bitácora)
 CREATE POLICY "audit_anon_read" ON public.audit_logs FOR SELECT TO anon USING (true);
 CREATE POLICY "audit_anon_create" ON public.audit_logs FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "audit_auth_manage" ON public.audit_logs FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+CREATE POLICY "audit_auth_manage" ON public.audit_logs FOR ALL TO authenticated USING ((select auth.role()) = 'authenticated') WITH CHECK ((select auth.role()) = 'authenticated');
 
