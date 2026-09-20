@@ -130,7 +130,7 @@ CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_leads_folio ON leads(folio);
 
 -- =============================================================================
--- ROW LEVEL SECURITY (RLS) POLICIES
+-- ROW LEVEL SECURITY (RLS) POLICIES (GRANULAR & AUDITED)
 -- =============================================================================
 
 -- 1. Enable RLS on all tables
@@ -141,28 +141,38 @@ ALTER TABLE public.server_services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 
--- 2. Profiles Policies
-CREATE POLICY "Allow public read access on profiles" ON public.profiles FOR SELECT USING (true);
-CREATE POLICY "Allow authenticated insert/update on profiles" ON public.profiles FOR ALL USING (true);
+-- 2. Clean previous generic policies if any
+DROP POLICY IF EXISTS "Allow all on profiles" ON public.profiles;
+DROP POLICY IF EXISTS "Allow all on projects" ON public.projects;
+DROP POLICY IF EXISTS "Allow all on finance_records" ON public.finance_records;
+DROP POLICY IF EXISTS "Allow all on server_services" ON public.server_services;
+DROP POLICY IF EXISTS "Allow all on leads" ON public.leads;
+DROP POLICY IF EXISTS "Allow all on audit_logs" ON public.audit_logs;
 
--- 3. Projects Policies
-CREATE POLICY "Allow public read access on projects" ON public.projects FOR SELECT USING (true);
-CREATE POLICY "Allow authenticated write on projects" ON public.projects FOR ALL USING (true);
+-- 3. Granular Policies: Leads
+CREATE POLICY "leads_public_insert" ON public.leads FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "leads_public_select" ON public.leads FOR SELECT TO public USING (true);
+CREATE POLICY "leads_auth_update" ON public.leads FOR UPDATE TO authenticated USING (true);
+CREATE POLICY "leads_auth_delete" ON public.leads FOR DELETE TO authenticated USING (true);
 
--- 4. Finance Records Policies
-CREATE POLICY "Allow public read access on finance_records" ON public.finance_records FOR SELECT USING (true);
-CREATE POLICY "Allow authenticated write on finance_records" ON public.finance_records FOR ALL USING (true);
+-- 4. Granular Policies: Profiles
+CREATE POLICY "profiles_public_select" ON public.profiles FOR SELECT TO public USING (true);
+CREATE POLICY "profiles_auth_all" ON public.profiles FOR ALL TO authenticated USING (true);
 
--- 5. Server Services Policies
-CREATE POLICY "Allow public read access on server_services" ON public.server_services FOR SELECT USING (true);
-CREATE POLICY "Allow authenticated write on server_services" ON public.server_services FOR ALL USING (true);
+-- 5. Granular Policies: Projects
+CREATE POLICY "projects_public_select" ON public.projects FOR SELECT TO public USING (true);
+CREATE POLICY "projects_auth_all" ON public.projects FOR ALL TO authenticated USING (true);
 
--- 6. Leads & Proposals Policies (Public can insert contact leads, read allowed)
-CREATE POLICY "Allow public insert on leads" ON public.leads FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow public read on leads" ON public.leads FOR SELECT USING (true);
-CREATE POLICY "Allow public update on leads" ON public.leads FOR UPDATE USING (true);
+-- 6. Granular Policies: Finance Records
+CREATE POLICY "finance_public_select" ON public.finance_records FOR SELECT TO public USING (true);
+CREATE POLICY "finance_auth_all" ON public.finance_records FOR ALL TO authenticated USING (true);
 
--- 7. Audit Logs Policies
-CREATE POLICY "Allow public read on audit_logs" ON public.audit_logs FOR SELECT USING (true);
-CREATE POLICY "Allow public insert on audit_logs" ON public.audit_logs FOR INSERT WITH CHECK (true);
+-- 7. Granular Policies: Server Services
+CREATE POLICY "services_public_select" ON public.server_services FOR SELECT TO public USING (true);
+CREATE POLICY "services_auth_all" ON public.server_services FOR ALL TO authenticated USING (true);
+
+-- 8. Granular Policies: Audit Logs
+CREATE POLICY "audit_public_select" ON public.audit_logs FOR SELECT TO public USING (true);
+CREATE POLICY "audit_public_insert" ON public.audit_logs FOR INSERT TO public WITH CHECK (true);
+CREATE POLICY "audit_auth_all" ON public.audit_logs FOR ALL TO authenticated USING (true);
 
