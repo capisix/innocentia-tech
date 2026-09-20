@@ -18,7 +18,7 @@ import {
 
 export default function OpenHouseClientDemoPage() {
   const [copiedLink, setCopiedLink] = useState(false);
-  const [activeView, setActiveView] = useState<"dashboard" | "app">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "app">("app");
 
   const handleShareLink = () => {
     if (typeof window !== "undefined") {

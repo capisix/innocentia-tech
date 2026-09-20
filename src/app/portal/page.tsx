@@ -14,6 +14,7 @@ import CommercialCalendarView, { CommercialAppointment } from "../../components/
 import PaymentsCalendarView from "../../components/portal/PaymentsCalendarView";
 import ExecutiveTelemetryDashboard from "../../components/portal/ExecutiveTelemetryDashboard";
 import OpenHousePropTechDemo from "../../components/portal/OpenHousePropTechDemo";
+import OpenHouseMobileAppDemo from "../../components/portal/OpenHouseMobileAppDemo";
 import {
   Sparkles,
   ArrowRight,
@@ -56,6 +57,8 @@ import {
   Camera,
   Settings,
   ExternalLink,
+  Smartphone,
+  LayoutGrid,
 } from "../../lib/icons";
 
 export type FinanceSection = "ingreso_proyecto" | "gasto_operativo" | "comision_vendedor" | "nomina_sueldo";
@@ -538,6 +541,7 @@ function PortalMainContent() {
   const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "telemetria" | "chat">("proyectos");
   const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "telemetria" | "chat">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "demo" | "finanzas" | "chat" | "solicitudes">("proyectos");
+  const [clientDemoView, setClientDemoView] = useState<"app" | "dashboard">("app");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "citas_calendario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
 
@@ -5891,22 +5895,63 @@ function PortalMainContent() {
 
             {/* TAB: DEMO INTERACTIVO OPEN HOUSE PROPTECH */}
             {clientTab === "demo" && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#E87512]/10 border border-[#E87512]/30 text-xs font-mono">
-                  <div className="flex items-center gap-2 text-[#FAE3D1]">
-                    <Sparkles className="w-4 h-4 text-[#E87512]" />
-                    <span>Estás previsualizando la <strong>3ra App Multiplataforma (Citas & Terrenos)</strong> de Open House Yucatán.</span>
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-3xl bg-[#0C0C14] border border-[#E87512]/40 shadow-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-[#E87512]/20 flex items-center justify-center text-[#E87512] flex-shrink-0">
+                      <Sparkles className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-black text-white uppercase tracking-tight">Open House Yucatán • Demo Interactivo</h3>
+                      <p className="text-[11px] font-mono text-[#FAE3D1]/80">3ra App Multiplataforma • Terrenos, Citas & Asesores</p>
+                    </div>
                   </div>
-                  <Link
-                    href="/demo/openhouse"
-                    target="_blank"
-                    className="px-3 py-1 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-black uppercase tracking-wider text-[11px] flex items-center gap-1.5 shadow-md"
-                  >
-                    <span>Abrir en Nueva Pestaña</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </Link>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex items-center bg-black/70 p-1 rounded-2xl border border-white/15 text-xs font-mono">
+                      <button
+                        type="button"
+                        onClick={() => setClientDemoView("app")}
+                        className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                          clientDemoView === "app"
+                            ? "bg-[#E87512] text-black shadow-[0_0_15px_rgba(232,117,18,0.5)] font-black"
+                            : "text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        <Smartphone className="w-3.5 h-3.5" />
+                        <span>App Móvil (Orelax Style)</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setClientDemoView("dashboard")}
+                        className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                          clientDemoView === "dashboard"
+                            ? "bg-[#E87512] text-black shadow-[0_0_15px_rgba(232,117,18,0.5)] font-black"
+                            : "text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        <LayoutGrid className="w-3.5 h-3.5" />
+                        <span>Panel PropTech</span>
+                      </button>
+                    </div>
+
+                    <Link
+                      href="/demo/openhouse"
+                      target="_blank"
+                      className="px-3.5 py-2 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-black uppercase tracking-wider text-[11px] flex items-center gap-1.5 shadow-md transition-all hover:scale-105"
+                    >
+                      <span>Pantalla Completa</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
-                <OpenHousePropTechDemo />
+
+                {clientDemoView === "app" ? (
+                  <OpenHouseMobileAppDemo />
+                ) : (
+                  <OpenHousePropTechDemo />
+                )}
               </div>
             )}
 

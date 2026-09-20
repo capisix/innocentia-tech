@@ -272,20 +272,22 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
   const handleCompleteSuccess = (user: UserAccount) => {
     // Save to localStorage & sessionStorage
     if (typeof window !== "undefined") {
-      const token = "AUTH_GATE_" + Buffer.from(user.email + "_" + Date.now()).toString("base64");
-      localStorage.setItem("innocentia_auth_token", token);
-      localStorage.setItem("innocentia_auth_user_id", user.id);
-      localStorage.setItem("innocentia_active_user", JSON.stringify(user));
-      localStorage.setItem("innocentia_active_role", user.role);
-      sessionStorage.setItem("innocentia_session_auth_id", user.id);
+      try {
+        const token = "AUTH_GATE_" + (window.btoa ? window.btoa(user.email + "_" + Date.now()) : Date.now().toString());
+        localStorage.setItem("innocentia_auth_token", token);
+        localStorage.setItem("innocentia_auth_user_id", user.id);
+        localStorage.setItem("innocentia_active_user", JSON.stringify(user));
+        localStorage.setItem("innocentia_active_role", user.role);
+        sessionStorage.setItem("innocentia_session_auth_id", user.id);
+      } catch (err) {
+        console.error("Auth storage error:", err);
+      }
     }
 
     setAuthSuccessMsg(`¡Bienvenido de vuelta, ${user.name}! Acceso concedido.`);
-    setTimeout(() => {
-      if (onSelectRole) onSelectRole(user.role, user);
-      onClose();
-      setIsLoading(false);
-    }, 200);
+    if (onSelectRole) onSelectRole(user.role, user);
+    onClose();
+    setIsLoading(false);
   };
 
   // Google / Gmail OAuth Login
