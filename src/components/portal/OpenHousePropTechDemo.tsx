@@ -25,6 +25,9 @@ import {
   Check,
   Copy,
   MessageSquare,
+  TrendingDown,
+  Plus,
+  Trash2,
 } from "../../lib/icons";
 
 export interface LotItem {
@@ -166,13 +169,95 @@ interface AppointmentRecord {
 }
 
 export default function OpenHousePropTechDemo({ isStandalone = false }: { isStandalone?: boolean }) {
-  const [activeModule, setActiveModule] = useState<"catalogo" | "agendar" | "calendario" | "vendedores" | "tasacion">("catalogo");
+  const [activeModule, setActiveModule] = useState<"catalogo" | "agendar" | "calendario" | "vendedores" | "finanzas" | "tasacion">("catalogo");
   
   // Selected Lot Simulator State
   const [selectedLot, setSelectedLot] = useState<LotItem>(OPEN_HOUSE_LOTS[0]);
   const [downPaymentCustom, setDownPaymentCustom] = useState<number>(10);
   const [customMonths, setCustomMonths] = useState<number>(36);
   const [copiedQuote, setCopiedQuote] = useState(false);
+
+  // Financial Control State for Open House Yucatán
+  const [financialFilter, setFinancialFilter] = useState<"todos" | "ingreso" | "gasto" | "comision">("todos");
+  const [financialRecords, setFinancialRecords] = useState([
+    {
+      id: "FIN-OH-101",
+      type: "ingreso",
+      concept: "Apartado 10% Lote Costa Esmeralda (Telchac Beach)",
+      category: "Venta de Lote",
+      amount: 29500,
+      date: "2026-09-18",
+      advisor: "Jessica Torre (VEN-JESS-101)",
+      client: "Eduardo Cáceres",
+      status: "cobrado",
+    },
+    {
+      id: "FIN-OH-102",
+      type: "ingreso",
+      concept: "Enganche 20% Macro-Lote Residencial Conkal Mérida",
+      category: "Venta de Lote",
+      amount: 178000,
+      date: "2026-09-15",
+      advisor: "Jessica Torre (VEN-JESS-101)",
+      client: "Arq. Fernando Garza",
+      status: "cobrado",
+    },
+    {
+      id: "FIN-OH-103",
+      type: "ingreso",
+      concept: "Apartado 10% Lote Dzidzantún Oasis",
+      category: "Venta de Lote",
+      amount: 19800,
+      date: "2026-09-12",
+      advisor: "Carlos Mendoza (VEN-CARLOS-202)",
+      client: "Lic. Roberto Medina",
+      status: "cobrado",
+    },
+    {
+      id: "FIN-OH-104",
+      type: "comision",
+      concept: "Comisión Asesor (5.5% sobre Enganche Conkal)",
+      category: "Comisión de Venta",
+      amount: 9790,
+      date: "2026-09-16",
+      advisor: "Jessica Torre (VEN-JESS-101)",
+      client: "Jessica Torre",
+      status: "pagado",
+    },
+    {
+      id: "FIN-OH-105",
+      type: "comision",
+      concept: "Comisión Asesor (4.5% sobre Apartado Dzidzantún)",
+      category: "Comisión de Venta",
+      amount: 891,
+      date: "2026-09-13",
+      advisor: "Carlos Mendoza (VEN-CARLOS-202)",
+      client: "Carlos Mendoza",
+      status: "pagado",
+    },
+    {
+      id: "FIN-OH-106",
+      type: "gasto",
+      concept: "Campaña Publicitaria Meta / Facebook Ads (Terrenos Yucatán)",
+      category: "Marketing Digital",
+      amount: 14500,
+      date: "2026-09-10",
+      advisor: "Open House Mkt",
+      client: "Meta Business",
+      status: "pagado",
+    },
+    {
+      id: "FIN-OH-107",
+      type: "gasto",
+      concept: "Renta de Oficina & Servicios Col. García Ginerés Mérida",
+      category: "Gasto Operativo",
+      amount: 18000,
+      date: "2026-09-01",
+      advisor: "Administración",
+      client: "Inmobiliaria Peninsular",
+      status: "pagado",
+    },
+  ]);
 
   // Appointment Form State
   const [clientName, setClientName] = useState("Eduardo Cáceres");
@@ -427,6 +512,19 @@ export default function OpenHousePropTechDemo({ isStandalone = false }: { isStan
 
         <button
           type="button"
+          onClick={() => setActiveModule("finanzas")}
+          className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer flex-shrink-0 ${
+            activeModule === "finanzas"
+              ? "bg-[#E87512] text-black font-black shadow-[0_0_20px_rgba(232,117,18,0.5)]"
+              : "bg-white/5 text-gray-300 hover:text-white border border-white/10 hover:border-[#E87512]/40"
+          }`}
+        >
+          <CreditCard className="w-3.5 h-3.5" />
+          <span>5. Control Financiero (Ingresos & Gastos)</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setActiveModule("tasacion")}
           className={`px-4 py-2.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer flex-shrink-0 ${
             activeModule === "tasacion"
@@ -435,7 +533,7 @@ export default function OpenHousePropTechDemo({ isStandalone = false }: { isStan
           }`}
         >
           <Building2 className="w-3.5 h-3.5" />
-          <span>5. Valuaciones & Vende Tu Inmueble</span>
+          <span>6. Valuaciones & Vende Tu Inmueble</span>
         </button>
       </div>
 
@@ -1034,7 +1132,156 @@ export default function OpenHousePropTechDemo({ isStandalone = false }: { isStan
       )}
 
       {/* ========================================================================= */}
-      {/* MODULE 5: VALUATIONS & SELL YOUR PROPERTY */}
+      {/* MODULE 5: FINANCIAL CONTROL & COMMISSIONS LEDGER */}
+      {/* ========================================================================= */}
+      {activeModule === "finanzas" && (
+        <div className="p-6 sm:p-8 rounded-3xl bg-[#0E0E12] border border-[#E87512]/30 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div>
+              <span className="text-[10px] font-mono text-[#E87512] uppercase font-black tracking-wider">
+                CONTROL FINANCIERO, VENTAS & UTILIDADES • OPEN HOUSE YUCATÁN
+              </span>
+              <h3 className="text-xl sm:text-2xl font-mono font-black text-white mt-1">
+                Balance Financiero & Registro de Movimientos
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-emerald-400 font-bold px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              Auditoría en Tiempo Real
+            </span>
+          </div>
+
+          {/* Financial KPI Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-2xl bg-[#17110C] border border-[#E87512]/40 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-gray-400">
+                <span>Ingresos por Ventas / Enganches</span>
+                <TrendingUp className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div className="text-2xl font-black font-mono text-emerald-400">$227,300 MXN</div>
+              <span className="text-[10px] font-mono text-gray-400 block">3 Lotes apartados y enganchados</span>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#14100D] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-gray-400">
+                <span>Comisiones de Vendedores</span>
+                <Users className="w-4 h-4 text-[#E87512]" />
+              </div>
+              <div className="text-2xl font-black font-mono text-[#E87512]">$10,681 MXN</div>
+              <span className="text-[10px] font-mono text-gray-400 block">Jessica Torre ($9,790) • Carlos ($891)</span>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#14100D] border border-white/10 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-gray-400">
+                <span>Gastos Operativos & Mkt</span>
+                <TrendingDown className="w-4 h-4 text-red-400" />
+              </div>
+              <div className="text-2xl font-black font-mono text-red-400">$32,500 MXN</div>
+              <span className="text-[10px] font-mono text-gray-400 block">Oficina García Ginerés & Meta Ads</span>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-[#1C110A] to-[#0A0A0E] border border-emerald-500/40 space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-gray-400">
+                <span>Utilidad Neta Open House</span>
+                <DollarSign className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div className="text-2xl font-black font-mono text-white">$184,119 MXN</div>
+              <span className="text-[10px] font-mono text-emerald-400 font-bold block">81.0% Margen Operativo</span>
+            </div>
+          </div>
+
+          {/* Filter Bar */}
+          <div className="flex items-center justify-between gap-3 pt-2">
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/60 border border-white/10 text-xs font-mono">
+              {(["todos", "ingreso", "comision", "gasto"] as const).map((filter) => (
+                <button
+                  key={filter}
+                  type="button"
+                  onClick={() => setFinancialFilter(filter)}
+                  className={`px-3 py-1.5 rounded-lg font-bold capitalize transition-all cursor-pointer ${
+                    financialFilter === filter
+                      ? "bg-[#E87512] text-black font-black"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {filter === "todos" ? "Todos los Registros" : filter === "ingreso" ? "Ingresos (Ventas)" : filter === "comision" ? "Comisiones" : "Gastos"}
+                </button>
+              ))}
+            </div>
+
+            <span className="text-xs font-mono text-gray-400 hidden sm:inline">
+              Mostrando {financialRecords.filter((r) => financialFilter === "todos" || r.type === financialFilter).length} movimientos
+            </span>
+          </div>
+
+          {/* Transactions Ledger Table */}
+          <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/50">
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="bg-white/5 text-gray-400 uppercase text-[10px] tracking-wider border-b border-white/10">
+                <tr>
+                  <th className="p-3.5">Folio / Fecha</th>
+                  <th className="p-3.5">Concepto del Movimiento</th>
+                  <th className="p-3.5">Categoría</th>
+                  <th className="p-3.5">Asesor / Responsable</th>
+                  <th className="p-3.5 text-right">Monto (MXN)</th>
+                  <th className="p-3.5 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5 text-gray-300">
+                {financialRecords
+                  .filter((r) => financialFilter === "todos" || r.type === financialFilter)
+                  .map((rec) => (
+                    <tr key={rec.id} className="hover:bg-white/[0.03] transition-colors">
+                      <td className="p-3.5 whitespace-nowrap">
+                        <span className="text-white font-bold block">{rec.id}</span>
+                        <span className="text-[10px] text-gray-500">{rec.date}</span>
+                      </td>
+                      <td className="p-3.5 font-medium text-white">
+                        {rec.concept}
+                        <span className="text-[10px] text-gray-400 block">Cliente: {rec.client}</span>
+                      </td>
+                      <td className="p-3.5 whitespace-nowrap">
+                        <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px]">
+                          {rec.category}
+                        </span>
+                      </td>
+                      <td className="p-3.5 whitespace-nowrap text-gray-300">
+                        {rec.advisor}
+                      </td>
+                      <td className="p-3.5 text-right font-black whitespace-nowrap">
+                        <span
+                          className={
+                            rec.type === "ingreso"
+                              ? "text-emerald-400"
+                              : rec.type === "comision"
+                              ? "text-[#E87512]"
+                              : "text-red-400"
+                          }
+                        >
+                          {rec.type === "ingreso" ? "+" : "-"}${rec.amount.toLocaleString()} MXN
+                        </span>
+                      </td>
+                      <td className="p-3.5 text-center whitespace-nowrap">
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                            rec.status === "cobrado" || rec.status === "pagado"
+                              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                              : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                          }`}
+                        >
+                          ✓ {rec.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODULE 6: VALUATIONS & SELL YOUR PROPERTY */}
       {/* ========================================================================= */}
       {activeModule === "tasacion" && (
         <div className="p-6 sm:p-8 rounded-3xl bg-[#0E0E12] border border-[#E87512]/30 space-y-6">

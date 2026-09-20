@@ -18,7 +18,6 @@ import {
 
 export default function OpenHouseClientDemoPage() {
   const [copiedLink, setCopiedLink] = useState(false);
-  const [activeView, setActiveView] = useState<"dashboard" | "app">("app");
 
   const handleShareLink = () => {
     if (typeof window !== "undefined") {
@@ -51,41 +50,12 @@ export default function OpenHouseClientDemoPage() {
             </Link>
             <div className="hidden md:block border-l border-white/15 pl-3">
               <span className="text-[10px] font-mono text-[#E87512] font-black uppercase tracking-wider block">
-                3RA APP MULTIPLATAFORMA • PROPTECH CITAS & TERRENOS
+                SISTEMA PROPTECH • CONTROL DE VENTAS, AGENDAMIENTO & FINANZAS
               </span>
               <span className="text-xs font-mono text-gray-300">
-                Demo Dedicado para Eduardo Cáceres
+                Open House Yucatán • Titular: Eduardo Cáceres
               </span>
             </div>
-          </div>
-
-          {/* Center: Switcher between Mobile App Experience & Web Dashboard */}
-          <div className="flex items-center bg-black/60 p-1 rounded-2xl border border-white/15 text-xs font-mono">
-            <button
-              type="button"
-              onClick={() => setActiveView("app")}
-              className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                activeView === "app"
-                  ? "bg-[#E87512] text-black shadow-[0_0_15px_rgba(232,117,18,0.5)] font-black"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <Smartphone className="w-3.5 h-3.5" />
-              <span>App Móvil (Orelax Style)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveView("dashboard")}
-              className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                activeView === "dashboard"
-                  ? "bg-[#E87512] text-black shadow-[0_0_15px_rgba(232,117,18,0.5)] font-black"
-                  : "text-gray-400 hover:text-white"
-              }`}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Portal Dashboard</span>
-            </button>
           </div>
 
           {/* Quick Actions for Client & Team */}
@@ -94,12 +64,12 @@ export default function OpenHouseClientDemoPage() {
               type="button"
               onClick={handleShareLink}
               className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 hover:text-white border border-white/15 font-mono text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-              title="Copiar enlace directo para abrir desde cualquier celular"
+              title="Copiar enlace directo del sistema"
             >
               {copiedLink ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-emerald-400 text-[11px]">¡Copiado!</span>
+                  <span className="text-emerald-400 text-[11px]">¡Enlace Copiado!</span>
                 </>
               ) : (
                 <>
@@ -110,10 +80,10 @@ export default function OpenHouseClientDemoPage() {
             </button>
 
             <Link
-              href="/portal?tab=demo"
-              className="px-3.5 py-2 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-1 shadow-[0_0_20px_rgba(232,117,18,0.4)] transition-all cursor-pointer"
+              href="/portal?user=eduardo"
+              className="px-3.5 py-2 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_20px_rgba(232,117,18,0.4)] transition-all cursor-pointer"
             >
-              <span>Portal</span>
+              <span>Portal Cliente</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -121,12 +91,8 @@ export default function OpenHouseClientDemoPage() {
       </header>
 
       {/* Main Interactive Demo Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10 w-full flex-1 flex flex-col items-center justify-center">
-        {activeView === "app" ? (
-          <OpenHouseMobileAppDemo />
-        ) : (
-          <OpenHousePropTechDemo isStandalone={true} />
-        )}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10 w-full flex-1">
+        <OpenHousePropTechDemo isStandalone={true} />
       </main>
 
       {/* Bottom Sticky Helper for Mobile Testing */}

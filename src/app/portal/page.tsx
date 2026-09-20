@@ -5895,63 +5895,29 @@ function PortalMainContent() {
 
             {/* TAB: DEMO INTERACTIVO OPEN HOUSE PROPTECH */}
             {clientTab === "demo" && (
-              <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-3xl bg-[#0C0C14] border border-[#E87512]/40 shadow-xl">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-3xl bg-[#0C0C14] border border-[#E87512]/40 shadow-xl">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-[#E87512]/20 flex items-center justify-center text-[#E87512] flex-shrink-0">
                       <Sparkles className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-black text-white uppercase tracking-tight">Open House Yucatán • Demo Interactivo</h3>
-                      <p className="text-[11px] font-mono text-[#FAE3D1]/80">3ra App Multiplataforma • Terrenos, Citas & Asesores</p>
+                      <h3 className="text-sm font-black text-white uppercase tracking-tight">Open House Yucatán • Sistema PropTech de Control</h3>
+                      <p className="text-[11px] font-mono text-[#FAE3D1]/80">3ra App Multiplataforma • Catálogo, Ventas, Citas, Asesores & Finanzas</p>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2">
-                    <div className="flex items-center bg-black/70 p-1 rounded-2xl border border-white/15 text-xs font-mono">
-                      <button
-                        type="button"
-                        onClick={() => setClientDemoView("app")}
-                        className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                          clientDemoView === "app"
-                            ? "bg-[#E87512] text-black shadow-[0_0_15px_rgba(232,117,18,0.5)] font-black"
-                            : "text-gray-400 hover:text-white"
-                        }`}
-                      >
-                        <Smartphone className="w-3.5 h-3.5" />
-                        <span>App Móvil (Orelax Style)</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setClientDemoView("dashboard")}
-                        className={`px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                          clientDemoView === "dashboard"
-                            ? "bg-[#E87512] text-black shadow-[0_0_15px_rgba(232,117,18,0.5)] font-black"
-                            : "text-gray-400 hover:text-white"
-                        }`}
-                      >
-                        <LayoutGrid className="w-3.5 h-3.5" />
-                        <span>Panel PropTech</span>
-                      </button>
-                    </div>
-
-                    <Link
-                      href="/demo/openhouse"
-                      target="_blank"
-                      className="px-3.5 py-2 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-black uppercase tracking-wider text-[11px] flex items-center gap-1.5 shadow-md transition-all hover:scale-105"
-                    >
-                      <span>Pantalla Completa</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+                  <Link
+                    href="/demo/openhouse"
+                    target="_blank"
+                    className="px-4 py-2 rounded-xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-black uppercase tracking-wider text-[11px] flex items-center gap-1.5 shadow-md transition-all hover:scale-105"
+                  >
+                    <span>Abrir en Pantalla Completa</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
 
-                {clientDemoView === "app" ? (
-                  <OpenHouseMobileAppDemo />
-                ) : (
-                  <OpenHousePropTechDemo />
-                )}
+                <OpenHousePropTechDemo />
               </div>
             )}
 
