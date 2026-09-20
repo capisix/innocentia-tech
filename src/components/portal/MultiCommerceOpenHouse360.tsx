@@ -157,18 +157,30 @@ export default function MultiCommerceOpenHouse360() {
             </div>
           </div>
 
-          {/* Business Unit Context Dropdown */}
-          <div className="hidden lg:flex items-center gap-2.5 pl-3 border-l border-white/10">
-            <div className="p-1.5 rounded-xl bg-white/5 border border-white/10 text-emerald-400">
-              <Building2 className="w-4 h-4" />
+          {/* Business Unit Context Dropdown & Official Pills */}
+          <div className="hidden xl:flex items-center gap-2 pl-3 border-l border-white/10">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10">
+              <div className="p-1 rounded-lg bg-emerald-500/10 text-emerald-400">
+                <Building2 className="w-3.5 h-3.5" />
+              </div>
+              <div className="text-left">
+                <span className="text-[9px] font-mono text-emerald-400 font-bold block uppercase leading-none">
+                  EVENTOS & HOSPEDAJE & EXCLUSIVAS
+                </span>
+                <span className="text-[10px] text-gray-400 font-medium block mt-0.5">
+                  Venta de Desarrollos Residenciales, Recorridos 360°, Open House VIP & Brokerage
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-[10px] font-mono text-emerald-400 font-bold block uppercase leading-none">
-                EVENTOS & HOSPEDAJE & EXCLUSIVAS
-              </span>
-              <span className="text-[11px] text-gray-400 font-medium block mt-0.5">
-                Venta de Desarrollos Residenciales, Recorridos 360°, Open House VIP & Brokerage
-              </span>
+
+            <div className="px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-[11px] font-mono text-gray-300 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Eventos & Hospedaje (Spa, Canchas & Villas)</span>
+            </div>
+
+            <div className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono font-bold text-emerald-300 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>DEMO OFICIAL OPEN HOUSE 360</span>
             </div>
           </div>
         </div>
@@ -229,7 +241,9 @@ export default function MultiCommerceOpenHouse360() {
           {/* Notifications */}
           <div className="relative p-2 rounded-xl bg-white/5 border border-white/10 text-gray-300 hover:text-white cursor-pointer">
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-mono font-bold flex items-center justify-center">
+              3
+            </span>
           </div>
 
           {/* User Profile */}
@@ -241,8 +255,8 @@ export default function MultiCommerceOpenHouse360() {
               EC
             </div>
             <div className="hidden xl:block text-left">
-              <span className="text-xs font-bold text-white block leading-tight">Eduardo Cáceres</span>
-              <span className="text-[10px] font-mono text-emerald-400 block">Open House Yucatán</span>
+              <span className="text-xs font-bold text-white block leading-tight">Perfil Activo</span>
+              <span className="text-[10px] font-mono text-emerald-400 block">Admin • Open House</span>
             </div>
           </Link>
         </div>
