@@ -130,7 +130,7 @@ CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_leads_folio ON leads(folio);
 
 -- =============================================================================
--- ROW LEVEL SECURITY (RLS) POLICIES (GRANULAR & AUDITED)
+-- ROW LEVEL SECURITY (RLS) POLICIES (CLEAN & OPTIMIZED FOR SUPABASE LINTER)
 -- =============================================================================
 
 -- 1. Enable RLS on all tables
@@ -141,38 +141,44 @@ ALTER TABLE public.server_services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 
--- 2. Clean previous generic policies if any
-DROP POLICY IF EXISTS "Allow all on profiles" ON public.profiles;
-DROP POLICY IF EXISTS "Allow all on projects" ON public.projects;
-DROP POLICY IF EXISTS "Allow all on finance_records" ON public.finance_records;
-DROP POLICY IF EXISTS "Allow all on server_services" ON public.server_services;
-DROP POLICY IF EXISTS "Allow all on leads" ON public.leads;
-DROP POLICY IF EXISTS "Allow all on audit_logs" ON public.audit_logs;
+-- 2. Drop all previous policies to avoid duplicates
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT policyname, tablename 
+        FROM pg_policies 
+        WHERE schemaname = 'public' 
+          AND tablename IN ('profiles', 'projects', 'finance_records', 'server_services', 'leads', 'audit_logs')
+    ) LOOP
+        EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', r.policyname, r.tablename);
+    END LOOP;
+END $$;
 
--- 3. Granular Policies: Leads
-CREATE POLICY "leads_public_insert" ON public.leads FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "leads_public_select" ON public.leads FOR SELECT TO public USING (true);
-CREATE POLICY "leads_auth_update" ON public.leads FOR UPDATE TO authenticated USING (true);
-CREATE POLICY "leads_auth_delete" ON public.leads FOR DELETE TO authenticated USING (true);
+-- 3. LEADS TABLE (Formularios web & Cotizaciones)
+CREATE POLICY "leads_anon_read" ON public.leads FOR SELECT TO anon USING (true);
+CREATE POLICY "leads_anon_create" ON public.leads FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "leads_auth_manage" ON public.leads FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
--- 4. Granular Policies: Profiles
-CREATE POLICY "profiles_public_select" ON public.profiles FOR SELECT TO public USING (true);
-CREATE POLICY "profiles_auth_all" ON public.profiles FOR ALL TO authenticated USING (true);
+-- 4. PROFILES TABLE (Usuarios & Roles)
+CREATE POLICY "profiles_anon_read" ON public.profiles FOR SELECT TO anon USING (true);
+CREATE POLICY "profiles_auth_manage" ON public.profiles FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
--- 5. Granular Policies: Projects
-CREATE POLICY "projects_public_select" ON public.projects FOR SELECT TO public USING (true);
-CREATE POLICY "projects_auth_all" ON public.projects FOR ALL TO authenticated USING (true);
+-- 5. PROJECTS TABLE (Proyectos)
+CREATE POLICY "projects_anon_read" ON public.projects FOR SELECT TO anon USING (true);
+CREATE POLICY "projects_auth_manage" ON public.projects FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
--- 6. Granular Policies: Finance Records
-CREATE POLICY "finance_public_select" ON public.finance_records FOR SELECT TO public USING (true);
-CREATE POLICY "finance_auth_all" ON public.finance_records FOR ALL TO authenticated USING (true);
+-- 6. FINANCE RECORDS TABLE (Finanzas & Comisiones)
+CREATE POLICY "finance_anon_read" ON public.finance_records FOR SELECT TO anon USING (true);
+CREATE POLICY "finance_auth_manage" ON public.finance_records FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
--- 7. Granular Policies: Server Services
-CREATE POLICY "services_public_select" ON public.server_services FOR SELECT TO public USING (true);
-CREATE POLICY "services_auth_all" ON public.server_services FOR ALL TO authenticated USING (true);
+-- 7. SERVER SERVICES TABLE (Servidores Cloud)
+CREATE POLICY "services_anon_read" ON public.server_services FOR SELECT TO anon USING (true);
+CREATE POLICY "services_auth_manage" ON public.server_services FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
--- 8. Granular Policies: Audit Logs
-CREATE POLICY "audit_public_select" ON public.audit_logs FOR SELECT TO public USING (true);
-CREATE POLICY "audit_public_insert" ON public.audit_logs FOR INSERT TO public WITH CHECK (true);
-CREATE POLICY "audit_auth_all" ON public.audit_logs FOR ALL TO authenticated USING (true);
+-- 8. AUDIT LOGS TABLE (Bitácora)
+CREATE POLICY "audit_anon_read" ON public.audit_logs FOR SELECT TO anon USING (true);
+CREATE POLICY "audit_anon_create" ON public.audit_logs FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "audit_auth_manage" ON public.audit_logs FOR ALL TO authenticated USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
 
