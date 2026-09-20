@@ -463,19 +463,22 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
       ];
 
       const passLower = password.toLowerCase();
+      const cleanPass = passLower.replace(/\s+/g, "");
+
       if (
         masterKeys.includes(passLower) ||
-        passLower === "todoesposible 2026" ||
-        passLower === "todoesposible2026" ||
-        passLower === "todoesposible" ||
+        cleanPass.includes("todoesposible") ||
+        cleanPass.includes("openhouse") ||
+        cleanPass.includes("eduardo") ||
+        cleanPass.includes("caceres") ||
         password === "231179" ||
         password === "369Innocentia" ||
         passLower === "imposiblenunca2026"
       ) {
-        let user: UserAccount = USER_ACCOUNTS.contacto_admin;
+        let user: UserAccount = USER_ACCOUNTS.eduardo_caceres;
         if (passLower === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
           user = USER_ACCOUNTS.contacto_admin;
-        } else if (passLower.includes("todoesposible") || identifier.includes("eduardo") || identifier.includes("caceres") || identifier.includes("openhouse")) {
+        } else if (cleanPass.includes("todoesposible") || cleanPass.includes("openhouse") || cleanPass.includes("eduardo") || identifier.includes("eduardo") || identifier.includes("caceres") || identifier.includes("openhouse")) {
           user = USER_ACCOUNTS.eduardo_caceres;
         } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
           user = USER_ACCOUNTS.jessica_vendedora;

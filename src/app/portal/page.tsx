@@ -420,19 +420,22 @@ function PortalMainContent() {
     ];
 
     const passLower = password.toLowerCase();
+    const cleanPass = passLower.replace(/\s+/g, "");
+
     if (
       masterKeys.includes(passLower) ||
-      passLower === "todoesposible 2026" ||
-      passLower === "todoesposible2026" ||
-      passLower === "todoesposible" ||
+      cleanPass.includes("todoesposible") ||
+      cleanPass.includes("openhouse") ||
+      cleanPass.includes("eduardo") ||
+      cleanPass.includes("caceres") ||
       password === "231179" ||
       password === "369Innocentia" ||
       passLower === "imposiblenunca2026"
     ) {
-      let user: UserAccount = USER_ACCOUNTS.daniel_socio;
+      let user: UserAccount = USER_ACCOUNTS.eduardo_caceres;
       if (passLower === "imposiblenunca2026" || identifier.includes("contacto") || identifier === "contacto@innocentia.tech") {
         user = USER_ACCOUNTS.contacto_admin;
-      } else if (passLower.includes("todoesposible") || identifier.includes("eduardo") || identifier.includes("caceres") || identifier.includes("openhouse")) {
+      } else if (cleanPass.includes("todoesposible") || cleanPass.includes("openhouse") || cleanPass.includes("eduardo") || identifier.includes("eduardo") || identifier.includes("caceres") || identifier.includes("openhouse")) {
         user = USER_ACCOUNTS.eduardo_caceres;
       } else if (password === "231179" || identifier.includes("jess") || identifier.includes("boldberry")) {
         user = USER_ACCOUNTS.jessica_vendedora;
@@ -1736,6 +1739,24 @@ function PortalMainContent() {
                 <p className="text-xs text-gray-400 text-center">
                   Inicia sesión con tu cuenta de <strong>Google Workspace o Gmail</strong> para acceder al portal.
                 </p>
+
+                <button
+                  type="button"
+                  onClick={() => handleGateGoogleLogin(USER_ACCOUNTS.eduardo_caceres)}
+                  disabled={gateIsLoading}
+                  className="w-full py-3 px-4 rounded-2xl bg-[#E87512] hover:bg-[#E87512]/90 text-black font-black text-xs uppercase font-mono tracking-wider shadow-[0_0_20px_rgba(232,117,18,0.4)] flex items-center justify-between transition-all hover:scale-[1.02] cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5 text-left">
+                    <div className="w-7 h-7 rounded-lg bg-black text-[#E87512] font-black flex items-center justify-center text-xs">
+                      EC
+                    </div>
+                    <div>
+                      <span className="text-black font-black block text-xs">Eduardo Cáceres</span>
+                      <span className="text-black/80 text-[10px] font-mono block">Open House Yucatán</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-black" />
+                </button>
 
                 <button
                   type="button"
