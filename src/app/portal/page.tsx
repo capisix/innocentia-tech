@@ -286,6 +286,10 @@ function PortalMainContent() {
     setAuthenticatedUserId(user.id);
     setGateAuthError(null);
 
+    if (user.id === "usr_client_eduardo" || user.email?.includes("openhouse") || user.name?.includes("Eduardo")) {
+      setClientTab("demo");
+    }
+
     if (typeof window !== "undefined") {
       sessionStorage.setItem("innocentia_session_auth_id", user.id);
       localStorage.setItem("innocentia_active_role", user.role);
@@ -7368,8 +7372,15 @@ function PortalMainContent() {
             setActiveRole(user.role);
             setActiveUser(user);
             setAuthenticatedUserId(user.id);
+            if (user.id === "usr_client_eduardo" || user.email?.includes("openhouse") || user.name?.includes("Eduardo")) {
+              setClientTab("demo");
+            }
             if (typeof window !== "undefined") {
               sessionStorage.setItem("innocentia_session_auth_id", user.id);
+              localStorage.setItem("innocentia_active_role", user.role);
+              localStorage.setItem("innocentia_active_user", JSON.stringify(user));
+              localStorage.setItem("innocentia_auth_token", "AUTH_" + user.id + "_" + Date.now());
+              localStorage.setItem("innocentia_auth_user_id", user.id);
             }
           }
           setIsAuthModalOpen(false);

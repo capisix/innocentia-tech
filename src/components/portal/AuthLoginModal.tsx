@@ -276,6 +276,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
       localStorage.setItem("innocentia_auth_token", token);
       localStorage.setItem("innocentia_auth_user_id", user.id);
       localStorage.setItem("innocentia_active_user", JSON.stringify(user));
+      localStorage.setItem("innocentia_active_role", user.role);
       sessionStorage.setItem("innocentia_session_auth_id", user.id);
     }
 
@@ -284,7 +285,7 @@ export default function AuthLoginModal({ isOpen, onClose, onSelectRole }: AuthLo
       if (onSelectRole) onSelectRole(user.role, user);
       onClose();
       setIsLoading(false);
-    }, 600);
+    }, 200);
   };
 
   // Google / Gmail OAuth Login
