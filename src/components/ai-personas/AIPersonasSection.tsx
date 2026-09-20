@@ -106,6 +106,8 @@ export default function AIPersonasSection() {
                   src="/images/sofia_desktop.png"
                   alt="Sofía - Diseño, UX y Creatividad • Hemisferio Creativo Innocentia Tech"
                   fill
+                  quality={100}
+                  unoptimized
                   className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
                   priority
                 />
@@ -324,6 +326,8 @@ export default function AIPersonasSection() {
                     src="/images/sofia_mobile.png"
                     alt="Sofía - Celular • Hemisferio Creativo"
                     fill
+                    quality={100}
+                    unoptimized
                     className="object-contain relative z-10 transition-transform duration-500 group-hover/mobart:scale-[1.02]"
                     priority
                   />
@@ -423,6 +427,8 @@ export default function AIPersonasSection() {
                   src="/images/ivan_desktop.png"
                   alt="Iván - Software, Arquitectura y Código • Hemisferio Lógico Innocentia Tech"
                   fill
+                  quality={100}
+                  unoptimized
                   className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
                   priority
                 />
@@ -641,6 +647,8 @@ export default function AIPersonasSection() {
                     src="/images/ivan_mobile.png"
                     alt="Iván - Celular • Hemisferio Lógico"
                     fill
+                    quality={100}
+                    unoptimized
                     className="object-contain relative z-10 transition-transform duration-500 group-hover/mobart:scale-[1.02]"
                     priority
                   />
