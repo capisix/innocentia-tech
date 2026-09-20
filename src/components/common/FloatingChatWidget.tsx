@@ -36,6 +36,31 @@ export default function FloatingChatWidget({
     }
   }, [isMaximizedExternal]);
 
+  // Send anonymous heartbeat to telemetry server
+  useEffect(() => {
+    try {
+      const sessionId =
+        sessionStorage.getItem("innocentia_session_id") ||
+        `sess-${Math.random().toString(36).substring(2, 10)}`;
+      sessionStorage.setItem("innocentia_session_id", sessionId);
+
+      const sendBeacon = () => {
+        fetch("/api/telemetry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId,
+            device: window.innerWidth < 768 ? "mobile" : "desktop",
+          }),
+        }).catch(() => {});
+      };
+
+      sendBeacon();
+      const interval = setInterval(sendBeacon, 45000);
+      return () => clearInterval(interval);
+    } catch {}
+  }, []);
+
   const handleClose = () => {
     setIsOpen(false);
     setIsMaximized(false);

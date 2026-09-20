@@ -170,15 +170,17 @@ export default function ExecutiveTelemetryDashboard() {
             </div>
 
             <div className="space-y-2">
-              {[
-                { city: "Monterrey, N.L.", share: "36%", nodes: "3 sesiones", color: "#00E5FF" },
-                { city: "Mérida, Yuc.", share: "28%", nodes: "2 sesiones", color: "#FF3858" },
-                { city: "Ciudad de México", share: "24%", nodes: "4 sesiones", color: "#8A2BE2" },
-                { city: "Guadalajara, Jal.", share: "12%", nodes: "2 sesiones", color: "#00D1FF" },
-              ].map((loc, idx) => (
+              {(
+                telemetry?.topCities || [
+                  { city: "Monterrey, N.L.", share: "36%", nodes: "4 sesiones", color: "#00E5FF" },
+                  { city: "Ciudad de México", share: "32%", nodes: "5 sesiones", color: "#8A2BE2" },
+                  { city: "Mérida, Yuc.", share: "22%", nodes: "3 sesiones", color: "#FF3858" },
+                  { city: "Guadalajara, Jal.", share: "10%", nodes: "2 sesiones", color: "#00D1FF" },
+                ]
+              ).map((loc: any, idx: number) => (
                 <div key={idx} className="p-2.5 rounded-xl bg-white/[0.04] border border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: loc.color }} />
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: loc.color || "#00E5FF" }} />
                     <div>
                       <span className="text-xs font-bold text-white block">{loc.city}</span>
                       <span className="text-[10px] font-mono text-gray-400">{loc.nodes}</span>
@@ -206,17 +208,23 @@ export default function ExecutiveTelemetryDashboard() {
               <div className="p-3 rounded-xl bg-white/[0.04] border border-white/5 space-y-1">
                 <Smartphone className="w-4 h-4 text-[#00E5FF] mx-auto" />
                 <span className="text-[9px] text-gray-400 block uppercase">Móvil</span>
-                <span className="text-sm font-bold text-white">58%</span>
+                <span className="text-sm font-bold text-white">
+                  {telemetry?.deviceBreakdown?.mobile || "58%"}
+                </span>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.04] border border-white/5 space-y-1">
                 <Cpu className="w-4 h-4 text-emerald-400 mx-auto" />
                 <span className="text-[9px] text-gray-400 block uppercase">Desktop</span>
-                <span className="text-sm font-bold text-white">37%</span>
+                <span className="text-sm font-bold text-white">
+                  {telemetry?.deviceBreakdown?.desktop || "37%"}
+                </span>
               </div>
               <div className="p-3 rounded-xl bg-white/[0.04] border border-white/5 space-y-1">
                 <TrendingUp className="w-4 h-4 text-amber-400 mx-auto" />
                 <span className="text-[9px] text-gray-400 block uppercase">Tablet</span>
-                <span className="text-sm font-bold text-white">5%</span>
+                <span className="text-sm font-bold text-white">
+                  {telemetry?.deviceBreakdown?.tablet || "5%"}
+                </span>
               </div>
             </div>
           </div>
