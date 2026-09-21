@@ -683,19 +683,242 @@ export default function AIPersonasSection() {
             <div className="absolute top-0 left-0 w-96 h-96 bg-[#FF3858]/15 rounded-full blur-[100px] pointer-events-none animate-pulse z-0" />
             <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00D1FF]/15 rounded-full blur-[100px] pointer-events-none z-0" />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-20">
+            {/* ========================================================== */}
+            {/* MOBILE DUAL CORE MASTER CARD (Dedicated Vertical Studio Artwork + Video Trigger) */}
+            {/* ========================================================== */}
+            <div className="block lg:hidden space-y-6">
+              {/* Header Info */}
+              <div className="space-y-2 text-center sm:text-left">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
+                  <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  <span>CUANDO DOS FORMAS DE PENSAR SE ENCUENTRAN</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight leading-tight">
+                  IDEAS SIN LÍMITES, <br />
+                  <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,56,88,0.4)]">
+                    SOLUCIONES REALES.
+                  </span>
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                  Creatividad y tecnología trabajando juntas para transformar visiones complejas en productos de clase mundial.
+                </p>
+              </div>
+
+              {/* Master Full-Bleed Vertical Studio Artwork for Dual */}
+              <div className="rounded-[28px] sm:rounded-[32px] bg-[#07070E]/90 backdrop-blur-2xl border border-gradient-to-r p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.2),0_15px_45px_rgba(255,56,88,0.2)]" style={{ borderColor: "#00D1FF50" }}>
+                <div 
+                  onClick={() => openVideo(DUAL_VIDEO, "mobile")}
+                  className="relative w-full aspect-[941/1672] rounded-[22px] overflow-hidden cursor-pointer group/mobdual shadow-2xl border border-white/15"
+                >
+                  {/* Halos */}
+                  <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/25 rounded-full blur-[60px] pointer-events-none" />
+                  <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/25 rounded-full blur-[60px] pointer-events-none" />
+
+                  <Image
+                    src="/images/dual_mobile.png"
+                    alt="Sofía & Iván Dual Core • Innocentia Tech"
+                    fill
+                    quality={100}
+                    unoptimized
+                    className="object-cover relative z-10 transition-transform duration-700 group-hover/mobdual:scale-[1.02]"
+                    priority
+                  />
+
+                  {/* Top Floating Badges */}
+                  <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
+                    <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-black/80 border border-[#FF3858]/60 text-[#FF5470] backdrop-blur-md shadow-lg flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-pulse" />
+                      SOFÍA • UI/UX
+                    </span>
+                    <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-black/80 border border-[#00D1FF]/60 text-[#00D1FF] backdrop-blur-md shadow-lg flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
+                      IVÁN • DEV/IA
+                    </span>
+                  </div>
+
+                  {/* Hover/Tap Overlay */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10 opacity-90 group-hover/mobdual:opacity-100 transition-opacity">
+                    <div className="p-3 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_35px_rgba(0,209,255,0.7)] group-hover/mobdual:scale-105 transition-transform">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] via-purple-500 to-[#FF3858] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
+                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+                      </div>
+                      <div className="text-left leading-tight pr-1">
+                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN DUAL</div>
+                        <div className="text-[9px] text-cyan-300 font-mono">VIDEO VERTICAL 9:16</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Action Presentation Button */}
+                <button
+                  type="button"
+                  onClick={() => openVideo(DUAL_VIDEO, "mobile")}
+                  className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 backdrop-blur-2xl border border-cyan-400/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.35)] cursor-pointer active:scale-98 transition-all group/btn"
+                >
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#FF3858] flex items-center justify-center shadow-[0_0_12px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+                  </div>
+                  <span className="font-bold text-xs uppercase tracking-wider text-white">Sofía & Iván Dual Core (60 FPS)</span>
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                    <ArrowRight className="w-4 h-4 text-cyan-300" />
+                  </div>
+                </button>
+              </div>
+
+              {/* Twin Synergy Cards: Sofía + Iván */}
+              <div className="flex items-stretch gap-2.5 pt-1">
+                {/* Sofía Card */}
+                <div className="flex-1 rounded-2xl bg-black/80 backdrop-blur-2xl border border-[#FF3858]/40 p-3 shadow-lg flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+                    <div className="flex items-center gap-1.5 text-xs font-mono font-black text-[#FF3858] uppercase">
+                      <Paintbrush className="w-3.5 h-3.5" />
+                      <span>SOFÍA</span>
+                    </div>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#FF3858]/20 text-[#FF5470] border border-[#FF3858]/30">UI / UX</span>
+                  </div>
+                  <div className="space-y-1 text-[11px] text-gray-200 font-medium">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#FF3858]">💖</span>
+                      <span>Imagina</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#FFD166]">🎨</span>
+                      <span>Diseña</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#FF5470]">✨</span>
+                      <span>Conecta</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Connecting Plus Sign */}
+                <div className="flex items-center justify-center text-lg font-mono text-white/50 px-0.5 font-bold select-none">
+                  +
+                </div>
+
+                {/* Iván Card */}
+                <div className="flex-1 rounded-2xl bg-black/80 backdrop-blur-2xl border border-[#00D1FF]/40 p-3 shadow-lg flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+                    <div className="flex items-center gap-1.5 text-xs font-mono font-black text-[#00D1FF] uppercase">
+                      <span className="font-mono font-black text-[#00D1FF]">&lt;/&gt;</span>
+                      <span>IVÁN</span>
+                    </div>
+                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/30">DEV / IA</span>
+                  </div>
+                  <div className="space-y-1 text-[11px] text-gray-200 font-medium">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#00D1FF]">🧊</span>
+                      <span>Analiza</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#70D6FF]">⚙️</span>
+                      <span>Construye</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#FFD166]">⚡</span>
+                      <span>Optimiza</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* JUNTOS Synergy Card */}
+              <div className="w-full rounded-2xl bg-black/80 backdrop-blur-2xl border border-white/15 p-3 space-y-2 shadow-xl">
+                <div className="flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm text-[#00D1FF]">♾️</span>
+                    <span className="bg-gradient-to-r from-[#FF3858] via-purple-400 to-[#00D1FF] bg-clip-text text-transparent font-black">
+                      SINERGIA DUAL CORE
+                    </span>
+                  </div>
+                  <span className="text-[9px] text-gray-400 font-normal">DE CONCEPTO A PRODUCCIÓN</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-xs font-medium text-gray-200">
+                  <div className="px-2 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center gap-1.5 text-center">
+                    <span>👥</span>
+                    <span className="text-[11px]">Crean</span>
+                  </div>
+                  <div className="px-2 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center gap-1.5 text-center">
+                    <span>💡</span>
+                    <span className="text-[11px]">Resuelven</span>
+                  </div>
+                  <div className="px-2 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center gap-1.5 text-center">
+                    <span>🚀</span>
+                    <span className="text-[11px]">Evolucionan</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Rotating Hashtags Rectangle Console (Mobile) */}
+              <div className="w-full p-[1px] rounded-2xl bg-gradient-to-r from-[#FF3858]/35 via-purple-500/25 to-[#00D1FF]/35 shadow-[0_4px_25px_rgba(0,0,0,0.8)]">
+                <div className="rounded-[15px] bg-[#0A0A16]/90 backdrop-blur-2xl p-3 space-y-2 border border-white/10">
+                  <div className="flex items-center justify-between text-[10px] font-mono">
+                    <div className="flex items-center gap-2">
+                      <span 
+                        className="w-2 h-2 rounded-full animate-pulse transition-colors duration-500" 
+                        style={{ backgroundColor: HASHTAG_SETS[activeTagSet].color }} 
+                      />
+                      <span className="font-bold uppercase tracking-wider text-white">CAPACIDADES</span>
+                      <span className="text-gray-500">•</span>
+                      <span 
+                        className="font-bold tracking-wide transition-colors duration-500"
+                        style={{ color: HASHTAG_SETS[activeTagSet].color }}
+                      >
+                        {HASHTAG_SETS[activeTagSet].badge}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      {HASHTAG_SETS.map((set, idx) => (
+                        <button
+                          key={set.category}
+                          type="button"
+                          onClick={() => setActiveTagSet(idx)}
+                          className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                            activeTagSet === idx
+                              ? "w-4 bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+                              : "w-1.5 bg-white/25 hover:bg-white/50"
+                          }`}
+                          aria-label={`Ver conjunto ${set.category}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-1.5 pt-0.5">
+                    {HASHTAG_SETS[activeTagSet].tags.map((tag, tagIdx) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 rounded-lg bg-white/[0.04] border border-white/10 text-[10px] font-mono font-medium text-gray-200"
+                        style={{
+                          borderColor: tagIdx === 0 ? `${HASHTAG_SETS[activeTagSet].color}60` : undefined,
+                          color: tagIdx === 0 ? HASHTAG_SETS[activeTagSet].color : undefined,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ========================================================== */}
+            {/* DESKTOP DUAL CORE MASTER VIEW (12-Column Wide Grid) */}
+            {/* ========================================================== */}
+            <div className="hidden lg:grid grid-cols-12 gap-8 items-center relative z-20">
               {/* Left Column: Typography, Synergy Glass Cards & Interactive Button */}
-              <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
+              <div className="col-span-5 flex flex-col justify-between space-y-4">
                 {/* Top Badge */}
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/20 text-[10px] sm:text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/20 text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
                     <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
                     <span>CUANDO DOS FORMAS DE PENSAR SE ENCUENTRAN</span>
                   </div>
                 </div>
 
                 {/* Headline */}
-                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight leading-[1.15]">
+                <h3 className="text-3xl lg:text-4xl font-black text-white uppercase tracking-tight leading-[1.15]">
                   IDEAS SIN LÍMITES, <br />
                   <span className="bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#00D1FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,56,88,0.4)]">
                     SOLUCIONES REALES.
@@ -703,7 +926,7 @@ export default function AIPersonasSection() {
                 </h3>
 
                 {/* Subtitle */}
-                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                <p className="text-sm text-gray-300 font-light leading-relaxed">
                   Creatividad y tecnología trabajando juntas para transformar visiones complejas en productos de clase mundial.
                 </p>
 
@@ -718,7 +941,7 @@ export default function AIPersonasSection() {
                       </div>
                       <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#FF3858]/20 text-[#FF5470] border border-[#FF3858]/30">UI / UX</span>
                     </div>
-                    <div className="space-y-1.5 text-[11px] sm:text-xs text-gray-200 font-medium">
+                    <div className="space-y-1.5 text-xs text-gray-200 font-medium">
                       <div className="flex items-center gap-2">
                         <span className="text-[#FF3858]">💖</span>
                         <span>Imagina</span>
@@ -748,7 +971,7 @@ export default function AIPersonasSection() {
                       </div>
                       <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#00D1FF]/20 text-[#00D1FF] border border-[#00D1FF]/30">DEV / IA</span>
                     </div>
-                    <div className="space-y-1.5 text-[11px] sm:text-xs text-gray-200 font-medium">
+                    <div className="space-y-1.5 text-xs text-gray-200 font-medium">
                       <div className="flex items-center gap-2">
                         <span className="text-[#00D1FF]">🧊</span>
                         <span>Analiza</span>
@@ -795,13 +1018,13 @@ export default function AIPersonasSection() {
                 {/* Interactive Action Button */}
                 <button
                   type="button"
-                  onClick={() => openVideo(DUAL_VIDEO)}
+                  onClick={() => openVideo(DUAL_VIDEO, "desktop")}
                   className="w-full px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black/90 to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 border border-[#00D1FF]/60 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_30px_rgba(0,209,255,0.25)] hover:shadow-[0_0_45px_rgba(0,209,255,0.5)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
                     <Play className="w-3 h-3 fill-black text-black ml-0.5" />
                   </div>
-                  <span className="uppercase text-white tracking-widest text-[11px] sm:text-xs">
+                  <span className="uppercase text-white tracking-widest text-xs">
                     DESCUBRE CÓMO CREAN JUNTOS
                   </span>
                   <ArrowRight className="w-4 h-4 text-[#00D1FF] group-hover/btn:translate-x-1 transition-transform" />
@@ -809,14 +1032,14 @@ export default function AIPersonasSection() {
               </div>
 
               {/* Right Column: Hero Artwork with Glowing Badges & Ambient Aura */}
-              <div className="lg:col-span-7 relative w-full flex flex-col items-center justify-center">
+              <div className="col-span-7 relative w-full flex flex-col items-center justify-center">
                 {/* Floating Holographic Labels */}
-                <div className="w-full flex items-center justify-between px-2 sm:px-6 mb-2 z-30">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#FF3858]/40 text-[10px] sm:text-xs font-mono font-bold text-[#FF5470] shadow-[0_0_15px_rgba(255,56,88,0.3)]">
+                <div className="w-full flex items-center justify-between px-6 mb-2 z-30">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#FF3858]/40 text-xs font-mono font-bold text-[#FF5470] shadow-[0_0_15px_rgba(255,56,88,0.3)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-ping" />
                     <span>DIRECCIÓN UI/UX</span>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#00D1FF]/40 text-[10px] sm:text-xs font-mono font-bold text-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.3)]">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#00D1FF]/40 text-xs font-mono font-bold text-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.3)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-ping" />
                     <span>ARQUITECTURA & IA</span>
                   </div>
@@ -824,7 +1047,7 @@ export default function AIPersonasSection() {
 
                 {/* Main Illustration Container */}
                 <div 
-                  onClick={() => openVideo(DUAL_VIDEO)}
+                  onClick={() => openVideo(DUAL_VIDEO, "desktop")}
                   className="relative w-full aspect-[1024/387] max-w-[700px] cursor-pointer group/art transition-transform duration-500 hover:scale-[1.02]"
                   title="Haz clic para ver cómo trabajan juntos Sofía e Iván"
                 >
@@ -850,11 +1073,11 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* Dynamic Rotating Hashtags Rectangle Console */}
+                {/* Dynamic Rotating Hashtags Rectangle Console (Desktop) */}
                 <div className="w-full mt-3 p-[1px] rounded-2xl bg-gradient-to-r from-[#FF3858]/35 via-purple-500/25 to-[#00D1FF]/35 shadow-[0_4px_25px_rgba(0,0,0,0.8)] z-30">
-                  <div className="rounded-[15px] bg-[#0A0A16]/90 backdrop-blur-2xl p-3 sm:p-3.5 space-y-2 border border-white/10">
+                  <div className="rounded-[15px] bg-[#0A0A16]/90 backdrop-blur-2xl p-3.5 space-y-2 border border-white/10">
                     {/* Header Row: Live indicator & Category Title */}
-                    <div className="flex items-center justify-between text-[10px] sm:text-xs font-mono">
+                    <div className="flex items-center justify-between text-xs font-mono">
                       <div className="flex items-center gap-2">
                         <span 
                           className="w-2 h-2 rounded-full animate-pulse transition-colors duration-500" 
@@ -889,11 +1112,11 @@ export default function AIPersonasSection() {
                     </div>
 
                     {/* Dynamic Hashtag Chips */}
-                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2 pt-0.5 min-h-[30px] transition-all duration-500">
+                    <div className="flex flex-wrap items-center justify-start gap-2 pt-0.5 min-h-[30px] transition-all duration-500">
                       {HASHTAG_SETS[activeTagSet].tags.map((tag, tagIdx) => (
                         <span
                           key={tag}
-                          className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 hover:border-white/30 text-[10px] sm:text-xs font-mono font-medium text-gray-200 transition-all duration-300 transform hover:scale-105 cursor-default shadow-sm"
+                          className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] border border-white/10 hover:border-white/30 text-xs font-mono font-medium text-gray-200 transition-all duration-300 transform hover:scale-105 cursor-default shadow-sm"
                           style={{
                             borderColor: tagIdx === 0 ? `${HASHTAG_SETS[activeTagSet].color}60` : undefined,
                             color: tagIdx === 0 ? HASHTAG_SETS[activeTagSet].color : undefined,
