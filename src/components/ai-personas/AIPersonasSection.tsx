@@ -331,80 +331,65 @@ export default function AIPersonasSection() {
                 </div>
               </div>
 
-              {/* MOBILE VIEW (Dedicated Vertical Artwork 4: Sofía Celular + Glass Info Panel) */}
-              <div className="block md:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#FF3858]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(255,56,88,0.2)]">
-                {/* Vertical Portrait Artwork */}
+              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Sofía + Interactive Cyber Effects) */}
+              <div className="block md:hidden rounded-[30px] bg-[#07070E]/90 backdrop-blur-2xl border border-[#FF3858]/40 overflow-hidden p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(255,56,88,0.25)] transition-all">
+                {/* Vertical Portrait Master Artwork with Interactive Neon Glow */}
                 <div 
                   onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
-                  className="relative w-full aspect-[1024/1536] max-h-[460px] rounded-2xl overflow-hidden cursor-pointer group/mobart"
+                  className="relative w-full aspect-[941/1672] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10"
                 >
-                  <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/25 rounded-full blur-[60px] pointer-events-none" />
+                  {/* Subtle Background Glow behind the Art */}
+                  <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
+                  
                   <Image
-                    src="/images/sofia_mobile.png"
-                    alt="Sofía - Celular • Hemisferio Creativo"
+                    src="/images/sofia_mobile.jpg"
+                    alt="Sofía - Hemisferio Creativo • Innocentia Tech"
                     fill
                     quality={100}
                     unoptimized
-                    className="object-contain relative z-10 transition-transform duration-500 group-hover/mobart:scale-[1.02]"
+                    className="object-cover relative z-10 transition-transform duration-700 group-hover/mobart:scale-[1.02]"
                     priority
                   />
-                  {/* Floating Play Indicator */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 group-hover/mobart:opacity-100 transition-opacity">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_30px_#FF3858]">
-                      <Play className="w-6 h-6 fill-white text-white ml-1" />
-                    </div>
-                  </div>
-                </div>
 
-                {/* Mobile Info & Dialogue System */}
-                <div className="space-y-3 relative z-20">
-                  <div className="flex flex-col gap-1.5">
-                    <div className="w-full py-1 px-3 rounded-full bg-black/60 border border-[#FFD166]/40 text-[#FFD166] font-mono font-black text-xs uppercase tracking-wider text-center">
-                      DISEÑO • UX • CREATIVIDAD
-                    </div>
-                    <div className="w-full py-1 px-3 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/60 text-[#FF5470] font-mono font-black text-[11px] uppercase tracking-widest text-center animate-pulse">
+                  {/* Top Ambient Status Pill (Floating over Image) */}
+                  <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#FF3858]/60 text-[#FF5470] backdrop-blur-md shadow-lg flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-pulse" />
                       HEMISFERIO CREATIVO
-                    </div>
+                    </span>
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#FFD166]/60 text-[#FFD166] backdrop-blur-md shadow-lg">
+                      UI • UX • ARTE
+                    </span>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-black/60 border border-[#FF3858]/30">
-                    <p className="text-gray-200 text-xs font-light leading-relaxed">
-                      Representa la <strong className="text-[#FF5470] font-semibold">imaginación</strong>, la creatividad y la sensibilidad del diseño. Convierte ideas en <strong className="text-[#FFD166] font-semibold">experiencias memorables</strong>.
-                    </p>
-                  </div>
-
-                  {/* Mobile Personalities */}
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
-                      <div className="text-sm">🪄</div>
-                      <div className="text-[10px] font-bold text-white">Pincel</div>
-                      <div className="text-[9px] text-[#FF5470] font-mono">Mágico</div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
-                      <div className="text-sm">🎨</div>
-                      <div className="text-[10px] font-bold text-white">Creatividad</div>
-                      <div className="text-[9px] text-gray-400 font-mono">Total</div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
-                      <div className="text-sm">💖</div>
-                      <div className="text-[10px] font-bold text-white">Empatía</div>
-                      <div className="text-[9px] text-gray-400 font-mono">Pasión</div>
+                  {/* Centered Floating Play Overlay on Tap/Hover */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10 opacity-90 group-hover/mobart:opacity-100 transition-opacity">
+                    <div className="p-3 rounded-2xl bg-black/75 backdrop-blur-xl border border-[#FF3858]/60 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_30px_rgba(255,56,88,0.7)] group-hover/mobart:scale-105 transition-transform">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_15px_#FF3858] flex-shrink-0">
+                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+                      </div>
+                      <div className="text-left leading-tight pr-1">
+                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
+                        <div className="text-[9px] text-[#FF5470] font-mono">VIDEO VERTICAL 9:16</div>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Mobile Action Button */}
-                  <button
-                    type="button"
-                    onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
-                    className="w-full py-3 px-4 rounded-full bg-[#0E070B]/95 hover:bg-[#1F0A15] backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.4)] cursor-pointer"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-[#FF3858] flex items-center justify-center shadow-[0_0_10px_#FF3858]">
-                      <Play className="w-3 h-3 fill-white text-white ml-0.5" />
-                    </div>
-                    <span className="font-bold text-xs">Sofía presentación</span>
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </button>
                 </div>
+
+                {/* Mobile Action Presentation Button */}
+                <button
+                  type="button"
+                  onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
+                  className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#1A0810] via-black to-[#1A0810] hover:from-[#2A0C1A] hover:to-[#2A0C1A] backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.35)] cursor-pointer active:scale-98 transition-all group/btn"
+                >
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_12px_#FF3858] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+                  </div>
+                  <span className="font-bold text-xs uppercase tracking-wider text-white">Sofía presentación (60 FPS)</span>
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </div>
+                </button>
               </div>
 
               {/* Hidden Semantic Metadata for Google SEO & Screen Readers */}
