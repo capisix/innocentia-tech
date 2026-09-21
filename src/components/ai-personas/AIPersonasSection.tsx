@@ -8,12 +8,49 @@ interface PersonaVideoData {
   title: string;
   role: string;
   subtitle: string;
-  videoSrc: string;
+  videoSrcDesktop: string;
+  videoSrcMobile: string;
   themeColor: string;
   secondaryColor: string;
   avatarImg: string;
   icon: string;
 }
+
+const SOFIA_VIDEO: PersonaVideoData = {
+  title: "Sofía",
+  role: "Dirección UI/UX & Creatividad",
+  subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
+  videoSrcDesktop: "/videos/sofia_presentacion.mp4",
+  videoSrcMobile: "/videos/sofia_presentacion_celular.mp4",
+  themeColor: "#FF3858",
+  secondaryColor: "#FF7A00",
+  avatarImg: "/images/sofia_seated_art.jpg",
+  icon: "🖌️",
+};
+
+const IVAN_VIDEO: PersonaVideoData = {
+  title: "Iván",
+  role: "CEO & Arquitectura Tech",
+  subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
+  videoSrcDesktop: "/videos/ivan_presentacion.mp4",
+  videoSrcMobile: "/videos/ivan_presentacion_celular.mp4",
+  themeColor: "#00D1FF",
+  secondaryColor: "#3A86FF",
+  avatarImg: "/images/ivan_seated_tech.jpg",
+  icon: "⚡",
+};
+
+const DUAL_VIDEO: PersonaVideoData = {
+  title: "Sofía & Iván",
+  role: "Dual Core Architecture",
+  subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
+  videoSrcDesktop: "/videos/sofia_ivan_dual.mp4",
+  videoSrcMobile: "/videos/sofia_ivan_dual_celular.mp4",
+  themeColor: "#00D1FF",
+  secondaryColor: "#FF3858",
+  avatarImg: "/images/dual_adults_master_transparent.png",
+  icon: "✨",
+};
 
 const HASHTAG_SETS = [
   {
@@ -44,7 +81,20 @@ const HASHTAG_SETS = [
 
 export default function AIPersonasSection() {
   const [activeVideo, setActiveVideo] = useState<PersonaVideoData | null>(null);
+  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("mobile");
   const [activeTagSet, setActiveTagSet] = useState(0);
+
+  const openVideo = (data: PersonaVideoData, forceFormat?: "mobile" | "desktop") => {
+    if (forceFormat) {
+      setVideoFormat(forceFormat);
+    } else {
+      const isMobileDevice =
+        typeof window !== "undefined" &&
+        (window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
+      setVideoFormat(isMobileDevice ? "mobile" : "desktop");
+    }
+    setActiveVideo(data);
+  };
 
   // Rotate hashtag sets every 3.2 seconds
   useEffect(() => {
@@ -97,7 +147,7 @@ export default function AIPersonasSection() {
               style={{ containerType: "inline-size" }}
             >
               {/* DESKTOP & TABLET VIEW (Horizontal Artwork + Native Glass Dialogues) */}
-              <div className="hidden sm:block relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              <div className="hidden md:block relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 {/* Ambient Soft Glow Behind Character */}
                 <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#FF3858]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 right-4 w-60 h-60 bg-[#FF7A00]/15 rounded-full blur-[80px] pointer-events-none" />
@@ -114,18 +164,7 @@ export default function AIPersonasSection() {
 
                 {/* Left Area Click Trigger (Avatar) - Símbolo de video elegante en hover */}
                 <div
-                  onClick={() =>
-                    setActiveVideo({
-                      title: "Sofía",
-                      role: "Dirección UI/UX & Creatividad",
-                      subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                      videoSrc: "/videos/sofia_presentacion.mp4",
-                      themeColor: "#FF3858",
-                      secondaryColor: "#FF7A00",
-                      avatarImg: "/images/sofia_seated_art.jpg",
-                      icon: "🖌️",
-                    })
-                  }
+                  onClick={() => openVideo(SOFIA_VIDEO)}
                   className="absolute top-0 left-0 bottom-0 w-[52%] z-20 cursor-pointer group/avatar"
                   title="Haz clic para ver el video de presentación de Sofía"
                 >
@@ -266,18 +305,7 @@ export default function AIPersonasSection() {
                   <div className="w-full">
                     <button
                       type="button"
-                      onClick={() =>
-                        setActiveVideo({
-                          title: "Sofía",
-                          role: "Dirección UI/UX & Creatividad",
-                          subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                          videoSrc: "/videos/sofia_presentacion.mp4",
-                          themeColor: "#FF3858",
-                          secondaryColor: "#FF7A00",
-                          avatarImg: "/images/sofia_seated_art.jpg",
-                          icon: "🖌️",
-                        })
-                      }
+                      onClick={() => openVideo(SOFIA_VIDEO)}
                       className="w-full px-3 py-1.5 rounded-full bg-[#0E070B]/95 hover:bg-[#1F0A15] backdrop-blur-2xl border border-[#FF3858]/75 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.4)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_35px_rgba(255,56,88,0.7)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                     >
                       <div 
@@ -304,21 +332,10 @@ export default function AIPersonasSection() {
               </div>
 
               {/* MOBILE VIEW (Dedicated Vertical Artwork 4: Sofía Celular + Glass Info Panel) */}
-              <div className="block sm:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#FF3858]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(255,56,88,0.2)]">
+              <div className="block md:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#FF3858]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(255,56,88,0.2)]">
                 {/* Vertical Portrait Artwork */}
                 <div 
-                  onClick={() =>
-                    setActiveVideo({
-                      title: "Sofía",
-                      role: "Dirección UI/UX & Creatividad",
-                      subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                      videoSrc: "/videos/sofia_presentacion.mp4",
-                      themeColor: "#FF3858",
-                      secondaryColor: "#FF7A00",
-                      avatarImg: "/images/sofia_seated_art.jpg",
-                      icon: "🖌️",
-                    })
-                  }
+                  onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
                   className="relative w-full aspect-[1024/1536] max-h-[460px] rounded-2xl overflow-hidden cursor-pointer group/mobart"
                 >
                   <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/25 rounded-full blur-[60px] pointer-events-none" />
@@ -378,18 +395,7 @@ export default function AIPersonasSection() {
                   {/* Mobile Action Button */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveVideo({
-                        title: "Sofía",
-                        role: "Dirección UI/UX & Creatividad",
-                        subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-                        videoSrc: "/videos/sofia_presentacion.mp4",
-                        themeColor: "#FF3858",
-                        secondaryColor: "#FF7A00",
-                        avatarImg: "/images/sofia_seated_art.jpg",
-                        icon: "🖌️",
-                      })
-                    }
+                    onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
                     className="w-full py-3 px-4 rounded-full bg-[#0E070B]/95 hover:bg-[#1F0A15] backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.4)] cursor-pointer"
                   >
                     <div className="w-6 h-6 rounded-full bg-[#FF3858] flex items-center justify-center shadow-[0_0_10px_#FF3858]">
@@ -418,7 +424,7 @@ export default function AIPersonasSection() {
               style={{ containerType: "inline-size" }}
             >
               {/* DESKTOP & TABLET VIEW (Horizontal Artwork + Native Glass Dialogues) */}
-              <div className="hidden sm:block relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
+              <div className="hidden md:block relative w-full aspect-[1024/828] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
                 {/* Ambient Soft Glow Behind Character */}
                 <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#00D1FF]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 left-4 w-60 h-60 bg-[#3A86FF]/15 rounded-full blur-[80px] pointer-events-none" />
@@ -435,18 +441,7 @@ export default function AIPersonasSection() {
 
                 {/* Left Area Click Trigger (Avatar) - Símbolo de video elegante en hover */}
                 <div
-                  onClick={() =>
-                    setActiveVideo({
-                      title: "Iván",
-                      role: "CEO & Arquitectura Tech",
-                      subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                      videoSrc: "/videos/ivan_presentacion.mp4",
-                      themeColor: "#00D1FF",
-                      secondaryColor: "#3A86FF",
-                      avatarImg: "/images/ivan_seated_tech.jpg",
-                      icon: "⚡",
-                    })
-                  }
+                  onClick={() => openVideo(IVAN_VIDEO)}
                   className="absolute top-0 left-0 bottom-0 w-[52%] z-20 cursor-pointer group/avatar"
                   title="Haz clic para ver el video de presentación de Iván"
                 >
@@ -587,18 +582,7 @@ export default function AIPersonasSection() {
                   <div className="w-full">
                     <button
                       type="button"
-                      onClick={() =>
-                        setActiveVideo({
-                          title: "Iván",
-                          role: "CEO & Arquitectura Tech",
-                          subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                          videoSrc: "/videos/ivan_presentacion.mp4",
-                          themeColor: "#00D1FF",
-                          secondaryColor: "#3A86FF",
-                          avatarImg: "/images/ivan_seated_tech.jpg",
-                          icon: "⚡",
-                        })
-                      }
+                      onClick={() => openVideo(IVAN_VIDEO)}
                       className="w-full px-3 py-1.5 rounded-full bg-[#060D18]/95 hover:bg-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/75 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.4)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_35px_rgba(0,209,255,0.7)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                     >
                       <div 
@@ -625,21 +609,10 @@ export default function AIPersonasSection() {
               </div>
 
               {/* MOBILE VIEW (Dedicated Vertical Artwork 3: Iván Celular + Glass Info Panel) */}
-              <div className="block sm:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#00D1FF]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(0,209,255,0.2)]">
+              <div className="block md:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#00D1FF]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(0,209,255,0.2)]">
                 {/* Vertical Portrait Artwork */}
                 <div 
-                  onClick={() =>
-                    setActiveVideo({
-                      title: "Iván",
-                      role: "CEO & Arquitectura Tech",
-                      subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                      videoSrc: "/videos/ivan_presentacion.mp4",
-                      themeColor: "#00D1FF",
-                      secondaryColor: "#3A86FF",
-                      avatarImg: "/images/ivan_seated_tech.jpg",
-                      icon: "⚡",
-                    })
-                  }
+                  onClick={() => openVideo(IVAN_VIDEO, "mobile")}
                   className="relative w-full aspect-[1024/1536] max-h-[460px] rounded-2xl overflow-hidden cursor-pointer group/mobart"
                 >
                   <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/25 rounded-full blur-[60px] pointer-events-none" />
@@ -699,18 +672,7 @@ export default function AIPersonasSection() {
                   {/* Mobile Action Button */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveVideo({
-                        title: "Iván",
-                        role: "CEO & Arquitectura Tech",
-                        subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-                        videoSrc: "/videos/ivan_presentacion.mp4",
-                        themeColor: "#00D1FF",
-                        secondaryColor: "#3A86FF",
-                        avatarImg: "/images/ivan_seated_tech.jpg",
-                        icon: "⚡",
-                      })
-                    }
+                    onClick={() => openVideo(IVAN_VIDEO, "mobile")}
                     className="w-full py-3 px-4 rounded-full bg-[#060D18]/95 hover:bg-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.4)] cursor-pointer"
                   >
                     <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF]">
@@ -863,18 +825,7 @@ export default function AIPersonasSection() {
                 {/* Interactive Action Button */}
                 <button
                   type="button"
-                  onClick={() =>
-                    setActiveVideo({
-                      title: "Sofía & Iván",
-                      role: "Dual Core Architecture",
-                      subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
-                      videoSrc: "/videos/sofia_ivan_dual.mp4",
-                      themeColor: "#00D1FF",
-                      secondaryColor: "#FF3858",
-                      avatarImg: "/images/dual_adults_master_transparent.png",
-                      icon: "✨",
-                    })
-                  }
+                  onClick={() => openVideo(DUAL_VIDEO)}
                   className="w-full px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black/90 to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 border border-[#00D1FF]/60 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_30px_rgba(0,209,255,0.25)] hover:shadow-[0_0_45px_rgba(0,209,255,0.5)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
@@ -903,18 +854,7 @@ export default function AIPersonasSection() {
 
                 {/* Main Illustration Container */}
                 <div 
-                  onClick={() =>
-                    setActiveVideo({
-                      title: "Sofía & Iván",
-                      role: "Dual Core Architecture",
-                      subtitle: "Creatividad + Tecnología • Prototipos a Producción a 60FPS",
-                      videoSrc: "/videos/sofia_ivan_dual.mp4",
-                      themeColor: "#00D1FF",
-                      secondaryColor: "#FF3858",
-                      avatarImg: "/images/dual_adults_master_transparent.png",
-                      icon: "✨",
-                    })
-                  }
+                  onClick={() => openVideo(DUAL_VIDEO)}
                   className="relative w-full aspect-[1024/387] max-w-[700px] cursor-pointer group/art transition-transform duration-500 hover:scale-[1.02]"
                   title="Haz clic para ver cómo trabajan juntos Sofía e Iván"
                 >
@@ -1053,111 +993,151 @@ export default function AIPersonasSection() {
       {/* ========================================================== */}
       {/* CINEMATIC DARK LUXURY VIDEO MODAL */}
       {/* ========================================================== */}
-      {activeVideo && (
-        <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
-          {/* Backdrop click to close */}
-          <div
-            className="absolute inset-0 z-0"
-            onClick={() => setActiveVideo(null)}
-          />
+      {activeVideo && (() => {
+        const isPortrait = videoFormat === "mobile";
+        const currentSrc = isPortrait ? activeVideo.videoSrcMobile : activeVideo.videoSrcDesktop;
 
-          <div
-            className="relative z-10 w-full max-w-4xl rounded-[32px] sm:rounded-[36px] bg-[#07070D] border p-4 sm:p-6 shadow-[0_0_100px_rgba(0,0,0,0.95)] space-y-4 my-auto overflow-hidden animate-in zoom-in-95 duration-300"
-            style={{
-              borderColor: `${activeVideo.themeColor}60`,
-              boxShadow: `0 0 80px ${activeVideo.themeColor}30`,
-            }}
-          >
-            {/* Modal Ambient Glow */}
+        return (
+          <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+            {/* Backdrop click to close */}
             <div
-              className="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-40"
-              style={{ backgroundColor: activeVideo.themeColor }}
+              className="absolute inset-0 z-0"
+              onClick={() => setActiveVideo(null)}
             />
 
-            {/* Modal Header Bar */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-3 relative z-10">
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-2xl flex items-center justify-center border text-xl flex-shrink-0 overflow-hidden relative"
-                  style={{
-                    borderColor: `${activeVideo.themeColor}60`,
-                    backgroundColor: `${activeVideo.themeColor}20`,
-                  }}
-                >
-                  <Image
-                    src={activeVideo.avatarImg}
-                    alt={activeVideo.title}
-                    fill
-                    className="object-cover object-top"
-                  />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base sm:text-lg font-black text-white uppercase font-mono tracking-tight">
-                      PRESENTACIÓN OFICIAL • {activeVideo.title}
-                    </h3>
-                    <span
-                      className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border uppercase hidden sm:inline-block"
-                      style={{
-                        color: activeVideo.themeColor,
-                        borderColor: `${activeVideo.themeColor}50`,
-                        backgroundColor: `${activeVideo.themeColor}15`,
-                      }}
-                    >
-                      60FPS HD
-                    </span>
+            <div
+              className={`relative z-10 w-full ${
+                isPortrait
+                  ? "max-w-[360px] sm:max-w-[420px]"
+                  : "max-w-4xl"
+              } rounded-[32px] sm:rounded-[36px] bg-[#07070D] border p-4 sm:p-5 shadow-[0_0_100px_rgba(0,0,0,0.95)] space-y-3.5 my-auto overflow-hidden animate-in zoom-in-95 duration-300 transition-all`}
+              style={{
+                borderColor: `${activeVideo.themeColor}60`,
+                boxShadow: `0 0 80px ${activeVideo.themeColor}30`,
+              }}
+            >
+              {/* Modal Ambient Glow */}
+              <div
+                className="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[100px] pointer-events-none opacity-40"
+                style={{ backgroundColor: activeVideo.themeColor }}
+              />
+
+              {/* Modal Header Bar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3 relative z-10">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center border text-xl flex-shrink-0 overflow-hidden relative"
+                    style={{
+                      borderColor: `${activeVideo.themeColor}60`,
+                      backgroundColor: `${activeVideo.themeColor}20`,
+                    }}
+                  >
+                    <Image
+                      src={activeVideo.avatarImg}
+                      alt={activeVideo.title}
+                      fill
+                      className="object-cover object-top"
+                    />
                   </div>
-                  <p className="text-[11px] font-mono text-gray-400">
-                    {activeVideo.subtitle}
-                  </p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm sm:text-base font-black text-white uppercase font-mono tracking-tight">
+                        PRESENTACIÓN • {activeVideo.title}
+                      </h3>
+                    </div>
+                    <p className="text-[10px] sm:text-[11px] font-mono text-gray-400 line-clamp-1">
+                      {activeVideo.subtitle}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right controls: Format Switcher + Close Button */}
+                <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                  {/* Format Selector Tabs */}
+                  <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.06] border border-white/15">
+                    <button
+                      type="button"
+                      onClick={() => setVideoFormat("mobile")}
+                      className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                        isPortrait
+                          ? "bg-[#FF3858] text-white shadow-[0_0_12px_rgba(255,56,88,0.6)]"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                      title="Ver video en formato vertical para celular"
+                    >
+                      <span>📱</span>
+                      <span>Celular</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setVideoFormat("desktop")}
+                      className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                        !isPortrait
+                          ? "bg-[#00D1FF] text-black shadow-[0_0_12px_rgba(0,209,255,0.6)]"
+                          : "text-gray-400 hover:text-white"
+                      }`}
+                      title="Ver video en formato horizontal para PC"
+                    >
+                      <span>🖥️</span>
+                      <span>PC / Cine</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveVideo(null)}
+                    aria-label="Cerrar video"
+                    className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-gray-300 hover:text-white transition-all cursor-pointer flex-shrink-0"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveVideo(null)}
-                aria-label="Cerrar video"
-                className="p-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/15 text-gray-300 hover:text-white transition-all cursor-pointer"
+              {/* Video Player Container */}
+              <div
+                className={`relative w-full rounded-2xl overflow-hidden bg-black border shadow-2xl transition-all ${
+                  isPortrait
+                    ? "aspect-[9/16] max-h-[68vh] mx-auto"
+                    : "aspect-video"
+                }`}
+                style={{ borderColor: `${activeVideo.themeColor}40` }}
               >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+                <video
+                  key={`${activeVideo.title}-${videoFormat}`}
+                  src={currentSrc}
+                  controls
+                  autoPlay
+                  playsInline
+                  className={`w-full h-full ${
+                    isPortrait ? "object-cover" : "object-contain"
+                  } bg-black`}
+                >
+                  Tu navegador no soporta reproducción de video HTML5.
+                </video>
+              </div>
 
-            {/* Video Player Container */}
-            <div
-              className="relative w-full rounded-2xl overflow-hidden bg-black border shadow-2xl aspect-video"
-              style={{ borderColor: `${activeVideo.themeColor}40` }}
-            >
-              <video
-                key={activeVideo.videoSrc}
-                src={activeVideo.videoSrc}
-                controls
-                autoPlay
-                playsInline
-                className="w-full h-full object-contain bg-black"
-              >
-                Tu navegador no soporta reproducción de video HTML5.
-              </video>
-            </div>
+              {/* Video Footer Info */}
+              <div className="flex items-center justify-between gap-3 pt-2 text-xs font-mono text-gray-400 border-t border-white/5">
+                <span className="flex items-center gap-1.5 text-[10px] sm:text-[11px]">
+                  <Sparkles className="w-3.5 h-3.5" style={{ color: activeVideo.themeColor }} />
+                  <span>
+                    Formato: <strong className="text-white">{isPortrait ? "Vertical Móvil 9:16" : "Widescreen PC 16:9"}</strong>
+                  </span>
+                </span>
 
-            {/* Video Footer Info */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-xs font-mono text-gray-400 border-t border-white/5">
-              <span className="flex items-center gap-1.5 text-[11px]">
-                <Sparkles className="w-3.5 h-3.5" style={{ color: activeVideo.themeColor }} />
-                <span>Innocentia Tech • Dual Core Architecture</span>
-              </span>
-
-              <button
-                type="button"
-                onClick={() => setActiveVideo(null)}
-                className="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-[11px] font-mono transition-all cursor-pointer"
-              >
-                Cerrar Video (Esc)
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveVideo(null)}
+                  className="px-3.5 py-1 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-[10px] sm:text-[11px] font-mono transition-all cursor-pointer"
+                >
+                  Cerrar (Esc)
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </section>
   );
 }

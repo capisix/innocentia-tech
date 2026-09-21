@@ -15,12 +15,22 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
   const [progress, setProgress] = useState(0);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
+  // Instant skip for mobile
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      onComplete();
+    }
+  }, [onComplete]);
+
   const handleSkip = () => {
     setIsVisible(false);
     setTimeout(onComplete, 600);
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      return;
+    }
     const video = videoRef.current;
     if (!video) return;
 

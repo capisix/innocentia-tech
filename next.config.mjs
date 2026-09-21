@@ -30,6 +30,22 @@ if (process.platform === "win32") {
       throw err;
     }
   };
+
+  if (fs.promises && fs.promises.readlink) {
+    const origPromisesReadlink = fs.promises.readlink;
+    fs.promises.readlink = async function (path, options) {
+      try {
+        return await origPromisesReadlink.call(fs.promises, path, options);
+      } catch (err) {
+        if (err && (err.code === "EISDIR" || err.code === "UNKNOWN")) {
+          const einvalErr = new Error(`EINVAL: invalid argument, readlink '${path}'`);
+          einvalErr.code = "EINVAL";
+          throw einvalErr;
+        }
+        throw err;
+      }
+    };
+  }
 }
 
 /** @type {import('next').NextConfig} */
@@ -40,6 +56,11 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  webpack: (config) => {
+    config.resolve.symlinks = false;
+    config.cache = false;
+    return config;
   },
 };
 

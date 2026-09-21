@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import AmbientLivingCanvas from "../components/common/AmbientLivingCanvas";
 import FloatingChatWidget from "../components/common/FloatingChatWidget";
 import ProjectCreationModal from "../components/common/ProjectCreationModal";
@@ -21,17 +21,21 @@ import Footer from "../components/footer/Footer";
 import PublicTelemetryHUD from "../components/common/PublicTelemetryHUD";
 
 function HomeContent() {
-  const [introFinished, setIntroFinished] = useState(() => {
-    if (typeof window !== "undefined") {
-      if (window.innerWidth < 768 || sessionStorage.getItem("innocentia_intro_viewed") === "true") {
-        return true;
-      }
-    }
-    return false;
-  });
+  const [showIntro, setShowIntro] = useState(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isChatMaximized, setIsChatMaximized] = useState(false);
+
+  // Only activate intro on desktop screens (>= 768px) and if not already viewed in session
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isMobile = window.innerWidth < 768;
+      const viewed = sessionStorage.getItem("innocentia_intro_viewed") === "true";
+      if (!isMobile && !viewed) {
+        setShowIntro(true);
+      }
+    }
+  }, []);
 
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
@@ -56,9 +60,9 @@ function HomeContent() {
       {/* Ambient Living Canvas (Partículas, Líneas vivas, Destellos sutiles Apple-style) */}
       <AmbientLivingCanvas />
 
-      {/* 01 Particle Intro */}
-      {!introFinished && (
-        <ParticleIntro onComplete={() => setIntroFinished(true)} />
+      {/* 01 Particle Intro (Solo en escritorio, nunca se descarga ni ejecuta en celulares) */}
+      {showIntro && (
+        <ParticleIntro onComplete={() => setShowIntro(false)} />
       )}
 
       {/* Floating Navbar */}
