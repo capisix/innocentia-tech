@@ -593,80 +593,65 @@ export default function AIPersonasSection() {
                 </div>
               </div>
 
-              {/* MOBILE VIEW (Dedicated Vertical Artwork 3: Iván Celular + Glass Info Panel) */}
-              <div className="block md:hidden rounded-[26px] bg-[#07070E]/80 backdrop-blur-xl border border-[#00D1FF]/30 overflow-hidden p-4 space-y-4 shadow-[0_10px_35px_rgba(0,209,255,0.2)]">
-                {/* Vertical Portrait Artwork */}
+              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Iván + Interactive Cyber Effects) */}
+              <div className="block md:hidden rounded-[30px] bg-[#07070E]/90 backdrop-blur-2xl border border-[#00D1FF]/40 overflow-hidden p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.25)] transition-all">
+                {/* Vertical Portrait Master Artwork with Interactive Neon Glow */}
                 <div 
                   onClick={() => openVideo(IVAN_VIDEO, "mobile")}
-                  className="relative w-full aspect-[1024/1536] max-h-[460px] rounded-2xl overflow-hidden cursor-pointer group/mobart"
+                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10"
                 >
-                  <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/25 rounded-full blur-[60px] pointer-events-none" />
+                  {/* Subtle Background Glow behind the Art */}
+                  <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
+                  
                   <Image
-                    src="/images/ivan_mobile.png"
-                    alt="Iván - Celular • Hemisferio Lógico"
+                    src="/images/ivan_mobile.jpg"
+                    alt="Iván - Hemisferio Lógico • Innocentia Tech"
                     fill
                     quality={100}
                     unoptimized
-                    className="object-contain relative z-10 transition-transform duration-500 group-hover/mobart:scale-[1.02]"
+                    className="object-cover relative z-10 transition-transform duration-700 group-hover/mobart:scale-[1.02]"
                     priority
                   />
-                  {/* Floating Play Indicator */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 group-hover/mobart:opacity-100 transition-opacity">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_30px_#00D1FF]">
-                      <Play className="w-6 h-6 fill-black text-black ml-1" />
-                    </div>
-                  </div>
-                </div>
 
-                {/* Mobile Info & Dialogue System */}
-                <div className="space-y-3 relative z-20">
-                  <div className="flex flex-col gap-1.5">
-                    <div className="w-full py-1 px-3 rounded-full bg-black/60 border border-[#70D6FF]/40 text-[#70D6FF] font-mono font-black text-xs uppercase tracking-wider text-center">
-                      SOFTWARE • ARQUITECTURA • CÓDIGO
-                    </div>
-                    <div className="w-full py-1 px-3 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/60 text-[#00D1FF] font-mono font-black text-[11px] uppercase tracking-widest text-center animate-pulse">
+                  {/* Top Ambient Status Pill (Floating over Image) */}
+                  <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#00D1FF]/60 text-[#00D1FF] backdrop-blur-md shadow-lg flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
                       HEMISFERIO LÓGICO
-                    </div>
+                    </span>
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#70D6FF]/60 text-[#70D6FF] backdrop-blur-md shadow-lg">
+                      DEV • CLOUD • IA
+                    </span>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-black/60 border border-[#00D1FF]/30">
-                    <p className="text-gray-200 text-xs font-light leading-relaxed">
-                      Representa la <strong className="text-[#00D1FF] font-semibold">lógica</strong>, la estructura y la tecnología. Transforma ideas en <strong className="text-[#70D6FF] font-semibold">soluciones sólidas y escalables</strong>.
-                    </p>
-                  </div>
-
-                  {/* Mobile Personalities */}
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
-                      <div className="text-sm font-mono text-[#00D1FF] font-black">&lt;/&gt;</div>
-                      <div className="text-[10px] font-bold text-white">Código</div>
-                      <div className="text-[9px] text-[#00D1FF] font-mono">Estructura</div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
-                      <div className="text-sm">🧊</div>
-                      <div className="text-[10px] font-bold text-white">Arquitectura</div>
-                      <div className="text-[9px] text-gray-400 font-mono">Solidez</div>
-                    </div>
-                    <div className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-center">
-                      <div className="text-sm">⚡</div>
-                      <div className="text-[10px] font-bold text-white">Ingeniería</div>
-                      <div className="text-[9px] text-gray-400 font-mono">Eficiencia</div>
+                  {/* Centered Floating Play Overlay on Tap/Hover */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10 opacity-90 group-hover/mobart:opacity-100 transition-opacity">
+                    <div className="p-3 rounded-2xl bg-black/75 backdrop-blur-xl border border-[#00D1FF]/60 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,209,255,0.7)] group-hover/mobart:scale-105 transition-transform">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
+                        <Play className="w-4 h-4 fill-black text-black ml-0.5" />
+                      </div>
+                      <div className="text-left leading-tight pr-1">
+                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
+                        <div className="text-[9px] text-[#00D1FF] font-mono">VIDEO VERTICAL 9:16</div>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Mobile Action Button */}
-                  <button
-                    type="button"
-                    onClick={() => openVideo(IVAN_VIDEO, "mobile")}
-                    className="w-full py-3 px-4 rounded-full bg-[#060D18]/95 hover:bg-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.4)] cursor-pointer"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF]">
-                      <Play className="w-3 h-3 fill-black text-black ml-0.5" />
-                    </div>
-                    <span className="font-bold text-xs">Iván presentación</span>
-                    <ArrowRight className="w-4 h-4 text-cyan-300" />
-                  </button>
                 </div>
+
+                {/* Mobile Action Presentation Button */}
+                <button
+                  type="button"
+                  onClick={() => openVideo(IVAN_VIDEO, "mobile")}
+                  className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#060D18] via-black to-[#060D18] hover:from-[#0C1A30] hover:to-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.35)] cursor-pointer active:scale-98 transition-all group/btn"
+                >
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_12px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
+                  </div>
+                  <span className="font-bold text-xs uppercase tracking-wider text-white">Iván presentación (60 FPS)</span>
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
+                    <ArrowRight className="w-4 h-4 text-cyan-300" />
+                  </div>
+                </button>
               </div>
 
               {/* Hidden Semantic Metadata for Google SEO & Screen Readers */}
