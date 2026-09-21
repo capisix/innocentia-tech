@@ -331,14 +331,15 @@ export default function AIPersonasSection() {
                 </div>
               </div>
 
-              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Sofía + Interactive Cyber Effects) */}
+              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Sofía) */}
               <div className="block md:hidden rounded-[30px] bg-[#07070E]/90 backdrop-blur-2xl border border-[#FF3858]/40 overflow-hidden p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(255,56,88,0.25)] transition-all">
-                {/* Vertical Portrait Master Artwork with Interactive Neon Glow */}
+                {/* Vertical Portrait Master Artwork (576x1024 Native 9:16 Aspect Ratio) */}
                 <div 
                   onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
-                  className="relative w-full aspect-[941/1672] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10"
+                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10 active:scale-[0.99] transition-transform"
+                  title="Toca para ver el video de presentación de Sofía"
                 >
-                  {/* Subtle Background Glow behind the Art */}
+                  {/* Subtle Background Glow */}
                   <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
                   
                   <Image
@@ -347,33 +348,9 @@ export default function AIPersonasSection() {
                     fill
                     quality={100}
                     unoptimized
-                    className="object-cover relative z-10 transition-transform duration-700 group-hover/mobart:scale-[1.02]"
+                    className="object-contain relative z-10"
                     priority
                   />
-
-                  {/* Top Ambient Status Pill (Floating over Image) */}
-                  <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#FF3858]/60 text-[#FF5470] backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-pulse" />
-                      HEMISFERIO CREATIVO
-                    </span>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#FFD166]/60 text-[#FFD166] backdrop-blur-md shadow-lg">
-                      UI • UX • ARTE
-                    </span>
-                  </div>
-
-                  {/* Centered Floating Play Overlay on Tap/Hover */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10 opacity-90 group-hover/mobart:opacity-100 transition-opacity">
-                    <div className="p-3 rounded-2xl bg-black/75 backdrop-blur-xl border border-[#FF3858]/60 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_30px_rgba(255,56,88,0.7)] group-hover/mobart:scale-105 transition-transform">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_15px_#FF3858] flex-shrink-0">
-                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
-                      </div>
-                      <div className="text-left leading-tight pr-1">
-                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
-                        <div className="text-[9px] text-[#FF5470] font-mono">VIDEO VERTICAL 9:16</div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Mobile Action Presentation Button */}
@@ -593,14 +570,15 @@ export default function AIPersonasSection() {
                 </div>
               </div>
 
-              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Iván + Interactive Cyber Effects) */}
+              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Iván) */}
               <div className="block md:hidden rounded-[30px] bg-[#07070E]/90 backdrop-blur-2xl border border-[#00D1FF]/40 overflow-hidden p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.25)] transition-all">
-                {/* Vertical Portrait Master Artwork with Interactive Neon Glow */}
+                {/* Vertical Portrait Master Artwork (576x1024 Native 9:16 Aspect Ratio) */}
                 <div 
                   onClick={() => openVideo(IVAN_VIDEO, "mobile")}
-                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10"
+                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10 active:scale-[0.99] transition-transform"
+                  title="Toca para ver el video de presentación de Iván"
                 >
-                  {/* Subtle Background Glow behind the Art */}
+                  {/* Subtle Background Glow */}
                   <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
                   
                   <Image
@@ -609,33 +587,9 @@ export default function AIPersonasSection() {
                     fill
                     quality={100}
                     unoptimized
-                    className="object-cover relative z-10 transition-transform duration-700 group-hover/mobart:scale-[1.02]"
+                    className="object-contain relative z-10"
                     priority
                   />
-
-                  {/* Top Ambient Status Pill (Floating over Image) */}
-                  <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#00D1FF]/60 text-[#00D1FF] backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
-                      HEMISFERIO LÓGICO
-                    </span>
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/75 border border-[#70D6FF]/60 text-[#70D6FF] backdrop-blur-md shadow-lg">
-                      DEV • CLOUD • IA
-                    </span>
-                  </div>
-
-                  {/* Centered Floating Play Overlay on Tap/Hover */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10 opacity-90 group-hover/mobart:opacity-100 transition-opacity">
-                    <div className="p-3 rounded-2xl bg-black/75 backdrop-blur-xl border border-[#00D1FF]/60 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,209,255,0.7)] group-hover/mobart:scale-105 transition-transform">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
-                        <Play className="w-4 h-4 fill-black text-black ml-0.5" />
-                      </div>
-                      <div className="text-left leading-tight pr-1">
-                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
-                        <div className="text-[9px] text-[#00D1FF] font-mono">VIDEO VERTICAL 9:16</div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Mobile Action Presentation Button */}
@@ -704,50 +658,26 @@ export default function AIPersonasSection() {
                 </p>
               </div>
 
-              {/* Master Full-Bleed Vertical Studio Artwork for Dual */}
-              <div className="rounded-[28px] sm:rounded-[32px] bg-[#07070E]/90 backdrop-blur-2xl border border-gradient-to-r p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.2),0_15px_45px_rgba(255,56,88,0.2)]" style={{ borderColor: "#00D1FF50" }}>
+              {/* Master Full-Bleed Vertical Studio Artwork for Dual (576x1024 Native 9:16 Aspect Ratio) */}
+              <div className="rounded-[28px] sm:rounded-[32px] bg-[#07070E]/90 backdrop-blur-2xl border border-cyan-400/30 p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.2),0_15px_45px_rgba(255,56,88,0.2)]">
                 <div 
                   onClick={() => openVideo(DUAL_VIDEO, "mobile")}
-                  className="relative w-full aspect-[941/1672] rounded-[22px] overflow-hidden cursor-pointer group/mobdual shadow-2xl border border-white/15"
+                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobdual shadow-2xl border border-white/15 active:scale-[0.99] transition-transform"
+                  title="Toca para ver el video de presentación Dual Core"
                 >
                   {/* Halos */}
                   <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/25 rounded-full blur-[60px] pointer-events-none" />
                   <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/25 rounded-full blur-[60px] pointer-events-none" />
 
                   <Image
-                    src="/images/dual_mobile.png"
+                    src="/images/dual_mobile.jpg"
                     alt="Sofía & Iván Dual Core • Innocentia Tech"
                     fill
                     quality={100}
                     unoptimized
-                    className="object-cover relative z-10 transition-transform duration-700 group-hover/mobdual:scale-[1.02]"
+                    className="object-contain relative z-10"
                     priority
                   />
-
-                  {/* Top Floating Badges */}
-                  <div className="absolute top-3 left-3 right-3 z-20 flex items-center justify-between pointer-events-none">
-                    <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-black/80 border border-[#FF3858]/60 text-[#FF5470] backdrop-blur-md shadow-lg flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-pulse" />
-                      SOFÍA • UI/UX
-                    </span>
-                    <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:py-1 rounded-full bg-black/80 border border-[#00D1FF]/60 text-[#00D1FF] backdrop-blur-md shadow-lg flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
-                      IVÁN • DEV/IA
-                    </span>
-                  </div>
-
-                  {/* Hover/Tap Overlay */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/10 opacity-90 group-hover/mobdual:opacity-100 transition-opacity">
-                    <div className="p-3 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_35px_rgba(0,209,255,0.7)] group-hover/mobdual:scale-105 transition-transform">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] via-purple-500 to-[#FF3858] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
-                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
-                      </div>
-                      <div className="text-left leading-tight pr-1">
-                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN DUAL</div>
-                        <div className="text-[9px] text-cyan-300 font-mono">VIDEO VERTICAL 9:16</div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Mobile Action Presentation Button */}
