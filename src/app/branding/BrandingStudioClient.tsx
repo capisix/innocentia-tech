@@ -120,14 +120,263 @@ const PALETTES_SHOWCASE = [
   },
 ];
 
+interface BrandShowcaseItem {
+  id: string;
+  title: string;
+  brand: string;
+  category: "logos" | "packaging" | "merch" | "identidad";
+  categoryLabel: string;
+  image: string;
+  description: string;
+  badge: string;
+  deliverables: string[];
+  aspect?: string;
+}
+
+const BRAND_SHOWCASE: BrandShowcaseItem[] = [
+  {
+    id: "h2w-crystal",
+    title: "Isotipo 3D Cristal & Transparencias",
+    brand: "Help 2 Win",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/logo 3d cristal con manos sin fondo.png",
+    description: "Renderización volumétrica en cristal óptico de alta refracción con manos en signo de victoria, diseñado para plataforma fintech y comunidad.",
+    badge: "3D Hyper Glass",
+    deliverables: ["Render 3D 8K", "Isotipo Alpha", "Master PNG"],
+  },
+  {
+    id: "h2w-merch-polo",
+    title: "Merchandising Textil Corporativo",
+    brand: "Help 2 Win",
+    category: "merch",
+    categoryLabel: "Merchandising & Textil",
+    image: "/images/branding/camisas fondo trans Help 2 win.png",
+    description: "Aplicación de marca en prendas polo y uniformes corporativos con bordado de alta densidad y paleta cromática oficial.",
+    badge: "Apparel & Merch",
+    deliverables: ["Guía Textil", "Ficha Técnica", "Mockup en Modelos"],
+  },
+  {
+    id: "h2w-totebag",
+    title: "Tote Bag Ecológica & Empaque",
+    brand: "Help 2 Win",
+    category: "merch",
+    categoryLabel: "Merchandising & Textil",
+    image: "/images/branding/Bolsa fontran Help 2 Win.png",
+    description: "Diseño de bolsa de algodón reciclado con emblema central serigrafiado a una tinta para kits de bienvenida y eventos.",
+    badge: "Eco Merchandising",
+    deliverables: ["Arte Serigrafía", "Separación de Color", "Prototipo"],
+  },
+  {
+    id: "h2w-vector3d",
+    title: "Emblema Vectorial 3D Orgánico",
+    brand: "Help 2 Win",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/herlp2win 3d vector.png",
+    description: "Isotipo de marca con gradientes dinámicos en tonos cian y esmeralda, adaptado para iconos de apps móviles e interfaces UI.",
+    badge: "App Icon Vector",
+    deliverables: ["SVG Vectorial", "Icono iOS/Android", "Gradientes HEX"],
+  },
+  {
+    id: "h2w-stamp",
+    title: "Sello Monocromático & Emblema",
+    brand: "Help 2 Win",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/Help2Win__sello_negro sin fondo.png",
+    description: "Versión circular de alto contraste para sellos de agua, lacrado digital, contratos y timbres notariales de la plataforma.",
+    badge: "Official Stamp",
+    deliverables: ["Vector Negativo", "Sello de Agua", "Certificados"],
+  },
+  {
+    id: "ikal-3d",
+    title: "Isotipo Escultórico Ancestral Maya 3D",
+    brand: "Ikal Chukum",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/ikal chukum logo 3d.png",
+    description: "Modelado 3D en relieve con textura de piedra caliza y resina vegetal de chukum para marca de acabados arquitectónicos de lujo.",
+    badge: "3D Stone Relief",
+    deliverables: ["Render Piedra 3D", "Vector Arqueológico", "Texturas"],
+  },
+  {
+    id: "ikal-color",
+    title: "Identidad Tipográfica Mineral",
+    brand: "Ikal Chukum",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/Logo Ikal chkum color.png",
+    description: "Composición tipográfica geométrica en tonalidades turquesa y chukum natural para catálogos de arquitectura y construcción.",
+    badge: "Corporate Identity",
+    deliverables: ["Tipografía Exclusiva", "Paleta Mineral", "Vector Master"],
+  },
+  {
+    id: "dejavu-gold",
+    title: "Logotipo 3D Golden Glow Metal",
+    brand: "Deja Vu Festival",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/logo Deja Vu festival.png",
+    description: "Tipografía 3D con textura de bronce pulido e iluminación volumétrica cálida para festival masivo de música y entretenimiento.",
+    badge: "Entertainment 3D",
+    deliverables: ["Render Metálico 3D", "Branding Escenarios", "Flyers HD"],
+  },
+  {
+    id: "ggc-chrome",
+    title: "Emblema 'G' 3D Acero & Cromo",
+    brand: "GGC Productions",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/logo GGC productiones - metalico.png",
+    description: "Monograma circular con biselado cromo de alta reflexión para casa productora de cine, comerciales y cinematografía.",
+    badge: "Cinema Chrome 3D",
+    deliverables: ["Render Acero Pulido", "Intro Animado", "Firma Digital"],
+  },
+  {
+    id: "ggc-gold",
+    title: "Monograma 'G' Oro & Carbón",
+    brand: "GGC Productions",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/logo GGC productiones - amarillo negro.png",
+    description: "Variante dorada sobre fondo negro carbón diseñada para claquetas de cine, créditos de largometrajes y material corporativo.",
+    badge: "Gold Edition",
+    deliverables: ["Logotipo Dorado", "Versión Papelería", "Claqueta de Cine"],
+  },
+  {
+    id: "jyoti-chocohongo",
+    title: "Packaging Botánico & Chocolate",
+    brand: "Jyöti • Chocohongo",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/frontal-empaque-chocohongo.jpg",
+    description: "Diseño integral de empaque con ilustración mística botánica y renderizado de tableta de chocolate artesanal con hongos adaptógenos.",
+    badge: "Luxury Food Packaging",
+    deliverables: ["Troquel Empaque", "Ilustración Vectorial", "Render Producto"],
+  },
+  {
+    id: "nidara-tree",
+    title: "Árbol de la Vida 3D Orgánico",
+    brand: "Nidara Wellness",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/logo arbol nidara 3d tipografia blanca.png",
+    description: "Isotipo en relieve de follaje esmeralda con raíces entrelazadas en 3D para marca de bienestar holístico, medicina natural y spas.",
+    badge: "Biophilic 3D",
+    deliverables: ["Render Biófilo 3D", "Tipografía Serif", "Guía Botánica"],
+  },
+  {
+    id: "bindu-cbd-bottle",
+    title: "Render Botella Gotero CBD & Flores",
+    brand: "Bindu CBD",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/botella cbd con flores.png",
+    description: "Escena 3D fotorrealista de botella de cristal ámbar con gotero, etiqueta metalizada mate y ambientación con pétalos de rosa.",
+    badge: "Cosmetic 3D Render",
+    deliverables: ["Etiqueta Frontal", "Render Fotorrealista", "Filtro UV"],
+  },
+  {
+    id: "bindu-hair-wax",
+    title: "Envase Circular de Cera Capilar",
+    brand: "Bindu Grooming",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/cera para cabellor transparente.png",
+    description: "Diseño de tapa circular de aluminio mate con grabado láser e isotipo verde menta para línea de cuidado personal masculino.",
+    badge: "Grooming Packaging",
+    deliverables: ["Tapa Grabado Láser", "Etiqueta Circular", "Mockup 3D"],
+  },
+  {
+    id: "bindu-moisturizer-tube",
+    title: "Tubo Cosmético Crema Humectante",
+    brand: "Bindu Skincare",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/crema humectante empaque sin fondo.png",
+    description: "Prototipo de tubo colapsible negro mate con banda ámbar reflectiva y tipografía minimalista de alta legibilidad.",
+    badge: "Skincare Packaging",
+    deliverables: ["Diseño de Tubo", "Tipografía Dermocosmética", "Offset"],
+  },
+  {
+    id: "bindu-cream-jar",
+    title: "Pote Cosmético Negro & Ámbar",
+    brand: "Bindu Skincare",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/crema humectante pote sin fondo.png",
+    description: "Frasco cilíndrico para crema facial nocturna con acabado mate y franja cromática corporativa.",
+    badge: "Cosmetic Jar",
+    deliverables: ["Envase 3D", "Serigrafía de Frasco", "Caja Exterior"],
+  },
+  {
+    id: "bindu-antiaging-pump",
+    title: "Dosificador Airless Antiarrugas",
+    brand: "Bindu Skincare",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/crema antiarrguas sin fondos.png",
+    description: "Envase dosificador airless blanco satín con bomba dispensadora de lujo para suero anti-edad.",
+    badge: "Airless Pump Dispenser",
+    deliverables: ["Botella Satín", "Etiquetado Frontal", "Render Producto"],
+  },
+  {
+    id: "experience-safely",
+    title: "Emblema Sendero de Viaje Seguro",
+    brand: "Experience Safely",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/Eperiencie Safely sin fondo con tipografía.png",
+    description: "Logotipo circular con sendero turquesa en 'S' y estrella guía naranja para plataforma de reservas turísticas y experiencias seguras.",
+    badge: "Travel & Booking Icon",
+    deliverables: ["Logotipo Vectorial", "Manual de Aplicación", "Favicons"],
+  },
+  {
+    id: "estilo-wood",
+    title: "Monograma Caligráfico sobre Madera",
+    brand: "Es-tilo",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/logo sin borde madera v4clara.png",
+    description: "Diseño de firma tipográfica manuscrita de lujo con acabados en bajorrelieve sobre madera clara para marca de moda y decoración.",
+    badge: "Signature Monogram",
+    deliverables: ["Trazo Manual Vectorial", "Boceto Caligráfico", "Rotulación"],
+  },
+  {
+    id: "estilo-diamond",
+    title: "Isotipo Geométrico Diamantado",
+    brand: "Es-tilo",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/propuesta logo v4.3 sin fondo.png",
+    description: "Propuesta de gema poligonal facetada con caligrafía interior dorada para joyería y alta costura.",
+    badge: "Diamond Vector",
+    deliverables: ["Retícula Geométrica", "Corte Láser", "Isotipo Master"],
+  },
+];
+
 export default function BrandingStudioClient() {
   const [selectedPkg, setSelectedPkg] = useState<BrandingPackage>(BRANDING_PACKAGES[1]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [activePaletteIdx, setActivePaletteIdx] = useState(0);
+  const [selectedFilter, setSelectedFilter] = useState<"todos" | "logos" | "packaging" | "merch" | "identidad">("todos");
+  const [activeShowcaseItem, setActiveShowcaseItem] = useState<BrandShowcaseItem | null>(null);
+
+  const filteredShowcase = selectedFilter === "todos"
+    ? BRAND_SHOWCASE
+    : BRAND_SHOWCASE.filter((item) => item.category === selectedFilter);
 
   const getWhatsAppLink = (pkgName: string) => {
     const text = encodeURIComponent(
       `¡Hola Sofía! Vi el estudio de Branding en Innocentia Tech y me interesa cotizar el paquete "${pkgName}". ¿Me podrías orientar con mi marca?`
+    );
+    return `https://wa.me/529601771556?text=${text}`;
+  };
+
+  const getWhatsAppShowcaseLink = (brandTitle: string, brandName: string) => {
+    const text = encodeURIComponent(
+      `¡Hola Sofía! Vi el diseño de "${brandTitle}" (${brandName}) en tu portafolio de Innocentia Tech y me gustaría cotizar un desarrollo de marca con esa misma calidad para mi proyecto.`
     );
     return `https://wa.me/529601771556?text=${text}`;
   };
@@ -155,7 +404,7 @@ export default function BrandingStudioClient() {
             </h1>
 
             <p className="text-gray-300 text-sm sm:text-base lg:text-lg font-light max-w-xl leading-relaxed">
-              Hola, soy <strong>Sofía</strong>, Directora Creativa en Innocentia Tech. Diseño logotipos, paletas de color y manuales de identidad pensados para conectar emocionalmente con tus clientes y transmitir confianza desde el primer segundo.
+              Hola, soy <strong>Sofía</strong>, Directora Creativa en Innocentia Tech. Diseño logotipos vectoriales, renders de packaging 3D, paletas cromáticas y manuales de identidad pensados para conectar con tu audiencia y elevar el valor de tu negocio.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -229,6 +478,111 @@ export default function BrandingStudioClient() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SHOWCASE & PORTFOLIO DE MARCAS CREADAS POR SOFÍA */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10 pb-6 text-left">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF3858]/10 border border-[#FF3858]/30 text-xs font-mono text-[#FF5470] uppercase">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>PORTAFOLIO OFICIAL & MOCKUPS</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              Marcas Diseñadas en el Estudio
+            </h2>
+            <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
+              Explora algunos de los proyectos de identidad, isotipos en 3D, renders de packaging y merchandising desarrollados por Sofía para clientes en tecnología, cosmética, eventos y arquitectura.
+            </p>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: "todos", label: "Todos (20)" },
+              { id: "logos", label: "Logos & 3D" },
+              { id: "packaging", label: "Packaging & Cosmética" },
+              { id: "merch", label: "Merchandising & Textil" },
+              { id: "identidad", label: "Sellos & Manuales" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setSelectedFilter(tab.id as any)}
+                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-bold transition-all cursor-pointer ${
+                  selectedFilter === tab.id
+                    ? "bg-[#FF3858] text-white shadow-[0_0_15px_#FF3858]"
+                    : "bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredShowcase.map((item) => (
+            <div
+              key={item.id}
+              onClick={() => setActiveShowcaseItem(item)}
+              className="group rounded-3xl bg-black/60 border border-white/10 hover:border-[#FF3858]/70 overflow-hidden flex flex-col justify-between transition-all duration-300 backdrop-blur-xl cursor-pointer hover:shadow-[0_15px_35px_rgba(255,56,88,0.2)] hover:-translate-y-1"
+            >
+              {/* Image Preview Container */}
+              <div className="relative w-full aspect-square bg-[#050508] p-4 flex items-center justify-center overflow-hidden border-b border-white/5">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-end p-4">
+                  <span className="text-[11px] font-mono text-[#FFD166] font-bold flex items-center gap-1">
+                    <span>Ver ficha & ampliar</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </div>
+
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="max-h-full max-w-full object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 z-20">
+                  <span className="px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[10px] font-mono font-bold text-gray-200">
+                    {item.badge}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card Meta */}
+              <div className="p-5 space-y-2.5 text-left flex-1 flex flex-col justify-between">
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono text-[#FF5470] font-bold uppercase tracking-wider">
+                    {item.brand} • {item.categoryLabel}
+                  </div>
+                  <h3 className="text-base font-bold text-white group-hover:text-[#FFD166] transition-colors line-clamp-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-gray-400 font-light line-clamp-2 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-white/10 flex flex-wrap gap-1.5">
+                  {item.deliverables.map((del, dIdx) => (
+                    <span
+                      key={dIdx}
+                      className="px-2 py-0.5 rounded-md bg-white/[0.04] text-[9px] font-mono text-gray-300 border border-white/5"
+                    >
+                      {del}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -518,6 +872,99 @@ export default function BrandingStudioClient() {
           </div>
         </div>
       </section>
+
+      {/* ========================================================================= */}
+      {/* BRAND SHOWCASE LIGHTBOX MODAL */}
+      {/* ========================================================================= */}
+      {activeShowcaseItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl animate-in fade-in duration-300">
+          <div className="relative w-full max-w-4xl rounded-3xl bg-[#090508] border border-[#FF3858]/50 overflow-hidden shadow-2xl space-y-4 p-5 sm:p-7 max-h-[92vh] flex flex-col justify-between">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <span className="px-3 py-1 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[#FF5470] font-mono text-xs font-bold uppercase tracking-wider">
+                  {activeShowcaseItem.badge}
+                </span>
+                <span className="text-xs font-mono text-gray-400">
+                  {activeShowcaseItem.brand} • {activeShowcaseItem.categoryLabel}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveShowcaseItem(null)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center overflow-y-auto pr-1">
+              {/* High-res Image Preview */}
+              <div className="md:col-span-7 relative w-full aspect-square max-h-[420px] rounded-2xl bg-[#030204] border border-white/10 p-6 flex items-center justify-center overflow-hidden">
+                <img
+                  src={activeShowcaseItem.image}
+                  alt={activeShowcaseItem.title}
+                  className="max-h-full max-w-full object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]"
+                />
+              </div>
+
+              {/* Meta & Specifications */}
+              <div className="md:col-span-5 space-y-5 text-left">
+                <div className="space-y-1.5">
+                  <span className="text-[11px] font-mono text-[#FFD166] uppercase font-bold tracking-wider">
+                    Ficha Técnica de Diseño
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                    {activeShowcaseItem.title}
+                  </h3>
+                  <div className="text-xs font-mono text-gray-400">
+                    Cliente / Proyecto: <strong className="text-white">{activeShowcaseItem.brand}</strong>
+                  </div>
+                </div>
+
+                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                  {activeShowcaseItem.description}
+                </p>
+
+                {/* Deliverables */}
+                <div className="space-y-2 border-t border-white/10 pt-3">
+                  <span className="text-[10px] font-mono text-gray-400 uppercase font-bold block">
+                    Entregables & Formatos:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {activeShowcaseItem.deliverables.map((del, dIdx) => (
+                      <span
+                        key={dIdx}
+                        className="px-2.5 py-1 rounded-lg bg-white/[0.05] border border-white/10 text-[10px] font-mono text-emerald-400 font-semibold flex items-center gap-1"
+                      >
+                        <Check className="w-3 h-3 text-emerald-400" />
+                        <span>{del}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Direct CTA */}
+                <div className="pt-3 border-t border-white/10 space-y-2">
+                  <a
+                    href={getWhatsAppShowcaseLink(activeShowcaseItem.title, activeShowcaseItem.brand)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 px-5 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(255,56,88,0.5)] hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>Quiero un diseño como este</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                  <p className="text-[10px] font-mono text-gray-400 text-center">
+                    Sofía te asesora directamente en WhatsApp
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* SOFÍA VIDEO PRESENTATION MODAL */}
