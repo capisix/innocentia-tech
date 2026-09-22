@@ -308,15 +308,18 @@ export default function MarketingGrowthClient() {
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-400 uppercase">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>ACOMPAÑAMIENTO INTEGRAL</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-white/15 text-xs font-mono text-gray-300 uppercase shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+            <span>ESTRATEGIAS DE CRECIMIENTO A MEDIDA</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
             Planes de Campañas & Aceleración de Ventas
           </h2>
-          <p className="text-gray-300 text-xs sm:text-sm font-light">
-            Elige el nivel de acompañamiento para tu empresa. Administramos tu pauta, optimizamos creativos y medimos conversiones cada semana.
+          <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed max-w-2xl mx-auto">
+            <span className="text-cyan-300 font-medium font-mono text-xs block mb-1">
+              📈 Precios recomendados de referencia • Nos adaptamos 100% a tus necesidades
+            </span>
+            Administramos tu pauta publicitaria, optimizamos creativos y medimos conversiones con retorno positivo.
           </p>
         </div>
 
@@ -346,7 +349,10 @@ export default function MarketingGrowthClient() {
                   </div>
 
                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
-                    <div className="text-3xl sm:text-4xl font-black text-white font-mono">{plan.feeMonthly}</div>
+                    <div className="flex items-baseline justify-between">
+                      <div className="text-3xl sm:text-4xl font-black text-white font-mono">{plan.feeMonthly}</div>
+                      <span className="text-[10px] font-mono text-gray-400 uppercase">Sugerido</span>
+                    </div>
                     <div className="text-[11px] font-mono text-cyan-300">{plan.recommendedAdSpend}</div>
                   </div>
 
@@ -396,6 +402,36 @@ export default function MarketingGrowthClient() {
               </div>
             );
           })}
+        </div>
+
+        {/* Leyenda Elegante: Precios recomendados & Adaptabilidad */}
+        <div className="max-w-4xl mx-auto p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-cyan-500/10 via-[#040810] to-blue-500/10 border border-cyan-500/30 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-5 shadow-2xl text-left">
+          <div className="flex items-center gap-4">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+              📈
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Precios Recomendados • Nos adaptamos a tus necesidades
+                </span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+              <p className="text-xs text-gray-300 font-light leading-relaxed">
+                Nuestros paquetes de gestión son <em>referencias estratégicas</em>. Ajustamos el volumen de pauta, canales de difusión y embudos de conversión según la etapa y el presupuesto de tu empresa.
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20me%20gustaría%20una%20propuesta%20de%20campañas%20adaptada%20a%20mi%20presupuesto."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-lg flex-shrink-0"
+          >
+            <span>Plan a mi medida</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#00D1FF]" />
+          </a>
         </div>
       </section>
 

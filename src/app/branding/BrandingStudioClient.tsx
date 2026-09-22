@@ -720,15 +720,18 @@ export default function BrandingStudioClient() {
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-400 uppercase">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>TRANSPARENCIA TOTAL</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/10 via-amber-500/10 to-[#FF3858]/10 border border-white/15 text-xs font-mono text-gray-300 uppercase shadow-lg">
+            <Sparkles className="w-3.5 h-3.5 text-[#FFD166]" />
+            <span>PROPUESTAS A LA MEDIDA & TRANSPARENCIA</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
             Paquetes de Inversión en Branding
           </h2>
-          <p className="text-gray-300 text-xs sm:text-sm font-light">
-            Selecciona el paquete ideal para tu negocio y comienza a trabajar con Sofía hoy mismo.
+          <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed max-w-2xl mx-auto">
+            <span className="text-[#FFD166] font-medium font-mono text-xs block mb-1">
+              ✨ Precios recomendados de referencia • Nos adaptamos 100% a tus necesidades
+            </span>
+            Selecciona el paquete base o solicita una cotización personalizada según la escala y requerimientos específicos de tu marca.
           </p>
         </div>
 
@@ -758,7 +761,10 @@ export default function BrandingStudioClient() {
                   </div>
 
                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
-                    <div className="text-3xl sm:text-4xl font-black text-white font-mono">{pkg.price}</div>
+                    <div className="flex items-baseline justify-between">
+                      <div className="text-3xl sm:text-4xl font-black text-white font-mono">{pkg.price}</div>
+                      <span className="text-[10px] font-mono text-gray-400 uppercase">Sugerido</span>
+                    </div>
                     <div className="text-[11px] font-mono text-emerald-400">Entrega: {pkg.deliveryTime}</div>
                   </div>
 
@@ -796,6 +802,36 @@ export default function BrandingStudioClient() {
               </div>
             );
           })}
+        </div>
+
+        {/* Leyenda Elegante: Precios recomendados & Adaptabilidad */}
+        <div className="max-w-4xl mx-auto p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#FF3858]/10 via-[#0B0609] to-[#FF7A00]/10 border border-[#FF3858]/30 backdrop-blur-xl flex flex-col sm:flex-row items-center justify-between gap-5 shadow-2xl text-left">
+          <div className="flex items-center gap-4">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#FF3858]/20 to-[#FFD166]/20 border border-[#FF3858]/40 flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
+              ✨
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Precios Recomendados • Nos adaptamos a tus necesidades
+                </span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+              <p className="text-xs text-gray-300 font-light leading-relaxed">
+                Los paquetes mostrados son <em>referencias estratégicas</em>. Si requieres entregables específicos, pagos por etapas o un alcance a tu medida, diseñamos una propuesta personalizada para ti.
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="https://wa.me/529601771556?text=Hola%20Sofía,%20vi%20los%20paquetes%20de%20branding%20en%20Innocentia%20Tech%20y%20me%20gustaría%20una%20propuesta%20adaptada%20a%20mis%20necesidades."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-lg flex-shrink-0"
+          >
+            <span>Propuesta a mi medida</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#FF5470]" />
+          </a>
         </div>
       </section>
 
