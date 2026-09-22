@@ -814,9 +814,9 @@ export default function AIPersonasSection() {
             {/* ========================================================== */}
             {/* DESKTOP DUAL CORE MASTER VIEW (12-Column Wide Grid) */}
             {/* ========================================================== */}
-            <div className="hidden lg:grid grid-cols-12 gap-8 items-center relative z-20">
+            <div className="hidden lg:grid grid-cols-12 gap-8 items-stretch relative z-20">
               {/* Left Column: Typography, Synergy Glass Cards & Interactive Button */}
-              <div className="col-span-5 flex flex-col justify-between space-y-4">
+              <div className="col-span-5 flex flex-col justify-between h-full space-y-4">
                 {/* Top Badge */}
                 <div>
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 border border-white/20 text-xs font-mono font-bold text-gray-200 uppercase backdrop-blur-xl shadow-lg">
@@ -923,14 +923,14 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* Interactive Action Button */}
+                {/* Interactive Action Button (Pinned to Bottom) */}
                 <button
                   type="button"
                   onClick={() => openVideo(DUAL_VIDEO, "desktop")}
-                  className="w-full px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black/90 to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 border border-[#00D1FF]/60 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_30px_rgba(0,209,255,0.25)] hover:shadow-[0_0_45px_rgba(0,209,255,0.5)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                  className="w-full mt-auto px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black/90 to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 border border-[#00D1FF]/60 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_30px_rgba(0,209,255,0.25)] hover:shadow-[0_0_45px_rgba(0,209,255,0.5)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
-                    <Play className="w-3 h-3 fill-black text-black ml-0.5" />
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_12px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
+                    <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
                   </div>
                   <span className="uppercase text-white tracking-widest text-xs">
                     DESCUBRE CÓMO CREAN JUNTOS
@@ -939,50 +939,52 @@ export default function AIPersonasSection() {
                 </button>
               </div>
 
-              {/* Right Column: Hero Artwork with Glowing Badges & Ambient Aura */}
-              <div className="col-span-7 relative w-full flex flex-col items-center justify-center">
+              {/* Right Column: Hero Artwork with Glowing Badges & Dynamic Console (Pinned to Bottom) */}
+              <div className="col-span-7 relative w-full flex flex-col justify-between h-full">
                 {/* Floating Holographic Labels */}
-                <div className="w-full flex items-center justify-between px-6 mb-2 z-30">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#FF3858]/40 text-xs font-mono font-bold text-[#FF5470] shadow-[0_0_15px_rgba(255,56,88,0.3)]">
+                <div className="w-full flex items-center justify-between px-4 mb-2 z-30">
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/75 backdrop-blur-xl border border-[#FF3858]/50 text-xs font-mono font-bold text-[#FF5470] shadow-[0_0_18px_rgba(255,56,88,0.35)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#FF3858] animate-ping" />
                     <span>DIRECCIÓN UI/UX</span>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-[#00D1FF]/40 text-xs font-mono font-bold text-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.3)]">
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/75 backdrop-blur-xl border border-[#00D1FF]/50 text-xs font-mono font-bold text-[#00D1FF] shadow-[0_0_18px_rgba(0,209,255,0.35)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-ping" />
                     <span>ARQUITECTURA & IA</span>
                   </div>
                 </div>
 
-                {/* Main Illustration Container */}
+                {/* Main Illustration Container - Expanded & Prominent */}
                 <div 
                   onClick={() => openVideo(DUAL_VIDEO, "desktop")}
-                  className="relative w-full aspect-[1024/387] max-w-[700px] cursor-pointer group/art transition-transform duration-500 hover:scale-[1.02]"
+                  className="relative w-full flex-1 min-h-[350px] lg:min-h-[390px] cursor-pointer group/art transition-transform duration-500 hover:scale-[1.015] flex items-center justify-center my-1"
                   title="Haz clic para ver cómo trabajan juntos Sofía e Iván"
                 >
                   {/* Subtle Character Halo Glows */}
-                  <div className="absolute top-1/4 left-1/10 w-56 h-56 bg-[#FF3858]/30 rounded-full blur-[80px] pointer-events-none" />
-                  <div className="absolute top-1/4 right-1/10 w-56 h-56 bg-[#00D1FF]/30 rounded-full blur-[80px] pointer-events-none" />
-                  <div className="absolute inset-x-1/4 top-1/3 w-48 h-48 bg-purple-500/20 rounded-full blur-[70px] pointer-events-none" />
+                  <div className="absolute top-1/4 left-1/10 w-64 h-64 bg-[#FF3858]/30 rounded-full blur-[90px] pointer-events-none" />
+                  <div className="absolute top-1/4 right-1/10 w-64 h-64 bg-[#00D1FF]/30 rounded-full blur-[90px] pointer-events-none" />
+                  <div className="absolute inset-x-1/4 top-1/3 w-56 h-56 bg-purple-500/20 rounded-full blur-[80px] pointer-events-none" />
 
                   <Image
                     src="/images/dual_adults_master_transparent.png"
                     alt="Sofía e Iván • Dual Core Innocentia Tech"
                     fill
-                    className="object-contain object-center drop-shadow-[0_20px_45px_rgba(0,0,0,0.95)] transition-transform duration-700 group-hover/art:scale-[1.03]"
+                    className="object-contain object-center drop-shadow-[0_20px_45px_rgba(0,0,0,0.95)] transition-transform duration-700 group-hover/art:scale-[1.02]"
                     priority
                   />
 
                   {/* Hover Overlay Badge */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/art:opacity-100 transition-all duration-300">
-                    <div className="px-4 py-2 rounded-2xl bg-black/85 backdrop-blur-2xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-2 shadow-[0_0_40px_rgba(0,209,255,0.7)]">
-                      <Play className="w-3.5 h-3.5 fill-[#00D1FF] text-[#00D1FF]" />
+                    <div className="px-5 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-white/30 text-white font-mono text-xs font-bold flex items-center gap-2.5 shadow-[0_0_40px_rgba(0,209,255,0.7)]">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#FF3858] flex items-center justify-center shadow-[0_0_10px_#00D1FF]">
+                        <Play className="w-3 h-3 fill-white text-white ml-0.5" />
+                      </div>
                       <span>VER PRESENTACIÓN DUAL CORE</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Dynamic Rotating Hashtags Rectangle Console (Desktop) */}
-                <div className="w-full mt-3 p-[1px] rounded-2xl bg-gradient-to-r from-[#FF3858]/35 via-purple-500/25 to-[#00D1FF]/35 shadow-[0_4px_25px_rgba(0,0,0,0.8)] z-30">
+                {/* Dynamic Rotating Hashtags Rectangle Console (Desktop) - Bottom-Aligned with Left Button */}
+                <div className="w-full mt-auto p-[1px] rounded-2xl bg-gradient-to-r from-[#FF3858]/35 via-purple-500/25 to-[#00D1FF]/35 shadow-[0_4px_25px_rgba(0,0,0,0.8)] z-30">
                   <div className="rounded-[15px] bg-[#0A0A16]/90 backdrop-blur-2xl p-3.5 space-y-2 border border-white/10">
                     {/* Header Row: Live indicator & Category Title */}
                     <div className="flex items-center justify-between text-xs font-mono">
