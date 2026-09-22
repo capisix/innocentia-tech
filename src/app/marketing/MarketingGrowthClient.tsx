@@ -193,15 +193,15 @@ export default function MarketingGrowthClient() {
           <div className="lg:col-span-5 relative flex justify-center">
             <div
               onClick={() => setIsVideoModalOpen(true)}
-              className="relative w-full max-w-[440px] aspect-[1024/1100] rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_50px_rgba(0,209,255,0.3)] border border-[#00D1FF]/40 bg-black/60"
+              className="relative w-full max-w-[460px] aspect-square rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_50px_rgba(0,209,255,0.35)] border border-[#00D1FF]/40 bg-black/60"
             >
               <Image
-                src="/images/ivan_desktop_hd.png"
+                src="/images/ivan_segmentacion_growth.jpg"
                 alt="Iván - Lead Tech & Growth Strategist • Innocentia Tech"
                 fill
                 quality={100}
                 unoptimized
-                className="object-contain transition-transform duration-700 group-hover:scale-105"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
                 priority
               />
 
@@ -573,7 +573,7 @@ export default function MarketingGrowthClient() {
 
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
               <video
-                src="/videos/ivan_presentacion.mp4"
+                src="/videos/ivan_segmentacion.mp4"
                 controls
                 autoPlay
                 className="w-full h-full object-cover"

@@ -681,7 +681,7 @@ export default function BrandingStudioClient() {
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[1.08]">
               Donde las ideas se convierten en{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5470] via-[#FF8800] to-[#FFE066] font-black drop-shadow-[0_0_35px_rgba(255,84,112,0.4)]">
                 Marcas Memorables
               </span>
             </h1>
@@ -745,15 +745,15 @@ export default function BrandingStudioClient() {
           <div className="lg:col-span-5 relative flex justify-center">
             <div
               onClick={() => setIsVideoModalOpen(true)}
-              className="relative w-full max-w-[440px] aspect-[1024/1100] rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_50px_rgba(255,56,88,0.3)] border border-[#FF3858]/30 bg-black/60"
+              className="relative w-full max-w-[460px] aspect-square rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_50px_rgba(255,56,88,0.35)] border border-[#FF3858]/40 bg-black/60"
             >
               <Image
-                src="/images/sofia_desktop_hd.png"
+                src="/images/sofia_branding_hd.jpg"
                 alt="Sofía - Creative Director • Innocentia Tech"
                 fill
                 quality={100}
                 unoptimized
-                className="object-contain transition-transform duration-700 group-hover:scale-105"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
                 priority
               />
 
@@ -2250,7 +2250,7 @@ export default function BrandingStudioClient() {
 
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
               <video
-                src="/videos/sofia_presentacion.mp4"
+                src="/videos/sofia_branding.mp4"
                 controls
                 autoPlay
                 className="w-full h-full object-cover"
