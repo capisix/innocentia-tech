@@ -27,12 +27,12 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
   }, []);
 
   const navLinks = [
-    { name: "Inicio", href: "/#hero" },
-    { name: "Capacidades", href: "/#servicios" },
+    { name: "Inicio", href: "/" },
+    { name: "🎨 Branding", href: "/branding", badge: "Sofía" },
+    { name: "📈 Campañas", href: "/marketing", badge: "Growth" },
     { name: "Proyectos", href: "/proyectos" },
     { name: "Blog & Precios", href: "/blog" },
-    { name: "Laboratorio", href: "/#playground" },
-    { name: "Preguntas (FAQ)", href: "/faq" },
+    { name: "FAQ", href: "/faq" },
   ];
 
   return (
@@ -55,23 +55,23 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
           </Link>
 
           {/* Clean Navigation Menu (Single Line, No Awkward Wrap) */}
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-7">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
             {navLinks.map((link) => {
               const isActive = activeLink === link.name;
               return (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setActiveLink(link.name)}
-                  className={`relative text-xs sm:text-sm font-medium transition-all tracking-wide py-1.5 whitespace-nowrap ${
-                    isActive ? "text-white font-bold drop-shadow-[0_0_10px_#FF3858]" : "text-gray-400 hover:text-white"
+                  className={`relative text-xs sm:text-sm font-medium transition-all tracking-wide py-1.5 whitespace-nowrap flex items-center gap-1.5 ${
+                    isActive ? "text-white font-bold drop-shadow-[0_0_10px_#FF3858]" : "text-gray-300 hover:text-white"
                   }`}
                 >
-                  {link.name}
+                  <span>{link.name}</span>
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#FF3858] to-[#FF7A00] rounded-full shadow-[0_0_10px_#FF3858]" />
                   )}
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -126,17 +126,18 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
           <div className="lg:hidden bg-[#07070D]/95 border-b border-white/10 p-6 space-y-4 backdrop-blur-2xl animate-in slide-in-from-top duration-200">
             <nav className="flex flex-col space-y-3">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => {
                     setActiveLink(link.name);
                     setMobileMenuOpen(false);
                   }}
-                  className="text-sm font-semibold text-gray-300 hover:text-white py-1"
+                  className="text-sm font-semibold text-gray-300 hover:text-white py-1 flex items-center justify-between"
                 >
-                  {link.name}
-                </a>
+                  <span>{link.name}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
+                </Link>
               ))}
             </nav>
             <div className="pt-4 border-t border-white/10 flex flex-col gap-3">

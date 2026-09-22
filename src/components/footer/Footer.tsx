@@ -236,6 +236,16 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-gray-400">
               <li>
+                <Link href="/branding" className="hover:text-[#FF3858] text-rose-300 font-bold transition-colors flex items-center gap-1.5">
+                  <span>🎨 Estudio de Branding (Sofía)</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/marketing" className="hover:text-[#00D1FF] text-cyan-300 font-bold transition-colors flex items-center gap-1.5">
+                  <span>📈 Campañas & Segmentación</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/crear-proyecto" className="hover:text-white transition-colors">
                   Cotizador Oficial de Proyectos
                 </Link>

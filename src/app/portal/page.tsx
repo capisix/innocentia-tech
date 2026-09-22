@@ -739,6 +739,7 @@ function PortalMainContent() {
       paidAmount: 0,
       targetDate: "30 de Octubre de 2026",
       unreadAlerts: 1,
+      demoUrl: "https://app.multiplataforma.innocentia.tech/#demo-axana",
     },
   ]);
 
@@ -2241,7 +2242,7 @@ function PortalMainContent() {
                           <Link
                             href={proj.demoUrl}
                             target="_blank"
-                            className="px-3 py-2 rounded-xl bg-[#E87512]/20 hover:bg-[#E87512] text-[#E87512] hover:text-black border border-[#E87512]/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(232,117,18,0.2)]"
+                            className="px-3 py-2 rounded-xl bg-[#00D1FF]/20 hover:bg-[#00D1FF] text-[#00D1FF] hover:text-black border border-[#00D1FF]/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(0,209,255,0.25)]"
                           >
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>Demo App</span>
