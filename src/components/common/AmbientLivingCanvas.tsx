@@ -319,8 +319,18 @@ export default function AmbientLivingCanvas({
     };
   }, [variant, starCount, mouseRadius, showVeins, showGrid]);
 
-  const orb1Color = variant === "branding" ? "bg-[#FF3858]/14" : "bg-[#FF3B5C]/12";
-  const orb2Color = variant === "branding" ? "bg-[#FF7A00]/14" : "bg-[#00E5FF]/12";
+  const orb1Color =
+    variant === "branding"
+      ? "bg-[#FF3858]/14"
+      : variant === "cyan"
+      ? "bg-[#00D1FF]/14"
+      : "bg-[#FF3B5C]/12";
+  const orb2Color =
+    variant === "branding"
+      ? "bg-[#FF7A00]/14"
+      : variant === "cyan"
+      ? "bg-[#3A86FF]/14"
+      : "bg-[#00E5FF]/12";
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
+import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import MarketingGrowthClient from "./MarketingGrowthClient";
 
 export const metadata: Metadata = {
@@ -19,9 +20,11 @@ export const metadata: Metadata = {
 export default function MarketingPage() {
   return (
     <main className="min-h-screen bg-[#040407] text-[#F3F4F6] selection:bg-[#00D1FF]/30 selection:text-white relative overflow-hidden">
+      <AmbientLivingCanvas variant="cyan" starCount={150} mouseRadius={200} />
       <Navbar />
       <MarketingGrowthClient />
       <Footer />
     </main>
   );
 }
+
