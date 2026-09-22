@@ -320,6 +320,7 @@ export default function CaseStudiesSection({
                 axana: "axana",
                 multisistema: "multisistema",
                 help2win: "help-2-win",
+                tacoslarry: "tacos-larry",
               };
               const projectSlug = slugMap[project.id] || "experience-safely";
 

@@ -744,6 +744,25 @@ function PortalMainContent() {
       unreadAlerts: 1,
       demoUrl: "https://app.multiplataforma.innocentia.tech/#demo-axana",
     },
+    {
+      id: "PRJ-TACOSLARRY-01",
+      name: "Taquería Larry - Plataforma Multi-Sucursales, Punto de Venta (POS) & E-Commerce",
+      client: "Taquería Larry",
+      clientEmail: "contacto@tacoslarry.com",
+      sellerId: "usr_partner_daniel",
+      sellerName: "Daniel Torre (Socio / Administrador)",
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design Lead)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "En Producción",
+      progress: 95,
+      currentSprint: "Fase 2: Multi-bodegas, control de repartidores y corte de caja por cuentas bancarias (Albo, BBVA, Spin)",
+      budget: 145000,
+      paidAmount: 145000,
+      targetDate: "En Operación",
+      unreadAlerts: 0,
+      demoUrl: "https://multicommerce-omega.vercel.app/tacoslarry",
+    },
   ]);
 
   // Audit Logs State con Metadata de Estados de Pago y Fechas - Solo registros reales de infraestructura y setup
@@ -2022,7 +2041,7 @@ function PortalMainContent() {
               <div className="px-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 backdrop-blur-md">
                 <span className="text-[10px] font-mono text-gray-400 block uppercase">Proyectos Activos</span>
                 <span className="text-lg font-black text-white">
-                  {activeRole === "asesor" ? advisorActiveProjectsCount : projects.filter((p) => p.status === "En Desarrollo" || p.status === "En Revisión").length}
+                  {activeRole === "asesor" ? advisorActiveProjectsCount : projects.length}
                 </span>
               </div>
 
