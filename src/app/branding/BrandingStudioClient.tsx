@@ -600,6 +600,14 @@ export default function BrandingStudioClient() {
   const [isClayPlaying, setIsClayPlaying] = useState(false);
   const [selectedMedicalService, setSelectedMedicalService] = useState(0);
 
+  // Interactive UI Lab Micro-States
+  const [glassSearchQuery, setGlassSearchQuery] = useState("");
+  const [glassActionFeedback, setGlassActionFeedback] = useState<string | null>(null);
+  const [isDeployingGlass, setIsDeployingGlass] = useState(false);
+  const [selectedClayDay, setSelectedClayDay] = useState<number>(4);
+  const [clayDesignsCount, setClayDesignsCount] = useState(1248);
+  const [biotechBooked, setBiotechBooked] = useState(false);
+
   const activePersonality = BRAND_PERSONALITIES[selectedPersonalityIdx];
   const activeEmotion = BRAND_EMOTIONS[selectedEmotionIdx];
 
@@ -1221,8 +1229,13 @@ export default function BrandingStudioClient() {
 
         {/* UI Prototype 1: Liquid Glass System (Inspirado en la tendencia vítrea) */}
         {activeUiTab === "liquid" && (
-          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#060814] via-[#0E1326] to-[#04060E] border border-cyan-500/30 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#060814] via-[#0E1326] to-[#04060E] border border-cyan-500/40 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left relative overflow-hidden">
+            {/* Ambient Aurora Glow when switch is active */}
+            {isGlassSwitchOn && (
+              <div className="absolute top-1/4 right-10 w-96 h-96 bg-gradient-to-tr from-[#00D1FF]/25 via-purple-600/20 to-transparent rounded-full blur-[100px] pointer-events-none animate-pulse-glow" />
+            )}
+
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6 relative z-10">
               <div className="space-y-1">
                 <span className="text-xs font-mono text-[#00D1FF] uppercase font-bold tracking-wider">
                   SISTEMA 01 • LIQUID GLASS UI KIT
@@ -1231,7 +1244,7 @@ export default function BrandingStudioClient() {
                   Refracción Vítrea & Gradientes Iridiscentes a 60 FPS
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-300 font-light">
-                  Componentes translúcidos con desenfoque óptico, bordes reflectivos y microinteracciones para startups de IA y fintechs.
+                  Componentes translúcidos con desenfoque óptico en tiempo real, bordes reflectivos y microinteracciones para startups de IA y fintechs.
                 </p>
               </div>
 
@@ -1239,80 +1252,212 @@ export default function BrandingStudioClient() {
                 href={getWhatsAppUiConceptLink("Liquid Glass System")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all hover:scale-105"
+                className="btn-cyan-gradient px-6 py-3 rounded-full text-slate-950 font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer whitespace-nowrap flex-shrink-0"
               >
                 <span>Cotizar UI con este estilo</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
               </a>
             </div>
 
             {/* Interactive Liquid Glass Canvas */}
-            <div className="p-6 sm:p-10 rounded-3xl bg-white/[0.02] border border-white/15 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,209,255,0.15)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="p-6 sm:p-10 rounded-3xl bg-white/[0.03] border border-white/20 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,209,255,0.15)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
               {/* Left Column: Glass Control Board */}
               <div className="lg:col-span-7 space-y-6">
-                {/* Search Bar Glass */}
-                <div className="p-3 rounded-2xl bg-white/[0.05] border border-white/20 backdrop-blur-xl flex items-center justify-between shadow-lg">
-                  <div className="flex items-center gap-3 text-gray-300 text-xs font-mono">
-                    <Search className="w-4 h-4 text-[#00D1FF]" />
-                    <span>Search projects & workspaces...</span>
+                {/* Search Bar Glass (Real Interactive Search Input) */}
+                <div className="space-y-2">
+                  <div className="p-3.5 rounded-2xl bg-white/[0.07] border border-cyan-500/30 backdrop-blur-2xl flex items-center justify-between shadow-xl focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-500/30 transition-all">
+                    <div className="flex items-center gap-3 text-white text-xs font-mono w-full">
+                      <Search className="w-4 h-4 text-[#00D1FF] flex-shrink-0" />
+                      <input
+                        type="text"
+                        value={glassSearchQuery}
+                        onChange={(e) => setGlassSearchQuery(e.target.value)}
+                        placeholder="Escribe para probar la búsqueda en vivo..."
+                        className="bg-transparent border-none outline-none text-white placeholder-gray-400 text-xs font-sans w-full"
+                      />
+                    </div>
+                    {glassSearchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setGlassSearchQuery("")}
+                        className="text-xs text-gray-400 hover:text-white px-2 py-0.5"
+                      >
+                        ✕
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGlassActionFeedback(
+                          glassSearchQuery
+                            ? `🔍 Búsqueda completada: "${glassSearchQuery}" (3 workspaces encontrados a 60 FPS)`
+                            : "💡 Escribe algo en la barra o haz clic en los tags de abajo"
+                        )
+                      }
+                      className="w-8 h-8 rounded-xl bg-[#00D1FF] hover:bg-[#38BDF8] flex items-center justify-center text-slate-950 font-black text-xs shadow-[0_0_12px_#00D1FF] flex-shrink-0 transition-transform hover:scale-105 cursor-pointer ml-2"
+                    >
+                      <Search className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+                    </button>
                   </div>
-                  <button className="w-7 h-7 rounded-xl bg-[#00D1FF] flex items-center justify-center text-black font-bold text-xs shadow-[0_0_10px_#00D1FF]">
-                    <Search className="w-3.5 h-3.5 text-black" />
-                  </button>
+
+                  {/* Suggestion Chips */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <span className="text-[10px] font-mono text-gray-400">Probar con:</span>
+                    {["App Fintech AI", "Dashboard SaaS", "E-Commerce de Lujo"].map((tag, tIdx) => (
+                      <button
+                        key={tIdx}
+                        type="button"
+                        onClick={() => {
+                          setGlassSearchQuery(tag);
+                          setGlassActionFeedback(`✨ Filtrando interfaz con "${tag}" a 60 FPS`);
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-400 text-[10px] font-mono text-cyan-200 hover:text-white transition-all cursor-pointer"
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                {/* Pill Buttons Row with Iridescent Borders */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <button className="px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-600/80 to-blue-600/80 border border-purple-400/50 text-white font-mono text-xs font-bold shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:scale-105 transition-transform">
-                    Primary Action
-                  </button>
-                  <button className="px-5 py-2.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-mono text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:scale-105 transition-transform">
-                    Secondary Glass
-                  </button>
-                  <div className="px-4 py-2 rounded-full bg-white/5 border border-white/20 text-gray-300 font-mono text-xs flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                    <span>60 FPS Live</span>
+                {/* Pill Buttons Row with Iridescent Feedback */}
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGlassActionFeedback("⚡ ¡Microinteracción háptica ejecutada a 60 FPS!");
+                        setTimeout(() => setGlassActionFeedback(null), 3500);
+                      }}
+                      className="px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 border border-purple-300/60 text-white font-mono text-xs font-black shadow-[0_0_20px_rgba(168,85,247,0.5)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                    >
+                      <span>Acción Primaria (Glow)</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setGlassActionFeedback("💎 Refracción de vidrio óptico activada con éxito.");
+                        setTimeout(() => setGlassActionFeedback(null), 3500);
+                      }}
+                      className="px-5 py-2.5 rounded-full bg-cyan-500/20 hover:bg-cyan-500/35 border border-cyan-400/60 text-cyan-200 hover:text-white font-mono text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                    >
+                      <span>Cristal Secundario</span>
+                    </button>
+
+                    <div className="px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/40 text-emerald-300 font-mono text-xs font-bold flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      <span>60 FPS en Vivo</span>
+                    </div>
                   </div>
+
+                  {/* Feedback Live Toast */}
+                  {glassActionFeedback && (
+                    <div className="p-3 rounded-2xl bg-cyan-950/80 border border-cyan-400/50 text-cyan-200 text-xs font-mono animate-in fade-in slide-in-from-top-2 duration-300 flex items-center gap-2 shadow-xl">
+                      <Sparkles className="w-4 h-4 text-[#00D1FF] flex-shrink-0 animate-spin" />
+                      <span>{glassActionFeedback}</span>
+                    </div>
+                  )}
                 </div>
 
-                {/* Interactive Switch & Sliders */}
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl flex items-center justify-between">
+                {/* Interactive Switch with Visual Lighting Control */}
+                <div
+                  onClick={() => setIsGlassSwitchOn(!isGlassSwitchOn)}
+                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between shadow-xl ${
+                    isGlassSwitchOn
+                      ? "bg-gradient-to-r from-cyan-950/40 via-purple-950/30 to-black border-cyan-400/50 shadow-[0_0_25px_rgba(0,209,255,0.2)]"
+                      : "bg-black/60 border-white/10"
+                  }`}
+                >
                   <div className="space-y-0.5">
-                    <span className="text-xs font-bold text-white block font-mono">Quantum Lighting Engine</span>
-                    <span className="text-[10px] text-gray-400">Refracción dinámica en tiempo real</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-white block font-mono">
+                        Motor de Iluminación Cuántica
+                      </span>
+                      <span
+                        className={`text-[9px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${
+                          isGlassSwitchOn
+                            ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                            : "bg-gray-800 text-gray-400"
+                        }`}
+                      >
+                        {isGlassSwitchOn ? "Activo (60 FPS)" : "Apagado"}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-gray-300">
+                      {isGlassSwitchOn
+                        ? "✨ Refracción dinámica iridiscente activa en tiempo real"
+                        : "Haz clic para activar el resplandor cuántico de cristal"}
+                    </span>
                   </div>
+
                   <button
                     type="button"
-                    onClick={() => setIsGlassSwitchOn(!isGlassSwitchOn)}
-                    className={`w-14 h-8 rounded-full p-1 transition-all flex items-center ${
-                      isGlassSwitchOn ? "bg-gradient-to-r from-[#00D1FF] to-[#8A2BE2] justify-end" : "bg-white/10 justify-start"
+                    aria-label="Toggle Quantum Lighting"
+                    className={`w-14 h-8 rounded-full p-1 transition-all flex items-center cursor-pointer ${
+                      isGlassSwitchOn
+                        ? "bg-gradient-to-r from-[#00D1FF] to-[#8A2BE2] justify-end shadow-[0_0_15px_#00D1FF]"
+                        : "bg-white/20 justify-start"
                     }`}
                   >
-                    <div className="w-6 h-6 rounded-full bg-white shadow-md" />
+                    <div className="w-6 h-6 rounded-full bg-white shadow-md transform transition-transform" />
                   </button>
                 </div>
               </div>
 
-              {/* Right Column: Liquid Card */}
-              <div className="lg:col-span-5 p-6 rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/25 backdrop-blur-2xl space-y-4 shadow-[0_0_30px_rgba(138,43,226,0.25)] relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-[#00D1FF]/20 rounded-full blur-xl pointer-events-none" />
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30">
-                    Glass Card Pro
+              {/* Right Column: Liquid Pro Card */}
+              <div
+                className={`lg:col-span-5 p-7 rounded-3xl border backdrop-blur-2xl space-y-5 shadow-2xl relative overflow-hidden transition-all duration-500 ${
+                  isGlassSwitchOn
+                    ? "bg-gradient-to-br from-white/[0.12] via-purple-900/20 to-white/[0.04] border-cyan-400/60 shadow-[0_0_40px_rgba(0,209,255,0.35)] scale-[1.02]"
+                    : "bg-gradient-to-br from-white/[0.06] to-black/60 border-white/20"
+                }`}
+              >
+                <div
+                  className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-2xl pointer-events-none transition-all duration-700 ${
+                    isGlassSwitchOn ? "bg-[#00D1FF]/40" : "bg-white/5"
+                  }`}
+                />
+
+                <div className="flex items-center justify-between relative z-10">
+                  <span className="text-[11px] font-mono font-black text-cyan-300 uppercase px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/50 shadow-md">
+                    SISTEMA CRISTAL PRO
                   </span>
-                  <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs text-white font-bold">
+                  <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-xs text-emerald-300 font-bold shadow-[0_0_10px_#10B981]">
                     ✓
                   </div>
                 </div>
 
-                <h4 className="text-xl font-bold text-white tracking-tight">Upgrade Workspace</h4>
-                <p className="text-xs text-gray-300 font-light leading-relaxed">
-                  Experiencia sensorial táctil con soporte completo para temas oscuros y renderizado acelerado por GPU.
-                </p>
+                <div className="space-y-2 relative z-10">
+                  <h4 className="text-xl font-black text-white tracking-tight">
+                    Plataforma Digital de Alto Impacto
+                  </h4>
+                  <p className="text-xs text-gray-200 font-light leading-relaxed">
+                    Experiencia sensorial táctil con componentes translúcidos, desenfoque óptico en tiempo real y aceleración total por GPU para tu producto digital.
+                  </p>
+                </div>
 
-                <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-black text-xs uppercase tracking-wider font-mono shadow-[0_0_20px_rgba(0,209,255,0.4)] hover:scale-105 transition-transform">
-                  Deploy to Production
-                </button>
+                <div className="pt-2 relative z-10">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsDeployingGlass(true);
+                      setTimeout(() => setIsDeployingGlass(false), 3000);
+                    }}
+                    className="btn-cyan-gradient w-full py-3.5 px-4 rounded-2xl text-slate-950 font-black text-xs uppercase tracking-wider font-mono flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.03] active:scale-95"
+                  >
+                    {isDeployingGlass ? (
+                      <>
+                        <Sparkles className="w-4 h-4 text-slate-950 animate-spin stroke-[2.5]" />
+                        <span>⚡ Desplegando en Servidores Cloud...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+                        <span>Desplegar en Producción</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1320,8 +1465,8 @@ export default function BrandingStudioClient() {
 
         {/* UI Prototype 2: Sensory Clay 3D Dashboard (Inspirado en interfaces táctiles suaves) */}
         {activeUiTab === "clay" && (
-          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#1C1618] via-[#2A1E22] to-[#140F11] border border-pink-500/30 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#1C1618] via-[#2A1E22] to-[#140F11] border border-pink-500/40 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left relative overflow-hidden">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6 relative z-10">
               <div className="space-y-1">
                 <span className="text-xs font-mono text-pink-300 uppercase font-bold tracking-wider">
                   SISTEMA 02 • SENSORY CLAY 3D DASHBOARD
@@ -1338,39 +1483,74 @@ export default function BrandingStudioClient() {
                 href={getWhatsAppUiConceptLink("Sensory Clay 3D Dashboard")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-400 to-amber-300 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all hover:scale-105"
+                className="btn-clay-gradient px-6 py-3 rounded-full text-white font-black text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer whitespace-nowrap flex-shrink-0"
               >
-                <span>Cotizar UI con este estilo</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Cotizar UI Estilo Clay</span>
+                <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
               </a>
             </div>
 
             {/* Interactive Clay Canvas */}
-            <div className="p-6 sm:p-10 rounded-3xl bg-[#20171A]/80 border border-white/10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Sidebar Mockup */}
-              <div className="lg:col-span-4 p-5 rounded-3xl bg-[#2A1D22] border border-white/10 space-y-4 shadow-xl text-left">
+            <div className="p-6 sm:p-10 rounded-3xl bg-[#20171A]/90 border border-pink-500/20 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              {/* Left Sidebar Mockup (Interactive Audio/Creative Profile) */}
+              <div className="lg:col-span-4 p-5 rounded-3xl bg-[#2A1D22] border border-pink-500/30 space-y-4 shadow-xl text-left">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-400 to-amber-300 p-0.5 shadow-md flex items-center justify-center text-xl">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-400 to-amber-300 p-0.5 shadow-md flex items-center justify-center text-xl flex-shrink-0">
                     🎧
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">Sofía Creative</h4>
-                    <span className="text-[10px] text-pink-300 font-mono">Good Morning, Creator! ✨</span>
+                    <h4 className="text-sm font-bold text-white">Sofía Brand Lab</h4>
+                    <span className="text-[10px] text-pink-300 font-mono">¡Buenos días, Creador! ✨</span>
                   </div>
                 </div>
 
+                {/* Interactive Player Row */}
                 <div className="space-y-2 pt-2 text-xs font-mono">
-                  <div className="p-2.5 rounded-xl bg-pink-500/20 text-pink-200 font-bold flex items-center gap-2">
-                    <Play className="w-3.5 h-3.5 fill-pink-300 text-pink-300" />
-                    <span>Focus Playlist (Lofi 3D)</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsClayPlaying(!isClayPlaying)}
+                    className={`w-full p-3 rounded-2xl border transition-all flex items-center justify-between cursor-pointer ${
+                      isClayPlaying
+                        ? "bg-gradient-to-r from-pink-600/40 to-rose-600/40 border-pink-400 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]"
+                        : "bg-white/5 border-white/10 text-pink-200 hover:bg-white/10"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-full bg-pink-500 flex items-center justify-center shadow-md">
+                        {isClayPlaying ? (
+                          <span className="text-[10px] font-bold">⏸</span>
+                        ) : (
+                          <Play className="w-3 h-3 fill-white text-white ml-0.5" />
+                        )}
+                      </div>
+                      <span className="font-bold">
+                        {isClayPlaying ? "Reproduciendo Lofi 3D" : "Playlist de Enfoque"}
+                      </span>
+                    </div>
+
+                    {isClayPlaying && (
+                      <div className="flex items-end gap-0.5 h-3">
+                        <span className="w-1 bg-pink-400 h-3 animate-pulse rounded-full" />
+                        <span className="w-1 bg-amber-300 h-2 animate-pulse rounded-full delay-75" />
+                        <span className="w-1 bg-pink-300 h-4 animate-pulse rounded-full delay-150" />
+                      </div>
+                    )}
+                  </button>
+
+                  <div className="p-2.5 rounded-xl bg-white/5 text-gray-200 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Heart className="w-3.5 h-3.5 text-rose-400" />
+                      <span>Paletas Favoritas</span>
+                    </div>
+                    <strong className="text-pink-300 font-bold">128</strong>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-white/5 text-gray-300 flex items-center gap-2">
-                    <Heart className="w-3.5 h-3.5 text-rose-400" />
-                    <span>Favorite Palettes (128)</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-white/5 text-gray-300 flex items-center gap-2">
-                    <LineChart className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Creative Streak (7 days)</span>
+
+                  <div className="p-2.5 rounded-xl bg-white/5 text-gray-200 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <LineChart className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Racha Creativa</span>
+                    </div>
+                    <strong className="text-emerald-300 font-bold">7 días seguidos</strong>
                   </div>
                 </div>
               </div>
@@ -1378,41 +1558,73 @@ export default function BrandingStudioClient() {
               {/* Center & Right: Clay Metric Cards */}
               <div className="lg:col-span-8 space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-pink-500/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] space-y-1 text-center">
-                    <span className="text-[10px] font-mono text-pink-300 uppercase font-bold">Designs Created</span>
-                    <div className="text-3xl font-black text-white font-mono">1,248</div>
-                    <span className="text-[10px] text-emerald-400 font-mono">+18% this month</span>
+                  <div
+                    onClick={() => setClayDesignsCount((c) => c + 1)}
+                    className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-pink-500/30 hover:border-pink-400 shadow-xl space-y-1 text-center cursor-pointer transition-all hover:scale-105"
+                    title="Haz clic para sumar un diseño"
+                  >
+                    <span className="text-[10px] font-mono text-pink-300 uppercase font-bold">
+                      Diseños Creados 👆
+                    </span>
+                    <div className="text-3xl font-black text-white font-mono">{clayDesignsCount}</div>
+                    <span className="text-[10px] text-emerald-400 font-mono">+18% este mes</span>
                   </div>
 
-                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-amber-500/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] space-y-1 text-center">
-                    <span className="text-[10px] font-mono text-amber-300 uppercase font-bold">Focus Hours</span>
+                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-amber-500/30 shadow-xl space-y-1 text-center">
+                    <span className="text-[10px] font-mono text-amber-300 uppercase font-bold">
+                      Horas de Enfoque
+                    </span>
                     <div className="text-3xl font-black text-white font-mono">34.6 h</div>
-                    <span className="text-[10px] text-emerald-400 font-mono">+6.2 hrs logged</span>
+                    <span className="text-[10px] text-emerald-400 font-mono">+6.2 hrs registradas</span>
                   </div>
 
-                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-emerald-500/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] space-y-1 text-center">
-                    <span className="text-[10px] font-mono text-emerald-300 uppercase font-bold">Client Rating</span>
-                    <div className="text-3xl font-black text-white font-mono">4.98 ★</div>
-                    <span className="text-[10px] text-gray-400 font-mono">100% Satisfaction</span>
+                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-emerald-500/30 shadow-xl space-y-1 text-center">
+                    <span className="text-[10px] font-mono text-emerald-300 uppercase font-bold">
+                      Calificación Clientes
+                    </span>
+                    <div className="text-3xl font-black text-white font-mono">5.0 ★</div>
+                    <span className="text-[10px] text-emerald-300 font-mono">100% Satisfacción</span>
                   </div>
                 </div>
 
-                {/* Clay Bar Chart Mockup */}
+                {/* Clay Bar Chart Mockup (Interactive Day Selector) */}
                 <div className="p-5 rounded-3xl bg-[#2A1D22] border border-white/10 space-y-3">
-                  <span className="text-xs font-mono text-gray-300 font-bold block">
-                    Weekly Creative Output:
-                  </span>
-                  <div className="flex items-end justify-between gap-2 h-20 pt-2 px-2">
-                    {[40, 65, 50, 85, 95, 70, 60].map((h, i) => (
-                      <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-gray-200 font-bold">
+                      Producción Creativa Semanal (Toca un día):
+                    </span>
+                    <span className="text-[11px] font-mono text-pink-300">
+                      Día seleccionado: {["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"][selectedClayDay]} (
+                      {[12, 18, 15, 24, 28, 19, 14][selectedClayDay]} entregables)
+                    </span>
+                  </div>
+
+                  <div className="flex items-end justify-between gap-2 h-24 pt-2 px-2">
+                    {[40, 65, 50, 85, 95, 70, 50].map((h, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setSelectedClayDay(i)}
+                        className={`flex-1 flex flex-col items-center gap-1.5 h-full justify-end cursor-pointer group/bar transition-all ${
+                          selectedClayDay === i ? "scale-105" : "opacity-75 hover:opacity-100"
+                        }`}
+                      >
                         <div
-                          className="w-full rounded-full bg-gradient-to-t from-rose-500 to-amber-300 transition-all duration-500 hover:scale-105"
+                          className={`w-full rounded-full transition-all duration-300 ${
+                            selectedClayDay === i
+                              ? "bg-gradient-to-t from-rose-500 to-amber-300 shadow-[0_0_15px_rgba(251,113,133,0.8)]"
+                              : "bg-gradient-to-t from-pink-900/60 to-pink-500/40"
+                          }`}
                           style={{ height: `${h}%` }}
                         />
-                        <span className="text-[9px] font-mono text-gray-400">
-                          {["M", "T", "W", "T", "F", "S", "S"][i]}
+                        <span
+                          className={`text-[10px] font-mono font-bold ${
+                            selectedClayDay === i ? "text-pink-300" : "text-gray-400"
+                          }`}
+                        >
+                          {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"][i]}
                         </span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -1423,8 +1635,8 @@ export default function BrandingStudioClient() {
 
         {/* UI Prototype 3: Pure Biotech & Clinical Flow (Inspirado en salud y estética médica) */}
         {activeUiTab === "biotech" && (
-          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#0A1816] via-[#0F2420] to-[#081210] border border-emerald-500/30 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#0A1816] via-[#0F2420] to-[#081210] border border-emerald-500/40 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left relative overflow-hidden">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6 relative z-10">
               <div className="space-y-1">
                 <span className="text-xs font-mono text-emerald-400 uppercase font-bold tracking-wider">
                   SISTEMA 03 • PURE BIOTECH & CLINICAL FLOW
@@ -1441,69 +1653,109 @@ export default function BrandingStudioClient() {
                 href={getWhatsAppUiConceptLink("Pure Biotech & Clinical Flow")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-teal-400 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all hover:scale-105"
+                className="btn-emerald-gradient px-6 py-3 rounded-full text-slate-950 font-black text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all cursor-pointer whitespace-nowrap flex-shrink-0"
               >
-                <span>Cotizar UI con este estilo</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Cotizar Sistema Clínico</span>
+                <ArrowRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
               </a>
             </div>
 
             {/* Interactive Biotech Canvas */}
-            <div className="p-6 sm:p-10 rounded-3xl bg-[#0B1C18] border border-emerald-500/20 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              {/* Left Column: Health Score Card */}
+            <div className="p-6 sm:p-10 rounded-3xl bg-[#0B1C18] border border-emerald-500/30 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              {/* Left Column: Health Score Card (Interactive Score) */}
               <div className="lg:col-span-5 p-6 rounded-3xl bg-white/[0.04] border border-emerald-500/30 backdrop-blur-xl space-y-5 text-center shadow-xl">
-                <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-emerald-500/20 to-teal-400/30 border-2 border-emerald-400 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.3)]">
-                  <span className="text-3xl font-black text-emerald-300 font-mono">92%</span>
-                  <span className="text-[8px] font-mono text-white/80 uppercase">Salud Óptima</span>
+                <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-emerald-500/20 to-teal-400/30 border-2 border-emerald-400 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.4)]">
+                  <span className="text-3xl font-black text-emerald-300 font-mono">
+                    {[98, 95, 99][selectedMedicalService]}%
+                  </span>
+                  <span className="text-[8px] font-mono text-white uppercase font-bold">Salud Óptima</span>
                 </div>
 
                 <div className="space-y-1">
                   <h4 className="text-lg font-bold text-white">Score de Diagnóstico</h4>
                   <p className="text-xs text-gray-300 font-light">
-                    Parámetros biométricos y estéticos validados con inteligencia clínica.
+                    Parámetros biométricos y estéticos validados con inteligencia clínica a 60 FPS.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-left font-mono text-[10px]">
                   <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
-                    <span className="text-gray-400 block">Tratamiento:</span>
-                    <strong className="text-emerald-300">Alineación 3D</strong>
+                    <span className="text-gray-400 block">Tratamiento Electo:</span>
+                    <strong className="text-emerald-300 truncate block">
+                      {["Blanqueamiento", "Implante 3D", "Armonización"][selectedMedicalService]}
+                    </strong>
                   </div>
                   <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
                     <span className="text-gray-400 block">Próxima Cita:</span>
                     <strong className="text-white">28 May, 10:30 AM</strong>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBiotechBooked(true);
+                    setTimeout(() => setBiotechBooked(false), 3000);
+                  }}
+                  className="btn-emerald-gradient w-full py-3 rounded-xl text-slate-950 font-black text-xs font-mono uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-105"
+                >
+                  {biotechBooked ? (
+                    <span>✓ Cita Confirmada en Sistema</span>
+                  ) : (
+                    <span>Agendar Valoración Digital</span>
+                  )}
+                </button>
               </div>
 
               {/* Right Column: Treatment Flow Selector */}
               <div className="lg:col-span-7 space-y-4">
                 <span className="text-xs font-mono text-emerald-400 font-bold block uppercase tracking-wider">
-                  Tratamientos & Experiencias Disponibles:
+                  Tratamientos & Protocolos Médicos (Toca para seleccionar):
                 </span>
 
                 <div className="space-y-2.5">
                   {[
-                    { name: "Teeth Whitening & Laser Care", desc: "Blanqueamiento dental láser con protección de esmalte", price: "$1,850 MXN" },
-                    { name: "Dental Implants & 3D Scan", desc: "Modelado maxilofacial por tomografía computarizada", price: "$8,500 MXN" },
-                    { name: "Facial Harmonization & Peeling", desc: "Tratamiento dermatológico no invasivo de alta gama", price: "$4,200 MXN" },
+                    {
+                      name: "Blanqueamiento Dental Láser & Cuidado de Esmalte",
+                      desc: "Fototerapia LED con protección avanzada de encías y esmalte",
+                      price: "$1,850 MXN",
+                    },
+                    {
+                      name: "Modelado Maxilofacial & Escaneo Tomográfico 3D",
+                      desc: "Reconstrucción digital 3D guiada por Inteligencia Artificial",
+                      price: "$8,500 MXN",
+                    },
+                    {
+                      name: "Armonización Facial & Peeling Médico de Alta Gama",
+                      desc: "Protocolo dermatológico no invasivo con biopéptidos regenerativos",
+                      price: "$4,200 MXN",
+                    },
                   ].map((service, sIdx) => (
                     <div
                       key={sIdx}
                       onClick={() => setSelectedMedicalService(sIdx)}
                       className={`p-4 rounded-2xl border transition-all flex items-center justify-between cursor-pointer ${
                         selectedMedicalService === sIdx
-                          ? "bg-emerald-950/40 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.25)]"
-                          : "bg-black/30 border-white/10 hover:border-white/25"
+                          ? "bg-emerald-950/60 border-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.35)] scale-[1.02]"
+                          : "bg-black/40 border-white/10 hover:border-white/30"
                       }`}
                     >
-                      <div className="space-y-0.5">
-                        <h5 className="text-sm font-bold text-white">{service.name}</h5>
-                        <p className="text-xs text-gray-400 font-light">{service.desc}</p>
+                      <div className="space-y-0.5 pr-2">
+                        <div className="flex items-center gap-2">
+                          <h5 className="text-sm font-bold text-white">{service.name}</h5>
+                          {selectedMedicalService === sIdx && (
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-300 font-light">{service.desc}</p>
                       </div>
-                      <div className="text-right flex items-center gap-3">
-                        <span className="text-sm font-bold text-emerald-400 font-mono">{service.price}</span>
-                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                      <div className="text-right flex items-center gap-3 flex-shrink-0">
+                        <span className="text-sm font-bold text-emerald-300 font-mono">{service.price}</span>
+                        <ChevronRight
+                          className={`w-4 h-4 ${
+                            selectedMedicalService === sIdx ? "text-emerald-400" : "text-gray-400"
+                          }`}
+                        />
                       </div>
                     </div>
                   ))}

@@ -129,3 +129,58 @@ body {
   transform: translateY(-1px) scale(1.01) !important;
 }
 
+.btn-emerald-gradient {
+  background: linear-gradient(135deg, #10B981 0%, #14B8A6 50%, #06B6D4 100%) !important;
+  color: #022018 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
+}
+
+.btn-emerald-gradient:hover {
+  background: linear-gradient(135deg, #34D399 0%, #10B981 50%, #0D9488 100%) !important;
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.85) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.btn-clay-gradient {
+  background: linear-gradient(135deg, #FB7185 0%, #F43F5E 50%, #F59E0B 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(251, 113, 133, 0.6) !important;
+}
+
+.btn-clay-gradient:hover {
+  background: linear-gradient(135deg, #FDA4AF 0%, #FB7185 50%, #D97706 100%) !important;
+  box-shadow: 0 0 35px rgba(251, 113, 133, 0.85) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.btn-purple-gradient {
+  background: linear-gradient(135deg, #A855F7 0%, #8B5CF6 50%, #6366F1 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.6) !important;
+}
+
+.btn-purple-gradient:hover {
+  background: linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #4F46E5 100%) !important;
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.85) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.btn-glass-emerald {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  color: #6EE7B7 !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.18) !important;
+}
+
+.btn-glass-emerald:hover {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: #10B981 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important;
+  transform: translateY(-1px) scale(1.01) !important;
+}
+
+
