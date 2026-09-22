@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Sparkles } from "../../lib/icons";
 import ProjectCaseStudyModal, { ProjectDetail } from "./ProjectCaseStudyModal";
 
@@ -19,7 +20,16 @@ export default function CaseStudiesSection({
   onAskSofia,
   onAskIvan,
 }: CaseStudiesSectionProps) {
+  const router = useRouter();
   const [selectedProject, setSelectedProject] = useState<ProjectDetail | null>(null);
+
+  const handleCreateProject = () => {
+    if (onOpenProjectModal) {
+      onOpenProjectModal();
+    } else {
+      router.push("/crear-proyecto");
+    }
+  };
 
   const projects: (ProjectDetail & {
     stats: string;
@@ -291,7 +301,8 @@ export default function CaseStudiesSection({
               </Link>
 
               <button
-                onClick={onOpenProjectModal}
+                type="button"
+                onClick={handleCreateProject}
                 className="inline-flex items-center gap-2 text-xs font-bold text-gray-300 hover:text-white uppercase tracking-wider group cursor-pointer"
               >
                 <span>Crear un nuevo proyecto</span>

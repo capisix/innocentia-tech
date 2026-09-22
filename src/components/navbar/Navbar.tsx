@@ -35,6 +35,14 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
     { name: "FAQ", icon: "💬", href: "/faq" },
   ];
 
+  const handleCreateProject = () => {
+    if (onOpenProjectModal) {
+      onOpenProjectModal();
+    } else {
+      router.push("/crear-proyecto");
+    }
+  };
+
   return (
     <>
       <header
@@ -94,7 +102,8 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
             </button>
 
             <button
-              onClick={onOpenProjectModal}
+              type="button"
+              onClick={handleCreateProject}
               className="px-5 py-2 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(255,56,88,0.4)] hover:scale-105 cursor-pointer"
             >
               <span>Crear Proyecto</span>
@@ -166,9 +175,10 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
                 <span>Ingresar al Portal (Roles)</span>
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  onOpenProjectModal?.();
+                  handleCreateProject();
                 }}
                 className="w-full py-3 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white font-bold text-xs uppercase flex items-center justify-center gap-2"
               >
