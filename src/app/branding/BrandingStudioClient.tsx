@@ -23,6 +23,13 @@ import {
   Eye,
   Heart,
   Zap,
+  Search,
+  Copy,
+  Calendar,
+  User,
+  Settings,
+  ChevronRight,
+  LineChart,
 } from "../../lib/icons";
 
 interface BrandingPackage {
@@ -339,6 +346,128 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
   },
 ];
 
+// Color Harmonies Gallery inspired by Pinterest Moodboards
+interface ColorHarmonyCard {
+  id: string;
+  name: string;
+  tags: string;
+  category: "misticas" | "terrosas" | "botanicas" | "mineral" | "gourmet";
+  gradientBg: string;
+  colors: string[];
+  description: string;
+}
+
+const COLOR_HARMONIES: ColorHarmonyCard[] = [
+  {
+    id: "nocturne-bloom",
+    name: "Nocturne Bloom",
+    tags: "Mystical · Deep · Botanical",
+    category: "misticas",
+    gradientBg: "from-[#1A1026] via-[#4B2A46] to-[#0A0610]",
+    colors: ["#1A1026", "#4B2A46", "#7E496B", "#B79AB4", "#EDE6EE"],
+    description: "Profundidad nocturna y feminidad mística para perfumes, spas de alta gama y proyectos creativos.",
+  },
+  {
+    id: "ethereal-dune",
+    name: "Ethereal Dune",
+    tags: "Soft · Earthy · Architectural",
+    category: "terrosas",
+    gradientBg: "from-[#6B705C] via-[#C49A8A] to-[#1F1E1A]",
+    colors: ["#6B705C", "#B69F7B", "#C49A8A", "#E7CDB8", "#F4EFE6"],
+    description: "Tonos minerales cálidos y arenas del desierto para firmas de arquitectura, moda y hotelería boutique.",
+  },
+  {
+    id: "astral-lagoon",
+    name: "Astral Lagoon",
+    tags: "Oceanic · Serene · Dreamy",
+    category: "mineral",
+    gradientBg: "from-[#0D2B36] via-[#1F5F63] to-[#051218]",
+    colors: ["#0D2B36", "#1F5F63", "#4CA7A1", "#A6D6C9", "#E6D6EA"],
+    description: "Aguas profundas y bioluminiscencia onírica para plataformas tecnológicas, wellness y aplicaciones móviles.",
+  },
+  {
+    id: "crimson-haze",
+    name: "Crimson Haze",
+    tags: "Bold · Rare · Magnetic",
+    category: "misticas",
+    gradientBg: "from-[#2B0A12] via-[#6E1D2F] to-[#120307]",
+    colors: ["#2B0A12", "#6E1D2F", "#9E3F57", "#C77D8B", "#E7D7D9"],
+    description: "Rojos volcánicos y magnetismo intenso para moda vanguardista, clubes nocturnos y festivales.",
+  },
+  {
+    id: "jade-whisper",
+    name: "Jade Whisper",
+    tags: "Fresh · Zen · Biophilic",
+    category: "botanicas",
+    gradientBg: "from-[#1B2E28] via-[#336B5C] to-[#0B1512]",
+    colors: ["#1B2E28", "#336B5C", "#71A897", "#B6D8C7", "#ECF3E9"],
+    description: "Bosques de niebla y jade ancestral para cosmética orgánica, botánica adaptógena y medicina integrativa.",
+  },
+  {
+    id: "amber-mirage",
+    name: "Amber Mirage",
+    tags: "Warm · Exotic · Timeless",
+    category: "mineral",
+    gradientBg: "from-[#4A2C1A] via-[#A35C1E] to-[#1E110A]",
+    colors: ["#4A2C1A", "#A35C1E", "#D99A4E", "#EBCB9C", "#FFF3E0"],
+    description: "Puestas de sol doradas y palacios antiguos para destilados artesanales, joyería y café de especialidad.",
+  },
+  {
+    id: "velvet-twilight",
+    name: "Velvet Twilight",
+    tags: "Royal · Moody · Luxury",
+    category: "misticas",
+    gradientBg: "from-[#1A1331] via-[#3A2257] to-[#0C0817]",
+    colors: ["#1A1331", "#3A2257", "#6B3F7C", "#9A78A6", "#D8C8E6"],
+    description: "Seda violeta y realeza crepuscular para eventos de gala, producción audiovisual y alta repostería.",
+  },
+  {
+    id: "midnight-sakura",
+    name: "Midnight Sakura",
+    tags: "Mysterious · Soft · Enchanting",
+    category: "botanicas",
+    gradientBg: "from-[#0B0E1A] via-[#6B3B5C] to-[#060810]",
+    colors: ["#0B0E1A", "#2C1A32", "#6B3B5C", "#B57896", "#F3E6EE"],
+    description: "Cerezo japonés bajo la luna llena para líneas de skincare, diseño editorial y hospitalidad de lujo.",
+  },
+  {
+    id: "roasted-cocoa",
+    name: "Roasted Cocoa & Mocha",
+    tags: "Rich · Gourmet · Warm",
+    category: "gourmet",
+    gradientBg: "from-[#1C1008] via-[#6E472D] to-[#0B0603]",
+    colors: ["#1C1008", "#382315", "#6E472D", "#AD7B52", "#E8C5A5"],
+    description: "Cacao tostado y crema tostada para marcas gastronómicas, chocolaterías finas y panaderías artesanales.",
+  },
+  {
+    id: "silky-matcha",
+    name: "Silky Matcha & Olive",
+    tags: "Natural · Organic · Vitality",
+    category: "gourmet",
+    gradientBg: "from-[#20291B] via-[#688052] to-[#0E130B]",
+    colors: ["#20291B", "#3E4F32", "#688052", "#A0B885", "#E0EBD2"],
+    description: "Té verde ceremonial y oliva suave para restaurantes plant-based, aceites finos y wellness.",
+  },
+  {
+    id: "winter-woods",
+    name: "Winter Woods & Frost",
+    tags: "Alpine · Crisp · Nordic",
+    category: "terrosas",
+    gradientBg: "from-[#0D1A24] via-[#2F526E] to-[#060D12]",
+    colors: ["#0D1A24", "#1B3245", "#2F526E", "#6086A8", "#BDD4E7"],
+    description: "Bosques boreales y nieve fresca para plataformas de software corporativo, finanzas y viajes de aventura.",
+  },
+  {
+    id: "slate-obsidian",
+    name: "Slate & Charcoal Obsidian",
+    tags: "Monolith · Minimal · Tech",
+    category: "mineral",
+    gradientBg: "from-[#181A20] via-[#454A5A] to-[#090A0D]",
+    colors: ["#181A20", "#2B2E38", "#454A5A", "#71788E", "#C5CAD8"],
+    description: "Piedra volcánica y precisión suiza para hardware premium, estudios de diseño y firmas jurídicas.",
+  },
+];
+
 // Personalities for the interactive style explorer
 const BRAND_PERSONALITIES = [
   {
@@ -463,12 +592,31 @@ export default function BrandingStudioClient() {
   const [selectedPersonalityIdx, setSelectedPersonalityIdx] = useState(0);
   const [selectedEmotionIdx, setSelectedEmotionIdx] = useState(0);
 
+  // Harmonies & UI Lab States
+  const [selectedHarmonyCategory, setSelectedHarmonyCategory] = useState<string>("todas");
+  const [copiedHex, setCopiedHex] = useState<string | null>(null);
+  const [activeUiTab, setActiveUiTab] = useState<"liquid" | "clay" | "biotech">("liquid");
+  const [isGlassSwitchOn, setIsGlassSwitchOn] = useState(true);
+  const [isClayPlaying, setIsClayPlaying] = useState(false);
+  const [selectedMedicalService, setSelectedMedicalService] = useState(0);
+
   const activePersonality = BRAND_PERSONALITIES[selectedPersonalityIdx];
   const activeEmotion = BRAND_EMOTIONS[selectedEmotionIdx];
 
   const filteredShowcase = selectedFilter === "todos"
     ? BRAND_SHOWCASE
     : BRAND_SHOWCASE.filter((item) => item.category === selectedFilter);
+
+  const filteredHarmonies = selectedHarmonyCategory === "todas"
+    ? COLOR_HARMONIES
+    : COLOR_HARMONIES.filter((item) => item.category === selectedHarmonyCategory);
+
+  const handleCopyPalette = (hexList: string[]) => {
+    const text = hexList.join(", ");
+    navigator.clipboard?.writeText(text);
+    setCopiedHex(hexList[0]);
+    setTimeout(() => setCopiedHex(null), 2500);
+  };
 
   const getWhatsAppLink = (pkgName: string) => {
     const text = encodeURIComponent(
@@ -487,6 +635,20 @@ export default function BrandingStudioClient() {
   const getWhatsAppPersonalityLink = (persName: string) => {
     const text = encodeURIComponent(
       `¡Hola Sofía! En el explorador de Innocentia Tech me identifiqué con la personalidad de marca "${persName}". Me gustaría crear mi universo de marca con esa dirección.`
+    );
+    return `https://wa.me/529601771556?text=${text}`;
+  };
+
+  const getWhatsAppPaletteLink = (palName: string, hexList: string[]) => {
+    const text = encodeURIComponent(
+      `¡Hola Sofía! Me encantó la paleta de colores "${palName}" (${hexList.slice(0, 3).join(", ")}) en Innocentia Tech. Quiero cotizar una identidad visual basada en esta armonía cromática.`
+    );
+    return `https://wa.me/529601771556?text=${text}`;
+  };
+
+  const getWhatsAppUiConceptLink = (conceptTitle: string) => {
+    const text = encodeURIComponent(
+      `¡Hola Sofía e Iván! Vi el prototipo de interfaz "${conceptTitle}" en Innocentia Tech y quiero cotizar el diseño y desarrollo de mi plataforma con ese mismo estilo.`
     );
     return `https://wa.me/529601771556?text=${text}`;
   };
@@ -883,7 +1045,461 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. EXPERIENCIA SENSORIAL: ANTES DE DISEÑAR, ESCUCHAMOS */}
+      {/* 6. NUEVA SECCIÓN: CURADURÍA DE PALETAS CROMÁTICAS DE SOFÍA (PINBOARDS) */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10 pb-6 text-left">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-amber-500/10 border border-white/15 text-xs font-mono text-purple-300 uppercase shadow-md">
+              <Paintbrush className="w-3.5 h-3.5 text-pink-400" />
+              <span>CURADURÍA CROMÁTICA & MOODS</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              Armonías & Paletas Sensoriales
+            </h2>
+            <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
+              Inspiración cromática curada por Sofía para diferentes universos de marca. Haz clic en los colores para copiarlos o solicitar una identidad con esa armonía.
+            </p>
+          </div>
+
+          {/* Harmony Category Filters */}
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: "todas", label: "Todas (12)" },
+              { id: "misticas", label: "Místicas & Noche" },
+              { id: "terrosas", label: "Terrosas & Desierto" },
+              { id: "mineral", label: "Mineral & Océano" },
+              { id: "botanicas", label: "Botánicas & Zen" },
+              { id: "gourmet", label: "Gourmet & Cacao" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedHarmonyCategory(cat.id)}
+                className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-bold transition-all cursor-pointer ${
+                  selectedHarmonyCategory === cat.id
+                    ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white shadow-[0_0_15px_rgba(255,56,88,0.4)]"
+                    : "bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Palettes Cards Grid (Tarjetas estilo imágenes 1 y 2) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredHarmonies.map((pal) => (
+            <div
+              key={pal.id}
+              className="rounded-3xl bg-black/70 border border-white/15 overflow-hidden flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-[#FF3858]/60 hover:shadow-[0_15px_35px_rgba(255,56,88,0.2)] hover:-translate-y-1 text-left group"
+            >
+              {/* Card Top: Atmospheric Gradient Box */}
+              <div
+                className={`p-6 bg-gradient-to-br ${pal.gradientBg} border-b border-white/10 space-y-2 relative overflow-hidden`}
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl pointer-events-none" />
+                <span className="text-[10px] font-mono text-white/70 uppercase tracking-widest block font-bold">
+                  {pal.tags}
+                </span>
+                <h3 className="text-xl font-black text-white tracking-tight drop-shadow-md">
+                  {pal.name}
+                </h3>
+              </div>
+
+              {/* Card Center: Color Swatches Strip with HEX codes */}
+              <div className="p-4 space-y-4">
+                {/* 5 Vertical Swatches */}
+                <div className="grid grid-cols-5 gap-1.5 h-24 rounded-2xl p-1.5 bg-black/60 border border-white/10 shadow-inner">
+                  {pal.colors.map((hex, hIdx) => (
+                    <div
+                      key={hIdx}
+                      className="group/swatch relative rounded-xl h-full flex flex-col justify-end p-1 transition-transform hover:scale-105 cursor-pointer shadow-md"
+                      style={{ backgroundColor: hex }}
+                      title={`Copiar ${hex}`}
+                      onClick={() => {
+                        navigator.clipboard?.writeText(hex);
+                        setCopiedHex(hex);
+                        setTimeout(() => setCopiedHex(null), 2000);
+                      }}
+                    >
+                      <span className="text-[8px] font-mono font-bold text-white bg-black/60 backdrop-blur-sm px-1 py-0.5 rounded text-center opacity-0 group-hover/swatch:opacity-100 transition-opacity truncate">
+                        {hex}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-xs text-gray-300 font-light leading-relaxed line-clamp-2">
+                  {pal.description}
+                </p>
+              </div>
+
+              {/* Card Footer: Action Buttons */}
+              <div className="p-4 border-t border-white/10 flex items-center justify-between gap-2 bg-white/[0.01]">
+                <button
+                  type="button"
+                  onClick={() => handleCopyPalette(pal.colors)}
+                  className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white font-mono text-[10px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <Copy className="w-3 h-3 text-[#FFD166]" />
+                  <span>{copiedHex === pal.colors[0] ? "¡Copiado!" : "Copiar HEX"}</span>
+                </button>
+
+                <a
+                  href={getWhatsAppPaletteLink(pal.name, pal.colors)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-[#FF3858]/10 hover:bg-[#FF3858]/25 border border-[#FF3858]/40 text-[#FF5470] font-mono text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                >
+                  <span>Diseñar con esta paleta</span>
+                  <ArrowRight className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 7. NUEVA SECCIÓN: BOSQUEJOS DE INTERFAZ & UI DESIGN SYSTEMS ORIGINALES */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10 pb-6 text-left">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-xs font-mono text-[#00D1FF] uppercase">
+              <Cpu className="w-3.5 h-3.5 text-[#00D1FF]" />
+              <span>LABORATORIO UI/UX • PROTOTIPOS ORIGINALES</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              Sistemas de Diseño & Experiencias de Interfaz
+            </h2>
+            <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
+              Así es como Sofía e Iván transforman un logotipo y un manual de marca en sistemas visuales vivos listos para aplicaciones móviles, tableros SaaS y experiencias web a 60 FPS.
+            </p>
+          </div>
+
+          {/* UI Style Selector Tabs */}
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: "liquid", label: "💎 Liquid Glass System", badge: "Glassmorphism" },
+              { id: "clay", label: "🧸 Sensory Clay 3D", badge: "Claymorphism" },
+              { id: "biotech", label: "🩺 Pure Biotech Flow", badge: "Clinical UI" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveUiTab(tab.id as any)}
+                className={`px-4 py-2 rounded-2xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                  activeUiTab === tab.id
+                    ? "bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+                    : "bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* UI Prototype 1: Liquid Glass System (Inspirado en la tendencia vítrea) */}
+        {activeUiTab === "liquid" && (
+          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#060814] via-[#0E1326] to-[#04060E] border border-cyan-500/30 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+              <div className="space-y-1">
+                <span className="text-xs font-mono text-[#00D1FF] uppercase font-bold tracking-wider">
+                  SISTEMA 01 • LIQUID GLASS UI KIT
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                  Refracción Vítrea & Gradientes Iridiscentes a 60 FPS
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 font-light">
+                  Componentes translúcidos con desenfoque óptico, bordes reflectivos y microinteracciones para startups de IA y fintechs.
+                </p>
+              </div>
+
+              <a
+                href={getWhatsAppUiConceptLink("Liquid Glass System")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all hover:scale-105"
+              >
+                <span>Cotizar UI con este estilo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Interactive Liquid Glass Canvas */}
+            <div className="p-6 sm:p-10 rounded-3xl bg-white/[0.02] border border-white/15 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,209,255,0.15)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Glass Control Board */}
+              <div className="lg:col-span-7 space-y-6">
+                {/* Search Bar Glass */}
+                <div className="p-3 rounded-2xl bg-white/[0.05] border border-white/20 backdrop-blur-xl flex items-center justify-between shadow-lg">
+                  <div className="flex items-center gap-3 text-gray-300 text-xs font-mono">
+                    <Search className="w-4 h-4 text-[#00D1FF]" />
+                    <span>Search projects & workspaces...</span>
+                  </div>
+                  <button className="w-7 h-7 rounded-xl bg-[#00D1FF] flex items-center justify-center text-black font-bold text-xs shadow-[0_0_10px_#00D1FF]">
+                    <Search className="w-3.5 h-3.5 text-black" />
+                  </button>
+                </div>
+
+                {/* Pill Buttons Row with Iridescent Borders */}
+                <div className="flex flex-wrap items-center gap-3">
+                  <button className="px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-600/80 to-blue-600/80 border border-purple-400/50 text-white font-mono text-xs font-bold shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:scale-105 transition-transform">
+                    Primary Action
+                  </button>
+                  <button className="px-5 py-2.5 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 font-mono text-xs font-bold shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:scale-105 transition-transform">
+                    Secondary Glass
+                  </button>
+                  <div className="px-4 py-2 rounded-full bg-white/5 border border-white/20 text-gray-300 font-mono text-xs flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    <span>60 FPS Live</span>
+                  </div>
+                </div>
+
+                {/* Interactive Switch & Sliders */}
+                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-bold text-white block font-mono">Quantum Lighting Engine</span>
+                    <span className="text-[10px] text-gray-400">Refracción dinámica en tiempo real</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsGlassSwitchOn(!isGlassSwitchOn)}
+                    className={`w-14 h-8 rounded-full p-1 transition-all flex items-center ${
+                      isGlassSwitchOn ? "bg-gradient-to-r from-[#00D1FF] to-[#8A2BE2] justify-end" : "bg-white/10 justify-start"
+                    }`}
+                  >
+                    <div className="w-6 h-6 rounded-full bg-white shadow-md" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Liquid Card */}
+              <div className="lg:col-span-5 p-6 rounded-3xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/25 backdrop-blur-2xl space-y-4 shadow-[0_0_30px_rgba(138,43,226,0.25)] relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-[#00D1FF]/20 rounded-full blur-xl pointer-events-none" />
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30">
+                    Glass Card Pro
+                  </span>
+                  <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs text-white font-bold">
+                    ✓
+                  </div>
+                </div>
+
+                <h4 className="text-xl font-bold text-white tracking-tight">Upgrade Workspace</h4>
+                <p className="text-xs text-gray-300 font-light leading-relaxed">
+                  Experiencia sensorial táctil con soporte completo para temas oscuros y renderizado acelerado por GPU.
+                </p>
+
+                <button className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-black text-xs uppercase tracking-wider font-mono shadow-[0_0_20px_rgba(0,209,255,0.4)] hover:scale-105 transition-transform">
+                  Deploy to Production
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* UI Prototype 2: Sensory Clay 3D Dashboard (Inspirado en interfaces táctiles suaves) */}
+        {activeUiTab === "clay" && (
+          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#1C1618] via-[#2A1E22] to-[#140F11] border border-pink-500/30 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+              <div className="space-y-1">
+                <span className="text-xs font-mono text-pink-300 uppercase font-bold tracking-wider">
+                  SISTEMA 02 • SENSORY CLAY 3D DASHBOARD
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                  Textura Táctil Suave, Amabilidad & Bienestar
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 font-light">
+                  Elementos tridimensionales con sombreado de arcilla suave en tonos melocotón, crema y menta para apps de lifestyle y comunidades.
+                </p>
+              </div>
+
+              <a
+                href={getWhatsAppUiConceptLink("Sensory Clay 3D Dashboard")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-400 to-amber-300 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all hover:scale-105"
+              >
+                <span>Cotizar UI con este estilo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Interactive Clay Canvas */}
+            <div className="p-6 sm:p-10 rounded-3xl bg-[#20171A]/80 border border-white/10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Sidebar Mockup */}
+              <div className="lg:col-span-4 p-5 rounded-3xl bg-[#2A1D22] border border-white/10 space-y-4 shadow-xl text-left">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-400 to-amber-300 p-0.5 shadow-md flex items-center justify-center text-xl">
+                    🎧
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white">Sofía Creative</h4>
+                    <span className="text-[10px] text-pink-300 font-mono">Good Morning, Creator! ✨</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-2 text-xs font-mono">
+                  <div className="p-2.5 rounded-xl bg-pink-500/20 text-pink-200 font-bold flex items-center gap-2">
+                    <Play className="w-3.5 h-3.5 fill-pink-300 text-pink-300" />
+                    <span>Focus Playlist (Lofi 3D)</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-white/5 text-gray-300 flex items-center gap-2">
+                    <Heart className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Favorite Palettes (128)</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-white/5 text-gray-300 flex items-center gap-2">
+                    <LineChart className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Creative Streak (7 days)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Center & Right: Clay Metric Cards */}
+              <div className="lg:col-span-8 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-pink-500/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] space-y-1 text-center">
+                    <span className="text-[10px] font-mono text-pink-300 uppercase font-bold">Designs Created</span>
+                    <div className="text-3xl font-black text-white font-mono">1,248</div>
+                    <span className="text-[10px] text-emerald-400 font-mono">+18% this month</span>
+                  </div>
+
+                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-amber-500/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] space-y-1 text-center">
+                    <span className="text-[10px] font-mono text-amber-300 uppercase font-bold">Focus Hours</span>
+                    <div className="text-3xl font-black text-white font-mono">34.6 h</div>
+                    <span className="text-[10px] text-emerald-400 font-mono">+6.2 hrs logged</span>
+                  </div>
+
+                  <div className="p-5 rounded-3xl bg-gradient-to-b from-[#352229] to-[#25171D] border border-emerald-500/20 shadow-[0_10px_25px_rgba(0,0,0,0.5)] space-y-1 text-center">
+                    <span className="text-[10px] font-mono text-emerald-300 uppercase font-bold">Client Rating</span>
+                    <div className="text-3xl font-black text-white font-mono">4.98 ★</div>
+                    <span className="text-[10px] text-gray-400 font-mono">100% Satisfaction</span>
+                  </div>
+                </div>
+
+                {/* Clay Bar Chart Mockup */}
+                <div className="p-5 rounded-3xl bg-[#2A1D22] border border-white/10 space-y-3">
+                  <span className="text-xs font-mono text-gray-300 font-bold block">
+                    Weekly Creative Output:
+                  </span>
+                  <div className="flex items-end justify-between gap-2 h-20 pt-2 px-2">
+                    {[40, 65, 50, 85, 95, 70, 60].map((h, i) => (
+                      <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+                        <div
+                          className="w-full rounded-full bg-gradient-to-t from-rose-500 to-amber-300 transition-all duration-500 hover:scale-105"
+                          style={{ height: `${h}%` }}
+                        />
+                        <span className="text-[9px] font-mono text-gray-400">
+                          {["M", "T", "W", "T", "F", "S", "S"][i]}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* UI Prototype 3: Pure Biotech & Clinical Flow (Inspirado en salud y estética médica) */}
+        {activeUiTab === "biotech" && (
+          <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-[#0A1816] via-[#0F2420] to-[#081210] border border-emerald-500/30 backdrop-blur-2xl shadow-2xl space-y-8 animate-in fade-in duration-300 text-left">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+              <div className="space-y-1">
+                <span className="text-xs font-mono text-emerald-400 uppercase font-bold tracking-wider">
+                  SISTEMA 03 • PURE BIOTECH & CLINICAL FLOW
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                  Minimalismo Clínico, Blancos Satín & Esmeralda Menta
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 font-light">
+                  Interfaces de máxima claridad visual y confianza para clínicas odontológicas, salud integral, spas dermatológicos y biotech.
+                </p>
+              </div>
+
+              <a
+                href={getWhatsAppUiConceptLink("Pure Biotech & Clinical Flow")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-400 to-teal-400 text-black font-mono text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all hover:scale-105"
+              >
+                <span>Cotizar UI con este estilo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Interactive Biotech Canvas */}
+            <div className="p-6 sm:p-10 rounded-3xl bg-[#0B1C18] border border-emerald-500/20 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Health Score Card */}
+              <div className="lg:col-span-5 p-6 rounded-3xl bg-white/[0.04] border border-emerald-500/30 backdrop-blur-xl space-y-5 text-center shadow-xl">
+                <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-emerald-500/20 to-teal-400/30 border-2 border-emerald-400 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.3)]">
+                  <span className="text-3xl font-black text-emerald-300 font-mono">92%</span>
+                  <span className="text-[8px] font-mono text-white/80 uppercase">Salud Óptima</span>
+                </div>
+
+                <div className="space-y-1">
+                  <h4 className="text-lg font-bold text-white">Score de Diagnóstico</h4>
+                  <p className="text-xs text-gray-300 font-light">
+                    Parámetros biométricos y estéticos validados con inteligencia clínica.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-left font-mono text-[10px]">
+                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <span className="text-gray-400 block">Tratamiento:</span>
+                    <strong className="text-emerald-300">Alineación 3D</strong>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <span className="text-gray-400 block">Próxima Cita:</span>
+                    <strong className="text-white">28 May, 10:30 AM</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Treatment Flow Selector */}
+              <div className="lg:col-span-7 space-y-4">
+                <span className="text-xs font-mono text-emerald-400 font-bold block uppercase tracking-wider">
+                  Tratamientos & Experiencias Disponibles:
+                </span>
+
+                <div className="space-y-2.5">
+                  {[
+                    { name: "Teeth Whitening & Laser Care", desc: "Blanqueamiento dental láser con protección de esmalte", price: "$1,850 MXN" },
+                    { name: "Dental Implants & 3D Scan", desc: "Modelado maxilofacial por tomografía computarizada", price: "$8,500 MXN" },
+                    { name: "Facial Harmonization & Peeling", desc: "Tratamiento dermatológico no invasivo de alta gama", price: "$4,200 MXN" },
+                  ].map((service, sIdx) => (
+                    <div
+                      key={sIdx}
+                      onClick={() => setSelectedMedicalService(sIdx)}
+                      className={`p-4 rounded-2xl border transition-all flex items-center justify-between cursor-pointer ${
+                        selectedMedicalService === sIdx
+                          ? "bg-emerald-950/40 border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.25)]"
+                          : "bg-black/30 border-white/10 hover:border-white/25"
+                      }`}
+                    >
+                      <div className="space-y-0.5">
+                        <h5 className="text-sm font-bold text-white">{service.name}</h5>
+                        <p className="text-xs text-gray-400 font-light">{service.desc}</p>
+                      </div>
+                      <div className="text-right flex items-center gap-3">
+                        <span className="text-sm font-bold text-emerald-400 font-mono">{service.price}</span>
+                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 8. EXPERIENCIA SENSORIAL: ANTES DE DISEÑAR, ESCUCHAMOS */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-black via-[#0E060A] to-[#170812] border border-[#FF3858]/30 backdrop-blur-2xl space-y-8 shadow-2xl text-left">
@@ -940,7 +1556,7 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. EXPLORADOR INTERACTIVO DE PERSONALIDAD DE MARCA */}
+      {/* 9. EXPLORADOR INTERACTIVO DE PERSONALIDAD DE MARCA */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-black via-[#0B0609] to-[#15070F] border border-[#FF3858]/30 backdrop-blur-2xl space-y-8 shadow-2xl text-left">
@@ -1041,7 +1657,7 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 8. LA SINERGIA: SOFÍA + IVÁN (CUANDO DISEÑO Y TECNOLOGÍA SE ENCUENTRAN) */}
+      {/* 10. LA SINERGIA: SOFÍA + IVÁN (CUANDO DISEÑO Y TECNOLOGÍA SE ENCUENTRAN) */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-r from-purple-950/20 via-black to-cyan-950/20 border border-white/15 backdrop-blur-2xl text-center space-y-8 shadow-2xl">
@@ -1113,7 +1729,7 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 9. PAQUETES: ESSENCE, IDENTITY, UNIVERSE (CON LEYENDA ADAPTABLE) */}
+      {/* 11. PAQUETES: ESSENCE, IDENTITY, UNIVERSE (CON LEYENDA ADAPTABLE) */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -1234,7 +1850,7 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 10. FAQ DE BRANDING */}
+      {/* 12. FAQ DE BRANDING */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-2">
@@ -1274,7 +1890,7 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 11. CIERRE EMOCIONAL Y MEMORABLE (CTA FINAL) */}
+      {/* 13. CIERRE EMOCIONAL Y MEMORABLE (CTA FINAL) */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
         <div className="p-8 sm:p-14 rounded-[36px] bg-gradient-to-r from-[#FF3858]/30 via-black to-[#FF7A00]/20 border border-[#FF3858]/50 backdrop-blur-2xl text-center space-y-6 shadow-2xl">
