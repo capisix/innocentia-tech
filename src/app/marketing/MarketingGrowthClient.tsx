@@ -389,14 +389,16 @@ export default function MarketingGrowthClient() {
                     href={getWhatsAppLink(plan.name)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-full py-3 px-4 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                    className={`w-full py-3.5 px-5 rounded-full font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
                       isSelected
-                        ? "bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-black shadow-[0_0_20px_rgba(0,209,255,0.5)]"
-                        : "bg-white/10 text-white hover:bg-white/20"
+                        ? "bg-[#00D1FF] bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] text-black shadow-[0_0_30px_rgba(0,209,255,0.7)] ring-2 ring-white/60 hover:brightness-110 scale-[1.02]"
+                        : "bg-gradient-to-r from-cyan-500/15 to-blue-500/10 hover:from-cyan-500/30 hover:to-blue-500/25 border border-cyan-500/40 hover:border-[#00D1FF] text-cyan-200 hover:text-white shadow-[0_0_15px_rgba(0,209,255,0.15)]"
                     }`}
                   >
-                    <span>Contratar {plan.name}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span className={isSelected ? "text-slate-950 font-black" : "text-cyan-200 hover:text-white font-bold"}>
+                      Contratar {plan.name}
+                    </span>
+                    <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? "text-slate-950 stroke-[2.5]" : "text-cyan-300"}`} />
                   </a>
                 </div>
               </div>
@@ -427,7 +429,7 @@ export default function MarketingGrowthClient() {
             href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20me%20gustaría%20una%20propuesta%20de%20campañas%20adaptada%20a%20mi%20presupuesto."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-lg flex-shrink-0"
+            className="px-5 py-3 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/35 hover:to-blue-500/35 border border-cyan-500/40 hover:border-cyan-300 text-cyan-200 hover:text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(0,209,255,0.2)] flex-shrink-0"
           >
             <span>Plan a mi medida</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#00D1FF]" />

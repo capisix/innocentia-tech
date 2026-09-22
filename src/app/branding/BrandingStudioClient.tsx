@@ -972,8 +972,8 @@ export default function BrandingStudioClient() {
                 onClick={() => setSelectedFilter(tab.id as any)}
                 className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-bold transition-all cursor-pointer ${
                   selectedFilter === tab.id
-                    ? "bg-[#FF3858] text-white shadow-[0_0_15px_#FF3858]"
-                    : "bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10"
+                    ? "bg-[#FF3858] text-white shadow-[0_0_20px_rgba(255,56,88,0.6)] ring-1 ring-white/40"
+                    : "bg-[#FF3858]/10 text-gray-300 border border-[#FF3858]/25 hover:text-white hover:border-[#FF3858]/60 hover:bg-[#FF3858]/20"
                 }`}
               >
                 {tab.label}
@@ -1078,8 +1078,8 @@ export default function BrandingStudioClient() {
                 onClick={() => setSelectedHarmonyCategory(cat.id)}
                 className={`px-3.5 py-1.5 rounded-full font-mono text-xs font-bold transition-all cursor-pointer ${
                   selectedHarmonyCategory === cat.id
-                    ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white shadow-[0_0_15px_rgba(255,56,88,0.4)]"
-                    : "bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10"
+                    ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white shadow-[0_0_20px_rgba(255,56,88,0.6)] ring-1 ring-white/40"
+                    : "bg-[#FF3858]/10 text-gray-300 border border-[#FF3858]/25 hover:text-white hover:border-[#FF3858]/60 hover:bg-[#FF3858]/20"
                 }`}
               >
                 {cat.label}
@@ -1093,68 +1093,84 @@ export default function BrandingStudioClient() {
           {filteredHarmonies.map((pal) => (
             <div
               key={pal.id}
-              className="rounded-3xl bg-black/70 border border-white/15 overflow-hidden flex flex-col justify-between transition-all duration-300 backdrop-blur-xl hover:border-[#FF3858]/60 hover:shadow-[0_15px_35px_rgba(255,56,88,0.2)] hover:-translate-y-1 text-left group"
+              className="p-5 rounded-3xl bg-black/80 border border-white/10 hover:border-[#FF3858]/60 transition-all duration-300 space-y-4 hover:shadow-[0_0_30px_rgba(255,56,88,0.2)] hover:-translate-y-1 flex flex-col justify-between group"
             >
-              {/* Card Top: Atmospheric Gradient Box */}
-              <div
-                className={`p-6 bg-gradient-to-br ${pal.gradientBg} border-b border-white/10 space-y-2 relative overflow-hidden`}
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl pointer-events-none" />
-                <span className="text-[10px] font-mono text-white/70 uppercase tracking-widest block font-bold">
-                  {pal.tags}
-                </span>
-                <h3 className="text-xl font-black text-white tracking-tight drop-shadow-md">
-                  {pal.name}
-                </h3>
-              </div>
-
-              {/* Card Center: Color Swatches Strip with HEX codes */}
-              <div className="p-4 space-y-4">
-                {/* 5 Vertical Swatches */}
-                <div className="grid grid-cols-5 gap-1.5 h-24 rounded-2xl p-1.5 bg-black/60 border border-white/10 shadow-inner">
-                  {pal.colors.map((hex, hIdx) => (
-                    <div
-                      key={hIdx}
-                      className="group/swatch relative rounded-xl h-full flex flex-col justify-end p-1 transition-transform hover:scale-105 cursor-pointer shadow-md"
-                      style={{ backgroundColor: hex }}
-                      title={`Copiar ${hex}`}
-                      onClick={() => {
-                        navigator.clipboard?.writeText(hex);
-                        setCopiedHex(hex);
-                        setTimeout(() => setCopiedHex(null), 2000);
-                      }}
-                    >
-                      <span className="text-[8px] font-mono font-bold text-white bg-black/60 backdrop-blur-sm px-1 py-0.5 rounded text-center opacity-0 group-hover/swatch:opacity-100 transition-opacity truncate">
-                        {hex}
-                      </span>
-                    </div>
-                  ))}
+              <div className="space-y-3">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-base font-bold text-white group-hover:text-[#FF3858] transition-colors">
+                      {pal.name}
+                    </h4>
+                    <span className="text-[10px] font-mono text-gray-400 block">{pal.subtitle}</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[9px] font-mono text-gray-300 uppercase">
+                    {pal.vibe}
+                  </span>
                 </div>
 
-                <p className="text-xs text-gray-300 font-light leading-relaxed line-clamp-2">
-                  {pal.description}
-                </p>
+                {/* Color Swatch Bars (Estilo de la imagen con franjas grandes y elegantes) */}
+                <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10 space-y-0.5 p-1 bg-black/40">
+                  <div className="grid grid-cols-5 h-20 rounded-xl overflow-hidden">
+                    {pal.colors.map((color, cIdx) => (
+                      <div
+                        key={cIdx}
+                        style={{ backgroundColor: color }}
+                        className="h-full relative group/swatch transition-transform hover:scale-110 cursor-pointer flex items-end justify-center pb-1.5"
+                        onClick={() => handleCopyPalette([color])}
+                        title={`Copiar ${color}`}
+                      >
+                        <span className="text-[8px] font-mono font-black text-black bg-white/80 px-1 rounded opacity-0 group-hover/swatch:opacity-100 transition-opacity">
+                          HEX
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Hex codes pills underneath */}
+                  <div className="grid grid-cols-5 gap-1 pt-1">
+                    {pal.colors.map((color, cIdx) => (
+                      <div
+                        key={cIdx}
+                        onClick={() => handleCopyPalette([color])}
+                        className="text-center py-1 rounded bg-white/5 hover:bg-white/15 border border-white/5 cursor-pointer transition-colors"
+                        title="Click para copiar HEX"
+                      >
+                        <span className="text-[9px] font-mono text-gray-300 block font-bold truncate px-0.5">
+                          {color}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Emotional / Strategic Concept */}
+                <p className="text-xs text-gray-300 font-light leading-relaxed">{pal.concept}</p>
+                <div className="text-[11px] font-mono text-[#FF7A00] flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 flex-shrink-0" />
+                  <span>Ideal para: {pal.industry}</span>
+                </div>
               </div>
 
-              {/* Card Footer: Action Buttons */}
-              <div className="p-4 border-t border-white/10 flex items-center justify-between gap-2 bg-white/[0.01]">
+              {/* Action Buttons */}
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => handleCopyPalette(pal.colors)}
-                  className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white font-mono text-[10px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-white/[0.08] to-white/[0.04] hover:from-white/20 hover:to-white/10 border border-white/15 text-gray-200 hover:text-white font-mono text-[10px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Copy className="w-3 h-3 text-[#FFD166]" />
-                  <span>{copiedHex === pal.colors[0] ? "¡Copiado!" : "Copiar HEX"}</span>
+                  <Copy className="w-3 h-3 text-[#FF5470]" />
+                  <span>{copiedHex === pal.colors[0] ? "¡Copiada!" : "Copiar Paleta"}</span>
                 </button>
 
                 <a
                   href={getWhatsAppPaletteLink(pal.name, pal.colors)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-[#FF3858]/10 hover:bg-[#FF3858]/25 border border-[#FF3858]/40 text-[#FF5470] font-mono text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#FF3858]/20 to-[#FF7A00]/20 hover:from-[#FF3858]/35 hover:to-[#FF7A00]/35 border border-[#FF3858]/40 hover:border-[#FF5470] text-[#FFA8B6] hover:text-white font-mono text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-[0_0_10px_rgba(255,56,88,0.2)]"
                 >
-                  <span>Diseñar con esta paleta</span>
-                  <ArrowRight className="w-3 h-3" />
+                  <span>Cotizar con esta paleta</span>
+                  <ArrowRight className="w-3 h-3 text-[#FF7A00]" />
                 </a>
               </div>
             </div>
@@ -1163,25 +1179,25 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. NUEVA SECCIÓN: BOSQUEJOS DE INTERFAZ & UI DESIGN SYSTEMS ORIGINALES */}
+      {/* 8. LABORATORIO DE CONCEPTOS & SISTEMAS UI ORIGINALES */}
       {/* ========================================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10 pb-6 text-left">
-          <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-xs font-mono text-[#00D1FF] uppercase">
-              <Cpu className="w-3.5 h-3.5 text-[#00D1FF]" />
-              <span>LABORATORIO UI/UX • PROTOTIPOS ORIGINALES</span>
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10 pb-6">
+          <div className="space-y-3 max-w-2xl text-left">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 border border-purple-500/30 text-xs font-mono text-purple-300 uppercase shadow-lg">
+              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+              <span>SISTEMAS VISUALES DIGITALES A MEDIDA</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
-              Sistemas de Diseño & Experiencias de Interfaz
+              Laboratorio de Interfaces & Conceptos de Diseño
             </h2>
             <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
-              Así es como Sofía e Iván transforman un logotipo y un manual de marca en sistemas visuales vivos listos para aplicaciones móviles, tableros SaaS y experiencias web a 60 FPS.
+              En Innocentia Tech no usamos plantillas genéricas. Desarrollamos <strong>sistemas visuales interactivos originales</strong> para marcas que exigen una experiencia inolvidable.
             </p>
           </div>
 
-          {/* UI Style Selector Tabs */}
-          <div className="flex flex-wrap items-center gap-2">
+          {/* UI Labs Tabs Selector */}
+          <div className="flex flex-wrap gap-2">
             {[
               { id: "liquid", label: "💎 Liquid Glass System", badge: "Glassmorphism" },
               { id: "clay", label: "🧸 Sensory Clay 3D", badge: "Claymorphism" },
@@ -1193,8 +1209,8 @@ export default function BrandingStudioClient() {
                 onClick={() => setActiveUiTab(tab.id as any)}
                 className={`px-4 py-2 rounded-2xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                   activeUiTab === tab.id
-                    ? "bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-black font-black shadow-[0_0_20px_rgba(0,209,255,0.4)]"
-                    : "bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10"
+                    ? "bg-[#00D1FF] bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] text-slate-950 font-black shadow-[0_0_25px_rgba(0,209,255,0.7)] ring-2 ring-white/50 scale-[1.02]"
+                    : "bg-cyan-500/10 text-cyan-200 border border-cyan-500/30 hover:text-white hover:border-[#00D1FF] hover:bg-cyan-500/20"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -1803,14 +1819,16 @@ export default function BrandingStudioClient() {
                     href={getWhatsAppLink(pkg.name)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-full py-3 px-4 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                    className={`w-full py-3.5 px-5 rounded-full font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
                       isSelected
-                        ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white shadow-[0_0_20px_rgba(255,56,88,0.5)]"
-                        : "bg-white/10 text-white hover:bg-white/20"
+                        ? "bg-[#FF3858] bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] text-white font-black shadow-[0_0_30px_rgba(255,56,88,0.7)] ring-2 ring-white/60 hover:brightness-110 scale-[1.02]"
+                        : "bg-gradient-to-r from-[#FF3858]/15 to-[#FF7A00]/10 hover:from-[#FF3858]/30 hover:to-[#FF7A00]/25 border border-[#FF3858]/40 hover:border-[#FF3858] text-[#FFA8B6] hover:text-white shadow-[0_0_15px_rgba(255,56,88,0.15)]"
                     }`}
                   >
-                    <span>Elegir {pkg.name}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span className={isSelected ? "text-white font-black" : "text-[#FFA8B6] hover:text-white font-bold"}>
+                      Elegir {pkg.name}
+                    </span>
+                    <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? "text-white stroke-[2.5]" : "text-[#FF7A00]"}`} />
                   </a>
                 </div>
               </div>
@@ -1841,7 +1859,7 @@ export default function BrandingStudioClient() {
             href="https://wa.me/529601771556?text=Hola%20Sofía,%20vi%20los%20paquetes%20de%20branding%20en%20Innocentia%20Tech%20y%20me%20gustaría%20una%20propuesta%20adaptada%20a%20mis%20necesidades."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-lg flex-shrink-0"
+            className="px-5 py-3 rounded-full bg-gradient-to-r from-[#FF3858]/20 to-[#FF7A00]/20 hover:from-[#FF3858]/35 hover:to-[#FF7A00]/35 border border-[#FF3858]/40 hover:border-[#FF5470] text-[#FFA8B6] hover:text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(255,56,88,0.2)] flex-shrink-0"
           >
             <span>Propuesta a mi medida</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#FF5470]" />
