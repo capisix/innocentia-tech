@@ -687,10 +687,40 @@ export const ChevronLeft = createIcon("m15 18-6-6 6-6");
 export const Heart = createIcon(
   <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
 );
+export const Bug = createIcon(
+  <g>
+    <rect width="8" height="14" x="8" y="6" rx="4" />
+    <path d="m19 7-3 2" />
+    <path d="m5 7 3 2" />
+    <path d="m19 19-3-2" />
+    <path d="m5 19 3-2" />
+    <path d="M20 13h-4" />
+    <path d="M4 13h4" />
+    <path d="m10 4 1 2" />
+    <path d="m14 4-1 2" />
+  </g>
+);
 
+export const AlertTriangle = createIcon(
+  <g>
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+    <line x1="12" x2="12" y1="9" y2="13" />
+    <line x1="12" x2="12.01" y1="17" y2="17" />
+  </g>
+);
 
+export const Filter = createIcon(
+  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+);
 
-
+export const GitPullRequest = createIcon(
+  <g>
+    <circle cx="18" cy="18" r="3" />
+    <circle cx="6" cy="6" r="3" />
+    <path d="M13 6h3a2 2 0 0 1 2 2v7" />
+    <line x1="6" x2="6" y1="9" y2="21" />
+  </g>
+);
 
 
 

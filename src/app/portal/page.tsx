@@ -160,6 +160,9 @@ export function getSellerCode(user: { id?: string; email?: string; name?: string
   if (id === "usr_sales_farid" || email.includes("farid") || email.includes("majestic") || name.includes("farid")) {
     return "VEN-FARID-303";
   }
+  if (id === "usr_partner_daniel" || email.includes("daniel") || name.includes("daniel")) {
+    return "SOC-DAN-201";
+  }
   return "VEN-" + (name.slice(0, 4).toUpperCase() || "ASESOR") + "-101";
 }
 
