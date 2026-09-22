@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X, Send, Sparkles, Maximize2, Minimize2, ArrowRight, RotateCcw, Clock, MessageSquare } from "../../lib/icons";
 import Image from "next/image";
 import { getIntelligentHumanReply } from "../../lib/conversationalAI";
@@ -196,11 +196,30 @@ export default function FloatingChatWidget({
     }
   }, [messages]);
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const maximizedMessagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
+    // Timeout ensures DOM layout updates (including images/bubbles) before scrolling
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior, block: "end" });
+      maximizedMessagesEndRef.current?.scrollIntoView({ behavior, block: "end" });
+    }, 60);
+  };
+
+  // Automatically scroll whenever messages change, bot is typing, or chat is opened/maximized
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isTyping, isOpen, isMaximized]);
+
   const handleResetChat = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem(SESSION_STORAGE_KEY);
     }
     setMessages(DEFAULT_WELCOME_MESSAGES);
+    scrollToBottom();
   };
 
   const quickQuestions = [
@@ -213,6 +232,11 @@ export default function FloatingChatWidget({
       label: "🎨 Diseñar una marca",
       query: "Quiero diseñar la identidad visual y marca de mi proyecto.",
       sender: "sofia" as const,
+    },
+    {
+      label: "📈 Estrategia de Marketing",
+      query: "Quiero diseñar una estrategia de marketing digital y captación de clientes.",
+      sender: "both" as const,
     },
     {
       label: "📱 Crear una App Móvil",
@@ -557,6 +581,7 @@ export default function FloatingChatWidget({
                   </span>
                 </div>
               )}
+              <div ref={maximizedMessagesEndRef} className="h-1" />
             </div>
 
             {/* Bottom Input Area */}
@@ -860,6 +885,7 @@ export default function FloatingChatWidget({
                   <span>Respondiendo...</span>
                 </div>
               )}
+              <div ref={messagesEndRef} className="h-1" />
             </div>
 
             {/* Input Bar */}

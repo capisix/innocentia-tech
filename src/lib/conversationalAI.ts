@@ -17,11 +17,84 @@ interface MatchRule {
 
 const RULES: MatchRule[] = [
   // =========================================================================
-  // 1. ESCALABILIDAD, ALTA CONCURRENCIA, TRÁFICO & ARQUITECTURA (PRIORIDAD MÁXIMA)
+  // 1. MARKETING DIGITAL, ESTRATEGIAS, GROWTH, PAUTAS & PUBLICIDAD
+  // =========================================================================
+  {
+    id: "marketing_growth",
+    priority: 95,
+    keywords: [
+      "marketing",
+      "estrategia de marketing",
+      "estrategia digital",
+      "estrategia d marketing",
+      "estrategia comercial",
+      "estrategia de ventas",
+      "estrategia",
+      "estrategias",
+      "campaña",
+      "campanas",
+      "campana",
+      "campañas",
+      "growth",
+      "growth marketing",
+      "meta ads",
+      "facebook ads",
+      "instagram ads",
+      "google ads",
+      "tiktok ads",
+      "pauta",
+      "pautas",
+      "publicidad",
+      "redes sociales",
+      "seo",
+      "posicionamiento",
+      "posicionamiento web",
+      "embudo de ventas",
+      "embudo",
+      "embudos",
+      "funnel",
+      "funnels",
+      "leads",
+      "prospectos",
+      "captacion",
+      "captación",
+      "conversion",
+      "conversión",
+      "ventas",
+      "vender mas",
+      "vender más",
+      "segmentacion",
+      "segmentación",
+      "retargeting",
+      "roas",
+      "anuncios",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡Me encanta! En marketing y crecimiento digital creamos la estrategia visual completa: anuncios de alto impacto para Instagram, Facebook y Google, copys persuasivos y landing pages diseñadas para convertir visitas en clientes reales.",
+          "IVÁN: Y en la parte técnica y analítica, configuramos segmentación cruzada avanzada (Meta Ads + Google Ads), píxeles de conversión con API CAPI y embudos automatizados conectados directo a tu WhatsApp o CRM para maximizar el retorno de tu inversión (ROAS).\n\n🚀 Conoce nuestros planes de Marketing & Growth o agenda tu sesión estratégica aquí:\n👉 https://innocentia.tech/marketing",
+        ],
+      },
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Diseñamos campañas integrales: desde el branding y creativos visuales para tus redes, hasta embudos de venta y automatizaciones de seguimiento.",
+          "IVÁN: Optimizamos cada etapa del embudo de adquisición para que tu costo por cliente potencial disminuya semana a semana con datos reales y medición precisa.\n\n🚀 Puedes cotizar tu estrategia de marketing en 2 minutos aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 2. ESCALABILIDAD, ALTA CONCURRENCIA, TRÁFICO & ARQUITECTURA
   // =========================================================================
   {
     id: "escalabilidad",
-    priority: 100,
+    priority: 90,
     keywords: [
       "escalable",
       "escalables",
@@ -69,23 +142,36 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 2. PROPIEDAD DEL CÓDIGO, DERECHOS & REPOSITORIOS (PRIORIDAD 90)
+  // 3. PROPIEDAD DEL CÓDIGO, DERECHOS & REPOSITORIOS
   // =========================================================================
   {
     id: "propiedad_codigo",
-    priority: 90,
+    priority: 88,
     keywords: [
       "codigo es mio",
       "código es mío",
       "el codigo es nuestro",
       "el código es nuestro",
+      "codigo me pertenece",
+      "código me pertenece",
+      "me pertenece",
+      "pertenece",
+      "de quien es el codigo",
+      "de quién es el código",
+      "quien es el dueño",
+      "quién es el dueño",
+      "quien es el dueno",
       "soy dueño",
       "somos dueños",
+      "soy dueno",
       "propiedad intelectual",
+      "propiedad del codigo",
+      "propiedad del código",
       "derechos de autor",
       "codigo fuente",
       "código fuente",
       "repositorio",
+      "repositorios",
       "github",
       "licencia",
       "ataduras",
@@ -106,7 +192,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 3. INTEGRACIONES: PASARELAS DE PAGO, STRIPE, WHATSAPP, FACTURACIÓN SAT
+  // 4. INTEGRACIONES: PASARELAS DE PAGO, STRIPE, WHATSAPP, FACTURACIÓN SAT
   // =========================================================================
   {
     id: "integraciones_pagos",
@@ -120,6 +206,7 @@ const RULES: MatchRule[] = [
       "paypal",
       "spei",
       "tarjeta",
+      "tarjetas",
       "cobros",
       "cobrar en linea",
       "cobros en línea",
@@ -131,7 +218,9 @@ const RULES: MatchRule[] = [
       "whatsapp api",
       "google maps",
       "webhook",
+      "webhooks",
       "api externa",
+      "apis externas",
     ],
     responses: [
       {
@@ -146,7 +235,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 4. GARANTÍA TÉCNICA, BUGS, SOPORTE & MONITOREO POST-VENTA
+  // 5. GARANTÍA TÉCNICA, BUGS, SOPORTE & MONITOREO POST-VENTA
   // =========================================================================
   {
     id: "garantia_soporte",
@@ -167,6 +256,8 @@ const RULES: MatchRule[] = [
       "post venta",
       "postventa",
       "monitoreo",
+      "poliza",
+      "póliza",
     ],
     responses: [
       {
@@ -181,11 +272,11 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 5. PROCESO DE TRABAJO & METODOLOGÍA (CÓMO TRABAJAN / ETAPAS)
+  // 6. PROCESO DE TRABAJO & METODOLOGÍA (CÓMO TRABAJAN / ETAPAS)
   // =========================================================================
   {
     id: "proceso_trabajo",
-    priority: 75,
+    priority: 78,
     keywords: [
       "como trabajan",
       "cómo trabajan",
@@ -198,6 +289,8 @@ const RULES: MatchRule[] = [
       "como empezamos",
       "cómo empezamos",
       "como se hace",
+      "fases",
+      "fase de desarrollo",
     ],
     responses: [
       {
@@ -212,11 +305,11 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 6. MODALIDADES DE INVERSIÓN: DESARROLLO A MEDIDA VS RENTA TECNOLÓGICA
+  // 7. MODALIDADES DE INVERSIÓN: DESARROLLO A MEDIDA VS RENTA TECNOLÓGICA
   // =========================================================================
   {
     id: "modalidades_pago",
-    priority: 70,
+    priority: 75,
     keywords: [
       "modalidad",
       "modalidades",
@@ -245,11 +338,11 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 7. MIGRACIÓN, REDISEÑO & MEJORA DE SISTEMAS EXISTENTES
+  // 8. MIGRACIÓN, REDISEÑO & MEJORA DE SISTEMAS EXISTENTES
   // =========================================================================
   {
     id: "migracion_rediseno",
-    priority: 65,
+    priority: 72,
     keywords: [
       "ya tengo una pagina",
       "ya tengo una página",
@@ -277,11 +370,328 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 8. UBICACIÓN, OFICINAS, VISITAS & REUNIONES VIRTUALES
+  // 9. CREACIÓN DE LOGO / BRANDING / IDENTIDAD VISUAL
+  // =========================================================================
+  {
+    id: "branding_logo",
+    priority: 70,
+    keywords: [
+      "logo",
+      "logotipo",
+      "isotipo",
+      "imagotipo",
+      "marca",
+      "branding",
+      "identidad visual",
+      "manual de marca",
+      "colores de marca",
+      "vector",
+      "svg",
+      "illustrator",
+      "curvas",
+      "diseño de marca",
+    ],
+    responses: [
+      {
+        speaker: "SOFÍA",
+        type: "sofia",
+        text: [
+          "¡Me encanta dar vida a nuevas marcas! Diseñamos tu identidad visual desde cero: logotipo, paleta cromática, tipografías y manual de marca para que transmitas profesionalismo y confianza.",
+          "Te entregamos todos los archivos vectoriales (AI, SVG, PDF, PNG de alta resolución) listos para redes sociales, sitio web, uniformes o impresión en gran formato.\n\n🚀 Puedes iniciar el diseño de tu marca aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 10. COMBINADO: LOGO + APP / SOFTWARE INTEGRAL
+  // =========================================================================
+  {
+    id: "combo_logo_app",
+    priority: 68,
+    keywords: [
+      "logo y una aplicacion",
+      "logo y una aplicación",
+      "logo y app",
+      "marca y app",
+      "marca y sistema",
+      "cotizar un logo y",
+      "que necesito para cotizar",
+      "qué necesito para cotizar",
+      "requisitos para cotizar",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡Es un combo perfecto! Creamos toda la identidad visual y estética de tu marca para que tu producto luzca impecable y coherente desde el primer día.",
+          "IVÁN: Y en paralelo programamos la aplicación o plataforma con la arquitectura tecnológica necesaria. Al contratar ambos servicios con nosotros, el diseño y el código se sincronizan a la perfección sin fricciones.\n\n🚀 Puedes cotizar tu paquete integral aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 11. INTELIGENCIA ARTIFICIAL, AGENTES & CHATBOTS WHATSAPP
+  // =========================================================================
+  {
+    id: "ia_agentes",
+    priority: 65,
+    keywords: [
+      "ia",
+      "inteligencia artificial",
+      "agente",
+      "agentes",
+      "agente de ia",
+      "agentes de ia",
+      "chatbot",
+      "chatbots",
+      "chat bot",
+      "automatizar",
+      "automatizacion",
+      "automatizaciones",
+      "gpt",
+      "llm",
+      "openai",
+      "deepseek",
+      "gemini",
+      "claude",
+      "bot de whatsapp",
+      "chatbot whatsapp",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "IVÁN: Conectamos agentes de Inteligencia Artificial a tu WhatsApp Business o plataforma web capaces de atender clientes 24/7, resolver consultas técnicas complejas, cotizar y registrar citas o ventas en tu base de datos automáticamente.",
+          "SOFÍA: Cuidamos minuciosamente que las respuestas del bot tengan el tono, calidez, vocabulario y personalidad exacta de tu marca para que la atención se sienta natural y fluida.\n\n🚀 Cotiza tu asistente de IA inteligente aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 12. DESARROLLO DE APPS MÓVILES (iOS Y ANDROID)
+  // =========================================================================
+  {
+    id: "apps_moviles",
+    priority: 60,
+    keywords: [
+      "app",
+      "apps",
+      "aplicacion",
+      "aplicaciones",
+      "aplicación",
+      "ios",
+      "android",
+      "play store",
+      "app store",
+      "flutter",
+      "react native",
+      "móvil",
+      "movil",
+      "celular",
+      "app movil",
+      "app móvil",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Diseñamos la experiencia de tu app para que sea fluida, visualmente impactante y fácil de navegar con una sola mano a 60 FPS.",
+          "IVÁN: Y yo me encargo de programarla con rendimiento nativo para iOS y Android: notificaciones push, modo offline, geolocalización en tiempo real, pasarelas de pago y publicación en Apple App Store y Google Play Store.\n\n🚀 Cuéntanos las funciones de tu app para cotizarla aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 13. SISTEMAS WEB, SAAS, CRM, ERP & PANELES DE CONTROL
+  // =========================================================================
+  {
+    id: "sistemas_saas",
+    priority: 55,
+    keywords: [
+      "saas",
+      "plataforma",
+      "plataformas",
+      "sistema",
+      "sistemas",
+      "crm",
+      "erp",
+      "portal",
+      "dashboard",
+      "panel",
+      "administrativo",
+      "base de datos",
+      "backend",
+      "fullstack",
+      "software a medida",
+      "desarrollo web",
+    ],
+    responses: [
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Desarrollamos plataformas web y sistemas SaaS a medida que digitalizan y automatizan la operación de tu negocio: administración de usuarios por roles, control de inventario, cotizadores automáticos, cobros recurrentes y reportes en tiempo real.",
+          "Construidos con Next.js 15, PostgreSQL y microservicios ultra rápidos accesibles desde cualquier navegador o dispositivo móvil.\n\n🚀 Cuéntanos qué proceso deseas digitalizar aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 14. E-COMMERCE, TIENDAS ONLINE & CATÁLOGOS CON PAGOS
+  // =========================================================================
+  {
+    id: "ecommerce_tiendas",
+    priority: 52,
+    keywords: [
+      "tienda",
+      "tiendas",
+      "tienda online",
+      "tienda en linea",
+      "tienda en línea",
+      "ecommerce",
+      "e-commerce",
+      "comercio electronico",
+      "comercio electrónico",
+      "carrito de compras",
+      "vender productos",
+      "catalogo de productos",
+      "catálogo de productos",
+      "shopify",
+      "woocommerce",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Diseñamos tiendas online visualmente increíbles, con fichas de producto atractivas, filtros rápidos y un proceso de checkout limpio que minimiza los carritos abandonados.",
+          "IVÁN: Integramos pasarelas de pago seguras (Stripe, Mercado Pago, PayPal, SPEI), cálculo automático de envíos, control de inventario y facturación automática en el SAT.\n\n🚀 Cotiza tu tienda online lista para vender aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 15. DISEÑO UI/UX, PANTALLAS, FIGMA & PROTOTIPOS
+  // =========================================================================
+  {
+    id: "ui_ux_figma",
+    priority: 50,
+    keywords: [
+      "figma",
+      "ux",
+      "ui",
+      "ui/ux",
+      "ui ux",
+      "prototipo",
+      "prototipos",
+      "interfaz",
+      "interfaces",
+      "wireframe",
+      "wireframes",
+      "pantallas",
+      "mockup",
+      "mockups",
+      "experiencia de usuario",
+    ],
+    responses: [
+      {
+        speaker: "SOFÍA",
+        type: "sofia",
+        text: [
+          "Diseñamos interfaces atractivas, modernas y muy intuitivas para tus clientes en Figma.",
+          "Podrás probar el prototipo interactivo directamente en tu teléfono antes de programar, para asegurarnos de que los flujos, animaciones y micro-interacciones queden impecables.\n\n🚀 Cuéntanos qué pantallas necesitas llenando el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 16. COSTOS, PRECIOS & COTIZACIONES GENERALES
+  // =========================================================================
+  {
+    id: "costos_precios",
+    priority: 45,
+    keywords: [
+      "costo",
+      "costos",
+      "precio",
+      "precios",
+      "cuanto cuesta",
+      "cuánto cuesta",
+      "presupuesto",
+      "cotizar",
+      "cotizacion",
+      "cotización",
+      "tarifa",
+      "tarifas",
+      "valor",
+      "inversion",
+      "inversión",
+      "cuanto cobran",
+      "cuánto cobran",
+    ],
+    responses: [
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Nuestros presupuestos son transparentes, estructurados y sin costos ocultos:",
+          "• Logotipos e Identidad de Marca: Desde $4,500 MXN.\n• Sitios Web y Landing Pages: Desde $12,000 MXN.\n• Campañas de Marketing & Growth: Planes de gestión mensual desde $8,000 MXN.\n• Apps Móviles y Plataformas SaaS: Desde $24,000 MXN (o en modalidad de renta tecnológica mensual con soporte).\n\n🚀 Para calcular el costo exacto con tu desglose de funciones, llena el formulario en 2 minutos:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 17. TIEMPOS DE ENTREGA & CRONOGRAMAS
+  // =========================================================================
+  {
+    id: "tiempos_entrega",
+    priority: 40,
+    keywords: [
+      "tiempo",
+      "tiempos",
+      "cuanto tarda",
+      "cuánto tarda",
+      "duracion",
+      "duración",
+      "plazos",
+      "dias",
+      "días",
+      "semanas",
+      "meses",
+      "entrega",
+      "entregas",
+      "cronograma",
+      "plazo",
+    ],
+    responses: [
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Trabajamos con plazos ágiles y entregas visibles por semana:",
+          "• Identidad Visual & Logotipos: 3 a 7 días hábiles.\n• Sitios Web & Landing Pages: 1 a 2 semanas.\n• Estrategias de Marketing: Lanzamiento de campañas en 5 a 7 días.\n• Apps Móviles & Sistemas Web: 3 a 6 semanas con prototipo interactivo listo en los primeros 5 días.\n\n🚀 Registra las fechas estimadas de tu proyecto aquí:\n👉 https://innocentia.tech/crear-proyecto",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 18. UBICACIÓN, OFICINAS, VISITAS & REUNIONES VIRTUALES
   // =========================================================================
   {
     id: "ubicacion_contacto",
-    priority: 60,
+    priority: 35,
     keywords: [
       "donde estan",
       "dónde están",
@@ -307,298 +717,100 @@ const RULES: MatchRule[] = [
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: Nuestra base de diseño e ingeniería está ubicada en Mérida, Yucatán, y colaboramos con empresas en toda la República Mexicana (CDMX, Monterrey, Guadalajara, Riviera Maya), así como en Estados Unidos y Latinoamérica.",
-          "IVÁN: Podemos coordinar una sesión virtual por Google Meet en cualquier momento o agendar una reunión presencial si te encuentras en la península. Escríbenos directamente al WhatsApp +52 960 177 1556 o llena tu solicitud en https://innocentia.tech/crear-proyecto.",
+          "SOFÍA: Nuestra base de diseño e ingeniería está ubicada en Mérida, Yucatán, y colaboramos con clientes en toda la República Mexicana, Estados Unidos y Latinoamérica.",
+          "IVÁN: Podemos coordinar una sesión virtual por Google Meet en cualquier momento o agendar una reunión presencial si te encuentras en Mérida. Escríbenos al WhatsApp +52 960 177 1556 o llena tu solicitud en https://innocentia.tech/crear-proyecto.",
         ],
       },
     ],
   },
 
   // =========================================================================
-  // 9. PREGUNTA COMBINADA: LOGO + APP / COTIZACIÓN INTEGRAL
-  // =========================================================================
-  {
-    id: "combo_logo_app",
-    priority: 55,
-    keywords: [
-      "logo y una aplicacion",
-      "logo y una aplicación",
-      "logo y app",
-      "cotizar un logo y",
-      "que necesito para cotizar",
-      "qué necesito para cotizar",
-      "requisitos para cotizar",
-      "como cotizar",
-      "cómo cotizar",
-      "para cotizar",
-    ],
-    responses: [
-      {
-        speaker: "DUAL",
-        type: "both",
-        text: [
-          "SOFÍA: ¡Es muy sencillo! Para tu logotipo o marca solo necesitamos conocer de qué trata tu negocio, a quién va dirigido y tus preferencias de colores o estilo.",
-          "IVÁN: Y para tu aplicación o sistema web, cuéntanos qué funciones imaginas (usuarios, catálogo, citas o cobros con tarjeta). Llenando nuestro formulario en 2 minutos te preparamos la cotización completa y desglosada.\n\n🚀 Puedes contarnos tu idea y cotizarla aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 10. CREACIÓN DE LOGO / BRANDING / IDENTIDAD VISUAL
-  // =========================================================================
-  {
-    id: "branding_logo",
-    priority: 50,
-    keywords: [
-      "logo",
-      "logotipo",
-      "isotipo",
-      "imagotipo",
-      "marca",
-      "branding",
-      "identidad visual",
-      "colores de marca",
-      "vector",
-      "svg",
-      "illustrator",
-      "curvas",
-    ],
-    responses: [
-      {
-        speaker: "SOFÍA",
-        type: "sofia",
-        text: [
-          "¡Me encanta dar vida a nuevas marcas! Diseñamos tu logotipo desde cero, asegurando que transmita confianza, personalidad y alto impacto.",
-          "Te entregamos todos los formatos vectoriales listos para imprimir en cualquier tamaño, usar en redes sociales, papelería y en tu sitio web.\n\n🚀 Para iniciar tu diseño y recibir tu cotización, llena el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 11. DISEÑO UI/UX, PANTALLAS, PROTOTIPOS, FIGMA
-  // =========================================================================
-  {
-    id: "ui_ux_figma",
-    priority: 45,
-    keywords: ["figma", "ux", "ui", "prototipo", "interfaz", "diseño web", "wireframe", "pantallas", "mockup"],
-    responses: [
-      {
-        speaker: "SOFÍA",
-        type: "sofia",
-        text: [
-          "Diseñamos interfaces atractivas, modernas y muy intuitivas para tus clientes.",
-          "Podrás probar el prototipo interactivo directamente en tu teléfono antes de programar, para asegurarnos de que los flujos y animaciones queden perfectos.\n\n🚀 Cuéntanos qué pantallas necesitas llenando el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 12. DESARROLLO DE APPS MÓVILES (iOS Y ANDROID)
-  // =========================================================================
-  {
-    id: "apps_moviles",
-    priority: 40,
-    keywords: [
-      "app",
-      "aplicacion",
-      "aplicación",
-      "ios",
-      "android",
-      "play store",
-      "app store",
-      "flutter",
-      "react native",
-      "móvil",
-      "movil",
-      "celular",
-      "telefono",
-    ],
-    responses: [
-      {
-        speaker: "DUAL",
-        type: "both",
-        text: [
-          "SOFÍA: Diseñamos la experiencia de tu app para que sea fluida, bonita y fácil de navegar con una sola mano.",
-          "IVÁN: Y yo me encargo de programarla con rendimiento nativo a 60 FPS en iPhone y Android: notificaciones push, geolocalización, pasarelas de pago y publicación en las tiendas oficiales.\n\n🚀 Registra los datos de tu app para cotizarla aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 13. SISTEMAS WEB, SAAS, CRM, ERP, PANELES DE CONTROL
-  // =========================================================================
-  {
-    id: "sistemas_saas",
-    priority: 35,
-    keywords: [
-      "saas",
-      "plataforma",
-      "sistema",
-      "crm",
-      "erp",
-      "portal",
-      "dashboard",
-      "panel",
-      "administrativo",
-      "base de datos",
-      "backend",
-      "fullstack",
-      "tienda online",
-      "ecommerce",
-      "e-commerce",
-    ],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Desarrollamos plataformas web y sistemas a medida que automatizan la operación de tu negocio: administración de usuarios, control de inventario, cotizadores automáticos, cobros en línea y reportes en tiempo real.",
-          "Totalmente responsivos y accesibles desde cualquier navegador o dispositivo.\n\n🚀 Cuéntanos qué proceso deseas digitalizar aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 14. INTELIGENCIA ARTIFICIAL, AGENTES & CHATBOTS WHATSAPP
-  // =========================================================================
-  {
-    id: "ia_agentes",
-    priority: 30,
-    keywords: ["ia", "inteligencia artificial", "agente", "chatbot", "chat bot", "automatizar", "automatizacion", "gpt", "llm", "openai"],
-    responses: [
-      {
-        speaker: "DUAL",
-        type: "both",
-        text: [
-          "IVÁN: Conectamos agentes de Inteligencia Artificial a tu WhatsApp Business o sitio web para atender clientes 24/7, resolver consultas técnicas complejas y agendar citas o cotizaciones automáticamente.",
-          "SOFÍA: Cuidando que las respuestas tengan el tono, calidez y personalidad exacta de tu marca.\n\n🚀 Cotiza tu asistente inteligente aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 15. COSTOS, PRECIOS & COTIZACIONES GENERALES
-  // =========================================================================
-  {
-    id: "costos_precios",
-    priority: 25,
-    keywords: [
-      "costo",
-      "costos",
-      "precio",
-      "precios",
-      "cuanto cuesta",
-      "cuánto cuesta",
-      "presupuesto",
-      "cotizar",
-      "cotizacion",
-      "cotización",
-      "tarifa",
-      "valor",
-      "inversion",
-      "inversión",
-    ],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Nuestros presupuestos son claros, transparentes y sin costos ocultos:",
-          "• Logotipos e Identidad de Marca: Desde $4,500 MXN.\n• Sitios Web y Páginas de Venta: Desde $12,000 MXN.\n• Aplicaciones Móviles y Plataformas SaaS: Desde $24,000 MXN (o en modalidad de renta tecnológica mensual con soporte incluido).\n\n🚀 Para calcular el costo exacto con tu desglose de funciones, llena el formulario en 2 minutos:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 16. TIEMPOS DE ENTREGA & CRONOGRAMAS
-  // =========================================================================
-  {
-    id: "tiempos_entrega",
-    priority: 20,
-    keywords: ["tiempo", "tiempos", "cuanto tarda", "cuánto tarda", "duracion", "duración", "plazos", "dias", "semanas", "meses", "entrega", "cronograma"],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Trabajamos con plazos ágiles y entregas visibles por semana:",
-          "• Identidad Visual & Logotipos: 3 a 7 días hábiles.\n• Sitios Web & Landing Pages: 1 a 2 semanas.\n• Apps Móviles & Sistemas Web: 3 a 6 semanas con prototipo inicial listo en los primeros 5 días.\n\n🚀 Registra las fechas de tu proyecto aquí:\n👉 https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 17. SEGURIDAD & INFRAESTRUCTURA CLOUD
-  // =========================================================================
-  {
-    id: "seguridad_cloud",
-    priority: 18,
-    keywords: ["seguridad", "hosting", "servidor", "nube", "cloud", "cifrado", "ssl", "postgresql", "supabase", "aws", "vercel", "cloudflare"],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Blindamos tu plataforma con cifrado SSL de grado bancario, protección Cloudflare contra ataques DDoS, aislamiento multi-tenant en PostgreSQL y respaldos automáticos.",
-          "Tu infraestructura cumple con los más altos estándares de seguridad y disponibilidad.\n\n👉 Conoce más creando tu proyecto aquí: https://innocentia.tech/crear-proyecto",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 18. SALUDOS & CHARLA HUMANA
+  // 19. SALUDOS & CHARLA HUMANA
   // =========================================================================
   {
     id: "saludos",
-    priority: 15,
-    keywords: ["hola", "buen dia", "buenos dias", "buenas tardes", "buenas noches", "hey", "saludos", "que tal", "qué tal", "como estas", "cómo estás"],
+    priority: 30,
+    keywords: [
+      "hola",
+      "buen dia",
+      "buen día",
+      "buenos dias",
+      "buenos días",
+      "buenas tardes",
+      "buenas noches",
+      "hey",
+      "saludos",
+      "que tal",
+      "qué tal",
+      "como estas",
+      "cómo estás",
+      "como andan",
+      "cómo andan",
+    ],
     responses: [
       {
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: ¡Hola! Qué gusto saludarte. Yo lidero el diseño, la experiencia visual y la creatividad.",
-          "IVÁN: ¡Hola! Y yo lidero la arquitectura de software, código y tecnología. Cuéntanos, ¿qué idea, app o sistema deseas construir?\n\nSi deseas cotizar de inmediato, puedes llenar el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
+          "SOFÍA: ¡Hola! Qué gusto saludarte. Yo lidero el diseño, la experiencia visual y la creatividad de marca.",
+          "IVÁN: ¡Hola! Y yo lidero la arquitectura de software, código y tecnología. Cuéntanos, ¿qué idea, app, sistema o campaña deseas construir?\n\nSi deseas cotizar de inmediato, puedes llenar el formulario aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
   // =========================================================================
-  // 19. IDENTIDAD DE INNOCENTIA & DUAL CORE
+  // 20. IDENTIDAD DE INNOCENTIA & DUAL CORE
   // =========================================================================
   {
     id: "identidad_innocentia",
-    priority: 12,
-    keywords: ["quienes son", "quiénes son", "quien eres", "quién eres", "que es innocentia", "qué es innocentia", "sofia", "sofía", "ivan", "iván", "dual core"],
+    priority: 25,
+    keywords: [
+      "quienes son",
+      "quiénes son",
+      "quien eres",
+      "quién eres",
+      "que es innocentia",
+      "qué es innocentia",
+      "sofia",
+      "sofía",
+      "ivan",
+      "iván",
+      "dual core",
+      "a que se dedican",
+      "a qué se dedican",
+    ],
     responses: [
       {
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: ¡Somos Innocentia Tech! Un laboratorio de software, diseño e inteligencia artificial donde unimos la creatividad con la ingeniería de alto impacto.",
-          "IVÁN: Te acompañamos desde el concepto inicial hasta el escalamiento global de tu plataforma.\n\n🚀 Conoce nuestras soluciones y cotiza tu idea aquí:\n👉 https://innocentia.tech/crear-proyecto",
+          "SOFÍA: ¡Somos Innocentia Tech! Un estudio y laboratorio de tecnología donde unimos el diseño visual de alto impacto con la ingeniería de software más avanzada.",
+          "IVÁN: Diseñamos marcas, desarrollamos apps móviles, plataformas web y conectamos agentes de inteligencia artificial para impulsar negocios reales.\n\n🚀 Conoce más o cotiza tu proyecto aquí:\n👉 https://innocentia.tech/crear-proyecto",
         ],
       },
     ],
   },
 
   // =========================================================================
-  // 20. AGRADECIMIENTOS & CIERRE
+  // 21. AGRADECIMIENTOS & CIERRE
   // =========================================================================
   {
     id: "agradecimientos",
-    priority: 10,
-    keywords: ["gracias", "muchas gracias", "excelente", "perfecto", "genial", "buenisimo", "buenísimo", "me gusta", "ok", "vale"],
+    priority: 20,
+    keywords: [
+      "gracias",
+      "muchas gracias",
+      "excelente",
+      "perfecto",
+      "genial",
+      "buenisimo",
+      "buenísimo",
+      "me gusta",
+      "ok",
+      "vale",
+      "entendido",
+    ],
     responses: [
       {
         speaker: "SOFÍA",
@@ -611,12 +823,25 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 21. WHATSAPP & CONTACTO OFICIAL
+  // 22. WHATSAPP & CONTACTO OFICIAL
   // =========================================================================
   {
     id: "contacto_whatsapp",
-    priority: 8,
-    keywords: ["telefono", "teléfono", "whatsapp", "whats", "numero", "número", "celular", "llamar", "marcar", "contacto", "9601771556", "960 177 1556"],
+    priority: 15,
+    keywords: [
+      "telefono",
+      "teléfono",
+      "whatsapp",
+      "whats",
+      "numero",
+      "número",
+      "celular",
+      "llamar",
+      "marcar",
+      "contacto",
+      "9601771556",
+      "960 177 1556",
+    ],
     responses: [
       {
         speaker: "DUAL",
@@ -632,37 +857,71 @@ const RULES: MatchRule[] = [
 
 let lastResponseIndex: { [key: string]: number } = {};
 
+/**
+ * Normalizes text removing diacritics and non-essential punctuation
+ */
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+/**
+ * Checks if a keyword matches inside a query using strict whole-word / phrase boundaries.
+ * Prevents false positives like "ui" matching inside "quiero" or "ia" matching inside "estrategia".
+ */
+function testKeywordMatch(normalizedQuery: string, normalizedKw: string): boolean {
+  // If the query is an exact match
+  if (normalizedQuery === normalizedKw) return true;
+
+  // Escape regex special chars in keyword
+  const escapedKw = normalizedKw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // Word boundary regex that works with alphanumeric characters and Spanish text
+  // Matches keyword only if surrounded by start/end of string or non-alphanumeric chars
+  const pattern = new RegExp(`(^|[^a-z0-9])${escapedKw}([^a-z0-9]|$)`, "i");
+  return pattern.test(normalizedQuery);
+}
+
 export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
-  const rawQuery = userQuery.toLowerCase().trim();
+  const rawQuery = userQuery.trim();
   if (!rawQuery) {
     return {
       speaker: "SOFÍA",
       type: "sofia",
-      text: ["¿En qué podemos ayudarte hoy? Cuéntanos tu idea sobre diseño, desarrollo o tecnología."],
+      text: ["¿En qué podemos ayudarte hoy? Cuéntanos tu idea sobre diseño, desarrollo, marketing o inteligencia artificial."],
     };
   }
 
-  // Normalize query removing accents for robust matching
-  const normalizedQuery = rawQuery
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+  const normalizedQuery = normalizeText(rawQuery);
 
-  // Find best match with priority and specificity scoring
+  // Find best match with priority, token count, and keyword length specificity scoring
   let bestMatch: MatchRule | null = null;
   let highestScore = -1;
 
   for (const rule of RULES) {
     let score = 0;
-    for (const kw of rule.keywords) {
-      const normalizedKw = kw
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+    let matchedKeywordsCount = 0;
 
-      if (normalizedQuery.includes(normalizedKw) || rawQuery.includes(kw)) {
-        // High priority multiplier + keyword length specificity
-        score += rule.priority * 10 + normalizedKw.length * 3;
+    for (const kw of rule.keywords) {
+      const normalizedKw = normalizeText(kw);
+
+      if (testKeywordMatch(normalizedQuery, normalizedKw)) {
+        matchedKeywordsCount++;
+        // Priority weight + phrase length bonus
+        const isPhrase = normalizedKw.includes(" ");
+        const lengthBonus = normalizedKw.length * 4;
+        const phraseBonus = isPhrase ? 80 : 0;
+
+        score += rule.priority * 15 + lengthBonus + phraseBonus;
       }
+    }
+
+    if (matchedKeywordsCount > 1) {
+      // Bonus for multiple keyword hits in same domain
+      score += matchedKeywordsCount * 40;
     }
 
     if (score > highestScore && score > 0) {
@@ -685,43 +944,66 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
     };
   }
 
-  // Dynamic context-aware fallback
+  // =========================================================================
+  // DYNAMIC CONTEXT-AWARE FALLBACK
+  // =========================================================================
+  const isMarketingFocused =
+    testKeywordMatch(normalizedQuery, "marketing") ||
+    testKeywordMatch(normalizedQuery, "estrategia") ||
+    testKeywordMatch(normalizedQuery, "vender") ||
+    testKeywordMatch(normalizedQuery, "campana") ||
+    testKeywordMatch(normalizedQuery, "anuncio") ||
+    testKeywordMatch(normalizedQuery, "pauta") ||
+    testKeywordMatch(normalizedQuery, "publicidad");
+
+  if (isMarketingFocused) {
+    return {
+      speaker: "DUAL",
+      type: "both",
+      text: [
+        `SOFÍA: ¡Excelente! Con respecto a "${rawQuery}", en Innocentia combinamos diseño de anuncios con copys persuasivos para captar clientes potenciales desde el primer día.`,
+        "IVÁN: Y configuramos la pauta en Meta y Google Ads con segmentación precisa y seguimiento de conversiones.\n\n🚀 Puedes contarnos los detalles de tu estrategia aquí:\n👉 https://innocentia.tech/crear-proyecto",
+      ],
+    };
+  }
+
   const isDesignFocused =
-    normalizedQuery.includes("visual") ||
-    normalizedQuery.includes("dibuj") ||
-    normalizedQuery.includes("estilo") ||
-    normalizedQuery.includes("color") ||
-    normalizedQuery.includes("logo") ||
-    normalizedQuery.includes("marca") ||
-    normalizedQuery.includes("imagen");
+    testKeywordMatch(normalizedQuery, "diseno") ||
+    testKeywordMatch(normalizedQuery, "visual") ||
+    testKeywordMatch(normalizedQuery, "estilo") ||
+    testKeywordMatch(normalizedQuery, "color") ||
+    testKeywordMatch(normalizedQuery, "logo") ||
+    testKeywordMatch(normalizedQuery, "marca") ||
+    testKeywordMatch(normalizedQuery, "imagen") ||
+    testKeywordMatch(normalizedQuery, "interfaz");
 
   if (isDesignFocused) {
     return {
       speaker: "SOFÍA",
       type: "sofia",
       text: [
-        `¡Claro que sí! Con respecto a "${userQuery}", en diseño nos enfocamos en que tu proyecto tenga una imagen atractiva, memorable y profesional.`,
+        `¡Claro que sí! Con respecto a "${rawQuery}", en diseño nos enfocamos en que tu proyecto tenga una identidad atractiva, moderna y profesional que cautive a tu audiencia.`,
         "Para conocer tu estilo y prepararte una propuesta personalizada, llena el formulario aquí en 2 minutos:\n👉 https://innocentia.tech/crear-proyecto",
       ],
     };
   }
 
   const isCodeFocused =
-    normalizedQuery.includes("funciona") ||
-    normalizedQuery.includes("lenguaje") ||
-    normalizedQuery.includes("servidor") ||
-    normalizedQuery.includes("velocidad") ||
-    normalizedQuery.includes("codigo") ||
-    normalizedQuery.includes("programar") ||
-    normalizedQuery.includes("app") ||
-    normalizedQuery.includes("sistema");
+    testKeywordMatch(normalizedQuery, "codigo") ||
+    testKeywordMatch(normalizedQuery, "programar") ||
+    testKeywordMatch(normalizedQuery, "app") ||
+    testKeywordMatch(normalizedQuery, "software") ||
+    testKeywordMatch(normalizedQuery, "sistema") ||
+    testKeywordMatch(normalizedQuery, "servidor") ||
+    testKeywordMatch(normalizedQuery, "lenguaje") ||
+    testKeywordMatch(normalizedQuery, "base de datos");
 
   if (isCodeFocused) {
     return {
       speaker: "IVÁN",
       type: "ivan",
       text: [
-        `Sobre tu consulta de "${userQuery}": en Innocentia nos encargamos de toda la arquitectura e ingeniería técnica para que tu software sea ultra rápido, seguro y escalable.`,
+        `Sobre tu consulta de "${rawQuery}": en Innocentia nos encargamos de toda la arquitectura e ingeniería técnica para que tu software sea ultra rápido, seguro y escalable.`,
         "Cuéntanos las funciones que imaginas llenando el formulario y te enviamos la cotización desglosada:\n👉 https://innocentia.tech/crear-proyecto",
       ],
     };
@@ -732,8 +1014,8 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
     speaker: "DUAL",
     type: "both",
     text: [
-      `SOFÍA: ¡Excelente consulta sobre "${userQuery}"! Nos encantaría ayudarte a darle forma visual y técnica.`,
-      "IVÁN: Es muy fácil empezar: cuéntanos qué necesitas en nuestro formulario en 2 minutos y te preparamos la cotización completa y desglosada:\n👉 https://innocentia.tech/crear-proyecto",
+      `SOFÍA: ¡Excelente consulta sobre "${rawQuery}"! Nos encantaría ayudarte a darle forma visual y comercial.`,
+      "IVÁN: Y yo me encargo de que toda la tecnología y arquitectura funcione de manera perfecta. Cuéntanos qué necesitas en nuestro formulario en 2 minutos y te preparamos la cotización completa y desglosada:\n👉 https://innocentia.tech/crear-proyecto",
     ],
   };
 }
