@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import FloatingChatWidget from "../components/common/FloatingChatWidget";
+import TelemetryBeacon from "../components/common/TelemetryBeacon";
 
 export const metadata: Metadata = {
   title: "Innocentia Tech • Desarrollo de Software, Apps Móviles e IA en México",
@@ -265,6 +266,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[#040407] text-[#F3F4F6] antialiased selection:bg-[#00E5FF]/30 selection:text-white min-h-screen relative">
+        <TelemetryBeacon />
         {children}
         <FloatingChatWidget />
       </body>

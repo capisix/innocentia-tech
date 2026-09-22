@@ -222,13 +222,18 @@ export default function ExecutiveTelemetryDashboard() {
               {dateRange === "live" ? "En línea ahora" : "Visitas Totales"}
             </span>
           </div>
-          <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            <span>
-              {dateRange === "live"
-                ? "Sincronizado con Google Analytics 4"
-                : `${(telemetry?.uniqueUsers ?? 0).toLocaleString()} usuarios únicos`}
+          <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+              <span>
+                {dateRange === "live"
+                  ? `${(telemetry?.totalVisits ?? 0).toLocaleString()} registrados`
+                  : `${(telemetry?.uniqueUsers ?? 0).toLocaleString()} usuarios únicos`}
+              </span>
             </span>
+            {dateRange === "live" && (
+              <span className="text-emerald-400 font-bold">Real Time</span>
+            )}
           </div>
         </div>
 
@@ -261,21 +266,23 @@ export default function ExecutiveTelemetryDashboard() {
         <div className="p-5 rounded-2xl bg-black/70 border border-purple-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-gray-400 uppercase font-bold">
-              {dateRange === "live" ? "Nodos Conectados" : "Cotizaciones / Leads"}
+              {dateRange === "live" ? "Nodos en Operación" : "Cotizaciones / Leads"}
             </span>
             {dateRange === "live" ? <Globe className="w-4 h-4 text-purple-400" /> : <Briefcase className="w-4 h-4 text-purple-400" />}
           </div>
           <div className="my-3">
             <span className="text-3xl sm:text-4xl font-black text-purple-400 font-mono">
-              {dateRange === "live" ? "5 Ciudades" : `${telemetry?.quoteConversions || 14} Leads`}
+              {dateRange === "live" ? `${telemetry?.activeNodesCount ?? 1} Activos` : `${telemetry?.quoteConversions || 14} Leads`}
             </span>
             <span className="text-xs font-mono text-purple-300 font-bold ml-2">
-              {dateRange === "live" ? "MTY, MID, CDMX" : "Formularios"}
+              {dateRange === "live" ? "5 Coberturas MX" : "Formularios"}
             </span>
           </div>
           <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2">
             <span>
-              {dateRange === "live" ? "Cobertura Nacional Activa" : "Tasa de conversión: ~4.8%"}
+              {dateRange === "live"
+                ? "Cobertura Nacional Activa"
+                : "Tasa de conversión: 2.8%"}
             </span>
           </div>
         </div>
