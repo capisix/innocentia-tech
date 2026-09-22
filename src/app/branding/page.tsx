@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
+import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
 import BrandingStudioClient from "./BrandingStudioClient";
 
 export const metadata: Metadata = {
@@ -21,9 +22,11 @@ export const metadata: Metadata = {
 export default function BrandingPage() {
   return (
     <main className="min-h-screen bg-[#040407] text-[#F3F4F6] selection:bg-[#FF3858]/30 selection:text-white relative overflow-hidden">
+      <AmbientLivingCanvas variant="branding" starCount={150} mouseRadius={200} />
       <Navbar />
       <BrandingStudioClient />
       <Footer />
     </main>
   );
 }
+
