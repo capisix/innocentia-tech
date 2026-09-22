@@ -1691,54 +1691,93 @@ export default function BrandingStudioClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left items-stretch">
             {/* Sofía */}
-            <div className="p-6 rounded-3xl bg-black/70 border border-[#FF3858]/40 space-y-3 flex flex-col justify-between shadow-xl">
-              <div className="space-y-2">
-                <div className="w-10 h-10 rounded-2xl bg-[#FF3858]/20 border border-[#FF3858]/40 flex items-center justify-center text-lg">
-                  🎨
+            <div className="rounded-3xl bg-black/80 border border-[#FF3858]/40 overflow-hidden flex flex-col justify-between shadow-2xl group hover:border-[#FF3858] transition-all duration-300 hover:shadow-[0_0_35px_rgba(255,56,88,0.3)]">
+              <div className="relative w-full h-56 bg-gradient-to-b from-[#FF3858]/20 via-black/40 to-black overflow-hidden flex items-end justify-center">
+                <Image
+                  src="/images/sofia_desktop_hd.png"
+                  alt="Sofía • Directora Creativa"
+                  fill
+                  quality={95}
+                  unoptimized
+                  className="object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-[#FF3858]/40 text-[#FF5470] font-mono text-[10px] font-bold uppercase">
+                  🎨 SOFÍA • CREATIVE
                 </div>
-                <span className="text-xs font-mono font-bold text-[#FF5470] block">SOFÍA</span>
-                <h3 className="text-lg font-bold text-white">Construye la Identidad</h3>
-                <p className="text-xs text-gray-300 font-light leading-relaxed">
-                  Diseña el alma, la emoción, el lenguaje visual, la psicología de color y la memoria sensorial de tu marca.
-                </p>
               </div>
-              <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
-                Arte · Emoción · Identidad
-              </span>
+
+              <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-bold text-[#FF5470] block">DIRECCIÓN ARTÍSTICA</span>
+                  <h3 className="text-lg font-bold text-white">Construye la Identidad</h3>
+                  <p className="text-xs text-gray-300 font-light leading-relaxed">
+                    Diseña el alma, la emoción, el lenguaje visual, la psicología cromática y la memoria sensorial de tu marca.
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
+                  Arte · Emoción · Identidad
+                </span>
+              </div>
             </div>
 
             {/* Iván */}
-            <div className="p-6 rounded-3xl bg-black/70 border border-[#00D1FF]/40 space-y-3 flex flex-col justify-between shadow-xl">
-              <div className="space-y-2">
-                <div className="w-10 h-10 rounded-2xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-lg">
-                  ⚡
+            <div className="rounded-3xl bg-black/80 border border-[#00D1FF]/40 overflow-hidden flex flex-col justify-between shadow-2xl group hover:border-[#00D1FF] transition-all duration-300 hover:shadow-[0_0_35px_rgba(0,209,255,0.3)]">
+              <div className="relative w-full h-56 bg-gradient-to-b from-[#00D1FF]/20 via-black/40 to-black overflow-hidden flex items-end justify-center">
+                <Image
+                  src="/images/ivan_desktop_hd.png"
+                  alt="Iván • Lead Software Architect"
+                  fill
+                  quality={95}
+                  unoptimized
+                  className="object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-[#00D1FF]/40 text-cyan-300 font-mono text-[10px] font-bold uppercase">
+                  ⚡ IVÁN • TECH LEAD
                 </div>
-                <span className="text-xs font-mono font-bold text-cyan-400 block">IVÁN</span>
-                <h3 className="text-lg font-bold text-white">La Convierte en Software</h3>
-                <p className="text-xs text-gray-300 font-light leading-relaxed">
-                  Transforma el diseño en interfaces a 60 FPS, arquitectura serverless en la nube y plataformas de alta conversión.
-                </p>
               </div>
-              <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
-                Código · Rendimiento · Cloud
-              </span>
+
+              <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-bold text-cyan-400 block">INGENIERÍA & CÓDIGO</span>
+                  <h3 className="text-lg font-bold text-white">La Convierte en Software</h3>
+                  <p className="text-xs text-gray-300 font-light leading-relaxed">
+                    Transforma el diseño en interfaces fluidas a 60 FPS, arquitectura serverless en la nube y plataformas de alta conversión.
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
+                  Código · Rendimiento · Cloud
+                </span>
+              </div>
             </div>
 
-            {/* Innocentia */}
-            <div className="p-6 rounded-3xl bg-gradient-to-br from-purple-950/40 to-black border border-purple-500/40 space-y-3 flex flex-col justify-between shadow-xl">
-              <div className="space-y-2">
-                <div className="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-lg">
-                  🚀
+            {/* Innocentia Ecosistema */}
+            <div className="rounded-3xl bg-gradient-to-br from-purple-950/40 via-black to-black border border-purple-500/40 overflow-hidden flex flex-col justify-between shadow-2xl group hover:border-purple-400 transition-all duration-300 hover:shadow-[0_0_35px_rgba(168,85,247,0.3)]">
+              <div className="relative w-full h-56 bg-gradient-to-b from-purple-500/20 via-black/40 to-black overflow-hidden flex items-center justify-center p-3">
+                <Image
+                  src="/images/sofia_ivan_chars.png"
+                  alt="Sinergia Sofía e Iván • Innocentia Tech"
+                  fill
+                  quality={95}
+                  unoptimized
+                  className="object-contain transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 backdrop-blur-md border border-purple-500/40 text-purple-300 font-mono text-[10px] font-bold uppercase">
+                  🚀 INNOCENTIA • DUAL
                 </div>
-                <span className="text-xs font-mono font-bold text-purple-300 block">INNOCENTIA</span>
-                <h3 className="text-lg font-bold text-white">Une Ambos Mundos</h3>
-                <p className="text-xs text-gray-300 font-light leading-relaxed">
-                  Cero fricción entre el equipo de diseño y los ingenieros de desarrollo. Tu marca nace hermosa y funciona impecable.
-                </p>
               </div>
-              <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
-                Ecosistema 360° Integral
-              </span>
+
+              <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-bold text-purple-300 block">EXPERIENCIA INTEGRAL</span>
+                  <h3 className="text-lg font-bold text-white">Une Ambos Mundos</h3>
+                  <p className="text-xs text-gray-300 font-light leading-relaxed">
+                    Cero fricción entre el equipo creativo y los ingenieros de desarrollo. Tu marca nace con diseño de autor y funciona impecable.
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
+                  Ecosistema 360° Completo
+                </span>
+              </div>
             </div>
           </div>
         </div>
