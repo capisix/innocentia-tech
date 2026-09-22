@@ -18,11 +18,17 @@ import {
   ShieldCheck,
   CreditCard,
   MessageSquare,
+  Compass,
+  Cpu,
+  Eye,
+  Heart,
+  Zap,
 } from "../../lib/icons";
 
 interface BrandingPackage {
   id: string;
   name: string;
+  tagline: string;
   badge: string;
   price: string;
   priceNum: number;
@@ -35,88 +41,66 @@ interface BrandingPackage {
 
 const BRANDING_PACKAGES: BrandingPackage[] = [
   {
-    id: "pkg_express",
-    name: "Identidad Esencial",
-    badge: "Ideal para Emprendedores",
+    id: "pkg_essence",
+    name: "ESSENCE",
+    tagline: "Tu marca comienza a existir.",
+    badge: "Para Nuevas Marcas & Emprendedores",
     price: "$4,500 MXN",
     priceNum: 4500,
     deliveryTime: "3 a 5 días hábiles",
-    description: "Diseño de logotipo profesional desde cero con archivos vectoriales listos para usar en redes, web y papelería básica.",
+    description: "Creación de logotipo e identidad esencial desde cero. Archivos vectoriales maestros y lineamientos de color listos para su lanzamiento.",
     features: [
-      "3 propuestas conceptuales iniciales",
-      "Rondas de ajuste y refinamiento ilimitadas sobre la propuesta electa",
-      "Archivos vectoriales originales (AI, EPS, SVG, PDF)",
-      "Versiones en alta resolución PNG transparente y JPG",
-      "Variaciones en fondo oscuro, claro y monocromático",
-      "Paleta de colores oficial con códigos HEX, RGB y CMYK",
+      "3 direcciones conceptuales iniciales diseñadas por Sofía",
+      "Rondas de refinamiento ilimitadas sobre la propuesta electa",
+      "Archivos vectoriales originales maestros (AI, EPS, SVG, PDF)",
+      "Variaciones cromáticas en fondo oscuro, claro y monocromático",
+      "Exportaciones en ultra alta resolución (PNG transparente y JPG)",
+      "Paleta oficial calibrada con códigos HEX, RGB y CMYK / Pantone",
+      "Tipografías institucionales sugeridas con licencias y jerarquías",
     ],
     deliverables: ["Logotipo Vectorial", "PNGs Transparentes", "Paleta de Color", "Tipografía Sugerida"],
   },
   {
-    id: "pkg_studio",
-    name: "Brand Studio Pro",
-    badge: "⭐ MÁS POPULAR",
+    id: "pkg_identity",
+    name: "IDENTITY",
+    tagline: "Tu marca encuentra su lenguaje.",
+    badge: "⭐ MÁS ELEGIDO",
     price: "$8,500 MXN",
     priceNum: 8500,
     deliveryTime: "5 a 8 días hábiles",
     popular: true,
-    description: "Sistema de identidad corporativa completo con manual de marca, aplicaciones reales, papelería y kit para redes sociales.",
+    description: "Sistema de identidad corporativa integral con manual de marca, aplicaciones reales, papelería corporativa y kit para redes sociales.",
     features: [
-      "Todo lo incluido en Identidad Esencial",
-      "Isotipo, Imagotipo y Logotipo secundario / sello",
-      "Manual de Identidad Visual (Brand Guidelines en PDF de 25+ págs)",
-      "Reglas de uso, áreas de protección y usos incorrectos",
-      "Diseño de Papelería Corporativa: Tarjetas de presentación, hojas membretadas y firmas de correo",
+      "Todo lo incluido en el paquete Essence",
+      "Isotipo, Imagotipo y sellos secundarios de agua",
+      "Manual de Identidad Visual (Brand Guidelines en PDF de 25+ páginas)",
+      "Retícula constructiva, áreas de protección y lineamientos de uso correcto",
+      "Papelería Corporativa: Tarjetas de presentación, hojas membretadas y firmas digitales",
       "Kit para Redes Sociales: Avatares oficiales, portadas y 5 plantillas editables en Figma / Canva",
-      "Mockups 3D hiperrealistas de aplicación en productos y empaques",
+      "Mockups 3D hiperrealistas de aplicación en producto, empaque y entorno real",
     ],
     deliverables: ["Logo Suite Completa", "Manual de Marca 25+ págs", "Kit Papelería", "Social Media Templates", "Mockups 3D"],
   },
   {
-    id: "pkg_360",
-    name: "Ecosistema 360° & UI Design",
-    badge: "Para Empresas & Startups",
+    id: "pkg_universe",
+    name: "UNIVERSE",
+    tagline: "Tu marca se convierte en una experiencia.",
+    badge: "Ecosistema Integral para Empresas & Startups",
     price: "$14,500 MXN",
     priceNum: 14500,
     deliveryTime: "10 a 14 días hábiles",
-    description: "La experiencia de marca definitiva: arquitectura visual integral, packaging, merchandising y sistema de diseño UI/UX para apps o plataformas web.",
+    description: "La experiencia de marca definitiva: arquitectura visual 360°, diseño de empaques o packaging 3D, merchandising y Design System para web y apps.",
     features: [
-      "Todo lo incluido en Brand Studio Pro",
-      "Diseño de Packaging, etiquetas o bolsas comerciales",
-      "Diseño de uniformes, rotulación vehicular o fachada comercial",
-      "Design System UI/UX en Figma (componentes, botones, tipografías a 60 FPS)",
-      "Animación de Logotipo en video HD (Intro / Outro animado)",
+      "Todo lo incluido en el paquete Identity",
+      "Diseño de Packaging, etiquetas o modelado de empaque comercial en 3D",
+      "Diseño de merchandising, uniformes de personal o rotulación vehicular",
+      "Design System UI/UX en Figma: Componentes, tipografía, iconografía, estados e interacciones listos para código",
+      "Animación de Logotipo en video HD (Intro / Outro animado para contenido y web)",
+      "Microinteracciones y animaciones optimizadas para experiencias fluidas de hasta 60 FPS",
       "Asesoría de registro de marca ante el IMPI (análisis fonético preliminar)",
-      "Acompañamiento creativo directo 1 a 1 con Sofía",
+      "Dirección creativa y acompañamiento estratégico 1 a 1 con Sofía",
     ],
-    deliverables: ["Full Brand Ecosystem", "UI Design System", "Packaging & Merch", "Logo Animado HD", "Asesoría IMPI"],
-  },
-];
-
-const PALETTES_SHOWCASE = [
-  {
-    name: "Cyber Neon & Tech",
-    category: "Software & Startups",
-    colors: ["#FF3858", "#00D1FF", "#8A2BE2", "#040407"],
-    description: "Vibrante, innovadora y de alto impacto digital.",
-  },
-  {
-    name: "Luxury & Mineral Glow",
-    category: "Inmobiliaria & Alta Gama",
-    colors: ["#D4AF37", "#1A1A24", "#2E382E", "#F4F4F6"],
-    description: "Elegancia atemporal, solidez y distinción premium.",
-  },
-  {
-    name: "Organic Eco Botanical",
-    category: "Salud & Bienestar",
-    colors: ["#10B981", "#064E3B", "#F59E0B", "#F3F4F6"],
-    description: "Frescura natural, confianza médica y sustentabilidad.",
-  },
-  {
-    name: "Gastronomy & High Energy",
-    category: "Restaurantes & Delivery",
-    colors: ["#FF5400", "#FFD166", "#D62828", "#111827"],
-    description: "Dinamismo, calidez y apetito visual instantáneo.",
+    deliverables: ["Full Brand Universe", "UI Design System", "Packaging 3D & Merch", "Logo Animado HD", "Asesoría IMPI"],
   },
 ];
 
@@ -130,10 +114,20 @@ interface BrandShowcaseItem {
   description: string;
   badge: string;
   deliverables: string[];
-  aspect?: string;
 }
 
 const BRAND_SHOWCASE: BrandShowcaseItem[] = [
+  {
+    id: "ikal-3d",
+    title: "Isotipo Escultórico Ancestral Maya 3D",
+    brand: "Ikal Chukum",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/ikal chukum logo 3d.png",
+    description: "Modelado 3D en relieve con textura de piedra caliza y resina vegetal de chukum para marca de acabados arquitectónicos de lujo.",
+    badge: "3D Stone Relief",
+    deliverables: ["Render Piedra 3D", "Vector Arqueológico", "Texturas"],
+  },
   {
     id: "h2w-crystal",
     title: "Isotipo 3D Cristal & Transparencias",
@@ -144,6 +138,50 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
     description: "Renderización volumétrica en cristal óptico de alta refracción con manos en signo de victoria, diseñado para plataforma fintech y comunidad.",
     badge: "3D Hyper Glass",
     deliverables: ["Render 3D 8K", "Isotipo Alpha", "Master PNG"],
+  },
+  {
+    id: "jyoti-chocohongo",
+    title: "Packaging Botánico & Chocolate Adaptogénico",
+    brand: "Jyöti • Chocohongo",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/frontal-empaque-chocohongo.jpg",
+    description: "Diseño integral de empaque con ilustración mística botánica y renderizado de tableta de chocolate artesanal con hongos funcionales.",
+    badge: "Luxury Food Packaging",
+    deliverables: ["Troquel Empaque", "Ilustración Vectorial", "Render Producto"],
+  },
+  {
+    id: "experience-safely",
+    title: "Emblema Sendero de Viaje Seguro",
+    brand: "Experience Safely",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/Eperiencie Safely sin fondo con tipografía.png",
+    description: "Logotipo circular con sendero turquesa en 'S' y estrella guía naranja para plataforma de reservas turísticas y experiencias seguras.",
+    badge: "Travel & Booking Icon",
+    deliverables: ["Logotipo Vectorial", "Manual de Aplicación", "Favicons"],
+  },
+  {
+    id: "bindu-cbd-bottle",
+    title: "Render Botella Gotero CBD & Flores",
+    brand: "Bindu CBD",
+    category: "packaging",
+    categoryLabel: "Packaging & Cosmética",
+    image: "/images/branding/botella cbd con flores.png",
+    description: "Escena 3D fotorrealista de botella de cristal ámbar con gotero, etiqueta metalizada mate y ambientación con pétalos de rosa.",
+    badge: "Cosmetic 3D Render",
+    deliverables: ["Etiqueta Frontal", "Render Fotorrealista", "Filtro UV"],
+  },
+  {
+    id: "dejavu-gold",
+    title: "Logotipo 3D Golden Glow Metal",
+    brand: "Deja Vu Festival",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/logo Deja Vu festival.png",
+    description: "Tipografía 3D con textura de bronce pulido e iluminación volumétrica cálida para festival masivo de música y entretenimiento.",
+    badge: "Entertainment 3D",
+    deliverables: ["Render Metálico 3D", "Branding Escenarios", "Flyers HD"],
   },
   {
     id: "h2w-merch-polo",
@@ -168,61 +206,6 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
     deliverables: ["Arte Serigrafía", "Separación de Color", "Prototipo"],
   },
   {
-    id: "h2w-vector3d",
-    title: "Emblema Vectorial 3D Orgánico",
-    brand: "Help 2 Win",
-    category: "logos",
-    categoryLabel: "Logotipos & 3D",
-    image: "/images/branding/herlp2win 3d vector.png",
-    description: "Isotipo de marca con gradientes dinámicos en tonos cian y esmeralda, adaptado para iconos de apps móviles e interfaces UI.",
-    badge: "App Icon Vector",
-    deliverables: ["SVG Vectorial", "Icono iOS/Android", "Gradientes HEX"],
-  },
-  {
-    id: "h2w-stamp",
-    title: "Sello Monocromático & Emblema",
-    brand: "Help 2 Win",
-    category: "identidad",
-    categoryLabel: "Identidad & Sellos",
-    image: "/images/branding/Help2Win__sello_negro sin fondo.png",
-    description: "Versión circular de alto contraste para sellos de agua, lacrado digital, contratos y timbres notariales de la plataforma.",
-    badge: "Official Stamp",
-    deliverables: ["Vector Negativo", "Sello de Agua", "Certificados"],
-  },
-  {
-    id: "ikal-3d",
-    title: "Isotipo Escultórico Ancestral Maya 3D",
-    brand: "Ikal Chukum",
-    category: "logos",
-    categoryLabel: "Logotipos & 3D",
-    image: "/images/branding/ikal chukum logo 3d.png",
-    description: "Modelado 3D en relieve con textura de piedra caliza y resina vegetal de chukum para marca de acabados arquitectónicos de lujo.",
-    badge: "3D Stone Relief",
-    deliverables: ["Render Piedra 3D", "Vector Arqueológico", "Texturas"],
-  },
-  {
-    id: "ikal-color",
-    title: "Identidad Tipográfica Mineral",
-    brand: "Ikal Chukum",
-    category: "identidad",
-    categoryLabel: "Identidad & Sellos",
-    image: "/images/branding/Logo Ikal chkum color.png",
-    description: "Composición tipográfica geométrica en tonalidades turquesa y chukum natural para catálogos de arquitectura y construcción.",
-    badge: "Corporate Identity",
-    deliverables: ["Tipografía Exclusiva", "Paleta Mineral", "Vector Master"],
-  },
-  {
-    id: "dejavu-gold",
-    title: "Logotipo 3D Golden Glow Metal",
-    brand: "Deja Vu Festival",
-    category: "logos",
-    categoryLabel: "Logotipos & 3D",
-    image: "/images/branding/logo Deja Vu festival.png",
-    description: "Tipografía 3D con textura de bronce pulido e iluminación volumétrica cálida para festival masivo de música y entretenimiento.",
-    badge: "Entertainment 3D",
-    deliverables: ["Render Metálico 3D", "Branding Escenarios", "Flyers HD"],
-  },
-  {
     id: "ggc-chrome",
     title: "Emblema 'G' 3D Acero & Cromo",
     brand: "GGC Productions",
@@ -245,17 +228,6 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
     deliverables: ["Logotipo Dorado", "Versión Papelería", "Claqueta de Cine"],
   },
   {
-    id: "jyoti-chocohongo",
-    title: "Packaging Botánico & Chocolate",
-    brand: "Jyöti • Chocohongo",
-    category: "packaging",
-    categoryLabel: "Packaging & Cosmética",
-    image: "/images/branding/frontal-empaque-chocohongo.jpg",
-    description: "Diseño integral de empaque con ilustración mística botánica y renderizado de tableta de chocolate artesanal con hongos adaptógenos.",
-    badge: "Luxury Food Packaging",
-    deliverables: ["Troquel Empaque", "Ilustración Vectorial", "Render Producto"],
-  },
-  {
     id: "nidara-tree",
     title: "Árbol de la Vida 3D Orgánico",
     brand: "Nidara Wellness",
@@ -265,17 +237,6 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
     description: "Isotipo en relieve de follaje esmeralda con raíces entrelazadas en 3D para marca de bienestar holístico, medicina natural y spas.",
     badge: "Biophilic 3D",
     deliverables: ["Render Biófilo 3D", "Tipografía Serif", "Guía Botánica"],
-  },
-  {
-    id: "bindu-cbd-bottle",
-    title: "Render Botella Gotero CBD & Flores",
-    brand: "Bindu CBD",
-    category: "packaging",
-    categoryLabel: "Packaging & Cosmética",
-    image: "/images/branding/botella cbd con flores.png",
-    description: "Escena 3D fotorrealista de botella de cristal ámbar con gotero, etiqueta metalizada mate y ambientación con pétalos de rosa.",
-    badge: "Cosmetic 3D Render",
-    deliverables: ["Etiqueta Frontal", "Render Fotorrealista", "Filtro UV"],
   },
   {
     id: "bindu-hair-wax",
@@ -322,17 +283,6 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
     deliverables: ["Botella Satín", "Etiquetado Frontal", "Render Producto"],
   },
   {
-    id: "experience-safely",
-    title: "Emblema Sendero de Viaje Seguro",
-    brand: "Experience Safely",
-    category: "logos",
-    categoryLabel: "Logotipos & 3D",
-    image: "/images/branding/Eperiencie Safely sin fondo con tipografía.png",
-    description: "Logotipo circular con sendero turquesa en 'S' y estrella guía naranja para plataforma de reservas turísticas y experiencias seguras.",
-    badge: "Travel & Booking Icon",
-    deliverables: ["Logotipo Vectorial", "Manual de Aplicación", "Favicons"],
-  },
-  {
     id: "estilo-wood",
     title: "Monograma Caligráfico sobre Madera",
     brand: "Es-tilo",
@@ -354,14 +304,167 @@ const BRAND_SHOWCASE: BrandShowcaseItem[] = [
     badge: "Diamond Vector",
     deliverables: ["Retícula Geométrica", "Corte Láser", "Isotipo Master"],
   },
+  {
+    id: "ikal-color",
+    title: "Identidad Tipográfica Mineral",
+    brand: "Ikal Chukum",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/Logo Ikal chkum color.png",
+    description: "Composición tipográfica geométrica en tonalidades turquesa y chukum natural para catálogos de arquitectura y construcción.",
+    badge: "Corporate Identity",
+    deliverables: ["Tipografía Exclusiva", "Paleta Mineral", "Vector Master"],
+  },
+  {
+    id: "h2w-vector3d",
+    title: "Emblema Vectorial 3D Orgánico",
+    brand: "Help 2 Win",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/herlp2win 3d vector.png",
+    description: "Isotipo de marca con gradientes dinámicos en tonos cian y esmeralda, adaptado para iconos de apps móviles e interfaces UI.",
+    badge: "App Icon Vector",
+    deliverables: ["SVG Vectorial", "Icono iOS/Android", "Gradientes HEX"],
+  },
+  {
+    id: "h2w-stamp",
+    title: "Sello Monocromático & Emblema",
+    brand: "Help 2 Win",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/Help2Win__sello_negro sin fondo.png",
+    description: "Versión circular de alto contraste para sellos de agua, lacrado digital, contratos y timbres notariales de la plataforma.",
+    badge: "Official Stamp",
+    deliverables: ["Vector Negativo", "Sello de Agua", "Certificados"],
+  },
+];
+
+// Personalities for the interactive style explorer
+const BRAND_PERSONALITIES = [
+  {
+    id: "innovadora",
+    name: "Innovadora",
+    emoji: "⚡",
+    tagline: "Disrupción tecnológica, vanguardia y futuro digital.",
+    colors: ["#00D1FF", "#70D6FF", "#8A2BE2", "#05050A"],
+    typography: "Sans Grotesque Geométrica con peso variable",
+    shapes: "Ángulos limpios, gradientes luminosos y volumetría 3D",
+    textures: "Vidrio esmerilado (Glassmorphism), cromo líquido y luz neón",
+    mood: "Alta energía, precisión digital e impacto visual instantáneo",
+  },
+  {
+    id: "elegante",
+    name: "Elegante",
+    emoji: "✨",
+    tagline: "Prestigio atemporal, solidez y distinción premium.",
+    colors: ["#D4AF37", "#E5C378", "#181820", "#08080C"],
+    typography: "Serif de alto contraste con proporciones clásicas",
+    shapes: "Retículas simétricas, bordes ultra finos y espaciado amplio",
+    textures: "Bronce cepillado, madera noble, mármol y papel de algodón",
+    mood: "Autoridad, confianza de alto nivel y discreción sofisticada",
+  },
+  {
+    id: "organica",
+    name: "Orgánica",
+    emoji: "🌿",
+    tagline: "Frescura botánica, bienestar, salud y sustentabilidad.",
+    colors: ["#10B981", "#34D399", "#064E3B", "#022018"],
+    typography: "Humanista con remates redondeados y calidez táctil",
+    shapes: "Curvas fluidas, hojas, ondas y formas inspiradas en la naturaleza",
+    textures: "Fibra reciclada, lino natural, agua y luz solar difusa",
+    mood: "Pureza, equilibrio emocional, vitalidad y armonía ecológica",
+  },
+  {
+    id: "rebelde",
+    name: "Rebelde",
+    emoji: "🔥",
+    tagline: "Audacia sin disculpas, ruptura de esquemas y volumen.",
+    colors: ["#FF3858", "#FF7A00", "#FFE600", "#0A0A0E"],
+    typography: "Display Condensed Ultra-Black de impacto urbano",
+    shapes: "Composiciones diagonales, asimetría dinámica y cortes limpios",
+    textures: "Asfalto oscuro, pintura electrostática y destellos de neón",
+    mood: "Desafío, adrenalina, identidad urbana y personalidad magnética",
+  },
+  {
+    id: "minimalista",
+    name: "Minimalista",
+    emoji: "◻️",
+    tagline: "Esencialismo puro: menos ruido, máximo significado.",
+    colors: ["#FFFFFF", "#9CA3AF", "#1F2937", "#020204"],
+    typography: "Neo-Grotesk Suiza con tracking generoso",
+    shapes: "Espacio negativo protagónico y geometrías esenciales",
+    textures: "Monolitos mate, aluminio anodizado y fondos monocromáticos",
+    mood: "Claridad mental, orden absoluto y atemporalidad estética",
+  },
+  {
+    id: "premium",
+    name: "Premium",
+    emoji: "💎",
+    tagline: "Lujo sensorial, deseo y exclusividad de alta costura.",
+    colors: ["#F472B6", "#FB7185", "#1E1B2E", "#0A0714"],
+    typography: "Editorial con ligaduras personalizadas de lujo",
+    shapes: "Facetas de diamante, curvas envolventes y brillo selectivo",
+    textures: "Seda negra, oro rosado, cuarzo y acabados aterciopelados",
+    mood: "Seducción visual, sofisticación profunda y alta deseabilidad",
+  },
+];
+
+// Emotions for "Antes de diseñar, escuchamos"
+const BRAND_EMOTIONS = [
+  {
+    id: "confianza",
+    name: "Confianza",
+    icon: "🛡️",
+    sofiaSaid: "Estructuramos tu marca con simetría sólida, contrastes limpios y tonalidades profundas que transmiten solidez financiera y autoridad desde el primer segundo.",
+    accentColor: "from-blue-500/20 to-cyan-500/20 border-cyan-500/40 text-cyan-300",
+  },
+  {
+    id: "deseo",
+    name: "Deseo",
+    icon: "🔥",
+    sofiaSaid: "Diseñamos con contrastes intensos, texturas aterciopeladas, iluminación volumétrica y curvas sensuales que despiertan una atracción irresistible hacia tu producto.",
+    accentColor: "from-rose-500/20 to-orange-500/20 border-rose-500/40 text-rose-300",
+  },
+  {
+    id: "curiosidad",
+    name: "Curiosidad",
+    icon: "✨",
+    sofiaSaid: "Exploramos formas inesperadas, asimetría balanceada y detalles de vanguardia que hacen que el usuario se detenga y quiera descubrir qué hay detrás.",
+    accentColor: "from-amber-500/20 to-yellow-500/20 border-amber-500/40 text-amber-300",
+  },
+  {
+    id: "exclusividad",
+    name: "Exclusividad",
+    icon: "👑",
+    sofiaSaid: "Usamos el espacio negativo como lujo visual, tipografías editoriales de alta costura y detalles dorados que colocan tu oferta en la cúspide de su mercado.",
+    accentColor: "from-yellow-500/20 to-amber-600/20 border-yellow-500/40 text-yellow-300",
+  },
+  {
+    id: "calma",
+    name: "Calma",
+    icon: "🌿",
+    sofiaSaid: "Canalizamos líneas orgánicas fluidas, tonos tierra y paletas botánicas que transmiten paz, salud, bienestar y una conexión humana genuina.",
+    accentColor: "from-emerald-500/20 to-teal-500/20 border-emerald-500/40 text-emerald-300",
+  },
+  {
+    id: "innovacion",
+    name: "Innovación",
+    icon: "⚡",
+    sofiaSaid: "Integramos gradientes luminosos, volumetría futurista y arquitectura digital que posicionan a tu empresa a la vanguardia de su industria.",
+    accentColor: "from-purple-500/20 to-cyan-500/20 border-purple-500/40 text-purple-300",
+  },
 ];
 
 export default function BrandingStudioClient() {
   const [selectedPkg, setSelectedPkg] = useState<BrandingPackage>(BRANDING_PACKAGES[1]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-  const [activePaletteIdx, setActivePaletteIdx] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState<"todos" | "logos" | "packaging" | "merch" | "identidad">("todos");
   const [activeShowcaseItem, setActiveShowcaseItem] = useState<BrandShowcaseItem | null>(null);
+  const [selectedPersonalityIdx, setSelectedPersonalityIdx] = useState(0);
+  const [selectedEmotionIdx, setSelectedEmotionIdx] = useState(0);
+
+  const activePersonality = BRAND_PERSONALITIES[selectedPersonalityIdx];
+  const activeEmotion = BRAND_EMOTIONS[selectedEmotionIdx];
 
   const filteredShowcase = selectedFilter === "todos"
     ? BRAND_SHOWCASE
@@ -369,14 +472,21 @@ export default function BrandingStudioClient() {
 
   const getWhatsAppLink = (pkgName: string) => {
     const text = encodeURIComponent(
-      `¡Hola Sofía! Vi el estudio de Branding en Innocentia Tech y me interesa cotizar el paquete "${pkgName}". ¿Me podrías orientar con mi marca?`
+      `¡Hola Sofía! Vi el estudio de Branding en Innocentia Tech y quiero construir mi marca con el paquete "${pkgName}". ¿Me podrías orientar para comenzar?`
     );
     return `https://wa.me/529601771556?text=${text}`;
   };
 
   const getWhatsAppShowcaseLink = (brandTitle: string, brandName: string) => {
     const text = encodeURIComponent(
-      `¡Hola Sofía! Vi el diseño de "${brandTitle}" (${brandName}) en tu portafolio de Innocentia Tech y me gustaría cotizar un desarrollo de marca con esa misma calidad para mi proyecto.`
+      `¡Hola Sofía! Vi el diseño de "${brandTitle}" (${brandName}) en el portafolio de Innocentia Tech y quiero construir una marca con esa misma calidad visual para mi proyecto.`
+    );
+    return `https://wa.me/529601771556?text=${text}`;
+  };
+
+  const getWhatsAppPersonalityLink = (persName: string) => {
+    const text = encodeURIComponent(
+      `¡Hola Sofía! En el explorador de Innocentia Tech me identifiqué con la personalidad de marca "${persName}". Me gustaría crear mi universo de marca con esa dirección.`
     );
     return `https://wa.me/529601771556?text=${text}`;
   };
@@ -384,7 +494,7 @@ export default function BrandingStudioClient() {
   return (
     <div className="pt-24 pb-20 space-y-24">
       {/* ========================================================================= */}
-      {/* 1. HERO SECTION: SOFÍA • DIRECCIÓN DE ARTE & BRANDING */}
+      {/* 1. HERO SECTION: SOFÍA • CREATIVE DIRECTOR (TRANSFORMACIÓN DE MARCA) */}
       {/* ========================================================================= */}
       <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {/* Ambient Glow */}
@@ -392,36 +502,50 @@ export default function BrandingStudioClient() {
         <div className="absolute top-20 right-1/4 w-80 h-80 bg-[#FF7A00]/15 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Column: Copy & Presentation */}
+          {/* Left Column: Transformation Statement */}
           <div className="lg:col-span-7 space-y-6 text-left">
             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#FF3858]/10 border border-[#FF3858]/30 text-[#FF5470] font-mono text-xs font-bold uppercase tracking-wider shadow-lg">
               <Sparkles className="w-4 h-4 text-[#FF3858] animate-spin" />
-              <span>ESTUDIO DE BRANDING & IDENTIDAD VISUAL</span>
+              <span>SOFÍA — CREATIVE DIRECTOR</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[1.1]">
-              Donde las ideas se convierten en <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166]">Marcas Memorables</span>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[1.08]">
+              Donde las ideas se convierten en{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF3858] via-[#FF7A00] to-[#FFD166]">
+                Marcas Memorables
+              </span>
             </h1>
 
-            <p className="text-gray-300 text-sm sm:text-base lg:text-lg font-light max-w-xl leading-relaxed">
-              Hola, soy <strong>Sofía</strong>, Directora Creativa en Innocentia Tech. Diseño logotipos vectoriales, renders de packaging 3D, paletas cromáticas y manuales de identidad pensados para conectar con tu audiencia y elevar el valor de tu negocio.
-            </p>
+            {/* Manifiesto Emocional de Sofía */}
+            <div className="space-y-2 border-l-2 border-[#FF3858] pl-4">
+              <p className="text-white text-base sm:text-lg font-medium leading-snug">
+                No diseñamos solamente cómo se ve una marca.
+              </p>
+              <p className="text-gray-300 text-sm sm:text-base font-light leading-relaxed">
+                Diseñamos cómo se siente, cómo habla y cómo será recordada.
+              </p>
+            </div>
+
+            {/* Disciplinas */}
+            <div className="text-xs font-mono text-gray-400 tracking-wide">
+              Identidad visual · Dirección creativa · Branding · Packaging · Experiencia digital
+            </div>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <a
                 href={getWhatsAppLink(selectedPkg.name)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_25px_rgba(255,56,88,0.5)] hover:scale-105 transition-all cursor-pointer"
+                className="px-7 py-4 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_30px_rgba(255,56,88,0.5)] hover:scale-105 transition-all cursor-pointer"
               >
-                <span>Cotizar mi Marca con Sofía</span>
+                <span>Construir mi marca con Sofía</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <button
                 type="button"
                 onClick={() => setIsVideoModalOpen(true)}
-                className="px-5 py-3.5 rounded-full bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#FF3858] text-white font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer shadow-lg hover:scale-105"
+                className="px-5 py-4 rounded-full bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#FF3858] text-white font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer shadow-lg hover:scale-105"
               >
                 <div className="w-6 h-6 rounded-full bg-[#FF3858] flex items-center justify-center shadow-[0_0_10px_#FF3858]">
                   <Play className="w-3 h-3 fill-white text-white ml-0.5" />
@@ -430,19 +554,19 @@ export default function BrandingStudioClient() {
               </button>
             </div>
 
-            {/* Micro badges */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-white/10 text-left font-mono">
+            {/* Micro badges: Human Creativity × AI */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-white/10 text-left font-mono">
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-[#FF5470] block">VECTORES 100%</span>
-                <span className="text-[10px] text-gray-400">AI, SVG, EPS, PDF</span>
+                <span className="text-xs font-bold text-[#FF5470] block">SENSIBILIDAD HUMANA</span>
+                <span className="text-[10px] text-gray-400">Dirección artística de autor</span>
               </div>
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-[#FFD166] block">MANUAL DE MARCA</span>
-                <span className="text-[10px] text-gray-400">Guía de Estilo Oficial</span>
+                <span className="text-xs font-bold text-[#FFD166] block">TECNOLOGÍA 3D & AI</span>
+                <span className="text-[10px] text-gray-400">Renders y prototipado veloz</span>
               </div>
               <div className="space-y-0.5">
                 <span className="text-xs font-bold text-emerald-400 block">DERECHOS TOTALES</span>
-                <span className="text-[10px] text-gray-400">Propiedad Intelectual</span>
+                <span className="text-[10px] text-gray-400">Propiedad Intelectual 100%</span>
               </div>
             </div>
           </div>
@@ -455,7 +579,7 @@ export default function BrandingStudioClient() {
             >
               <Image
                 src="/images/sofia_desktop_hd.png"
-                alt="Sofía - Directora de Arte & Branding • Innocentia Tech"
+                alt="Sofía - Creative Director • Innocentia Tech"
                 fill
                 quality={100}
                 unoptimized
@@ -464,15 +588,15 @@ export default function BrandingStudioClient() {
               />
 
               {/* Floating Glass Pill */}
-              <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl bg-black/85 backdrop-blur-xl border border-[#FF3858]/40 flex items-center justify-between shadow-2xl">
+              <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-2xl bg-black/85 backdrop-blur-xl border border-[#FF3858]/40 flex items-center justify-between shadow-2xl">
                 <div className="flex items-center gap-2.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#FF3858] animate-ping" />
                   <div>
-                    <span className="text-xs font-bold text-white block font-mono">SOFÍA • BRANDING STUDIO</span>
-                    <span className="text-[10px] text-gray-400 font-mono">Haz clic para ver video de presentación</span>
+                    <span className="text-xs font-bold text-white block font-mono">SOFÍA • CREATIVE DIRECTOR</span>
+                    <span className="text-[10px] text-gray-400 font-mono">“Una marca comienza con una idea que merece ser recordada.”</span>
                   </div>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-[#FF3858] flex items-center justify-center shadow-lg">
+                <div className="w-8 h-8 rounded-full bg-[#FF3858] flex items-center justify-center shadow-lg flex-shrink-0">
                   <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
                 </div>
               </div>
@@ -482,17 +606,189 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* SHOWCASE & PORTFOLIO DE MARCAS CREADAS POR SOFÍA */}
+      {/* 2. MANIFIESTO: HUMAN CREATIVITY × ARTIFICIAL INTELLIGENCE */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-r from-[#FF3858]/10 via-black to-[#FF7A00]/10 border border-[#FF3858]/30 backdrop-blur-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center text-left shadow-2xl">
+          <div className="lg:col-span-4 space-y-2 border-b lg:border-b-0 lg:border-r border-white/10 pb-6 lg:pb-0 lg:pr-8">
+            <span className="text-xs font-mono text-[#FFD166] uppercase font-bold tracking-wider">
+              NUESTRA FILOSOFÍA
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+              Human Creativity × Artificial Intelligence
+            </h2>
+            <p className="text-xs text-gray-400 font-mono">
+              Dirección Creativa + Inteligencia Artificial + Diseño Profesional de Vanguardia
+            </p>
+          </div>
+
+          <div className="lg:col-span-8 space-y-4">
+            <h3 className="text-lg sm:text-xl font-bold text-white leading-snug">
+              Imaginación humana. Tecnología sin límites.
+            </h3>
+            <p className="text-gray-300 text-sm sm:text-base font-light leading-relaxed">
+              La Inteligencia Artificial acelera las posibilidades creativas, explora miles de combinaciones visuales en segundos y renderiza empaques 3D fotorrealistas. Pero es la <strong>sensibilidad, intuición y visión estratégica de Sofía</strong> la que decide cuáles tienen sentido, alma y poder de conversión para tu negocio.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-2 text-xs font-mono text-gray-400">
+              <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white">
+                ✓ Curaduría Humana 100%
+              </span>
+              <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white">
+                ✓ Prototipado 3D Acelerado
+              </span>
+              <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white">
+                ✓ Vectores Puros & Manuales Exclusivos
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 3. QUÉ PODEMOS CREAR: CAPACIDADES DEL ESTUDIO */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/15 text-xs font-mono text-[#FF5470] uppercase">
+            <span>CAPACIDADES DEL ESTUDIO</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+            Todo lo que tu marca necesita para liderar
+          </h2>
+          <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
+            Construimos el ecosistema visual completo que acompaña a tu cliente desde el primer impacto publicitario hasta el desempaque del producto.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            {
+              icon: "🎨",
+              title: "Logotipos Vectoriales & Isotipos",
+              desc: "Arquitectura geométrica pura en curvas vectoriales limpias. Entregado en AI, SVG, EPS, PDF y PNG transparentes de ultra alta resolución listos para cualquier escala.",
+            },
+            {
+              icon: "📖",
+              title: "Manual de Identidad & Brand Guidelines",
+              desc: "La biblia visual de tu marca: retícula constructiva, áreas de reserva, tipografías primarias/secundarias, códigos cromáticos y lineamientos de aplicación.",
+            },
+            {
+              icon: "🌈",
+              title: "Psicología Cromática & Paletas Sensoriales",
+              desc: "Curaduría cromática estratégica basada en el público objetivo y la emoción de compra: códigos HEX para web, RGB para pantallas y CMYK / Pantone para impresión.",
+            },
+            {
+              icon: "📦",
+              title: "Packaging & Prototipos 3D Hiperrealistas",
+              desc: "Diseño de cajas, etiquetas de producto, botellas cosméticas, empaques colapsibles y renders 3D de alta fidelidad para preventas e inversionistas.",
+            },
+            {
+              icon: "📱",
+              title: "Social Media Kit & Plantillas Editables",
+              desc: "Avatares oficiales, portadas y plantillas personalizadas en Figma o Canva para que tus publicaciones de Instagram, LinkedIn y YouTube mantengan un nivel prémium.",
+            },
+            {
+              icon: "⚡",
+              title: "Design System UI/UX & Microinteracciones",
+              desc: "Componentes, tipografía, color, iconografía, estados e interacciones listos para código con microinteracciones fluidas de hasta 60 FPS.",
+            },
+          ].map((pillar, idx) => (
+            <div
+              key={idx}
+              className="p-6 rounded-3xl bg-black/60 border border-white/10 hover:border-[#FF3858]/60 transition-all duration-300 backdrop-blur-xl space-y-3 group hover:shadow-[0_10px_30px_rgba(255,56,88,0.15)] text-left"
+            >
+              <div className="text-3xl p-2.5 rounded-2xl bg-white/[0.04] border border-white/10 w-fit group-hover:scale-110 transition-transform">
+                {pillar.icon}
+              </div>
+              <h3 className="text-lg font-bold text-white tracking-tight">{pillar.title}</h3>
+              <p className="text-xs text-gray-300 font-light leading-relaxed">{pillar.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 4. EL PROCESO: ASÍ NACE UNA MARCA EN INNOCENTIA */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFD166]/10 border border-[#FFD166]/30 text-xs font-mono text-[#FFD166] uppercase shadow-md">
+            <Compass className="w-3.5 h-3.5 text-[#FFD166]" />
+            <span>METODOLOGÍA CREATIVA</span>
+          </div>
+          <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+            Así nace una marca en Innocentia
+          </h2>
+          <p className="text-gray-300 text-xs sm:text-sm font-light">
+            Un proceso estructurado en 5 etapas donde el análisis estratégico y la dirección de arte convergen para crear identidades duraderas.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+          {[
+            {
+              step: "01",
+              name: "DESCUBRIR",
+              desc: "Entendemos tu historia, mercado, competencia, personalidad de marca y visión a largo plazo.",
+              color: "text-[#FF5470] border-[#FF3858]/40",
+            },
+            {
+              step: "02",
+              name: "CONCEPTUALIZAR",
+              desc: "Exploramos territorios visuales, símbolos, psicología de formas, tipografía y lenguaje cromático.",
+              color: "text-[#FF7A00] border-[#FF7A00]/40",
+            },
+            {
+              step: "03",
+              name: "CREAR",
+              desc: "Construimos la arquitectura geométrica y el sistema visual completo de la marca.",
+              color: "text-[#FFD166] border-[#FFD166]/40",
+            },
+            {
+              step: "04",
+              name: "DARLE VIDA",
+              desc: "Aplicamos la identidad en productos físicos, empaques, redes, espacios y plataformas web.",
+              color: "text-emerald-400 border-emerald-500/40",
+            },
+            {
+              step: "05",
+              name: "EVOLUCIONAR",
+              desc: "La marca queda documentada y preparada para crecer, escalar y liderar su sector.",
+              color: "text-[#00D1FF] border-[#00D1FF]/40",
+            },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className={`p-5 sm:p-6 rounded-3xl bg-black/60 border ${item.color} backdrop-blur-xl flex flex-col justify-between space-y-4 text-left shadow-lg hover:-translate-y-1 transition-transform`}
+            >
+              <div className="space-y-2">
+                <span className={`text-2xl sm:text-3xl font-black font-mono ${item.color.split(" ")[0]}`}>
+                  {item.step}
+                </span>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+                  {item.name}
+                </h3>
+              </div>
+              <p className="text-xs text-gray-300 font-light leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. PORTAFOLIO: MARCAS QUE YA COBRARON VIDA */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 border-b border-white/10 pb-6 text-left">
           <div className="space-y-3 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF3858]/10 border border-[#FF3858]/30 text-xs font-mono text-[#FF5470] uppercase">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>PORTAFOLIO OFICIAL & MOCKUPS</span>
+              <span>PORTAFOLIO & CASOS REALES</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
-              Marcas Diseñadas en el Estudio
+              Marcas que ya cobraron vida
             </h2>
             <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
               Explora algunos de los proyectos de identidad, isotipos en 3D, renders de packaging y merchandising desarrollados por Sofía para clientes en tecnología, cosmética, eventos y arquitectura.
@@ -587,124 +883,153 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. LOS 6 PILARES DE UN BRANDING DE ALTO IMPACTO */}
+      {/* 6. EXPERIENCIA SENSORIAL: ANTES DE DISEÑAR, ESCUCHAMOS */}
       {/* ========================================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.04] border border-white/15 text-xs font-mono text-[#FF5470] uppercase">
-            <span>SERVICIOS & ALCANCE</span>
-          </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
-            ¿Qué incluye el diseño de tu marca con Sofía?
-          </h2>
-          <p className="text-gray-300 text-xs sm:text-sm font-light">
-            No entregamos solo un dibujo; construimos la identidad visual estratégica que hará que tu negocio se posicione y cobre lo que realmente vale.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            {
-              icon: "🎨",
-              title: "Logotipos Vectoriales & Isotipos",
-              desc: "Diseño matemático en curvas vectoriales limpias. Entregado en AI, SVG, EPS, PDF y PNG transparentes de ultra alta resolución listos para cualquier escala.",
-            },
-            {
-              icon: "📖",
-              title: "Manual de Identidad & Brand Book",
-              desc: "La biblia visual de tu marca: retícula constructiva, áreas de protección, tipografías primarias/secundarias y lineamientos de uso correcto.",
-            },
-            {
-              icon: "🌈",
-              title: "Psicología Cromática Estratégica",
-              desc: "Selección de paletas de color con base en el público objetivo y la emoción de compra: códigos HEX para web, RGB para pantallas y CMYK / Pantone para impresión.",
-            },
-            {
-              icon: "📦",
-              title: "Packaging, Empaques & Merchandising",
-              desc: "Diseño de cajas, etiquetas de producto, bolsas, tarjetas de presentación de lujo con barniz a registro y uniformes de personal.",
-            },
-            {
-              icon: "📱",
-              title: "Social Media Kit & Plantillas",
-              desc: "Avatares oficiales, portadas y plantillas editables en Figma o Canva para que tus publicaciones de Instagram, Facebook y LinkedIn luzcan impecables.",
-            },
-            {
-              icon: "⚡",
-              title: "Integración con Apps & Web (UI/UX)",
-              desc: "Conexión directa con Iván para que los colores, tipografías y botones de tu marca se implementen a la perfección en tu sitio web o aplicación móvil.",
-            },
-          ].map((pillar, idx) => (
-            <div
-              key={idx}
-              className="p-6 rounded-3xl bg-black/60 border border-white/10 hover:border-[#FF3858]/60 transition-all duration-300 backdrop-blur-xl space-y-3 group hover:shadow-[0_10px_30px_rgba(255,56,88,0.15)]"
-            >
-              <div className="text-3xl p-2.5 rounded-2xl bg-white/[0.04] border border-white/10 w-fit group-hover:scale-110 transition-transform">
-                {pillar.icon}
-              </div>
-              <h3 className="text-lg font-bold text-white tracking-tight">{pillar.title}</h3>
-              <p className="text-xs text-gray-300 font-light leading-relaxed">{pillar.desc}</p>
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-black via-[#0E060A] to-[#170812] border border-[#FF3858]/30 backdrop-blur-2xl space-y-8 shadow-2xl text-left">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+            <div className="space-y-1">
+              <span className="text-xs font-mono text-[#FFD166] uppercase font-bold tracking-wider">
+                CONEXIÓN CREATIVA CON SOFÍA
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
+                Antes de diseñar, escuchamos.
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-300 font-light">
+                ¿Cómo quieres que alguien se sienta la primera vez que vea tu marca?
+              </p>
             </div>
-          ))}
+          </div>
+
+          {/* Emotion Selectors */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {BRAND_EMOTIONS.map((emo, idx) => (
+              <button
+                key={emo.id}
+                type="button"
+                onClick={() => setSelectedEmotionIdx(idx)}
+                className={`p-4 rounded-2xl border transition-all text-center flex flex-col items-center justify-center space-y-2 cursor-pointer ${
+                  selectedEmotionIdx === idx
+                    ? "bg-gradient-to-b from-[#FF3858]/30 to-black border-[#FF3858] shadow-[0_0_20px_rgba(255,56,88,0.4)] scale-105"
+                    : "bg-white/[0.02] border-white/10 hover:border-white/30 text-gray-400 hover:text-white"
+                }`}
+              >
+                <span className="text-2xl">{emo.icon}</span>
+                <span className="text-xs font-bold font-mono text-white">{emo.name}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Sofía Dynamic Answer */}
+          <div className="p-6 rounded-3xl bg-black/70 border border-[#FF3858]/30 space-y-4 shadow-xl">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-2xl bg-[#FF3858] flex items-center justify-center text-white font-bold text-sm shadow-[0_0_15px_#FF3858]">
+                S
+              </div>
+              <div>
+                <span className="text-xs font-mono font-bold text-white block">SOFÍA RESPONDE:</span>
+                <span className="text-[10px] font-mono text-[#FF5470]">Dirección de Arte para transmitir {activeEmotion.name}</span>
+              </div>
+            </div>
+
+            <p className="text-sm sm:text-base text-gray-200 font-light leading-relaxed pl-3 border-l-2 border-[#FF3858]">
+              “{activeEmotion.sofiaSaid}”
+            </p>
+          </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 3. EXPLORADOR INTERACTIVO DE PALETAS CROMÁTICAS */}
+      {/* 7. EXPLORADOR INTERACTIVO DE PERSONALIDAD DE MARCA */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-black via-[#0B0609] to-[#15070F] border border-[#FF3858]/30 backdrop-blur-2xl space-y-8 shadow-2xl">
+        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-br from-black via-[#0B0609] to-[#15070F] border border-[#FF3858]/30 backdrop-blur-2xl space-y-8 shadow-2xl text-left">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
             <div className="space-y-1">
               <span className="text-xs font-mono text-[#FFD166] uppercase font-bold tracking-wider">
-                EXPLORADOR DE ESTILOS DE SOFÍA
+                EXPLORADOR DE PERSONALIDAD DE MARCA
               </span>
               <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-                Paletas & Armonía Visual
+                ¿Qué personalidad tiene tu marca?
               </h3>
               <p className="text-xs sm:text-sm text-gray-300 font-light">
-                Cada industria requiere un lenguaje cromático específico para transmitir autoridad y afinidad.
+                Selecciona la esencia de tu negocio y mira cómo Sofía proyecta su universo visual en tiempo real.
               </p>
             </div>
 
+            {/* Personality Selector Pills */}
             <div className="flex flex-wrap items-center gap-2">
-              {PALETTES_SHOWCASE.map((pal, idx) => (
+              {BRAND_PERSONALITIES.map((pers, idx) => (
                 <button
-                  key={idx}
+                  key={pers.id}
                   type="button"
-                  onClick={() => setActivePaletteIdx(idx)}
-                  className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
-                    activePaletteIdx === idx
+                  onClick={() => setSelectedPersonalityIdx(idx)}
+                  className={`px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    selectedPersonalityIdx === idx
                       ? "bg-[#FF3858] text-white shadow-[0_0_15px_#FF3858]"
                       : "bg-white/5 text-gray-400 border border-white/10 hover:text-white"
                   }`}
                 >
-                  {pal.category}
+                  <span>{pers.emoji}</span>
+                  <span>{pers.name}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Palette Active View */}
+          {/* Active Personality Preview Card */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-5 space-y-3">
-              <span className="text-xs font-mono text-gray-400 uppercase">Paleta Seleccionada:</span>
-              <h4 className="text-2xl font-bold text-white font-mono">
-                {PALETTES_SHOWCASE[activePaletteIdx].name}
-              </h4>
-              <p className="text-sm text-gray-300 font-light leading-relaxed">
-                {PALETTES_SHOWCASE[activePaletteIdx].description}
-              </p>
+            <div className="lg:col-span-5 space-y-4">
+              <div className="space-y-1">
+                <span className="text-[11px] font-mono text-[#FF5470] uppercase font-bold">
+                  Tu universo visual podría sentirse así →
+                </span>
+                <h4 className="text-3xl font-black text-white font-mono flex items-center gap-2">
+                  <span>{activePersonality.emoji}</span>
+                  <span>{activePersonality.name}</span>
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+                  {activePersonality.tagline}
+                </p>
+              </div>
+
+              <div className="space-y-2.5 pt-2 border-t border-white/10 text-xs font-mono">
+                <div>
+                  <span className="text-gray-400 block text-[10px] uppercase">Tipografía Sugerida:</span>
+                  <strong className="text-white">{activePersonality.typography}</strong>
+                </div>
+                <div>
+                  <span className="text-gray-400 block text-[10px] uppercase">Formas & Geometría:</span>
+                  <span className="text-gray-200">{activePersonality.shapes}</span>
+                </div>
+                <div>
+                  <span className="text-gray-400 block text-[10px] uppercase">Texturas & Acabados:</span>
+                  <span className="text-gray-200">{activePersonality.textures}</span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <a
+                  href={getWhatsAppPersonalityLink(activePersonality.name)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-mono text-xs font-bold uppercase tracking-wider shadow-lg transition-all hover:scale-105 cursor-pointer"
+                >
+                  <span>Crear una marca con esta dirección</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
 
+            {/* Colors Preview */}
             <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {PALETTES_SHOWCASE[activePaletteIdx].colors.map((color, cIdx) => (
+              {activePersonality.colors.map((color, cIdx) => (
                 <div
                   key={cIdx}
                   className="p-4 rounded-2xl bg-black/60 border border-white/15 space-y-3 text-center shadow-lg"
                 >
                   <div
-                    className="w-full h-20 rounded-xl shadow-inner transition-transform hover:scale-105"
+                    className="w-full h-24 rounded-xl shadow-inner transition-transform hover:scale-105"
                     style={{ backgroundColor: color }}
                   />
                   <div className="font-mono text-xs font-bold text-white">{color}</div>
@@ -716,7 +1041,79 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 4. COTIZADOR DE PAQUETES DE BRANDING */}
+      {/* 8. LA SINERGIA: SOFÍA + IVÁN (CUANDO DISEÑO Y TECNOLOGÍA SE ENCUENTRAN) */}
+      {/* ========================================================================= */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-r from-purple-950/20 via-black to-cyan-950/20 border border-white/15 backdrop-blur-2xl text-center space-y-8 shadow-2xl">
+          <div className="max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-mono text-cyan-400 uppercase font-bold tracking-wider">
+              EL NÚCLEO DE INNOCENTIA
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              Cuando diseño y tecnología se encuentran.
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-300 font-light">
+              La identidad no se queda en un PDF. Se convierte en una experiencia interactiva en código vivo.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left items-stretch">
+            {/* Sofía */}
+            <div className="p-6 rounded-3xl bg-black/70 border border-[#FF3858]/40 space-y-3 flex flex-col justify-between shadow-xl">
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-2xl bg-[#FF3858]/20 border border-[#FF3858]/40 flex items-center justify-center text-lg">
+                  🎨
+                </div>
+                <span className="text-xs font-mono font-bold text-[#FF5470] block">SOFÍA</span>
+                <h3 className="text-lg font-bold text-white">Construye la Identidad</h3>
+                <p className="text-xs text-gray-300 font-light leading-relaxed">
+                  Diseña el alma, la emoción, el lenguaje visual, la psicología de color y la memoria sensorial de tu marca.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
+                Arte · Emoción · Identidad
+              </span>
+            </div>
+
+            {/* Iván */}
+            <div className="p-6 rounded-3xl bg-black/70 border border-[#00D1FF]/40 space-y-3 flex flex-col justify-between shadow-xl">
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-2xl bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-lg">
+                  ⚡
+                </div>
+                <span className="text-xs font-mono font-bold text-cyan-400 block">IVÁN</span>
+                <h3 className="text-lg font-bold text-white">La Convierte en Software</h3>
+                <p className="text-xs text-gray-300 font-light leading-relaxed">
+                  Transforma el diseño en interfaces a 60 FPS, arquitectura serverless en la nube y plataformas de alta conversión.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
+                Código · Rendimiento · Cloud
+              </span>
+            </div>
+
+            {/* Innocentia */}
+            <div className="p-6 rounded-3xl bg-gradient-to-br from-purple-950/40 to-black border border-purple-500/40 space-y-3 flex flex-col justify-between shadow-xl">
+              <div className="space-y-2">
+                <div className="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-lg">
+                  🚀
+                </div>
+                <span className="text-xs font-mono font-bold text-purple-300 block">INNOCENTIA</span>
+                <h3 className="text-lg font-bold text-white">Une Ambos Mundos</h3>
+                <p className="text-xs text-gray-300 font-light leading-relaxed">
+                  Cero fricción entre el equipo de diseño y los ingenieros de desarrollo. Tu marca nace hermosa y funciona impecable.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-3 block">
+                Ecosistema 360° Integral
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 9. PAQUETES: ESSENCE, IDENTITY, UNIVERSE (CON LEYENDA ADAPTABLE) */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
         <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -725,13 +1122,13 @@ export default function BrandingStudioClient() {
             <span>PROPUESTAS A LA MEDIDA & TRANSPARENCIA</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
-            Paquetes de Inversión en Branding
+            Paquetes de Creación de Marca
           </h2>
           <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed max-w-2xl mx-auto">
             <span className="text-[#FFD166] font-medium font-mono text-xs block mb-1">
               ✨ Precios recomendados de referencia • Nos adaptamos 100% a tus necesidades
             </span>
-            Selecciona el paquete base o solicita una cotización personalizada según la escala y requerimientos específicos de tu marca.
+            Elige el nivel de profundidad visual para tu negocio o solicita una propuesta hecha a la medida.
           </p>
         </div>
 
@@ -758,6 +1155,7 @@ export default function BrandingStudioClient() {
                   <div className="space-y-1">
                     <span className="text-[11px] font-mono text-gray-400 uppercase block">{pkg.badge}</span>
                     <h3 className="text-2xl font-black text-white uppercase tracking-tight">{pkg.name}</h3>
+                    <p className="text-xs font-mono text-[#FFD166] italic">{pkg.tagline}</p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
@@ -771,7 +1169,7 @@ export default function BrandingStudioClient() {
                   <p className="text-xs text-gray-300 font-light leading-relaxed">{pkg.description}</p>
 
                   {/* Features List */}
-                  <div className="space-y-2.5 pt-2 border-t border-white/10 text-xs">
+                  <div className="space-y-2.5 pt-2 border-t border-white/10 text-xs text-left">
                     <span className="text-[10px] font-mono text-gray-400 uppercase block font-bold">
                       ¿Qué incluye?
                     </span>
@@ -836,15 +1234,15 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. FAQ DE BRANDING */}
+      {/* 10. FAQ DE BRANDING */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-8">
         <div className="text-center space-y-2">
           <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-            Preguntas Frecuentes sobre Branding
+            Preguntas Frecuentes sobre el Estudio
           </h2>
           <p className="text-gray-400 text-xs sm:text-sm">
-            Todo lo que necesitas saber sobre el proceso de diseño y entrega.
+            Todo lo que necesitas saber sobre el proceso de diseño, derechos y entrega.
           </p>
         </div>
 
@@ -876,36 +1274,44 @@ export default function BrandingStudioClient() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. CTA FINAL: INICIAR PROYECTO */}
+      {/* 11. CIERRE EMOCIONAL Y MEMORABLE (CTA FINAL) */}
       {/* ========================================================================= */}
       <section className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-        <div className="p-8 sm:p-12 rounded-[36px] bg-gradient-to-r from-[#FF3858]/30 via-black to-[#FF7A00]/20 border border-[#FF3858]/50 backdrop-blur-2xl text-center space-y-6 shadow-2xl">
-          <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
-            ¿Listo para darle vida a tu marca?
-          </h2>
-          <p className="text-gray-300 text-sm sm:text-base font-light max-w-2xl mx-auto">
-            Cuéntanos tu idea, tu mercado y tus colores favoritos. Sofía te preparará una propuesta visual personalizada.
-          </p>
+        <div className="p-8 sm:p-14 rounded-[36px] bg-gradient-to-r from-[#FF3858]/30 via-black to-[#FF7A00]/20 border border-[#FF3858]/50 backdrop-blur-2xl text-center space-y-6 shadow-2xl">
+          <div className="space-y-3 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-5xl font-black text-white uppercase tracking-tight leading-tight">
+              Tu marca todavía no existe.
+            </h2>
+            <p className="text-xl sm:text-2xl text-[#FFD166] font-light">
+              Existe la idea.
+            </p>
+            <p className="text-gray-300 text-sm sm:text-base font-light leading-relaxed">
+              Nosotros podemos ayudarla a encontrar su forma.
+            </p>
+          </div>
 
           <div className="flex flex-wrap justify-center items-center gap-4 pt-2">
-            <Link
-              href="/crear-proyecto"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_30px_rgba(255,56,88,0.6)] hover:scale-105 transition-all cursor-pointer"
-            >
-              <span>Llenar Formulario de Proyecto</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-
             <a
-              href="https://wa.me/529601771556?text=Hola%20Sofía,%20quiero%20cotizar%20un%20proyecto%20de%20Branding%20en%20Innocentia%20Tech"
+              href="https://wa.me/529601771556?text=Hola%20Sofía,%20quiero%20comenzar%20a%20construir%20mi%20marca%20en%20Innocentia%20Tech"
               target="_blank"
               rel="noopener noreferrer"
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_35px_rgba(255,56,88,0.6)] hover:scale-105 transition-all cursor-pointer"
+            >
+              <span>Comenzar con Sofía</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+
+            <Link
+              href="/crear-proyecto"
               className="px-7 py-4 rounded-full bg-black/80 hover:bg-black border border-white/20 hover:border-[#FF3858] text-white font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer hover:scale-105"
             >
-              <MessageSquare className="w-4 h-4 text-[#FF5470]" />
-              <span>WhatsApp Directo (+52 960 177 1556)</span>
-            </a>
+              <span>Llenar Formulario de Proyecto</span>
+            </Link>
           </div>
+
+          <p className="text-[11px] font-mono text-gray-400">
+            Cuéntanos qué imaginas. Nosotros comenzamos desde ahí.
+          </p>
         </div>
       </section>
 
@@ -1015,7 +1421,7 @@ export default function BrandingStudioClient() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white font-mono">SOFÍA • PRESENTACIÓN OFICIAL</h3>
-                  <span className="text-xs text-[#FF5470] font-mono">Dirección Creativa & Branding en Innocentia Tech</span>
+                  <span className="text-xs text-[#FF5470] font-mono">Creative Director en Innocentia Tech</span>
                 </div>
               </div>
               <button
