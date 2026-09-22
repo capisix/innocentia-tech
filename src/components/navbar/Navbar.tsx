@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Globe, Menu, X, ArrowRight, Lock } from "../../lib/icons";
 import AuthLoginModal, { RoleType } from "../portal/AuthLoginModal";
 
@@ -13,10 +13,10 @@ interface NavbarProps {
 
 export default function Navbar({ onOpenProjectModal }: NavbarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("Inicio");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,12 +27,12 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
   }, []);
 
   const navLinks = [
-    { name: "Inicio", href: "/" },
-    { name: "🎨 Branding", href: "/branding", badge: "Sofía" },
-    { name: "📈 Campañas", href: "/marketing", badge: "Growth" },
-    { name: "Proyectos", href: "/proyectos" },
-    { name: "Blog & Precios", href: "/blog" },
-    { name: "FAQ", href: "/faq" },
+    { name: "Inicio", icon: "🏠", href: "/" },
+    { name: "Branding", icon: "🎨", href: "/branding", badge: "Sofía" },
+    { name: "Campañas", icon: "📈", href: "/marketing", badge: "Growth" },
+    { name: "Proyectos", icon: "🚀", href: "/proyectos" },
+    { name: "Blog & Precios", icon: "📰", href: "/blog" },
+    { name: "FAQ", icon: "💬", href: "/faq" },
   ];
 
   return (
@@ -54,19 +54,24 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
             />
           </Link>
 
-          {/* Clean Navigation Menu (Single Line, No Awkward Wrap) */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6">
+          {/* Clean Navigation Menu with Icons on ALL items */}
+          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5">
             {navLinks.map((link) => {
-              const isActive = activeLink === link.name;
+              const isActive =
+                pathname === link.href ||
+                (link.href !== "/" && pathname?.startsWith(link.href));
+
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  onClick={() => setActiveLink(link.name)}
                   className={`relative text-xs sm:text-sm font-medium transition-all tracking-wide py-1.5 whitespace-nowrap flex items-center gap-1.5 ${
-                    isActive ? "text-white font-bold drop-shadow-[0_0_10px_#FF3858]" : "text-gray-300 hover:text-white"
+                    isActive
+                      ? "text-white font-bold drop-shadow-[0_0_10px_#FF3858]"
+                      : "text-gray-300 hover:text-white"
                   }`}
                 >
+                  <span className="text-sm">{link.icon}</span>
                   <span>{link.name}</span>
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#FF3858] to-[#FF7A00] rounded-full shadow-[0_0_10px_#FF3858]" />
@@ -125,20 +130,28 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-[#07070D]/95 border-b border-white/10 p-6 space-y-4 backdrop-blur-2xl animate-in slide-in-from-top duration-200">
             <nav className="flex flex-col space-y-3">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => {
-                    setActiveLink(link.name);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-sm font-semibold text-gray-300 hover:text-white py-1 flex items-center justify-between"
-                >
-                  <span>{link.name}</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-gray-500" />
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname === link.href ||
+                  (link.href !== "/" && pathname?.startsWith(link.href));
+
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`text-sm font-semibold py-1 flex items-center justify-between transition-colors ${
+                      isActive ? "text-white font-bold" : "text-gray-300 hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-base">{link.icon}</span>
+                      <span>{link.name}</span>
+                    </div>
+                    <ArrowRight className={`w-3.5 h-3.5 ${isActive ? "text-[#FF3858]" : "text-gray-500"}`} />
+                  </Link>
+                );
+              })}
             </nav>
             <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
               <button
@@ -185,4 +198,3 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
     </>
   );
 }
-
