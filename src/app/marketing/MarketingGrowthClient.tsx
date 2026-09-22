@@ -389,13 +389,13 @@ export default function MarketingGrowthClient() {
                     href={getWhatsAppLink(plan.name)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-full py-3.5 px-5 rounded-full font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
+                    className={`w-full py-3.5 px-5 rounded-full font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       isSelected
-                        ? "bg-[#00D1FF] bg-gradient-to-r from-[#00D1FF] via-[#00B4D8] to-[#3A86FF] text-black shadow-[0_0_30px_rgba(0,209,255,0.7)] ring-2 ring-white/60 hover:brightness-110 scale-[1.02]"
-                        : "bg-gradient-to-r from-cyan-500/15 to-blue-500/10 hover:from-cyan-500/30 hover:to-blue-500/25 border border-cyan-500/40 hover:border-[#00D1FF] text-cyan-200 hover:text-white shadow-[0_0_15px_rgba(0,209,255,0.15)]"
+                        ? "btn-cyan-gradient ring-2 ring-white/60 scale-[1.02]"
+                        : "btn-glass-cyan"
                     }`}
                   >
-                    <span className={isSelected ? "text-slate-950 font-black" : "text-cyan-200 hover:text-white font-bold"}>
+                    <span className={isSelected ? "text-slate-950 font-black" : "text-cyan-200 font-bold"}>
                       Contratar {plan.name}
                     </span>
                     <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? "text-slate-950 stroke-[2.5]" : "text-cyan-300"}`} />
@@ -429,7 +429,7 @@ export default function MarketingGrowthClient() {
             href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20me%20gustaría%20una%20propuesta%20de%20campañas%20adaptada%20a%20mi%20presupuesto."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-3 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/35 hover:to-blue-500/35 border border-cyan-500/40 hover:border-cyan-300 text-cyan-200 hover:text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(0,209,255,0.2)] flex-shrink-0"
+            className="btn-glass-cyan px-5 py-3 rounded-full font-mono text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer flex-shrink-0"
           >
             <span>Plan a mi medida</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#00D1FF]" />
@@ -454,17 +454,17 @@ export default function MarketingGrowthClient() {
               href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20quiero%20cotizar%20campañas%20de%20Marketing%20Digital%20y%20Segmentación%20Cruzada"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#00D1FF] to-[#3A86FF] hover:from-[#38B6FF] hover:to-[#0096C7] text-black font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_30px_rgba(0,209,255,0.6)] hover:scale-105 transition-all cursor-pointer"
+              className="btn-cyan-gradient px-8 py-4 rounded-full text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer"
             >
-              <MessageSquare className="w-4 h-4 text-black" />
-              <span>WhatsApp de Estrategia (+52 960 177 1556)</span>
+              <MessageSquare className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+              <span className="text-slate-950 font-black">WhatsApp de Estrategia (+52 960 177 1556)</span>
             </a>
 
             <Link
               href="/crear-proyecto"
-              className="px-7 py-4 rounded-full bg-black/80 hover:bg-black border border-white/20 hover:border-[#00D1FF] text-white font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer hover:scale-105"
+              className="btn-glass-cyan px-7 py-4 rounded-full font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer"
             >
-              <span>Llenar Formulario de Pauta</span>
+              <span className="text-cyan-200">Llenar Formulario de Pauta</span>
               <ArrowRight className="w-4 h-4 text-[#00D1FF]" />
             </Link>
           </div>

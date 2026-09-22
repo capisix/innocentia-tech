@@ -698,10 +698,10 @@ export default function BrandingStudioClient() {
                 href={getWhatsAppLink(selectedPkg.name)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-7 py-4 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_30px_rgba(255,56,88,0.5)] hover:scale-105 transition-all cursor-pointer"
+                className="btn-sofia-gradient px-7 py-4 rounded-full text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer"
               >
                 <span>Construir mi marca con Sofía</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
               </a>
 
               <button
@@ -1819,13 +1819,13 @@ export default function BrandingStudioClient() {
                     href={getWhatsAppLink(pkg.name)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`w-full py-3.5 px-5 rounded-full font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg ${
+                    className={`w-full py-3.5 px-5 rounded-full font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       isSelected
-                        ? "bg-[#FF3858] bg-gradient-to-r from-[#FF3858] via-[#FF5470] to-[#FF7A00] text-white font-black shadow-[0_0_30px_rgba(255,56,88,0.7)] ring-2 ring-white/60 hover:brightness-110 scale-[1.02]"
-                        : "bg-gradient-to-r from-[#FF3858]/15 to-[#FF7A00]/10 hover:from-[#FF3858]/30 hover:to-[#FF7A00]/25 border border-[#FF3858]/40 hover:border-[#FF3858] text-[#FFA8B6] hover:text-white shadow-[0_0_15px_rgba(255,56,88,0.15)]"
+                        ? "btn-sofia-gradient ring-2 ring-white/60 scale-[1.02]"
+                        : "btn-glass-sofia"
                     }`}
                   >
-                    <span className={isSelected ? "text-white font-black" : "text-[#FFA8B6] hover:text-white font-bold"}>
+                    <span className={isSelected ? "text-white font-black" : "text-[#FFA8B6] font-bold"}>
                       Elegir {pkg.name}
                     </span>
                     <ArrowRight className={`w-3.5 h-3.5 ${isSelected ? "text-white stroke-[2.5]" : "text-[#FF7A00]"}`} />
@@ -1859,7 +1859,7 @@ export default function BrandingStudioClient() {
             href="https://wa.me/529601771556?text=Hola%20Sofía,%20vi%20los%20paquetes%20de%20branding%20en%20Innocentia%20Tech%20y%20me%20gustaría%20una%20propuesta%20adaptada%20a%20mis%20necesidades."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-3 rounded-full bg-gradient-to-r from-[#FF3858]/20 to-[#FF7A00]/20 hover:from-[#FF3858]/35 hover:to-[#FF7A00]/35 border border-[#FF3858]/40 hover:border-[#FF5470] text-[#FFA8B6] hover:text-white font-mono text-xs font-bold whitespace-nowrap transition-all hover:scale-105 flex items-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(255,56,88,0.2)] flex-shrink-0"
+            className="btn-glass-sofia px-5 py-3 rounded-full font-mono text-xs font-bold whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer flex-shrink-0"
           >
             <span>Propuesta a mi medida</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#FF5470]" />
@@ -1929,17 +1929,18 @@ export default function BrandingStudioClient() {
               href="https://wa.me/529601771556?text=Hola%20Sofía,%20quiero%20comenzar%20a%20construir%20mi%20marca%20en%20Innocentia%20Tech"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#FF3858] to-[#FF7A00] hover:from-[#FF4D6D] hover:to-[#FF8800] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 shadow-[0_0_35px_rgba(255,56,88,0.6)] hover:scale-105 transition-all cursor-pointer"
+              className="btn-sofia-gradient px-8 py-4 rounded-full text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2.5 transition-all cursor-pointer"
             >
               <span>Comenzar con Sofía</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 text-white stroke-[2.5]" />
             </a>
 
             <Link
               href="/crear-proyecto"
-              className="px-7 py-4 rounded-full bg-black/80 hover:bg-black border border-white/20 hover:border-[#FF3858] text-white font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer hover:scale-105"
+              className="btn-glass-sofia px-7 py-4 rounded-full font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer"
             >
-              <span>Llenar Formulario de Proyecto</span>
+              <span className="text-[#FFA8B6]">Llenar Formulario de Marca</span>
+              <ArrowRight className="w-4 h-4 text-[#FF5470]" />
             </Link>
           </div>
 

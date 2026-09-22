@@ -69,3 +69,63 @@ body {
 .animate-float {
   animation: floatSlow 5s ease-in-out infinite;
 }
+
+/* ========================================================================= */
+/* BULLETPROOF GRADIENT & GLASS BUTTONS (HIGH CONTRAST & MAXIMUM VISIBILITY) */
+/* ========================================================================= */
+.btn-cyan-gradient {
+  background: linear-gradient(135deg, #00D1FF 0%, #0096FF 50%, #3A86FF 100%) !important;
+  color: #020617 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(0, 209, 255, 0.6) !important;
+}
+
+.btn-cyan-gradient:hover {
+  background: linear-gradient(135deg, #38BDF8 0%, #00D1FF 50%, #2563EB 100%) !important;
+  box-shadow: 0 0 35px rgba(0, 209, 255, 0.85) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.btn-sofia-gradient {
+  background: linear-gradient(135deg, #FF3858 0%, #FF5470 50%, #FF7A00 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 25px rgba(255, 56, 88, 0.6) !important;
+}
+
+.btn-sofia-gradient:hover {
+  background: linear-gradient(135deg, #FF5470 0%, #FF3858 50%, #FF8800 100%) !important;
+  box-shadow: 0 0 35px rgba(255, 56, 88, 0.85) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.btn-glass-cyan {
+  background: rgba(0, 209, 255, 0.1) !important;
+  border: 1px solid rgba(0, 209, 255, 0.4) !important;
+  color: #67E8F9 !important;
+  box-shadow: 0 0 15px rgba(0, 209, 255, 0.18) !important;
+}
+
+.btn-glass-cyan:hover {
+  background: rgba(0, 209, 255, 0.22) !important;
+  border-color: #00D1FF !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 25px rgba(0, 209, 255, 0.4) !important;
+  transform: translateY(-1px) scale(1.01) !important;
+}
+
+.btn-glass-sofia {
+  background: rgba(255, 56, 88, 0.1) !important;
+  border: 1px solid rgba(255, 56, 88, 0.4) !important;
+  color: #FFA8B6 !important;
+  box-shadow: 0 0 15px rgba(255, 56, 88, 0.18) !important;
+}
+
+.btn-glass-sofia:hover {
+  background: rgba(255, 56, 88, 0.22) !important;
+  border-color: #FF3858 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 25px rgba(255, 56, 88, 0.4) !important;
+  transform: translateY(-1px) scale(1.01) !important;
+}
+
