@@ -143,10 +143,10 @@ export default function AIPersonasSection() {
             {/* CARD 1: SOFÍA (DESKTOP & MOBILE RESPONSIVE) */}
             {/* ========================================================== */}
             <div className="space-y-4 sm:space-y-5 flex flex-col justify-between">
-              {/* DESKTOP & TABLET VIEW: CLEAN HIGH-DEF ARTWORK (Click-to-Play Video) */}
+              {/* DESKTOP & TABLET VIEW: FULL BLEED ARTWORK (100% Flush to Border, Click-to-Play Video) */}
               <div 
                 onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
-                className="hidden md:block relative w-full aspect-[1024/825] overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#07070E] border border-[#FF3858]/35 shadow-[0_15px_45px_rgba(255,56,88,0.2)] hover:shadow-[0_20px_60px_rgba(255,56,88,0.35)] transition-all duration-500 cursor-pointer group/art select-none"
+                className="hidden md:block relative w-full aspect-square overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#07070E] border border-[#FF3858]/40 shadow-[0_15px_45px_rgba(255,56,88,0.25)] hover:shadow-[0_20px_60px_rgba(255,56,88,0.45)] hover:border-[#FF3858]/80 transition-all duration-500 cursor-pointer group/art select-none"
                 title="Haz clic para ver el video de presentación de Sofía"
               >
                 {/* Ambient Soft Glow */}
@@ -159,7 +159,7 @@ export default function AIPersonasSection() {
                   fill
                   quality={100}
                   unoptimized
-                  className="object-contain relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
+                  className="object-cover w-full h-full relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
                   priority
                 />
 
@@ -176,8 +176,8 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* Sleek Floating Bottom-Right Pill Button - Properly Aligned Inside Frame */}
-                <div className="absolute bottom-3.5 right-3.5 z-20 pointer-events-auto">
+                {/* Sleek Floating Bottom-Right Pill Button - Flush within Frame */}
+                <div className="absolute bottom-4 right-4 z-20 pointer-events-auto">
                   <div className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#1A0812]/90 via-black/85 to-[#1A0812]/90 hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.35)] transition-all cursor-pointer group-hover/art:border-[#FF3858]">
                     <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_#FF3858]">
                       <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
@@ -203,7 +203,7 @@ export default function AIPersonasSection() {
                   fill
                   quality={100}
                   unoptimized
-                  className="object-contain relative z-10"
+                  className="object-cover w-full h-full relative z-10"
                   priority
                 />
               </div>
@@ -314,10 +314,10 @@ export default function AIPersonasSection() {
             {/* CARD 2: IVÁN (DESKTOP & MOBILE RESPONSIVE) */}
             {/* ========================================================== */}
             <div className="space-y-4 sm:space-y-5 flex flex-col justify-between">
-              {/* DESKTOP & TABLET VIEW: CLEAN HIGH-DEF ARTWORK (Click-to-Play Video) */}
+              {/* DESKTOP & TABLET VIEW: FULL BLEED ARTWORK (100% Flush to Border, Click-to-Play Video) */}
               <div 
                 onClick={() => openVideo(IVAN_VIDEO, "desktop")}
-                className="hidden md:block relative w-full aspect-[1024/825] overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#040810] border border-[#00D1FF]/35 shadow-[0_15px_45px_rgba(0,209,255,0.2)] hover:shadow-[0_20px_60px_rgba(0,209,255,0.35)] transition-all duration-500 cursor-pointer group/art select-none"
+                className="hidden md:block relative w-full aspect-square overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#040810] border border-[#00D1FF]/40 shadow-[0_15px_45px_rgba(0,209,255,0.25)] hover:shadow-[0_20px_60px_rgba(0,209,255,0.45)] hover:border-[#00D1FF]/80 transition-all duration-500 cursor-pointer group/art select-none"
                 title="Haz clic para ver el video de presentación de Iván"
               >
                 {/* Ambient Soft Glow */}
@@ -330,7 +330,7 @@ export default function AIPersonasSection() {
                   fill
                   quality={100}
                   unoptimized
-                  className="object-contain relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
+                  className="object-cover w-full h-full relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
                   priority
                 />
 
@@ -347,8 +347,8 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* Sleek Floating Bottom-Right Pill Button - Properly Aligned Inside Frame */}
-                <div className="absolute bottom-3.5 right-3.5 z-20 pointer-events-auto">
+                {/* Sleek Floating Bottom-Right Pill Button - Flush within Frame */}
+                <div className="absolute bottom-4 right-4 z-20 pointer-events-auto">
                   <div className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#06101E]/90 via-black/85 to-[#06101E]/90 hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.35)] transition-all cursor-pointer group-hover/art:border-[#00D1FF]">
                     <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_#00D1FF]">
                       <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
