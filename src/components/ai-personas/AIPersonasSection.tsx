@@ -20,7 +20,7 @@ const SOFIA_VIDEO: PersonaVideoData = {
   title: "Sofía",
   role: "Dirección UI/UX & Creatividad",
   subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-  videoSrcDesktop: "/videos/sofia_presentacion_celular.mp4",
+  videoSrcDesktop: "/videos/sofia_presentacion.mp4",
   videoSrcMobile: "/videos/sofia_presentacion_celular.mp4",
   themeColor: "#FF3858",
   secondaryColor: "#FF7A00",
@@ -32,7 +32,7 @@ const IVAN_VIDEO: PersonaVideoData = {
   title: "Iván",
   role: "CEO & Arquitectura Tech",
   subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-  videoSrcDesktop: "/videos/ivan_presentacion_celular.mp4",
+  videoSrcDesktop: "/videos/ivan_presentacion.mp4",
   videoSrcMobile: "/videos/ivan_presentacion_celular.mp4",
   themeColor: "#00D1FF",
   secondaryColor: "#3A86FF",
@@ -81,13 +81,11 @@ const HASHTAG_SETS = [
 
 export default function AIPersonasSection() {
   const [activeVideo, setActiveVideo] = useState<PersonaVideoData | null>(null);
-  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("mobile");
+  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("desktop");
   const [activeTagSet, setActiveTagSet] = useState(0);
 
   const openVideo = (data: PersonaVideoData, forceFormat?: "mobile" | "desktop") => {
-    if (data.videoSrcDesktop === data.videoSrcMobile) {
-      setVideoFormat("mobile");
-    } else if (forceFormat) {
+    if (forceFormat) {
       setVideoFormat(forceFormat);
     } else {
       const isMobileDevice =
