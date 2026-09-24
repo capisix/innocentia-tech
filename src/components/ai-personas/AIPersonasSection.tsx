@@ -162,14 +162,25 @@ export default function AIPersonasSection() {
                   priority
                 />
 
-                {/* Left Area Click Trigger (Avatar) - Símbolo de video elegante en hover */}
+                {/* TOP HEADER PILL: HEMISFERIO CREATIVO (Centered right above SOFÍA 3D Title) */}
+                <div className="absolute top-[8.5%] left-[56%] right-[10%] z-20 flex justify-center pointer-events-none">
+                  <div 
+                    className="px-3.5 py-0.5 rounded-full bg-[#FF3858]/15 border border-[#FF3858]/70 backdrop-blur-md text-[#FF5470] font-mono font-bold uppercase tracking-widest text-center flex items-center justify-center leading-none shadow-[0_0_15px_rgba(255,56,88,0.35)]"
+                    style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
+                  >
+                    HEMISFERIO CREATIVO
+                  </div>
+                </div>
+
+                {/* FULL CARD INTERACTIVE VIDEO TRIGGER */}
                 <div
                   onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
-                  className="absolute top-0 left-0 bottom-0 w-[52%] z-20 cursor-pointer group/avatar"
+                  className="absolute inset-0 z-20 cursor-pointer group/card"
                   title="Haz clic para ver el video de presentación de Sofía"
                 >
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 transform scale-90 group-hover/avatar:scale-100">
-                    <div className="px-4 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(255,56,88,0.7)] group-hover/avatar:border-[#FF3858] transition-colors">
+                  {/* Center Hover Play Badge */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-all duration-300 transform scale-90 group-hover/card:scale-100">
+                    <div className="px-4 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(255,56,88,0.7)]">
                       <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_15px_#FF3858] flex-shrink-0">
                         <Play className="w-4 h-4 fill-white text-white ml-0.5" />
                       </div>
@@ -179,137 +190,24 @@ export default function AIPersonasSection() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS HUD DIALOGUE SYSTEM */}
-                <div 
-                  className="absolute top-[37%] left-[54%] right-[3.5%] bottom-[3.5%] z-20 flex flex-col justify-between"
-                  style={{ gap: "clamp(4px, 1.1cqi, 8px)" }}
-                >
-                  {/* Row 1: Misión / Descripción Glass Card */}
-                  <div 
-                    className="w-full rounded-xl sm:rounded-2xl bg-black/35 hover:bg-black/50 backdrop-blur-md border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.5),inset_0_0_15px_rgba(255,56,88,0.08)] flex items-center"
-                    style={{ padding: "clamp(5px, 1.4cqi, 10px)" }}
-                  >
-                    <p 
-                      className="text-gray-200 font-light leading-relaxed"
-                      style={{ fontSize: "clamp(5.5px, 1.55cqi, 9.5px)" }}
-                    >
-                      Representa la <span className="text-[#FF5470] font-semibold drop-shadow-[0_0_8px_rgba(255,56,88,0.5)]">imaginación</span>, la creatividad y la sensibilidad del diseño. Convierte ideas en <span className="text-[#FFD166] font-semibold drop-shadow-[0_0_8px_rgba(255,209,102,0.4)]">experiencias visuales memorables</span>, intuitivas y emocionales.
-                    </p>
-                  </div>
-
-                  {/* Row 2: Personalidad Card */}
-                  <div 
-                    className="w-full rounded-xl sm:rounded-2xl bg-black/35 hover:bg-black/50 backdrop-blur-md border border-[#FF3858]/35 hover:border-[#FF3858]/80 transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.5),inset_0_0_15px_rgba(255,56,88,0.08)] flex flex-col justify-center"
-                    style={{ padding: "clamp(4px, 1.3cqi, 9px)", gap: "clamp(2px, 0.6cqi, 4px)" }}
-                  >
-                    <div 
-                      className="inline-flex items-center font-mono font-bold text-[#FF5470] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
-                    >
-                      ✦ PERSONALIDAD
-                    </div>
-                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.4cqi, 3px)" }}>
-                      <div 
-                        className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)", gap: "clamp(3px, 0.8cqi, 5px)" }}
-                      >
-                        <span className="text-[#FF3858] drop-shadow-[0_0_6px_#FF3858]">💖</span>
-                        <span>Curiosa y entusiasta</span>
-                      </div>
-                      <div 
-                        className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)", gap: "clamp(3px, 0.8cqi, 5px)" }}
-                      >
-                        <span className="text-[#FFD166] drop-shadow-[0_0_6px_#FFD166]">⭐</span>
-                        <span>Empática y cercana</span>
-                      </div>
-                      <div 
-                        className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)", gap: "clamp(3px, 0.8cqi, 5px)" }}
-                      >
-                        <span className="text-[#FF5470] drop-shadow-[0_0_6px_#FF5470]">✨</span>
-                        <span>Imaginativa y detallista</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Row 3: Elementos Clave (3 Micro Cards) */}
-                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.6cqi, 4px)" }}>
-                    <div 
-                      className="font-mono font-bold text-[#FF5470] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
-                    >
-                      ✦ ELEMENTOS CLAVE
-                    </div>
-                    <div className="grid grid-cols-3" style={{ gap: "clamp(3px, 0.8cqi, 6px)" }}>
-                      <div 
-                        className="rounded-lg sm:rounded-xl bg-black/35 hover:bg-[#FF3858]/20 backdrop-blur-md border border-[#FF3858]/30 hover:border-[#FF3858] transition-all duration-300 flex flex-col items-center justify-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] cursor-default group/micro"
-                        style={{ padding: "clamp(3px, 1.0cqi, 7px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
-                      >
-                        <span className="group-hover/micro:scale-110 transition-transform" style={{ fontSize: "clamp(7px, 1.9cqi, 12px)" }}>🪄</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)" }}>
-                          Pincel
-                        </div>
-                        <div className="text-[#FF5470] font-mono leading-none" style={{ fontSize: "clamp(4px, 1.1cqi, 7px)" }}>
-                          Mágico
-                        </div>
-                      </div>
-
-                      <div 
-                        className="rounded-lg sm:rounded-xl bg-black/35 hover:bg-[#FF3858]/20 backdrop-blur-md border border-[#FF3858]/30 hover:border-[#FF3858] transition-all duration-300 flex flex-col items-center justify-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] cursor-default group/micro"
-                        style={{ padding: "clamp(3px, 1.0cqi, 7px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
-                      >
-                        <span className="group-hover/micro:scale-110 transition-transform" style={{ fontSize: "clamp(7px, 1.9cqi, 12px)" }}>🎨</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)" }}>
-                          Creatividad
-                        </div>
-                        <div className="text-gray-300 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.1cqi, 7px)" }}>
-                          & Inspiración
-                        </div>
-                      </div>
-
-                      <div 
-                        className="rounded-lg sm:rounded-xl bg-black/35 hover:bg-[#FF3858]/20 backdrop-blur-md border border-[#FF3858]/30 hover:border-[#FF3858] transition-all duration-300 flex flex-col items-center justify-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] cursor-default group/micro"
-                        style={{ padding: "clamp(3px, 1.0cqi, 7px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
-                      >
-                        <span className="group-hover/micro:scale-110 transition-transform" style={{ fontSize: "clamp(7px, 1.9cqi, 12px)" }}>💖</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)" }}>
-                          Empatía
-                        </div>
-                        <div className="text-gray-300 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.1cqi, 7px)" }}>
-                          & Pasión
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Row 4: Botón Sofía presentación */}
-                  <div className="w-full">
+                  {/* Sleek Floating Bottom-Right Pill Button */}
+                  <div className="absolute bottom-[4.5%] right-[4.5%] z-30 pointer-events-auto">
                     <button
                       type="button"
-                      onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
-                      className="w-full px-3 py-1.5 rounded-full bg-gradient-to-r from-[#1A0812]/90 via-black/80 to-[#1A0812]/90 hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.35)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(255,56,88,0.6)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openVideo(SOFIA_VIDEO, "desktop");
+                      }}
+                      className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#1A0812]/90 via-black/85 to-[#1A0812]/90 hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.35)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(255,56,88,0.6)] transition-all cursor-pointer hover:scale-105 active:scale-95 group/btn"
                     >
-                      <div 
-                        className="rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_12px_#FF3858] transition-transform"
-                        style={{ width: "clamp(14px, 2.8cqi, 20px)", height: "clamp(14px, 2.8cqi, 20px)" }}
-                      >
-                        <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#FF3858] transition-transform">
+                        <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
                       </div>
-                      <span 
-                        className="font-bold text-white whitespace-nowrap drop-shadow-md leading-none tracking-wide"
-                        style={{ fontSize: "clamp(7px, 2.0cqi, 11px)" }}
-                      >
+                      <span className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap drop-shadow-md leading-none">
                         Sofía presentación
                       </span>
-                      <div 
-                        className="rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                        style={{ width: "clamp(14px, 2.8cqi, 20px)", height: "clamp(14px, 2.8cqi, 20px)" }}
-                      >
-                        <ArrowRight className="w-1/2 h-1/2 text-white" />
-                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
                     </button>
                   </div>
                 </div>
@@ -385,25 +283,6 @@ export default function AIPersonasSection() {
                   priority
                 />
 
-                {/* Left Area Click Trigger (Avatar) - Símbolo de video elegante en hover */}
-                <div
-                  onClick={() => openVideo(IVAN_VIDEO, "desktop")}
-                  className="absolute top-0 left-0 bottom-0 w-[52%] z-20 cursor-pointer group/avatar"
-                  title="Haz clic para ver el video de presentación de Iván"
-                >
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 transform scale-90 group-hover/avatar:scale-100">
-                    <div className="px-4 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(0,209,255,0.7)] group-hover/avatar:border-[#00D1FF] transition-colors">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
-                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
-                      </div>
-                      <div className="text-left leading-tight">
-                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
-                        <div className="text-[9px] text-[#00D1FF] font-medium font-mono">VIDEO HD • 60FPS</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 {/* TOP HEADER PILL: HEMISFERIO LÓGICO (Centered right above IVÁN 3D Title) */}
                 <div className="absolute top-[8.5%] left-[56%] right-[10%] z-20 flex justify-center pointer-events-none">
                   <div 
@@ -414,135 +293,42 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* RIGHT SIDE: ANIMATED & INTERACTIVE GLASS HUD DIALOGUE SYSTEM */}
-                <div 
-                  className="absolute top-[37%] left-[54%] right-[3.5%] bottom-[3.5%] z-20 flex flex-col justify-between"
-                  style={{ gap: "clamp(4px, 1.1cqi, 8px)" }}
+                {/* FULL CARD INTERACTIVE VIDEO TRIGGER */}
+                <div
+                  onClick={() => openVideo(IVAN_VIDEO, "desktop")}
+                  className="absolute inset-0 z-20 cursor-pointer group/card"
+                  title="Haz clic para ver el video de presentación de Iván"
                 >
-                  {/* Row 1: Misión / Descripción Glass Card */}
-                  <div 
-                    className="w-full rounded-xl sm:rounded-2xl bg-black/35 hover:bg-black/50 backdrop-blur-md border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.5),inset_0_0_15px_rgba(0,209,255,0.08)] flex items-center"
-                    style={{ padding: "clamp(5px, 1.4cqi, 10px)" }}
-                  >
-                    <p 
-                      className="text-gray-200 font-light leading-relaxed"
-                      style={{ fontSize: "clamp(5.5px, 1.55cqi, 9.5px)" }}
-                    >
-                      Representa la <span className="text-[#00D1FF] font-semibold drop-shadow-[0_0_8px_rgba(0,209,255,0.5)]">lógica</span>, la estructura y la tecnología. Transforma ideas en <span className="text-[#70D6FF] font-semibold drop-shadow-[0_0_8px_rgba(112,214,255,0.4)]">soluciones sólidas, escalables</span>, eficientes y seguras.
-                    </p>
-                  </div>
-
-                  {/* Row 2: Personalidad Card */}
-                  <div 
-                    className="w-full rounded-xl sm:rounded-2xl bg-black/35 hover:bg-black/50 backdrop-blur-md border border-[#00D1FF]/35 hover:border-[#00D1FF]/80 transition-all duration-300 shadow-[0_4px_25px_rgba(0,0,0,0.5),inset_0_0_15px_rgba(0,209,255,0.08)] flex flex-col justify-center"
-                    style={{ padding: "clamp(4px, 1.3cqi, 9px)", gap: "clamp(2px, 0.6cqi, 4px)" }}
-                  >
-                    <div 
-                      className="inline-flex items-center font-mono font-bold text-[#00D1FF] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
-                    >
-                      ✦ PERSONALIDAD
-                    </div>
-                    <div className="flex flex-col" style={{ gap: "clamp(1px, 0.4cqi, 3px)" }}>
-                      <div 
-                        className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)", gap: "clamp(3px, 0.8cqi, 5px)" }}
-                      >
-                        <span className="text-[#00D1FF] drop-shadow-[0_0_6px_#00D1FF]">⚙️</span>
-                        <span>Lógico y analítico</span>
+                  {/* Center Hover Play Badge */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-all duration-300 transform scale-90 group-hover/card:scale-100">
+                    <div className="px-4 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(0,209,255,0.7)]">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
+                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
                       </div>
-                      <div 
-                        className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)", gap: "clamp(3px, 0.8cqi, 5px)" }}
-                      >
-                        <span className="text-[#70D6FF] drop-shadow-[0_0_6px_#70D6FF]">🛡️</span>
-                        <span>Responsable y confiable</span>
-                      </div>
-                      <div 
-                        className="flex items-center text-gray-200 font-medium leading-none"
-                        style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)", gap: "clamp(3px, 0.8cqi, 5px)" }}
-                      >
-                        <span className="text-[#FFD166] drop-shadow-[0_0_6px_#FFD166]">⚡</span>
-                        <span>Innovador y enfocado</span>
+                      <div className="text-left leading-tight">
+                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
+                        <div className="text-[9px] text-[#00D1FF] font-medium font-mono">VIDEO HD • 60FPS</div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Row 3: Elementos Clave (3 Micro Cards) */}
-                  <div className="w-full flex flex-col" style={{ gap: "clamp(2px, 0.6cqi, 4px)" }}>
-                    <div 
-                      className="font-mono font-bold text-[#00D1FF] uppercase tracking-wider leading-none"
-                      style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
-                    >
-                      ✦ ELEMENTOS CLAVE
-                    </div>
-                    <div className="grid grid-cols-3" style={{ gap: "clamp(3px, 0.8cqi, 6px)" }}>
-                      <div 
-                        className="rounded-lg sm:rounded-xl bg-black/35 hover:bg-[#00D1FF]/20 backdrop-blur-md border border-[#00D1FF]/30 hover:border-[#00D1FF] transition-all duration-300 flex flex-col items-center justify-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] cursor-default group/micro"
-                        style={{ padding: "clamp(3px, 1.0cqi, 7px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
-                      >
-                        <span className="font-mono text-[#00D1FF] font-black group-hover/micro:scale-110 transition-transform drop-shadow-[0_0_6px_#00D1FF]" style={{ fontSize: "clamp(7px, 1.9cqi, 12px)" }}>&lt;/&gt;</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)" }}>
-                          Código
-                        </div>
-                        <div className="text-[#00D1FF] font-mono leading-none" style={{ fontSize: "clamp(4px, 1.1cqi, 7px)" }}>
-                          & Estructura
-                        </div>
-                      </div>
-
-                      <div 
-                        className="rounded-lg sm:rounded-xl bg-black/35 hover:bg-[#00D1FF]/20 backdrop-blur-md border border-[#00D1FF]/30 hover:border-[#00D1FF] transition-all duration-300 flex flex-col items-center justify-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] cursor-default group/micro"
-                        style={{ padding: "clamp(3px, 1.0cqi, 7px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
-                      >
-                        <span className="group-hover/micro:scale-110 transition-transform" style={{ fontSize: "clamp(7px, 1.9cqi, 12px)" }}>🧊</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)" }}>
-                          Arquitectura
-                        </div>
-                        <div className="text-gray-300 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.1cqi, 7px)" }}>
-                          & Solidez
-                        </div>
-                      </div>
-
-                      <div 
-                        className="rounded-lg sm:rounded-xl bg-black/35 hover:bg-[#00D1FF]/20 backdrop-blur-md border border-[#00D1FF]/30 hover:border-[#00D1FF] transition-all duration-300 flex flex-col items-center justify-center text-center shadow-[0_2px_12px_rgba(0,0,0,0.4)] cursor-default group/micro"
-                        style={{ padding: "clamp(3px, 1.0cqi, 7px)", gap: "clamp(1px, 0.3cqi, 2px)" }}
-                      >
-                        <span className="group-hover/micro:scale-110 transition-transform" style={{ fontSize: "clamp(7px, 1.9cqi, 12px)" }}>⚡</span>
-                        <div className="font-bold text-white leading-tight" style={{ fontSize: "clamp(5px, 1.4cqi, 8.5px)" }}>
-                          Ingeniería
-                        </div>
-                        <div className="text-gray-300 font-mono leading-none" style={{ fontSize: "clamp(4px, 1.1cqi, 7px)" }}>
-                          & Eficiencia
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Row 4: Botón Iván presentación */}
-                  <div className="w-full">
+                  {/* Sleek Floating Bottom-Right Pill Button */}
+                  <div className="absolute bottom-[4.5%] right-[4.5%] z-30 pointer-events-auto">
                     <button
                       type="button"
-                      onClick={() => openVideo(IVAN_VIDEO, "desktop")}
-                      className="w-full px-3 py-1.5 rounded-full bg-gradient-to-r from-[#06101E]/90 via-black/80 to-[#06101E]/90 hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.35)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.6)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openVideo(IVAN_VIDEO, "desktop");
+                      }}
+                      className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#06101E]/90 via-black/85 to-[#06101E]/90 hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.35)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.6)] transition-all cursor-pointer hover:scale-105 active:scale-95 group/btn"
                     >
-                      <div 
-                        className="rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_12px_#00D1FF] transition-transform"
-                        style={{ width: "clamp(14px, 2.8cqi, 20px)", height: "clamp(14px, 2.8cqi, 20px)" }}
-                      >
-                        <Play className="w-1/2 h-1/2 fill-white text-white ml-0.5" />
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#00D1FF] transition-transform">
+                        <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
                       </div>
-                      <span 
-                        className="font-bold text-white whitespace-nowrap drop-shadow-md leading-none tracking-wide"
-                        style={{ fontSize: "clamp(7px, 2.0cqi, 11px)" }}
-                      >
+                      <span className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap drop-shadow-md leading-none">
                         Iván presentación
                       </span>
-                      <div 
-                        className="rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform"
-                        style={{ width: "clamp(14px, 2.8cqi, 20px)", height: "clamp(14px, 2.8cqi, 20px)" }}
-                      >
-                        <ArrowRight className="w-1/2 h-1/2 text-white" />
-                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
                     </button>
                   </div>
                 </div>
