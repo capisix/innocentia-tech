@@ -162,6 +162,32 @@ export default function AIPersonasSection() {
                   className="object-contain relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
                   priority
                 />
+
+                {/* Center Hover Presentation Trigger Badge */}
+                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none opacity-0 group-hover/art:opacity-100 transition-all duration-300 transform scale-90 group-hover/art:scale-100">
+                  <div className="px-5 py-3 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold flex items-center gap-3.5 shadow-[0_0_35px_rgba(255,56,88,0.7)]">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_15px_#FF3858] flex-shrink-0">
+                      <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+                    </div>
+                    <div className="text-left leading-tight">
+                      <div className="text-[12px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
+                      <div className="text-[9.5px] text-[#FF5470] font-medium font-mono">VIDEO HD • 60FPS</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sleek Floating Bottom-Right Pill Button - Properly Aligned Inside Frame */}
+                <div className="absolute bottom-3.5 right-3.5 z-20 pointer-events-auto">
+                  <div className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#1A0812]/90 via-black/85 to-[#1A0812]/90 hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.35)] transition-all cursor-pointer group-hover/art:border-[#FF3858]">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_#FF3858]">
+                      <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
+                    </div>
+                    <span className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap drop-shadow-md leading-none">
+                      Sofía presentación
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 text-white/70" />
+                  </div>
+                </div>
               </div>
 
               {/* MOBILE VIEW (Dedicated Portrait Artwork) */}
@@ -307,6 +333,32 @@ export default function AIPersonasSection() {
                   className="object-contain relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
                   priority
                 />
+
+                {/* Center Hover Presentation Trigger Badge */}
+                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none opacity-0 group-hover/art:opacity-100 transition-all duration-300 transform scale-90 group-hover/art:scale-100">
+                  <div className="px-5 py-3 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold flex items-center gap-3.5 shadow-[0_0_35px_rgba(0,209,255,0.7)]">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
+                      <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+                    </div>
+                    <div className="text-left leading-tight">
+                      <div className="text-[12px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
+                      <div className="text-[9.5px] text-[#00D1FF] font-medium font-mono">VIDEO HD • 60FPS</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sleek Floating Bottom-Right Pill Button - Properly Aligned Inside Frame */}
+                <div className="absolute bottom-3.5 right-3.5 z-20 pointer-events-auto">
+                  <div className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#06101E]/90 via-black/85 to-[#06101E]/90 hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.35)] transition-all cursor-pointer group-hover/art:border-[#00D1FF]">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_#00D1FF]">
+                      <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
+                    </div>
+                    <span className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap drop-shadow-md leading-none">
+                      Iván presentación
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 text-white/70" />
+                  </div>
+                </div>
               </div>
 
               {/* MOBILE VIEW (Dedicated Portrait Artwork) */}
