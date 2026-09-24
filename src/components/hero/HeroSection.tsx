@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageSquare, ChevronDown } from "../../lib/icons";
 
@@ -13,6 +13,28 @@ export default function HeroSection({
   onOpenProjectModal,
   onOpenChatModal,
 }: HeroSectionProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
   return (
     <section
       id="hero"
@@ -116,6 +138,7 @@ export default function HeroSection({
                 {/* Video inside the Safe Zone with Deep Black Background */}
                 <div className="absolute inset-0 flex items-center justify-center bg-black">
                   <video
+                    ref={videoRef}
                     src="/videos/hero_floating_astronaut.mp4"
                     autoPlay
                     loop
@@ -123,6 +146,7 @@ export default function HeroSection({
                     playsInline
                     preload="metadata"
                     poster="/images/hero_dual_desk_studio.png"
+                    disablePictureInPicture
                     className="w-full h-full object-contain filter brightness-105 contrast-105 scale-100 transition-transform duration-700"
                   />
                 </div>

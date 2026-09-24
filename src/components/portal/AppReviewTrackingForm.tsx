@@ -1005,7 +1005,7 @@ _Generado automáticamente desde el Portal de Seguimiento Innocentia._`;
                   <div className="space-y-1">
                     <div className="inline-flex items-center gap-2 text-xs font-mono text-[#00D1FF] uppercase font-bold tracking-wider">
                       <Building2 className="w-3.5 h-3.5" />
-                      <span>Paso 1: Vinculación de Proyecto e Identificación</span>
+                      <span>Paso 1: Vinculación de Proyecto</span>
                     </div>
                     <h2 className="text-xl sm:text-2xl font-black text-white uppercase font-mono">
                       ¿A qué proyecto se vincula este reporte?

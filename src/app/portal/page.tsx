@@ -240,6 +240,8 @@ function PortalMainContent() {
   const [gateAuthError, setGateAuthError] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [partnerProjectFilter, setPartnerProjectFilter] = useState<"todos" | "daniel" | "produccion" | "desarrollo">("todos");
+  const [copiedPartnerDemo, setCopiedPartnerDemo] = useState<string | null>(null);
 
   // Initialize from URL and enforce mandatory password lock for CEO & Socios
   useEffect(() => {
@@ -5805,32 +5807,391 @@ function PortalMainContent() {
               </div>
             )}
 
-            {/* Partner Tab 4: Proyectos */}
+            {/* Partner Tab 4: Proyectos & Demos Multiplataforma */}
             {partnerTab === "proyectos" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.map((proj) => (
-                  <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <span className="text-[10px] font-mono text-purple-400 font-bold">{proj.id}</span>
-                        <h3 className="text-lg font-black text-white">{proj.name}</h3>
-                        <p className="text-xs text-gray-400">Cliente: {proj.client}</p>
+              <div className="space-y-8 animate-fadeIn">
+                {/* Header & Filter Stats */}
+                <div className="p-6 sm:p-8 rounded-[32px] bg-gradient-to-br from-[#0B0B14] via-[#07070E] to-[#12072B] border border-purple-500/30 space-y-6 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+                  
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+                    <div className="space-y-1.5">
+                      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 text-xs font-mono font-bold uppercase">
+                        <Building2 className="w-3.5 h-3.5 text-purple-400" />
+                        <span>PORTAFOLIO DE PROYECTOS &amp; DEMOS EN VIVO</span>
                       </div>
-                      <span className="text-xs font-mono font-bold text-emerald-400">${proj.budget.toLocaleString()} MXN</span>
+                      <h2 className="text-xl sm:text-2xl font-black text-white font-mono uppercase tracking-tight">
+                        Proyectos Asignados &amp; Demos Multiplataforma
+                      </h2>
+                      <p className="text-xs sm:text-sm text-gray-300 font-mono">
+                        Supervisa el estatus técnico, fases de desarrollo, sprints y comparte demostraciones interactivas con clientes y prospectos.
+                      </p>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 text-xs font-mono space-y-1">
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Tech Lead:</span>
-                        <span className="text-white font-bold">{proj.devLead}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Diseño:</span>
-                        <span className="text-white font-bold">{proj.uxLead}</span>
-                      </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const msg = `🌮 *DEMO INTERACTIVO • TAQUERÍA LARRY (INNOCENTIA TECH)*\n\nHola, te comparto la demostración en vivo de la plataforma multi-sucursal y punto de venta desarrollada para Taquería Larry:\n👉 https://multicommerce-omega.vercel.app/tacoslarry\n\n_Asesor / Socio: Daniel Torre (SOC-DAN-201)_`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+                        }}
+                        className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-mono font-bold text-xs flex items-center gap-2 shadow-lg hover:scale-105 transition-all cursor-pointer"
+                      >
+                        <Share2 className="w-4 h-4" />
+                        <span>Compartir Demo Larry (WhatsApp)</span>
+                      </button>
                     </div>
                   </div>
-                ))}
+
+                  {/* Summary Metric Badges */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10 pt-2 border-t border-white/10 text-xs font-mono">
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                      <span className="text-gray-400 block text-[10px] uppercase">Proyectos Registrados</span>
+                      <strong className="text-lg font-black text-white">{projects.length}</strong>
+                    </div>
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                      <span className="text-gray-400 block text-[10px] uppercase">Presupuesto en Gestión</span>
+                      <strong className="text-lg font-black text-emerald-400">
+                        ${projects.reduce((acc, p) => acc + (p.budget || 0), 0).toLocaleString()} MXN
+                      </strong>
+                    </div>
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                      <span className="text-gray-400 block text-[10px] uppercase">Demos en Producción</span>
+                      <strong className="text-lg font-black text-[#00D1FF]">4 Activos</strong>
+                    </div>
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                      <span className="text-gray-400 block text-[10px] uppercase">Código de Socio</span>
+                      <strong className="text-lg font-black text-purple-400 font-mono">SOC-DAN-201</strong>
+                    </div>
+                  </div>
+
+                  {/* Filter Pills */}
+                  <div className="flex items-center gap-2 flex-wrap relative z-10 pt-1">
+                    {[
+                      { id: "todos", label: `Todos los Proyectos (${projects.length})` },
+                      { id: "daniel", label: `🌮 Mis Proyectos (Daniel Torre)` },
+                      { id: "produccion", label: `⚡ En Producción` },
+                      { id: "desarrollo", label: `🛠️ En Desarrollo / Revisión` },
+                    ].map((f) => (
+                      <button
+                        key={f.id}
+                        type="button"
+                        onClick={() => setPartnerProjectFilter(f.id as any)}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                          partnerProjectFilter === f.id
+                            ? "bg-purple-600 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                            : "bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10"
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* MULTIPLATFORM DEMO CAROUSEL / SHOWCASE SECTION */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 font-bold uppercase tracking-wider">
+                      <Sparkles className="w-4 h-4 text-[#00D1FF] animate-pulse" />
+                      <span>DEMOS MULTIPLATAFORMA DISPONIBLES EN VIVO</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-gray-400">
+                      Haz clic para probar o copiar enlaces directos
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                      {
+                        id: "demo_tacoslarry",
+                        title: "Taquería Larry",
+                        category: "POS & Menú Digital",
+                        url: "https://multicommerce-omega.vercel.app/tacoslarry",
+                        badge: "🌮 Proyecto Daniel Torre",
+                        desc: "Plataforma multi-sucursales, punto de venta en tiempo real y pedidos online.",
+                        color: "#FF3858",
+                      },
+                      {
+                        id: "demo_openhouse",
+                        title: "Open House 360",
+                        category: "PropTech & Terrenos",
+                        url: "/demo/openhouse",
+                        badge: "🏡 App PropTech 360",
+                        desc: "Catálogo interactivo de terrenos en Yucatán, calendario y cotizaciones automáticas.",
+                        color: "#00D1FF",
+                      },
+                      {
+                        id: "demo_axana",
+                        title: "Axana Store",
+                        category: "E-Commerce Móvil",
+                        url: "https://app.multiplataforma.innocentia.tech/#demo-axana",
+                        badge: "🛍️ Catálogo Digital",
+                        desc: "Catálogo dinámico con carrito, checkout y pedidos directos a WhatsApp API.",
+                        color: "#8A2BE2",
+                      },
+                      {
+                        id: "demo_safely",
+                        title: "Experience Safely",
+                        category: "Turismo & Reservas",
+                        url: "https://experiencesafely.com",
+                        badge: "🌴 Motor de Reservas VIP",
+                        desc: "Reservas de tours con código QR dinámico, pagos Stripe y validación en taquilla.",
+                        color: "#10B981",
+                      },
+                    ].map((demo) => {
+                      const isCopied = copiedPartnerDemo === demo.id;
+                      return (
+                        <div
+                          key={demo.id}
+                          className="p-5 rounded-3xl bg-[#07070E] border border-white/15 hover:border-cyan-500/50 transition-all shadow-xl space-y-3.5 flex flex-col justify-between group relative overflow-hidden"
+                        >
+                          <div
+                            className="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-2xl pointer-events-none opacity-20"
+                            style={{ backgroundColor: demo.color }}
+                          />
+
+                          <div className="space-y-2 relative z-10">
+                            <div className="flex items-center justify-between">
+                              <span
+                                className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border"
+                                style={{
+                                  backgroundColor: `${demo.color}15`,
+                                  borderColor: `${demo.color}40`,
+                                  color: demo.color,
+                                }}
+                              >
+                                {demo.badge}
+                              </span>
+                              <span className="text-[10px] font-mono text-gray-400">{demo.category}</span>
+                            </div>
+
+                            <h3 className="text-base font-black text-white font-mono">{demo.title}</h3>
+                            <p className="text-xs text-gray-300 font-light leading-relaxed">{demo.desc}</p>
+                          </div>
+
+                          <div className="space-y-2 pt-2 border-t border-white/10 relative z-10">
+                            <div className="flex items-center gap-2">
+                              <Link
+                                href={demo.url}
+                                target={demo.url.startsWith("http") ? "_blank" : undefined}
+                                className="flex-1 py-2 rounded-xl bg-cyan-500/20 hover:bg-[#00D1FF] text-[#00D1FF] hover:text-black border border-cyan-500/40 text-xs font-mono font-bold transition-all flex items-center justify-center gap-1.5 shadow-md text-center cursor-pointer"
+                              >
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>Abrir Demo</span>
+                                <ExternalLink className="w-3 h-3" />
+                              </Link>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const fullUrl = demo.url.startsWith("http") ? demo.url : `https://innocentia.tech${demo.url}`;
+                                  navigator.clipboard.writeText(fullUrl);
+                                  setCopiedPartnerDemo(demo.id);
+                                  setTimeout(() => setCopiedPartnerDemo(null), 3000);
+                                }}
+                                title="Copiar enlace del demo"
+                                className="p-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-gray-300 hover:text-white transition-all cursor-pointer"
+                              >
+                                {isCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Link2 className="w-4 h-4 text-cyan-400" />}
+                              </button>
+                            </div>
+                            {isCopied && (
+                              <span className="text-[10px] font-mono text-emerald-400 text-center block animate-fadeIn">
+                                ✓ ¡Enlace copiado al portapapeles!
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* DETAILED PROJECTS GRID */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-mono text-purple-400 font-bold uppercase tracking-wider">
+                      <Layers className="w-4 h-4 text-purple-400" />
+                      <span>FICHAS EJECUTIVAS DE PROYECTOS &amp; AVANCES TÉCNICOS</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {projects
+                      .filter((proj) => {
+                        if (partnerProjectFilter === "daniel") {
+                          return (
+                            (proj.sellerId || "").includes("daniel") ||
+                            (proj.sellerName || "").toLowerCase().includes("daniel") ||
+                            proj.id.includes("TACOSLARRY")
+                          );
+                        }
+                        if (partnerProjectFilter === "produccion") return proj.status === "En Producción" || proj.status === "Completado";
+                        if (partnerProjectFilter === "desarrollo") return proj.status === "En Desarrollo" || proj.status === "En Revisión";
+                        return true;
+                      })
+                      .map((proj) => {
+                        const isDanielProject =
+                          (proj.sellerId || "").includes("daniel") ||
+                          (proj.sellerName || "").toLowerCase().includes("daniel") ||
+                          proj.id.includes("TACOSLARRY");
+
+                        return (
+                          <div
+                            key={proj.id}
+                            className={`p-6 sm:p-7 rounded-[32px] bg-[#07070E] border transition-all shadow-xl space-y-5 flex flex-col justify-between ${
+                              isDanielProject
+                                ? "border-purple-500/50 bg-gradient-to-br from-[#0B0B14] to-[#07070E] shadow-[0_0_30px_rgba(168,85,247,0.15)]"
+                                : "border-white/15 hover:border-purple-500/40"
+                            }`}
+                          >
+                            <div className="space-y-4">
+                              {/* Top Header */}
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-[10px] font-mono text-purple-400 font-bold px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/30">
+                                      {proj.id}
+                                    </span>
+                                    {isDanielProject && (
+                                      <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                                        <span>🌮</span>
+                                        <span>Proyecto Daniel Torre</span>
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h3 className="text-lg font-black text-white font-mono leading-snug pt-1">
+                                    {proj.name}
+                                  </h3>
+                                  <p className="text-xs text-gray-300 font-mono">
+                                    Cliente: <strong className="text-white">{proj.client}</strong> {proj.clientEmail && `(${proj.clientEmail})`}
+                                  </p>
+                                </div>
+
+                                <span
+                                  className={`text-[10px] font-mono font-bold px-3 py-1 rounded-full border flex-shrink-0 ${
+                                    proj.status === "En Producción" || proj.status === "Completado"
+                                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                                      : proj.status === "Por Iniciar"
+                                      ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                                      : "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]/40"
+                                  }`}
+                                >
+                                  {proj.status}
+                                </span>
+                              </div>
+
+                              {/* Progress Bar */}
+                              <div className="space-y-1.5 p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 font-mono">
+                                <div className="flex justify-between text-xs">
+                                  <span className="text-gray-400">Avance General del Proyecto</span>
+                                  <span className="text-white font-bold">{proj.progress}%</span>
+                                </div>
+                                <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-gradient-to-r from-purple-500 via-[#00D1FF] to-emerald-400 rounded-full transition-all duration-500"
+                                    style={{ width: `${proj.progress}%` }}
+                                  />
+                                </div>
+                                <p className="text-[11px] text-gray-300 pt-1 leading-relaxed">
+                                  {proj.currentSprint}
+                                </p>
+                              </div>
+
+                              {/* Financial Breakdown for Partner */}
+                              <div className="grid grid-cols-3 gap-2 text-xs font-mono p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/20 to-blue-950/20 border border-purple-500/20">
+                                <div>
+                                  <span className="text-gray-400 block text-[10px]">Presupuesto:</span>
+                                  <strong className="text-white text-xs">${proj.budget.toLocaleString()} MXN</strong>
+                                </div>
+                                <div>
+                                  <span className="text-gray-400 block text-[10px]">Cobrado:</span>
+                                  <strong className="text-emerald-400 text-xs">${(proj.paidAmount || 0).toLocaleString()} MXN</strong>
+                                </div>
+                                <div>
+                                  <span className="text-gray-400 block text-[10px]">Por Cobrar:</span>
+                                  <strong className="text-amber-400 text-xs">
+                                    ${Math.max(0, proj.budget - (proj.paidAmount || 0)).toLocaleString()} MXN
+                                  </strong>
+                                </div>
+                              </div>
+
+                              {/* Technical & Commercial Assignments */}
+                              <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 text-xs font-mono space-y-1.5">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Dev Lead:</span>
+                                  <span className="text-white font-bold">{proj.devLead}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Diseño UI/UX:</span>
+                                  <span className="text-white font-bold">{proj.uxLead}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">DevOps &amp; Cloud:</span>
+                                  <span className="text-white font-bold">{proj.devopsLead || "Iván Castillo (CEO)"}</span>
+                                </div>
+                                <div className="flex justify-between border-t border-white/5 pt-1">
+                                  <span className="text-gray-400">Socio / Asesor:</span>
+                                  <span className="text-purple-300 font-bold">{proj.sellerName}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Actions & Live Demo Links */}
+                            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t border-white/10">
+                              <span className="text-[11px] font-mono text-gray-400">
+                                📅 {proj.targetDate || "En Operación"}
+                              </span>
+
+                              <div className="flex items-center gap-2 flex-wrap">
+                                {proj.demoUrl && (
+                                  <Link
+                                    href={proj.demoUrl}
+                                    target={proj.demoUrl.startsWith("http") ? "_blank" : undefined}
+                                    className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-[#00D1FF] text-white font-mono font-bold text-xs flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,209,255,0.3)] hover:scale-105 transition-all cursor-pointer"
+                                  >
+                                    <Sparkles className="w-3.5 h-3.5" />
+                                    <span>Ver Demo en Vivo</span>
+                                    <ExternalLink className="w-3 h-3" />
+                                  </Link>
+                                )}
+
+                                <button
+                                  type="button"
+                                  onClick={() => setPartnerTab("chat")}
+                                  className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-gray-300 hover:text-white text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                                >
+                                  <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
+                                  <span>Chat</span>
+                                </button>
+
+                                {proj.demoUrl && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const fullUrl = proj.demoUrl?.startsWith("http") ? proj.demoUrl : `https://innocentia.tech${proj.demoUrl}`;
+                                      navigator.clipboard.writeText(fullUrl);
+                                      setCopiedPartnerDemo(proj.id);
+                                      setTimeout(() => setCopiedPartnerDemo(null), 3000);
+                                    }}
+                                    title="Copiar enlace de demo"
+                                    className="p-2 rounded-xl bg-white/5 hover:bg-white/15 border border-white/15 text-gray-400 hover:text-white transition-all cursor-pointer"
+                                  >
+                                    {copiedPartnerDemo === proj.id ? (
+                                      <Check className="w-4 h-4 text-emerald-400" />
+                                    ) : (
+                                      <Link2 className="w-4 h-4 text-purple-400" />
+                                    )}
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
               </div>
             )}
 

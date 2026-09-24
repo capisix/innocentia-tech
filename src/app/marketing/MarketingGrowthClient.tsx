@@ -576,6 +576,9 @@ export default function MarketingGrowthClient() {
                 src="/videos/ivan_segmentacion.mp4"
                 controls
                 autoPlay
+                playsInline
+                preload="metadata"
+                disablePictureInPicture
                 className="w-full h-full object-cover"
               />
             </div>

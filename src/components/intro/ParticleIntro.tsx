@@ -124,6 +124,7 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
             playsInline
             muted={isMuted}
             preload="metadata"
+            disablePictureInPicture
             onLoadedData={() => setIsVideoLoaded(true)}
             className={`w-full h-full object-cover transition-opacity duration-500 ${
               isVideoLoaded ? "opacity-100" : "opacity-0"

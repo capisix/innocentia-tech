@@ -16,6 +16,10 @@ import {
   Sparkles,
   Lock,
   RotateCcw,
+  ExternalLink,
+  Link2,
+  Check,
+  Share2,
 } from "../../lib/icons";
 import { UserAccount } from "./AuthLoginModal";
 
@@ -41,7 +45,7 @@ export default function UserProfileModal({
   activeUser,
   onUpdateUser,
 }: UserProfileModalProps) {
-  const [activeTab, setActiveTab] = useState<"foto" | "password" | "cuenta">("foto");
+  const [activeTab, setActiveTab] = useState<"foto" | "password" | "cuenta" | "proyectos">("foto");
 
   // Avatar state
   const [avatarPreview, setAvatarPreview] = useState<string>(activeUser.avatarUrl || "");
@@ -59,6 +63,7 @@ export default function UserProfileModal({
   // Feedback states
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [copiedDemo, setCopiedDemo] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -214,6 +219,23 @@ export default function UserProfileModal({
           >
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Cuenta</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab("proyectos");
+              setErrorMessage("");
+              setSuccessMessage("");
+            }}
+            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeTab === "proyectos"
+                ? "bg-white/15 text-white"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-[#00D1FF]" />
+            <span>Proyectos &amp; Demos</span>
           </button>
         </div>
 
@@ -466,6 +488,139 @@ export default function UserProfileModal({
                 className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold cursor-pointer"
               >
                 Entendido
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 4: PROYECTOS & DEMOS MULTIPLATAFORMA */}
+        {/* ========================================================================= */}
+        {activeTab === "proyectos" && (
+          <div className="space-y-4 text-xs font-mono animate-in fade-in duration-200">
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/30 to-blue-950/30 border border-purple-500/30 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-purple-300 font-bold uppercase text-[10px] flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  Portafolio &amp; Demos Multiplataforma
+                </span>
+                <span className="text-[10px] text-gray-400">
+                  {activeUser.role === "socio" ? "Socio: SOC-DAN-201" : activeUser.roleTitle}
+                </span>
+              </div>
+              <p className="text-[11px] text-gray-300 font-light">
+                Demostraciones interactivas en vivo asignadas a tu cuenta para validación técnica y presentación comercial:
+              </p>
+            </div>
+
+            <div className="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1">
+              {[
+                {
+                  id: "demo_larry",
+                  title: "🌮 Taquería Larry • POS & Multi-Sucursales",
+                  desc: "Plataforma multi-bodegas, corte de caja por bancos y pedidos en línea (Proyecto Daniel Torre).",
+                  url: "https://multicommerce-omega.vercel.app/tacoslarry",
+                  badge: "🌮 Proyecto Daniel",
+                  color: "#FF3858",
+                },
+                {
+                  id: "demo_openhouse",
+                  title: "🏡 Open House 360 • App PropTech",
+                  desc: "Venta interactiva de terrenos y lotes residenciales en Yucatán con cotizador y agenda.",
+                  url: "/demo/openhouse",
+                  badge: "🏡 PropTech 360",
+                  color: "#00D1FF",
+                },
+                {
+                  id: "demo_axana",
+                  title: "🛍️ Axana Shoes • E-Commerce & WhatsApp",
+                  desc: "Catálogo dinámico con carrito inteligente y despacho automatizado a WhatsApp API.",
+                  url: "https://app.multiplataforma.innocentia.tech/#demo-axana",
+                  badge: "🛍️ Catálogo",
+                  color: "#8A2BE2",
+                },
+                {
+                  id: "demo_safely",
+                  title: "🌴 Experience Safely • Reservas VIP",
+                  desc: "Motor de reservaciones turísticas con emisión de boletos QR y pasarela de cobro Stripe.",
+                  url: "https://experiencesafely.com",
+                  badge: "🌴 Reservas VIP",
+                  color: "#10B981",
+                },
+              ].map((item) => {
+                const isCopied = copiedDemo === item.id;
+                return (
+                  <div
+                    key={item.id}
+                    className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-[#00D1FF]/40 transition-all space-y-2.5"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h5 className="text-white font-bold text-xs">{item.title}</h5>
+                        <p className="text-[10px] text-gray-400 font-light mt-0.5">{item.desc}</p>
+                      </div>
+                      <span
+                        className="text-[9px] font-bold px-2 py-0.5 rounded-md border flex-shrink-0"
+                        style={{
+                          backgroundColor: `${item.color}15`,
+                          borderColor: `${item.color}40`,
+                          color: item.color,
+                        }}
+                      >
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <a
+                        href={item.url}
+                        target={item.url.startsWith("http") ? "_blank" : undefined}
+                        rel="noreferrer"
+                        className="flex-1 py-1.5 px-3 rounded-xl bg-[#00D1FF]/20 hover:bg-[#00D1FF] text-[#00D1FF] hover:text-black font-bold text-[10px] flex items-center justify-center gap-1.5 transition-all text-center"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        <span>Abrir Demo en Vivo</span>
+                      </a>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const fullUrl = item.url.startsWith("http") ? item.url : `https://innocentia.tech${item.url}`;
+                          navigator.clipboard.writeText(fullUrl);
+                          setCopiedDemo(item.id);
+                          setTimeout(() => setCopiedDemo(null), 3000);
+                        }}
+                        className="py-1.5 px-3 rounded-xl bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white border border-white/10 text-[10px] flex items-center gap-1 transition-all cursor-pointer"
+                      >
+                        {isCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Link2 className="w-3 h-3 text-cyan-400" />}
+                        <span>{isCopied ? "Copiado" : "Copiar"}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const fullUrl = item.url.startsWith("http") ? item.url : `https://innocentia.tech${item.url}`;
+                          const shareText = `🚀 Te comparto el demo interactivo de ${item.title}:\n👉 ${fullUrl}\n\n_Asesor: Daniel Torre (SOC-DAN-201)_`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank");
+                        }}
+                        title="Compartir por WhatsApp"
+                        className="p-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 text-[10px] flex items-center gap-1 transition-all cursor-pointer"
+                      >
+                        <Share2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold cursor-pointer text-xs"
+              >
+                Cerrar
               </button>
             </div>
           </div>

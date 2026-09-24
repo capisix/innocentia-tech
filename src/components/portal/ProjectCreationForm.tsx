@@ -439,7 +439,6 @@ export default function ProjectCreationForm({
 🚀 *FICHA DE PROYECTO & COTIZACIÓN • INNOCENTIA TECH*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 *Folio de Proyecto:* ${folio}
-🆔 *ID de Registro:* ${registeredClientId || "CLI-2026-8941"}
 📅 *Fecha:* ${new Date().toLocaleDateString("es-MX", { dateStyle: "long" })}
 
 👤 *DATOS DE LA EMPRESA & CONTACTO:*
@@ -569,7 +568,6 @@ ${techSection}
                 {clientCompany} — {clientName}
               </strong>
               {clientIndustry && <span className="text-gray-400 ml-2">({clientIndustry})</span>}
-              <span className="text-emerald-400 ml-2 font-bold">[{registeredClientId}]</span>
             </div>
           </div>
 

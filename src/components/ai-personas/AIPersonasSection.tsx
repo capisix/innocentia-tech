@@ -1212,6 +1212,9 @@ export default function AIPersonasSection() {
                   controls
                   autoPlay
                   playsInline
+                  preload="metadata"
+                  poster={activeVideo.avatarImg}
+                  disablePictureInPicture
                   className={`w-full h-full ${
                     isPortrait ? "object-cover" : "object-contain"
                   } bg-black`}

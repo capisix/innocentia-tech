@@ -51,7 +51,6 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
   const whatsappMessage = `🚀 *PROPUESTA COMERCIAL OFICIAL • INNOCENTIA TECH*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 *Folio de Proyecto:* ${folio}
-🆔 *ID de Cliente:* ${proposalData.clientId || "CLI-01"}
 📅 *Fecha:* ${proposalData.date || new Date().toLocaleDateString("es-MX")}
 
 👤 *CLIENTE REGISTRADO:*

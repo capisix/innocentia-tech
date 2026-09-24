@@ -2253,6 +2253,9 @@ export default function BrandingStudioClient() {
                 src="/videos/sofia_branding.mp4"
                 controls
                 autoPlay
+                playsInline
+                preload="metadata"
+                disablePictureInPicture
                 className="w-full h-full object-cover"
               />
             </div>
