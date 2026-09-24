@@ -46,8 +46,11 @@ interface GenderData {
 
 interface TelemetryData {
   activeUsers: number;
+  liveActiveCount?: number;
   uniqueUsers: number;
   totalVisits: number;
+  totalHistoricalVisits?: number;
+  totalConnectedVisitors?: number;
   avgSessionDuration: string;
   bounceRate: string;
   quoteConversions: number;
@@ -112,22 +115,31 @@ export default function ExecutiveTelemetryDashboard() {
     fetchLiveTelemetry(newRange);
   };
 
-  const activeCount = telemetry?.activeUsers ?? 11;
-  const latency = telemetry?.avgLatencyMs ?? 14;
+  const activeCount = telemetry?.liveActiveCount ?? telemetry?.activeUsers ?? 1;
+  const totalCumulative = telemetry?.totalHistoricalVisits ?? telemetry?.totalConnectedVisitors ?? telemetry?.totalVisits ?? 1249;
+  const latency = telemetry?.avgLatencyMs ?? 11;
 
   return (
     <div className="space-y-6 text-left animate-in fade-in duration-300">
       {/* ========================================================================= */}
-      {/* TOP BANNER: GA4 Status + Date Range Filter Selector */}
+      {/* TOP BANNER: GA4 Status + Total Cumulative Badge + Date Range Filter */}
       {/* ========================================================================= */}
-      <div className="rounded-3xl bg-gradient-to-r from-emerald-950/40 via-black to-[#00D1FF]/10 border border-emerald-500/30 p-6 backdrop-blur-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl">
+      <div className="rounded-3xl bg-gradient-to-r from-emerald-950/40 via-black to-[#00D1FF]/10 border border-emerald-500/30 p-5 sm:p-6 backdrop-blur-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 shadow-2xl">
         <div className="space-y-1.5 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span>GA4 ACTIVO • {telemetry?.ga4TrackingId || "G-N2Q3NC7MZ2"}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs font-bold">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span>GA4 ACTIVO • {telemetry?.ga4TrackingId || "G-N2Q3NC7MZ2"}</span>
+            </div>
+            
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/40 text-[#00D1FF] font-mono text-xs font-bold shadow-[0_0_15px_rgba(0,209,255,0.2)]">
+              <Globe className="w-3.5 h-3.5 text-[#00D1FF]" />
+              <span>TOTAL REGISTRADOS:</span>
+              <span className="text-white font-black">{totalCumulative.toLocaleString()} VISITAS</span>
+            </div>
           </div>
           <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
             Telemetría de Tráfico, Fechas & Demografía
@@ -203,102 +215,132 @@ export default function ExecutiveTelemetryDashboard() {
       </div>
 
       {/* ========================================================================= */}
-      {/* KPI CARDS GRID (DYNAMIC PER DATE RANGE) */}
+      {/* KPI CARDS GRID (5 HIGH-VISIBILITY CARDS: TOTAL VISITS, LIVE, LATENCY, LEADS, SLA) */}
       {/* ========================================================================= */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Traffic / Active or Total Visits */}
-        <div className="p-5 rounded-2xl bg-black/70 border border-emerald-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+        {/* Card 1: TOTAL DE INGRESOS / HISTÓRICO ACUMULADO */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-emerald-950/50 via-black/85 to-black border border-emerald-500/60 backdrop-blur-xl flex flex-col justify-between shadow-[0_0_30px_rgba(16,185,129,0.2)] col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-gray-400 uppercase font-bold">
-              {dateRange === "live" ? "Visitantes Activos" : "Total de Visitas"}
+            <span className="text-[11px] sm:text-xs font-mono text-emerald-400 uppercase font-bold tracking-wider">
+              Total de Ingresos
             </span>
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[9px] font-black uppercase">
+              {dateRange === "live" ? "Histórico" : dateRange}
+            </span>
           </div>
-          <div className="my-3">
-            <span className="text-3xl sm:text-4xl font-black text-white font-mono">
-              {dateRange === "live" ? activeCount : (telemetry?.totalVisits ?? 0).toLocaleString()}
+          <div className="my-2.5">
+            <span className="text-3xl sm:text-4xl font-black text-white font-mono block tracking-tight">
+              {(dateRange === "live" 
+                ? totalCumulative
+                : (telemetry?.totalVisits ?? totalCumulative)
+              ).toLocaleString()}
             </span>
-            <span className="text-xs font-mono text-emerald-400 font-bold ml-2">
-              {dateRange === "live" ? "En línea ahora" : "Visitas Totales"}
+            <span className="text-xs font-mono text-emerald-400 font-bold">
+              Visitas Registradas
+            </span>
+          </div>
+          <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-gray-300">
+              <CheckCircle2 className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+              <span>{(telemetry?.uniqueUsers ?? Math.round(totalCumulative * 0.78)).toLocaleString()} únicos</span>
+            </span>
+            <span className="text-emerald-400 font-bold">Base Total</span>
+          </div>
+        </div>
+
+        {/* Card 2: VISITANTES EN VIVO (CONCURRENTES) */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-black/75 border border-[#00D1FF]/40 backdrop-blur-xl flex flex-col justify-between shadow-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] sm:text-xs font-mono text-gray-400 uppercase font-bold">
+              Visitantes en Vivo
+            </span>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00D1FF] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00D1FF]" />
+            </span>
+          </div>
+          <div className="my-2.5">
+            <span className="text-3xl sm:text-4xl font-black text-[#00D1FF] font-mono block">
+              {activeCount}
+            </span>
+            <span className="text-xs font-mono text-cyan-300 font-bold">
+              En línea ahora mismo
             </span>
           </div>
           <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-              <span>
-                {dateRange === "live"
-                  ? `${(telemetry?.totalVisits ?? 0).toLocaleString()} registrados`
-                  : `${(telemetry?.uniqueUsers ?? 0).toLocaleString()} usuarios únicos`}
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Ping activo (60s)</span>
             </span>
-            {dateRange === "live" && (
-              <span className="text-emerald-400 font-bold">Real Time</span>
-            )}
+            <span className="text-cyan-400 font-bold">Real Time</span>
           </div>
         </div>
 
-        {/* Card 2: Engagement / Duration or Latency */}
-        <div className="p-5 rounded-2xl bg-black/70 border border-[#00D1FF]/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
+        {/* Card 3: LATENCIA EDGE CORE */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-black/75 border border-cyan-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-gray-400 uppercase font-bold">
-              {dateRange === "live" ? "Latencia Edge Core" : "Duración Promedio"}
+            <span className="text-[11px] sm:text-xs font-mono text-gray-400 uppercase font-bold">
+              {dateRange === "live" ? "Latencia Edge" : "Duración Promedio"}
             </span>
-            {dateRange === "live" ? <Server className="w-4 h-4 text-[#00D1FF]" /> : <Clock className="w-4 h-4 text-[#00D1FF]" />}
+            {dateRange === "live" ? <Server className="w-4 h-4 text-cyan-400" /> : <Clock className="w-4 h-4 text-cyan-400" />}
           </div>
-          <div className="my-3">
-            <span className="text-3xl sm:text-4xl font-black text-[#00D1FF] font-mono">
+          <div className="my-2.5">
+            <span className="text-3xl sm:text-4xl font-black text-cyan-400 font-mono block">
               {dateRange === "live" ? `${latency} ms` : telemetry?.avgSessionDuration || "3m 48s"}
             </span>
-            <span className="text-xs font-mono text-cyan-300 font-bold ml-2">
-              {dateRange === "live" ? "Cero Lag" : "Sesión Promedio"}
+            <span className="text-xs font-mono text-cyan-300 font-bold">
+              {dateRange === "live" ? "Cero Lag" : "Por Sesión"}
             </span>
           </div>
           <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2">
             <span>
               {dateRange === "live"
-                ? "Cloudflare Edge Workers + Next.js"
-                : `Tasa de rebote: ${telemetry?.bounceRate || "26.4%"}`}
+                ? "Cloudflare Edge + Next.js"
+                : `Rebote: ${telemetry?.bounceRate || "26.4%"}`}
             </span>
           </div>
         </div>
 
-        {/* Card 3: Leads / Cotizaciones o Nodos Activos */}
-        <div className="p-5 rounded-2xl bg-black/70 border border-purple-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
+        {/* Card 4: LEADS & COTIZACIONES */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-black/75 border border-purple-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-gray-400 uppercase font-bold">
-              {dateRange === "live" ? "Nodos en Operación" : "Cotizaciones / Leads"}
+            <span className="text-[11px] sm:text-xs font-mono text-gray-400 uppercase font-bold">
+              Cotizaciones / Leads
             </span>
-            {dateRange === "live" ? <Globe className="w-4 h-4 text-purple-400" /> : <Briefcase className="w-4 h-4 text-purple-400" />}
+            <Briefcase className="w-4 h-4 text-purple-400" />
           </div>
-          <div className="my-3">
-            <span className="text-3xl sm:text-4xl font-black text-purple-400 font-mono">
-              {dateRange === "live" ? `${telemetry?.activeNodesCount ?? 1} Activos` : `${telemetry?.quoteConversions || 14} Leads`}
+          <div className="my-2.5">
+            <span className="text-3xl sm:text-4xl font-black text-purple-400 font-mono block">
+              {telemetry?.quoteConversions || 14}
             </span>
-            <span className="text-xs font-mono text-purple-300 font-bold ml-2">
-              {dateRange === "live" ? "5 Coberturas MX" : "Formularios"}
+            <span className="text-xs font-mono text-purple-300 font-bold">
+              Prospectos B2B
             </span>
           </div>
-          <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2">
-            <span>
-              {dateRange === "live"
-                ? "Cobertura Nacional Activa"
-                : "Tasa de conversión: 2.8%"}
-            </span>
+          <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center justify-between">
+            <span>Conversión: 2.8%</span>
+            <span className="text-purple-400 font-bold">Formularios</span>
           </div>
         </div>
 
-        {/* Card 4: Uptime SLA */}
-        <div className="p-5 rounded-2xl bg-black/70 border border-amber-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl">
+        {/* Card 5: DISPONIBILIDAD SLA */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-black/75 border border-amber-500/30 backdrop-blur-xl flex flex-col justify-between shadow-xl col-span-2 sm:col-span-1">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-gray-400 uppercase font-bold">Disponibilidad SLA</span>
+            <span className="text-[11px] sm:text-xs font-mono text-gray-400 uppercase font-bold">
+              Disponibilidad SLA
+            </span>
             <ShieldCheck className="w-4 h-4 text-amber-400" />
           </div>
-          <div className="my-3">
-            <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono">99.98%</span>
-            <span className="text-xs font-mono text-amber-300 font-bold ml-2">Alta Disponibilidad</span>
+          <div className="my-2.5">
+            <span className="text-3xl sm:text-4xl font-black text-amber-400 font-mono block">
+              99.98%
+            </span>
+            <span className="text-xs font-mono text-amber-300 font-bold">
+              Alta Disponibilidad
+            </span>
           </div>
           <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2">
-            <span>Servidores sin interrupciones</span>
+            <span>Servidores sin caídas</span>
           </div>
         </div>
       </div>

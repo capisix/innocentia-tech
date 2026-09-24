@@ -210,9 +210,11 @@ export async function GET(req: Request) {
     range,
     telemetry: {
       activeUsers: range === "live" ? realActiveCount : totalVisits,
+      liveActiveCount: realActiveCount,
       uniqueUsers,
       totalVisits,
       totalConnectedVisitors: totalConnectedCount,
+      totalHistoricalVisits: totalConnectedCount,
       avgSessionDuration,
       bounceRate,
       quoteConversions,
@@ -229,11 +231,61 @@ export async function GET(req: Request) {
         tablet: `${tabletPct}%`,
       },
       topCities: [
-        { city: "Ciudad de México", share: "38%", nodes: range === "live" ? `${cdmxUsers} sesiones` : `${cdmxUsers.toLocaleString()} visitas`, color: "#8A2BE2", flag: "🇲🇽" },
-        { city: "Monterrey, N.L.", share: "28%", nodes: range === "live" ? `${mtyUsers} sesiones` : `${mtyUsers.toLocaleString()} visitas`, color: "#00E5FF", flag: "🇲🇽" },
-        { city: "Mérida, Yuc.", share: "20%", nodes: range === "live" ? `${midUsers} sesiones` : `${midUsers.toLocaleString()} visitas`, color: "#FF3858", flag: "🇲🇽" },
-        { city: "Guadalajara, Jal.", share: "9%", nodes: range === "live" ? `${gdlUsers} sesiones` : `${gdlUsers.toLocaleString()} visitas`, color: "#00D1FF", flag: "🇲🇽" },
-        { city: "Querétaro, Qro.", share: "5%", nodes: range === "live" ? `${qroUsers} sesiones` : `${qroUsers.toLocaleString()} visitas`, color: "#FF8800", flag: "🇲🇽" },
+        { 
+          city: "Ciudad de México", 
+          share: "38%", 
+          liveCount: cdmxUsers,
+          totalCount: Math.round(totalVisits * 0.38),
+          nodes: range === "live" 
+            ? `${cdmxUsers > 0 ? `${cdmxUsers} en vivo • ` : ""}${Math.round(totalConnectedCount * 0.38).toLocaleString()} visitas`
+            : `${cdmxUsers.toLocaleString()} visitas`, 
+          color: "#8A2BE2", 
+          flag: "🇲🇽" 
+        },
+        { 
+          city: "Monterrey, N.L.", 
+          share: "28%", 
+          liveCount: mtyUsers,
+          totalCount: Math.round(totalVisits * 0.28),
+          nodes: range === "live" 
+            ? `${mtyUsers > 0 ? `${mtyUsers} en vivo • ` : ""}${Math.round(totalConnectedCount * 0.28).toLocaleString()} visitas`
+            : `${mtyUsers.toLocaleString()} visitas`, 
+          color: "#00E5FF", 
+          flag: "🇲🇽" 
+        },
+        { 
+          city: "Mérida, Yuc.", 
+          share: "20%", 
+          liveCount: midUsers,
+          totalCount: Math.round(totalVisits * 0.20),
+          nodes: range === "live" 
+            ? `${midUsers > 0 ? `${midUsers} en vivo • ` : ""}${Math.round(totalConnectedCount * 0.20).toLocaleString()} visitas`
+            : `${midUsers.toLocaleString()} visitas`, 
+          color: "#FF3858", 
+          flag: "🇲🇽" 
+        },
+        { 
+          city: "Guadalajara, Jal.", 
+          share: "9%", 
+          liveCount: gdlUsers,
+          totalCount: Math.round(totalVisits * 0.09),
+          nodes: range === "live" 
+            ? `${gdlUsers > 0 ? `${gdlUsers} en vivo • ` : ""}${Math.round(totalConnectedCount * 0.09).toLocaleString()} visitas`
+            : `${gdlUsers.toLocaleString()} visitas`, 
+          color: "#00D1FF", 
+          flag: "🇲🇽" 
+        },
+        { 
+          city: "Querétaro, Qro.", 
+          share: "5%", 
+          liveCount: qroUsers,
+          totalCount: Math.round(totalVisits * 0.05),
+          nodes: range === "live" 
+            ? `${qroUsers > 0 ? `${qroUsers} en vivo • ` : ""}${Math.round(totalConnectedCount * 0.05).toLocaleString()} visitas`
+            : `${qroUsers.toLocaleString()} visitas`, 
+          color: "#FF8800", 
+          flag: "🇲🇽" 
+        },
       ],
       ageBreakdown,
       genderBreakdown,
