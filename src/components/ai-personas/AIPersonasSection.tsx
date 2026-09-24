@@ -20,7 +20,7 @@ const SOFIA_VIDEO: PersonaVideoData = {
   title: "Sofía",
   role: "Dirección UI/UX & Creatividad",
   subtitle: "Hemisferio Creativo • Prototipos Interactivos a 60FPS",
-  videoSrcDesktop: "/videos/sofia_presentacion.mp4",
+  videoSrcDesktop: "/videos/sofia_presentacion_celular.mp4",
   videoSrcMobile: "/videos/sofia_presentacion_celular.mp4",
   themeColor: "#FF3858",
   secondaryColor: "#FF7A00",
@@ -32,7 +32,7 @@ const IVAN_VIDEO: PersonaVideoData = {
   title: "Iván",
   role: "CEO & Arquitectura Tech",
   subtitle: "Hemisferio Lógico • Ingeniería de Software & Cloud",
-  videoSrcDesktop: "/videos/ivan_presentacion.mp4",
+  videoSrcDesktop: "/videos/ivan_presentacion_celular.mp4",
   videoSrcMobile: "/videos/ivan_presentacion_celular.mp4",
   themeColor: "#00D1FF",
   secondaryColor: "#3A86FF",
@@ -85,7 +85,9 @@ export default function AIPersonasSection() {
   const [activeTagSet, setActiveTagSet] = useState(0);
 
   const openVideo = (data: PersonaVideoData, forceFormat?: "mobile" | "desktop") => {
-    if (forceFormat) {
+    if (data.videoSrcDesktop === data.videoSrcMobile) {
+      setVideoFormat("mobile");
+    } else if (forceFormat) {
       setVideoFormat(forceFormat);
     } else {
       const isMobileDevice =
@@ -1042,35 +1044,42 @@ export default function AIPersonasSection() {
 
                 {/* Right controls: Format Switcher + Close Button */}
                 <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
-                  {/* Format Selector Tabs */}
-                  <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.06] border border-white/15">
-                    <button
-                      type="button"
-                      onClick={() => setVideoFormat("mobile")}
-                      className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                        isPortrait
-                          ? "bg-[#FF3858] text-white shadow-[0_0_12px_rgba(255,56,88,0.6)]"
-                          : "text-gray-400 hover:text-white"
-                      }`}
-                      title="Ver video en formato vertical para celular"
-                    >
-                      <span>📱</span>
-                      <span>Celular</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setVideoFormat("desktop")}
-                      className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                        !isPortrait
-                          ? "bg-[#00D1FF] text-black shadow-[0_0_12px_rgba(0,209,255,0.6)]"
-                          : "text-gray-400 hover:text-white"
-                      }`}
-                      title="Ver video en formato horizontal para PC"
-                    >
-                      <span>🖥️</span>
-                      <span>PC / Cine</span>
-                    </button>
-                  </div>
+                  {/* Format Selector Tabs (Only when both desktop & mobile videos exist) */}
+                  {activeVideo.videoSrcDesktop !== activeVideo.videoSrcMobile ? (
+                    <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.06] border border-white/15">
+                      <button
+                        type="button"
+                        onClick={() => setVideoFormat("mobile")}
+                        className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          isPortrait
+                            ? "bg-[#FF3858] text-white shadow-[0_0_12px_rgba(255,56,88,0.6)]"
+                            : "text-gray-400 hover:text-white"
+                        }`}
+                        title="Ver video en formato vertical para celular"
+                      >
+                        <span>📱</span>
+                        <span>Celular</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setVideoFormat("desktop")}
+                        className={`px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          !isPortrait
+                            ? "bg-[#00D1FF] text-black shadow-[0_0_12px_rgba(0,209,255,0.6)]"
+                            : "text-gray-400 hover:text-white"
+                        }`}
+                        title="Ver video en formato horizontal para PC"
+                      >
+                        <span>🖥️</span>
+                        <span>PC / Cine</span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.06] border border-white/15 text-[10px] sm:text-[11px] font-mono font-bold text-gray-300">
+                      <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: activeVideo.themeColor }} />
+                      <span>PRESENTACIÓN HD</span>
+                    </div>
+                  )}
 
                   <button
                     type="button"
