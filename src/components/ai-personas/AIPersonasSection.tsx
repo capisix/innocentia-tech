@@ -140,15 +140,16 @@ export default function AIPersonasSection() {
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
             {/* ========================================================== */}
-            {/* CARD 1: SOFÍA (DESKTOP & TABLET + MOBILE RESPONSIVE) */}
+            {/* CARD 1: SOFÍA (DESKTOP & MOBILE RESPONSIVE) */}
             {/* ========================================================== */}
-            <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(255,56,88,0.25)] hover:drop-shadow-[0_25px_60px_rgba(255,56,88,0.45)]"
-              style={{ containerType: "inline-size" }}
-            >
-              {/* DESKTOP & TABLET VIEW (1024x825 Clean Artwork + Interactive Glass Dialogues) */}
-              <div className="hidden md:block relative w-full aspect-[1024/825] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
-                {/* Ambient Soft Glow Behind Character */}
+            <div className="space-y-4 sm:space-y-5 flex flex-col justify-between">
+              {/* DESKTOP & TABLET VIEW: CLEAN HIGH-DEF ARTWORK (Click-to-Play Video) */}
+              <div 
+                onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
+                className="hidden md:block relative w-full aspect-[1024/825] overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#07070E] border border-[#FF3858]/35 shadow-[0_15px_45px_rgba(255,56,88,0.2)] hover:shadow-[0_20px_60px_rgba(255,56,88,0.35)] transition-all duration-500 cursor-pointer group/art select-none"
+                title="Haz clic para ver el video de presentación de Sofía"
+              >
+                {/* Ambient Soft Glow */}
                 <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#FF3858]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 right-4 w-60 h-60 bg-[#FF7A00]/15 rounded-full blur-[80px] pointer-events-none" />
 
@@ -158,96 +159,119 @@ export default function AIPersonasSection() {
                   fill
                   quality={100}
                   unoptimized
-                  className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
+                  className="object-contain relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
                   priority
                 />
+              </div>
 
-                {/* TOP HEADER PILL: HEMISFERIO CREATIVO (Centered right above SOFÍA 3D Title) */}
-                <div className="absolute top-[8.5%] left-[56%] right-[10%] z-20 flex justify-center pointer-events-none">
-                  <div 
-                    className="px-3.5 py-0.5 rounded-full bg-[#FF3858]/15 border border-[#FF3858]/70 backdrop-blur-md text-[#FF5470] font-mono font-bold uppercase tracking-widest text-center flex items-center justify-center leading-none shadow-[0_0_15px_rgba(255,56,88,0.35)]"
-                    style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
-                  >
-                    HEMISFERIO CREATIVO
-                  </div>
-                </div>
+              {/* MOBILE VIEW (Dedicated Portrait Artwork) */}
+              <div 
+                onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
+                className="block md:hidden relative w-full aspect-[576/1024] rounded-[24px] overflow-hidden bg-[#07070E] border border-[#FF3858]/40 shadow-[0_15px_45px_rgba(255,56,88,0.25)] cursor-pointer group/mobart active:scale-[0.99] transition-transform select-none"
+                title="Toca para ver el video de presentación de Sofía"
+              >
+                <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
+                <Image
+                  src="/images/sofia_mobile.jpg"
+                  alt="Sofía - Hemisferio Creativo • Innocentia Tech"
+                  fill
+                  quality={100}
+                  unoptimized
+                  className="object-contain relative z-10"
+                  priority
+                />
+              </div>
 
-                {/* FULL CARD INTERACTIVE VIDEO TRIGGER */}
-                <div
-                  onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
-                  className="absolute inset-0 z-20 cursor-pointer group/card"
-                  title="Haz clic para ver el video de presentación de Sofía"
-                >
-                  {/* Center Hover Play Badge */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-all duration-300 transform scale-90 group-hover/card:scale-100">
-                    <div className="px-4 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(255,56,88,0.7)]">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_15px_#FF3858] flex-shrink-0">
-                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+              {/* RECTÁNGULO DE CARACTERÍSTICAS & PRESENTACIÓN: SOFÍA */}
+              <div className="rounded-[24px] sm:rounded-[30px] bg-[#0A0710]/95 backdrop-blur-2xl border border-[#FF3858]/40 p-4 sm:p-5 space-y-4 shadow-[0_15px_35px_rgba(255,56,88,0.15)] transition-all">
+                {/* Header Identidad */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#FF3858]/15 border border-[#FF3858]/40 flex items-center justify-center text-[#FF3858] shadow-[0_0_12px_rgba(255,56,88,0.3)]">
+                      <Paintbrush className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-black text-white font-mono tracking-wide">SOFÍA</h3>
+                        <span className="px-2 py-0.5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 text-[#FF5470] font-mono text-[10px] font-bold uppercase">
+                          UI / UX & Creatividad
+                        </span>
                       </div>
-                      <div className="text-left leading-tight">
-                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
-                        <div className="text-[9px] text-[#FF5470] font-medium font-mono">VIDEO HD • 60FPS</div>
+                      <div className="text-[11px] font-mono text-[#FF5470] font-medium">
+                        ✦ HEMISFERIO CREATIVO
                       </div>
                     </div>
                   </div>
+                  <span className="text-xl">🎨</span>
+                </div>
 
-                  {/* Sleek Floating Bottom-Right Pill Button */}
-                  <div className="absolute bottom-[4.5%] right-[4.5%] z-30 pointer-events-auto">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openVideo(SOFIA_VIDEO, "desktop");
-                      }}
-                      className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#1A0812]/90 via-black/85 to-[#1A0812]/90 hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.35)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(255,56,88,0.6)] transition-all cursor-pointer hover:scale-105 active:scale-95 group/btn"
-                    >
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#FF3858] transition-transform">
-                        <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
-                      </div>
-                      <span className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap drop-shadow-md leading-none">
-                        Sofía presentación
-                      </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
-                    </button>
+                {/* Misión / Descripción */}
+                <div className="p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
+                  <p className="text-xs sm:text-sm text-gray-200 font-light leading-relaxed">
+                    Representa la <strong className="text-[#FF5470] font-semibold">imaginación</strong>, la creatividad y la sensibilidad del diseño. Convierte ideas en <strong className="text-[#FFD166] font-semibold">experiencias visuales memorables</strong>, intuitivas y emocionales.
+                  </p>
+                </div>
+
+                {/* Personalidad & Enfoque */}
+                <div className="space-y-1.5">
+                  <div className="text-[11px] font-mono font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-[#FF3858]">✦</span> PERSONALIDAD & ENFOQUE
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center gap-2 text-left">
+                      <span className="text-sm flex-shrink-0">💖</span>
+                      <span className="text-[11px] sm:text-xs text-gray-200 font-medium leading-tight">Curiosa y entusiasta</span>
+                    </div>
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center gap-2 text-left">
+                      <span className="text-sm flex-shrink-0">⭐</span>
+                      <span className="text-[11px] sm:text-xs text-gray-200 font-medium leading-tight">Empática y cercana</span>
+                    </div>
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center gap-2 text-left">
+                      <span className="text-sm flex-shrink-0">✨</span>
+                      <span className="text-[11px] sm:text-xs text-gray-200 font-medium leading-tight">Imaginativa y detallista</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Sofía) */}
-              <div className="block md:hidden rounded-[30px] bg-[#07070E]/90 backdrop-blur-2xl border border-[#FF3858]/40 overflow-hidden p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(255,56,88,0.25)] transition-all">
-                {/* Vertical Portrait Master Artwork (576x1024 Native 9:16 Aspect Ratio) */}
-                <div 
-                  onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
-                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10 active:scale-[0.99] transition-transform"
-                  title="Toca para ver el video de presentación de Sofía"
-                >
-                  {/* Subtle Background Glow */}
-                  <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-[#FF3858]/20 rounded-full blur-[60px] pointer-events-none" />
-                  
-                  <Image
-                    src="/images/sofia_mobile.jpg"
-                    alt="Sofía - Hemisferio Creativo • Innocentia Tech"
-                    fill
-                    quality={100}
-                    unoptimized
-                    className="object-contain relative z-10"
-                    priority
-                  />
+                {/* Elementos Clave (3 Micro Cards) */}
+                <div className="space-y-1.5">
+                  <div className="text-[11px] font-mono font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-[#FF3858]">✦</span> ELEMENTOS CLAVE
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-[#FF3858]/10 border border-[#FF3858]/30 transition-all flex flex-col items-center text-center">
+                      <span className="text-base mb-0.5">🪄</span>
+                      <div className="text-xs font-bold text-white leading-tight">Pincel Mágico</div>
+                      <div className="text-[10px] text-[#FF5470] font-mono">Diseño & Arte</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-[#FF3858]/10 border border-[#FF3858]/30 transition-all flex flex-col items-center text-center">
+                      <span className="text-base mb-0.5">🎨</span>
+                      <div className="text-xs font-bold text-white leading-tight">Creatividad</div>
+                      <div className="text-[10px] text-gray-400 font-mono">& Inspiración</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-[#FF3858]/10 border border-[#FF3858]/30 transition-all flex flex-col items-center text-center">
+                      <span className="text-base mb-0.5">💖</span>
+                      <div className="text-xs font-bold text-white leading-tight">Empatía</div>
+                      <div className="text-[10px] text-gray-400 font-mono">& Pasión</div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Mobile Action Presentation Button */}
+                {/* Botón de Presentación */}
                 <button
                   type="button"
-                  onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
-                  className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#1A0810] via-black to-[#1A0810] hover:from-[#2A0C1A] hover:to-[#2A0C1A] backdrop-blur-2xl border border-[#FF3858]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_25px_rgba(255,56,88,0.35)] cursor-pointer active:scale-98 transition-all group/btn"
+                  onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#1A0812] via-black to-[#1A0812] hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.25)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(255,56,88,0.5)] transition-all cursor-pointer group/btn"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center shadow-[0_0_12px_#FF3858] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
-                    <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#FF3858] transition-transform">
+                      <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+                    </div>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      Ver presentación de Sofía (Video HD • 60 FPS)
+                    </span>
                   </div>
-                  <span className="font-bold text-xs uppercase tracking-wider text-white">Sofía presentación (60 FPS)</span>
-                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </div>
+                  <ArrowRight className="w-4 h-4 text-white/70 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
                 </button>
               </div>
 
@@ -261,15 +285,16 @@ export default function AIPersonasSection() {
             </div>
 
             {/* ========================================================== */}
-            {/* CARD 2: IVÁN (DESKTOP & TABLET + MOBILE RESPONSIVE) */}
+            {/* CARD 2: IVÁN (DESKTOP & MOBILE RESPONSIVE) */}
             {/* ========================================================== */}
-            <div 
-              className="group relative rounded-[28px] sm:rounded-[36px] bg-transparent border-0 transition-all duration-500 select-none drop-shadow-[0_15px_35px_rgba(0,209,255,0.25)] hover:drop-shadow-[0_25px_60px_rgba(0,209,255,0.45)]"
-              style={{ containerType: "inline-size" }}
-            >
-              {/* DESKTOP & TABLET VIEW (1024x825 Clean Artwork + Interactive Glass Dialogues) */}
-              <div className="hidden md:block relative w-full aspect-[1024/825] overflow-hidden rounded-[26px] sm:rounded-[34px] bg-transparent">
-                {/* Ambient Soft Glow Behind Character */}
+            <div className="space-y-4 sm:space-y-5 flex flex-col justify-between">
+              {/* DESKTOP & TABLET VIEW: CLEAN HIGH-DEF ARTWORK (Click-to-Play Video) */}
+              <div 
+                onClick={() => openVideo(IVAN_VIDEO, "desktop")}
+                className="hidden md:block relative w-full aspect-[1024/825] overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#040810] border border-[#00D1FF]/35 shadow-[0_15px_45px_rgba(0,209,255,0.2)] hover:shadow-[0_20px_60px_rgba(0,209,255,0.35)] transition-all duration-500 cursor-pointer group/art select-none"
+                title="Haz clic para ver el video de presentación de Iván"
+              >
+                {/* Ambient Soft Glow */}
                 <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#00D1FF]/20 rounded-full blur-[90px] pointer-events-none" />
                 <div className="absolute bottom-4 left-4 w-60 h-60 bg-[#3A86FF]/15 rounded-full blur-[80px] pointer-events-none" />
 
@@ -279,96 +304,119 @@ export default function AIPersonasSection() {
                   fill
                   quality={100}
                   unoptimized
-                  className="object-contain relative z-10 transition-transform duration-700 group-hover:scale-[1.01]"
+                  className="object-contain relative z-10 transition-transform duration-700 group-hover/art:scale-[1.02]"
                   priority
                 />
+              </div>
 
-                {/* TOP HEADER PILL: HEMISFERIO LÓGICO (Centered right above IVÁN 3D Title) */}
-                <div className="absolute top-[8.5%] left-[56%] right-[10%] z-20 flex justify-center pointer-events-none">
-                  <div 
-                    className="px-3.5 py-0.5 rounded-full bg-[#00D1FF]/15 border border-[#00D1FF]/70 backdrop-blur-md text-[#00D1FF] font-mono font-bold uppercase tracking-widest text-center flex items-center justify-center leading-none shadow-[0_0_15px_rgba(0,209,255,0.35)]"
-                    style={{ fontSize: "clamp(5.5px, 1.4cqi, 8.5px)" }}
-                  >
-                    HEMISFERIO LÓGICO
-                  </div>
-                </div>
+              {/* MOBILE VIEW (Dedicated Portrait Artwork) */}
+              <div 
+                onClick={() => openVideo(IVAN_VIDEO, "mobile")}
+                className="block md:hidden relative w-full aspect-[576/1024] rounded-[24px] overflow-hidden bg-[#040810] border border-[#00D1FF]/40 shadow-[0_15px_45px_rgba(0,209,255,0.25)] cursor-pointer group/mobart active:scale-[0.99] transition-transform select-none"
+                title="Toca para ver el video de presentación de Iván"
+              >
+                <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
+                <Image
+                  src="/images/ivan_mobile.jpg"
+                  alt="Iván - Hemisferio Lógico • Innocentia Tech"
+                  fill
+                  quality={100}
+                  unoptimized
+                  className="object-contain relative z-10"
+                  priority
+                />
+              </div>
 
-                {/* FULL CARD INTERACTIVE VIDEO TRIGGER */}
-                <div
-                  onClick={() => openVideo(IVAN_VIDEO, "desktop")}
-                  className="absolute inset-0 z-20 cursor-pointer group/card"
-                  title="Haz clic para ver el video de presentación de Iván"
-                >
-                  {/* Center Hover Play Badge */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/card:opacity-100 transition-all duration-300 transform scale-90 group-hover/card:scale-100">
-                    <div className="px-4 py-2.5 rounded-2xl bg-black/85 backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold flex items-center gap-3 shadow-[0_0_35px_rgba(0,209,255,0.7)]">
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_15px_#00D1FF] flex-shrink-0">
-                        <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+              {/* RECTÁNGULO DE CARACTERÍSTICAS & PRESENTACIÓN: IVÁN */}
+              <div className="rounded-[24px] sm:rounded-[30px] bg-[#050A14]/95 backdrop-blur-2xl border border-[#00D1FF]/40 p-4 sm:p-5 space-y-4 shadow-[0_15px_35px_rgba(0,209,255,0.15)] transition-all">
+                {/* Header Identidad */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#00D1FF]/15 border border-[#00D1FF]/40 flex items-center justify-center text-[#00D1FF] font-mono font-bold text-xs shadow-[0_0_12px_rgba(0,209,255,0.3)]">
+                      &lt;/&gt;
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-black text-white font-mono tracking-wide">IVÁN</h3>
+                        <span className="px-2 py-0.5 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 text-[#00D1FF] font-mono text-[10px] font-bold uppercase">
+                          Arquitectura & Software
+                        </span>
                       </div>
-                      <div className="text-left leading-tight">
-                        <div className="text-[11px] font-black uppercase text-white tracking-wider">VER PRESENTACIÓN</div>
-                        <div className="text-[9px] text-[#00D1FF] font-medium font-mono">VIDEO HD • 60FPS</div>
+                      <div className="text-[11px] font-mono text-[#00D1FF] font-medium">
+                        ✦ HEMISFERIO LÓGICO
                       </div>
                     </div>
                   </div>
+                  <span className="text-xl">⚙️</span>
+                </div>
 
-                  {/* Sleek Floating Bottom-Right Pill Button */}
-                  <div className="absolute bottom-[4.5%] right-[4.5%] z-30 pointer-events-auto">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openVideo(IVAN_VIDEO, "desktop");
-                      }}
-                      className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#06101E]/90 via-black/85 to-[#06101E]/90 hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.35)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.6)] transition-all cursor-pointer hover:scale-105 active:scale-95 group/btn"
-                    >
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#00D1FF] transition-transform">
-                        <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
-                      </div>
-                      <span className="text-[11px] sm:text-xs font-bold text-white whitespace-nowrap drop-shadow-md leading-none">
-                        Iván presentación
-                      </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-white/70 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
-                    </button>
+                {/* Misión / Descripción */}
+                <div className="p-3 sm:p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
+                  <p className="text-xs sm:text-sm text-gray-200 font-light leading-relaxed">
+                    Representa la <strong className="text-[#00D1FF] font-semibold">lógica</strong>, la estructura y la tecnología. Transforma ideas en <strong className="text-[#70D6FF] font-semibold">soluciones sólidas, escalables</strong>, eficientes y seguras.
+                  </p>
+                </div>
+
+                {/* Personalidad & Enfoque */}
+                <div className="space-y-1.5">
+                  <div className="text-[11px] font-mono font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-[#00D1FF]">✦</span> PERSONALIDAD & ENFOQUE
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center gap-2 text-left">
+                      <span className="text-sm flex-shrink-0">⚙️</span>
+                      <span className="text-[11px] sm:text-xs text-gray-200 font-medium leading-tight">Lógico y analítico</span>
+                    </div>
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center gap-2 text-left">
+                      <span className="text-sm flex-shrink-0">🛡️</span>
+                      <span className="text-[11px] sm:text-xs text-gray-200 font-medium leading-tight">Responsable y confiable</span>
+                    </div>
+                    <div className="p-2 sm:p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center gap-2 text-left">
+                      <span className="text-sm flex-shrink-0">⚡</span>
+                      <span className="text-[11px] sm:text-xs text-gray-200 font-medium leading-tight">Innovador y enfocado</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* MOBILE VIEW (Dedicated Full-Bleed Vertical Studio Artwork: Iván) */}
-              <div className="block md:hidden rounded-[30px] bg-[#07070E]/90 backdrop-blur-2xl border border-[#00D1FF]/40 overflow-hidden p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.25)] transition-all">
-                {/* Vertical Portrait Master Artwork (576x1024 Native 9:16 Aspect Ratio) */}
-                <div 
-                  onClick={() => openVideo(IVAN_VIDEO, "mobile")}
-                  className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobart shadow-2xl border border-white/10 active:scale-[0.99] transition-transform"
-                  title="Toca para ver el video de presentación de Iván"
-                >
-                  {/* Subtle Background Glow */}
-                  <div className="absolute top-1/4 right-1/4 w-48 h-48 bg-[#00D1FF]/20 rounded-full blur-[60px] pointer-events-none" />
-                  
-                  <Image
-                    src="/images/ivan_mobile.jpg"
-                    alt="Iván - Hemisferio Lógico • Innocentia Tech"
-                    fill
-                    quality={100}
-                    unoptimized
-                    className="object-contain relative z-10"
-                    priority
-                  />
+                {/* Elementos Clave (3 Micro Cards) */}
+                <div className="space-y-1.5">
+                  <div className="text-[11px] font-mono font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-[#00D1FF]">✦</span> ELEMENTOS CLAVE
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-[#00D1FF]/10 border border-[#00D1FF]/30 transition-all flex flex-col items-center text-center">
+                      <span className="text-xs font-mono font-black text-[#00D1FF] mb-0.5">&lt;/&gt;</span>
+                      <div className="text-xs font-bold text-white leading-tight">Código</div>
+                      <div className="text-[10px] text-[#00D1FF] font-mono">& Estructura</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-[#00D1FF]/10 border border-[#00D1FF]/30 transition-all flex flex-col items-center text-center">
+                      <span className="text-base mb-0.5">🧊</span>
+                      <div className="text-xs font-bold text-white leading-tight">Arquitectura</div>
+                      <div className="text-[10px] text-gray-400 font-mono">& Solidez</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white/[0.03] hover:bg-[#00D1FF]/10 border border-[#00D1FF]/30 transition-all flex flex-col items-center text-center">
+                      <span className="text-base mb-0.5">⚡</span>
+                      <div className="text-xs font-bold text-white leading-tight">Ingeniería</div>
+                      <div className="text-[10px] text-gray-400 font-mono">& Eficiencia</div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Mobile Action Presentation Button */}
+                {/* Botón de Presentación */}
                 <button
                   type="button"
-                  onClick={() => openVideo(IVAN_VIDEO, "mobile")}
-                  className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#060D18] via-black to-[#060D18] hover:from-[#0C1A30] hover:to-[#0C1A30] backdrop-blur-2xl border border-[#00D1FF]/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_25px_rgba(0,209,255,0.35)] cursor-pointer active:scale-98 transition-all group/btn"
+                  onClick={() => openVideo(IVAN_VIDEO, "desktop")}
+                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#06101E] via-black to-[#06101E] hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.25)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.5)] transition-all cursor-pointer group/btn"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_12px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
-                    <Play className="w-3.5 h-3.5 fill-black text-black ml-0.5" />
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center flex-shrink-0 group-hover/btn:scale-110 shadow-[0_0_10px_#00D1FF] transition-transform">
+                      <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+                    </div>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      Ver presentación de Iván (Video HD • 60 FPS)
+                    </span>
                   </div>
-                  <span className="font-bold text-xs uppercase tracking-wider text-white">Iván presentación (60 FPS)</span>
-                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover/btn:translate-x-0.5 transition-transform">
-                    <ArrowRight className="w-4 h-4 text-cyan-300" />
-                  </div>
+                  <ArrowRight className="w-4 h-4 text-white/70 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
                 </button>
               </div>
 
