@@ -147,12 +147,12 @@ export default function FloatingChatWidget({
     {
       id: "1",
       sender: "sofia",
-      text: "¡Hola! Soy Sofía. Cuéntame qué estás imaginando: diseño de marca, experiencia de usuario o una idea que quieras hacer realidad.",
+      text: "¡Hola! Qué gusto saludarte. Soy Sofía y veo la parte de diseño, branding y concepto visual en Innocentia.",
     },
     {
       id: "2",
       sender: "ivan",
-      text: "Y yo soy Iván. Estoy listo para estructurar la arquitectura, definir la base de datos, APIs y el código escalable.",
+      text: "Y yo soy Iván, a cargo del desarrollo de software y tecnología. ¿Qué tipo de negocio tienes o qué proyecto traes en mente?",
     },
   ];
 
