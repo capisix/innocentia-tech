@@ -140,8 +140,7 @@ export default function FloatingChatWidget({
     };
   }, []);
 
-  const SESSION_STORAGE_KEY = "innocentia_chat_session_history";
-  const SESSION_EXPIRATION_MS = 2 * 60 * 60 * 1000; // 2 horas de inactividad
+  const SESSION_STORAGE_KEY = "innocentia_chat_session_history_v2";
 
   const DEFAULT_WELCOME_MESSAGES: Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }> = [
     {
@@ -160,19 +159,18 @@ export default function FloatingChatWidget({
     Array<{ id: string; sender: "user" | "sofia" | "ivan"; text: string }>
   >(DEFAULT_WELCOME_MESSAGES);
 
-  // Load chat from session or reset if older than 2 hours of inactivity
+  // Load chat from active session tab or start fresh
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
-        const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+        // Clean any old legacy localStorage
+        localStorage.removeItem("innocentia_chat_session_history");
+        
+        const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          const elapsed = Date.now() - (parsed.lastActivity || 0);
-          if (elapsed < SESSION_EXPIRATION_MS && Array.isArray(parsed.messages) && parsed.messages.length > 0) {
+          if (Array.isArray(parsed.messages) && parsed.messages.length > 0) {
             setMessages(parsed.messages);
-          } else {
-            // Expired after 2 hours
-            localStorage.removeItem(SESSION_STORAGE_KEY);
           }
         }
       } catch (e) {
@@ -181,11 +179,11 @@ export default function FloatingChatWidget({
     }
   }, []);
 
-  // Save conversation state and timestamp on message changes
+  // Save conversation state within the active browser session tab
   useEffect(() => {
     if (typeof window !== "undefined" && messages.length > 2) {
       try {
-        localStorage.setItem(
+        sessionStorage.setItem(
           SESSION_STORAGE_KEY,
           JSON.stringify({
             messages,
@@ -216,7 +214,8 @@ export default function FloatingChatWidget({
 
   const handleResetChat = () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem(SESSION_STORAGE_KEY);
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      localStorage.removeItem("innocentia_chat_session_history");
     }
     setMessages(DEFAULT_WELCOME_MESSAGES);
     scrollToBottom();
