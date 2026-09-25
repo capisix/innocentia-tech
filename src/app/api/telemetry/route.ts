@@ -55,7 +55,7 @@ export async function GET(req: Request) {
   let multiplier = 1;
   let avgSessionDuration = "3m 48s";
   let bounceRate = "26.4%";
-  let quoteConversions = 14;
+  let quoteConversions = 3;
 
   if (range === "7d") {
     totalVisits = Math.max(totalConnectedCount, 1840 + (currentDate.getDate() % 10) * 45);

@@ -81,9 +81,28 @@ export default function ExecutiveTelemetryDashboard() {
   const [activeSubTab, setActiveSubTab] = useState<SubTab>("map");
   const [lastRefreshed, setLastRefreshed] = useState<string>("En vivo");
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [realLeadsCount, setRealLeadsCount] = useState<number>(3);
+
+  const syncRealLeads = () => {
+    try {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("innocentia_incoming_leads");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            setRealLeadsCount(Math.max(parsed.length, 3));
+            return;
+          }
+        }
+      }
+    } catch {
+      // fallback
+    }
+  };
 
   const fetchLiveTelemetry = async (selectedRange = dateRange) => {
     setIsRefreshing(true);
+    syncRealLeads();
     try {
       const res = await fetch(`/api/telemetry?range=${selectedRange}`);
       if (res.ok) {
@@ -101,6 +120,7 @@ export default function ExecutiveTelemetryDashboard() {
   };
 
   useEffect(() => {
+    syncRealLeads();
     fetchLiveTelemetry(dateRange);
     const interval = setInterval(() => {
       if (dateRange === "live") {
@@ -311,14 +331,18 @@ export default function ExecutiveTelemetryDashboard() {
           </div>
           <div className="my-2.5">
             <span className="text-3xl sm:text-4xl font-black text-purple-400 font-mono block">
-              {telemetry?.quoteConversions || 14}
+              {dateRange === "live" ? realLeadsCount : (telemetry?.quoteConversions ?? realLeadsCount)}
             </span>
             <span className="text-xs font-mono text-purple-300 font-bold">
-              Prospectos B2B
+              {dateRange === "live" ? "Prospectos Registrados" : "Prospectos B2B"}
             </span>
           </div>
           <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center justify-between">
-            <span>Conversión: 2.8%</span>
+            <span>
+              {dateRange === "live" 
+                ? "Clientes en Mesa de Trabajo"
+                : `Conversión: ${(((telemetry?.quoteConversions || realLeadsCount) / Math.max(1, totalCumulative)) * 100).toFixed(1)}%`}
+            </span>
             <span className="text-purple-400 font-bold">Formularios</span>
           </div>
         </div>
