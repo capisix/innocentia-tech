@@ -270,13 +270,11 @@ export default function FloatingChatWidget({
 
     // Simulate AI dual intelligence response
     const reply = getIntelligentHumanReply(text);
-    const persona = reply.type === "sofia" ? "sofia" : reply.type === "ivan" ? "ivan" : "both";
 
-    setIsTyping(persona);
-
-    setTimeout(() => {
-      setIsTyping(null);
-      if (reply.type === "sofia") {
+    if (reply.type === "sofia") {
+      setIsTyping("sofia");
+      setTimeout(() => {
+        setIsTyping(null);
         setMessages((prev) => [
           ...prev,
           {
@@ -285,7 +283,11 @@ export default function FloatingChatWidget({
             text: reply.text.join("\n\n"),
           },
         ]);
-      } else if (reply.type === "ivan") {
+      }, 1200);
+    } else if (reply.type === "ivan") {
+      setIsTyping("ivan");
+      setTimeout(() => {
+        setIsTyping(null);
         setMessages((prev) => [
           ...prev,
           {
@@ -294,44 +296,52 @@ export default function FloatingChatWidget({
             text: reply.text.join("\n\n"),
           },
         ]);
-      } else {
-        // Dual sequence
-        reply.text.forEach((t, idx) => {
+      }, 1200);
+    } else {
+      // Natural staggered conversation: Sofía first, then Iván
+      setIsTyping("sofia");
+      setTimeout(() => {
+        const sofiaText = reply.text[0]?.replace(/^SOFÍA:\s*/, "") || "";
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            sender: "sofia",
+            text: sofiaText,
+          },
+        ]);
+
+        if (reply.text.length > 1) {
+          setIsTyping("ivan");
           setTimeout(() => {
-            const isIvan = t.startsWith("IVÁN:") || idx === 1;
+            setIsTyping(null);
+            const ivanText = reply.text[1]?.replace(/^IVÁN:\s*/, "") || "";
             setMessages((prev) => [
               ...prev,
               {
-                id: (Date.now() + idx + 1).toString(),
-                sender: isIvan ? "ivan" : "sofia",
-                text: t.replace(/^SOFÍA:\s*/, "").replace(/^IVÁN:\s*/, ""),
+                id: (Date.now() + 2).toString(),
+                sender: "ivan",
+                text: ivanText,
               },
             ]);
-          }, idx * 400);
-        });
-      }
-    }, 800);
+          }, 1400);
+        } else {
+          setIsTyping(null);
+        }
+      }, 1100);
+    }
   };
 
   const renderMessageBubble = (text: string, isSmall: boolean = false) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlRegex);
-    const hasFormLink =
-      text.includes("crear-proyecto") ||
-      text.includes("#onboarding") ||
-      text.includes("onboarding") ||
-      text.includes("formulario") ||
-      text.includes("cotización") ||
-      text.includes("cotizacion") ||
-      text.includes("cotizar");
+    const hasFormLink = text.includes("crear-proyecto");
 
     const hasWhatsAppMention =
       text.includes("WhatsApp") ||
       text.includes("whatsapp") ||
       text.includes("960 177 1556") ||
-      text.includes("9601771556") ||
-      text.includes("teléfono") ||
-      text.includes("telefono");
+      text.includes("9601771556");
 
     const handleFormClick = (e: React.MouseEvent) => {
       e.preventDefault();
@@ -415,22 +425,20 @@ export default function FloatingChatWidget({
             <div className="px-6 py-4 bg-white/[0.03] border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex items-center -space-x-2">
-                  <div className="w-10 h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)]">
+                  <div className="w-10 h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)] overflow-hidden relative">
                     <Image
-                      src="/images/sofia_pink_beanbag.png"
+                      src="/images/sofia_seated_art.jpg"
                       alt="Sofía"
-                      width={32}
-                      height={32}
-                      className="object-contain"
+                      fill
+                      className="object-cover object-top rounded-full"
                     />
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)]">
+                  <div className="w-10 h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)] overflow-hidden relative">
                     <Image
-                      src="/images/ivan_standing_stylus.png"
+                      src="/images/ivan_seated_tech.jpg"
                       alt="Iván"
-                      width={32}
-                      height={32}
-                      className="object-contain"
+                      fill
+                      className="object-cover object-top rounded-full"
                     />
                   </div>
                 </div>
@@ -520,7 +528,7 @@ export default function FloatingChatWidget({
                 >
                   {msg.sender !== "user" && (
                     <div
-                      className={`w-9 h-9 rounded-full p-0.5 flex-shrink-0 flex items-center justify-center border ${
+                      className={`w-9 h-9 rounded-full p-0.5 flex-shrink-0 flex items-center justify-center border overflow-hidden relative shadow-lg ${
                         msg.sender === "sofia"
                           ? "bg-[#FF3858]/20 border-[#FF3858]/60 shadow-[0_0_12px_rgba(255,56,88,0.4)]"
                           : "bg-[#00D1FF]/20 border-[#00D1FF]/60 shadow-[0_0_12px_rgba(0,209,255,0.4)]"
@@ -529,13 +537,12 @@ export default function FloatingChatWidget({
                       <Image
                         src={
                           msg.sender === "sofia"
-                            ? "/images/sofia_pink_beanbag.png"
-                            : "/images/ivan_idea_laptop.png"
+                            ? "/images/sofia_seated_art.jpg"
+                            : "/images/ivan_seated_tech.jpg"
                         }
                         alt={msg.sender}
-                        width={28}
-                        height={28}
-                        className="object-contain"
+                        fill
+                        className="object-cover object-top rounded-full"
                       />
                     </div>
                   )}
@@ -570,15 +577,27 @@ export default function FloatingChatWidget({
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-2 text-xs font-mono text-gray-400 p-2">
-                  <div className="w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
-                  <span>
-                    {isTyping === "sofia"
-                      ? "Sofía está visualizando la solución..."
-                      : isTyping === "ivan"
-                      ? "Iván está estructurando el código..."
-                      : "Sofía & Iván están sincronizando..."}
-                  </span>
+                <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.04] border border-white/10 w-fit animate-pulse">
+                  <div className={`w-7 h-7 rounded-full overflow-hidden relative border ${
+                    isTyping === "sofia" ? "border-[#FF3858]" : "border-[#00D1FF]"
+                  }`}>
+                    <Image
+                      src={isTyping === "sofia" ? "/images/sofia_seated_art.jpg" : "/images/ivan_seated_tech.jpg"}
+                      alt="Escribiendo"
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-gray-300">
+                    <span className="flex gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </span>
+                    <span className="font-semibold ml-1">
+                      {isTyping === "sofia" ? "Sofía está escribiendo..." : "Iván está escribiendo..."}
+                    </span>
+                  </div>
                 </div>
               )}
               <div ref={maximizedMessagesEndRef} className="h-1" />
@@ -659,15 +678,14 @@ export default function FloatingChatWidget({
                 }}
                 className="group flex items-end gap-2.5 cursor-pointer hover:scale-[1.02] transition-all"
               >
-                <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex-shrink-0">
+                <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 rounded-full overflow-hidden border-2 border-[#FF3858]/80 shadow-[0_0_15px_rgba(255,56,88,0.6)]">
                   <Image
-                    src="/images/sofia_pink_beanbag.png"
+                    src="/images/sofia_seated_art.jpg"
                     alt="Sofía"
-                    width={48}
-                    height={48}
-                    className="object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.8)] animate-bounce"
+                    fill
+                    className="object-cover object-top"
                   />
-                  <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#FFD166] animate-ping" />
+                  <div className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-[#FFD166] animate-ping" />
                 </div>
                 <div className="bg-black/95 border border-[#FF3858]/60 rounded-2xl rounded-br-none p-3 sm:p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(255,56,88,0.35)] text-left">
                   <div className="flex items-center gap-1.5 mb-1">
@@ -691,15 +709,14 @@ export default function FloatingChatWidget({
                 }}
                 className="group flex items-end gap-2.5 cursor-pointer hover:scale-[1.02] transition-all"
               >
-                <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex-shrink-0">
+                <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 rounded-full overflow-hidden border-2 border-[#00D1FF]/80 shadow-[0_0_15px_rgba(0,209,255,0.6)]">
                   <Image
-                    src="/images/ivan_idea_laptop.png"
+                    src="/images/ivan_seated_tech.jpg"
                     alt="Iván"
-                    width={48}
-                    height={48}
-                    className="object-contain filter drop-shadow-[0_0_12px_rgba(0,209,255,0.8)] animate-bounce"
+                    fill
+                    className="object-cover object-top"
                   />
-                  <div className="absolute -top-1 right-0 w-2 h-2 rounded-full bg-[#00D1FF] animate-ping" />
+                  <div className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-[#00D1FF] animate-ping" />
                 </div>
                 <div className="bg-black/95 border border-[#00D1FF]/60 rounded-2xl rounded-br-none p-3 sm:p-3.5 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,209,255,0.35)] text-left">
                   <div className="flex items-center gap-1.5 mb-1">
@@ -745,16 +762,16 @@ export default function FloatingChatWidget({
               }}
               className="group flex items-center gap-2.5 sm:gap-3 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-full bg-[#040407]/95 border border-white/20 hover:border-[#00D1FF]/60 shadow-[0_0_25px_rgba(0,209,255,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer relative"
             >
-              <div className="flex items-center -space-x-1.5">
-                <div className="w-5 h-5 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 flex items-center justify-center overflow-hidden">
-                  <Image src="/images/sofia_pink_beanbag.png" alt="Sofía - Asesora de Diseño" width={16} height={16} className="object-contain" />
+              <div className="flex items-center -space-x-2">
+                <div className="w-6 h-6 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/60 flex items-center justify-center overflow-hidden relative shadow-[0_0_8px_rgba(255,56,88,0.5)]">
+                  <Image src="/images/sofia_seated_art.jpg" alt="Sofía" fill className="object-cover object-top" />
                 </div>
-                <div className="w-5 h-5 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 flex items-center justify-center overflow-hidden">
-                  <Image src="/images/ivan_standing_stylus.png" alt="Iván - Asesor de Software" width={16} height={16} className="object-contain" />
+                <div className="w-6 h-6 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/60 flex items-center justify-center overflow-hidden relative shadow-[0_0_8px_rgba(0,209,255,0.5)]">
+                  <Image src="/images/ivan_seated_tech.jpg" alt="Iván" fill className="object-cover object-top" />
                 </div>
               </div>
               <div className="text-left whitespace-nowrap">
-                <span className="text-xs font-bold text-white block leading-tight">¿Necesitas ayuda?</span>
+                <span className="text-xs font-bold text-white block leading-tight">¿Tienes alguna duda?</span>
                 <span className="text-[9px] sm:text-[10px] text-gray-400 font-mono">Sofía & Iván</span>
               </div>
             </button>
@@ -768,22 +785,20 @@ export default function FloatingChatWidget({
             <div className="p-3.5 sm:p-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="flex items-center -space-x-2">
-                  <div className="w-7 h-7 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 p-0.5 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/60 p-0.5 flex items-center justify-center overflow-hidden relative shadow-[0_0_10px_rgba(255,56,88,0.4)]">
                     <Image
-                      src="/images/sofia_pink_beanbag.png"
+                      src="/images/sofia_seated_art.jpg"
                       alt="Sofía"
-                      width={20}
-                      height={20}
-                      className="object-contain"
+                      fill
+                      className="object-cover object-top rounded-full"
                     />
                   </div>
-                  <div className="w-7 h-7 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 p-0.5 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/60 p-0.5 flex items-center justify-center overflow-hidden relative shadow-[0_0_10px_rgba(0,209,255,0.4)]">
                     <Image
-                      src="/images/ivan_standing_stylus.png"
+                      src="/images/ivan_seated_tech.jpg"
                       alt="Iván"
-                      width={20}
-                      height={20}
-                      className="object-contain"
+                      fill
+                      className="object-cover object-top rounded-full"
                     />
                   </div>
                 </div>
@@ -814,7 +829,7 @@ export default function FloatingChatWidget({
                 <button
                   type="button"
                   onClick={handleResetChat}
-                  title="Nueva conversación (La sesión se guarda por 2h o puedes reiniciarla aquí)"
+                  title="Nueva conversación"
                   className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -854,15 +869,27 @@ export default function FloatingChatWidget({
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex items-start gap-2.5 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
+                  {msg.sender !== "user" && (
+                    <div className={`w-7 h-7 rounded-full overflow-hidden relative border flex-shrink-0 mt-0.5 shadow-md ${
+                      msg.sender === "sofia" ? "border-[#FF3858]/60" : "border-[#00D1FF]/60"
+                    }`}>
+                      <Image
+                        src={msg.sender === "sofia" ? "/images/sofia_seated_art.jpg" : "/images/ivan_seated_tech.jpg"}
+                        alt={msg.sender}
+                        fill
+                        className="object-cover object-top"
+                      />
+                    </div>
+                  )}
                   <div
-                    className={`max-w-[85%] sm:max-w-[82%] p-3 rounded-2xl text-xs leading-relaxed ${
+                    className={`max-w-[82%] sm:max-w-[78%] p-3 rounded-2xl text-xs leading-relaxed ${
                       msg.sender === "user"
                         ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white rounded-br-none"
                         : msg.sender === "sofia"
-                        ? "bg-[#FF3858]/10 border border-[#FF3858]/30 text-gray-200 rounded-bl-none"
-                        : "bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-gray-200 rounded-bl-none font-mono"
+                        ? "bg-[#FF3858]/10 border border-[#FF3858]/30 text-gray-200 rounded-tl-none"
+                        : "bg-[#00D1FF]/10 border border-[#00D1FF]/30 text-gray-200 rounded-tl-none font-mono"
                     }`}
                   >
                     {msg.sender !== "user" && (
@@ -880,9 +907,27 @@ export default function FloatingChatWidget({
               ))}
 
               {isTyping && (
-                <div className="text-[10px] font-mono text-gray-400 flex items-center gap-1.5 p-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF] animate-pulse" />
-                  <span>Respondiendo...</span>
+                <div className="flex items-center gap-2 p-2 rounded-xl bg-white/[0.03] border border-white/5 w-fit">
+                  <div className={`w-5 h-5 rounded-full overflow-hidden relative border ${
+                    isTyping === "sofia" ? "border-[#FF3858]" : "border-[#00D1FF]"
+                  }`}>
+                    <Image
+                      src={isTyping === "sofia" ? "/images/sofia_seated_art.jpg" : "/images/ivan_seated_tech.jpg"}
+                      alt="Escribiendo"
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
+                  <div className="flex items-center gap-1 text-[10px] font-mono text-gray-400">
+                    <span className="flex gap-0.5">
+                      <span className="w-1 h-1 rounded-full bg-white animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1 h-1 rounded-full bg-white animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-1 h-1 rounded-full bg-white animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </span>
+                    <span className="ml-1">
+                      {isTyping === "sofia" ? "Sofía está escribiendo..." : "Iván está escribiendo..."}
+                    </span>
+                  </div>
                 </div>
               )}
               <div ref={messagesEndRef} className="h-1" />
