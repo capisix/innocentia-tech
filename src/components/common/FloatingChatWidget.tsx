@@ -254,7 +254,7 @@ export default function FloatingChatWidget({
     },
   ];
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string) => {
     const text = textToSend || inputValue;
     if (!text.trim()) return;
 
@@ -264,14 +264,31 @@ export default function FloatingChatWidget({
       sender: "user" as const,
       text: text.trim(),
     };
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedHistory = [...messages, userMsg];
+    setMessages(updatedHistory);
     setInputValue("");
 
-    // Simulate AI dual intelligence response
-    const reply = getIntelligentHumanReply(text);
+    setIsTyping("sofia");
+
+    let reply = getIntelligentHumanReply(text);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text.trim(), history: updatedHistory.slice(-6) }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.response && Array.isArray(data.response.text) && data.response.text.length > 0) {
+          reply = data.response;
+        }
+      }
+    } catch {
+      // Gracefully continue with client-side reply
+    }
 
     if (reply.type === "sofia") {
-      setIsTyping("sofia");
       setTimeout(() => {
         setIsTyping(null);
         setMessages((prev) => [
@@ -279,10 +296,10 @@ export default function FloatingChatWidget({
           {
             id: (Date.now() + 1).toString(),
             sender: "sofia",
-            text: reply.text.join("\n\n"),
+            text: reply.text.join("\n\n").replace(/^SOFÍA:\s*/, ""),
           },
         ]);
-      }, 1200);
+      }, 1000);
     } else if (reply.type === "ivan") {
       setIsTyping("ivan");
       setTimeout(() => {
@@ -292,13 +309,12 @@ export default function FloatingChatWidget({
           {
             id: (Date.now() + 1).toString(),
             sender: "ivan",
-            text: reply.text.join("\n\n"),
+            text: reply.text.join("\n\n").replace(/^IVÁN:\s*/, ""),
           },
         ]);
-      }, 1200);
+      }, 1000);
     } else {
       // Natural staggered conversation: Sofía first, then Iván
-      setIsTyping("sofia");
       setTimeout(() => {
         const sofiaText = reply.text[0]?.replace(/^SOFÍA:\s*/, "") || "";
         setMessages((prev) => [

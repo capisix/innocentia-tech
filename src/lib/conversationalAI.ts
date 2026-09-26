@@ -17,7 +17,232 @@ interface MatchRule {
 
 const RULES: MatchRule[] = [
   // =========================================================================
-  // 1. ELEGIR LOGO / BRANDING / IDENTIDAD VISUAL & CONCEPTUALIZACIÓN
+  // 1. ¿ES DIFÍCIL / COMPLICADO DISEÑAR O CREAR UN SISTEMA O APP? (PREGUNTA DIRECTA)
+  // =========================================================================
+  {
+    id: "dificultad_sistema_proceso",
+    priority: 110,
+    keywords: [
+      "es dificil",
+      "es difícil",
+      "es muy dificil",
+      "es muy difícil",
+      "es complicado",
+      "es muy complicado",
+      "es dificil diseñar",
+      "es difícil diseñar",
+      "es dificil crear",
+      "es difícil crear",
+      "es dificil hacer",
+      "es difícil hacer",
+      "es dificil diseñar un sistema",
+      "es difícil diseñar un sistema",
+      "es dificil hacer un sistema",
+      "es difícil hacer un sistema",
+      "es dificil programar",
+      "es difícil programar",
+      "que tan dificil",
+      "qué tan difícil",
+      "que tan complicado",
+      "qué tan complicado",
+      "cuesta mucho trabajo",
+      "se puede hacer",
+      "es posible",
+      "da miedo",
+      "es facil",
+      "es fácil",
+      "es sencillo",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "IVÁN: Para nada tiene por qué ser difícil ni abrumador si se trabaja con el método correcto. Lo que suele complicar un sistema es cuando se intenta programar sin tener clara la lógica o cuando se improvisa sobre la marcha. Nosotros nos encargamos de toda la complejidad técnica y dividimos el proyecto en pasos sencillos.",
+          "SOFÍA: Exacto, tú no tienes que preocuparte por tecnicismos ni aprender código; primero creamos un prototipo interactivo en Figma para que pruebes y apruebes cada pantalla en tu celular como si fuera un juego. Cuéntanos, ¿qué proceso o problema de tu negocio te gustaría sistematizar?",
+        ],
+      },
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Diseñar un sistema se vuelve muy fluido cuando empezamos por entender qué necesitas resolver en tu día a día. Hacemos que la experiencia sea visualmente limpia, rápida y muy fácil de usar para ti o tus colaboradores.",
+          "IVÁN: Y por la parte técnica, estructuramos una arquitectura sólida para que no te dé dolores de cabeza a futuro. ¿El sistema que imaginas sería para uso interno de tu equipo o para que lo usen tus clientes?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 2. TIEMPOS DE ENTREGA, DURACIÓN Y PLAZOS
+  // =========================================================================
+  {
+    id: "tiempos_duracion",
+    priority: 105,
+    keywords: [
+      "cuanto tardan",
+      "cuánto tardan",
+      "cuanto tiempo lleva",
+      "cuánto tiempo lleva",
+      "cuanto tiempo se tarda",
+      "cuánto tiempo se tarda",
+      "en cuanto tiempo",
+      "en cuánto tiempo",
+      "cuanto demora",
+      "cuánto demora",
+      "plazos de entrega",
+      "tiempos de entrega",
+      "cuanto tiempo toma",
+      "cuánto tiempo toma",
+      "fecha de entrega",
+      "tardan mucho",
+      "se tardan mucho",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "IVÁN: Los tiempos dependen del alcance: un sitio web o landing page profesional toma entre 1 y 2 semanas; una identidad de marca completa alrededor de 2 semanas; y una plataforma o app móvil a medida suele tomar entre 4 y 8 semanas, con entregas continuas cada semana para que pruebes los avances en vivo.",
+          "SOFÍA: Además, desde la primera semana ya estás viendo y aprobando el diseño interactivo en tu celular. ¿Para qué fecha tienes planeado o te gustaría estrenar tu proyecto?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 3. DECISIÓN: ¿QUÉ ME CONVIENE? (WEB VS APP)
+  // =========================================================================
+  {
+    id: "decision_web_vs_app",
+    priority: 104,
+    keywords: [
+      "que me conviene",
+      "qué me conviene",
+      "web o app",
+      "app o web",
+      "pagina o app",
+      "página o app",
+      "me conviene una app",
+      "necesito una app",
+      "vale la pena una app",
+      "conviene una pagina",
+      "que es mejor una web o una app",
+      "qué es mejor una web o una app",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "IVÁN: Para la gran mayoría de los negocios que inician, lo más inteligente, rápido y rentable es arrancar con una plataforma web optimizada para celular. Una app móvil descargable tiene sentido si requieres funciones nativas como GPS continuo en segundo plano, cámara en modo offline o notificaciones push frecuentes.",
+          "SOFÍA: Cuéntanos un poco: ¿qué producto o servicio ofreces y de qué manera te gustaría que tus clientes interactúen contigo?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 4. SOLO TENGO UNA IDEA / NO SÉ DE TECNOLOGÍA / APENAS VOY EMPEZANDO
+  // =========================================================================
+  {
+    id: "solo_tengo_una_idea",
+    priority: 103,
+    keywords: [
+      "apenas tengo una idea",
+      "solo tengo una idea",
+      "sólo tengo una idea",
+      "tengo una idea pero",
+      "no tengo nada",
+      "no tengo nada listo",
+      "no se nada de tecnologia",
+      "no sé nada de tecnología",
+      "no entiendo de tecnologia",
+      "no entiendo de tecnología",
+      "soy nuevo en esto",
+      "apenas voy empezando",
+      "no tengo logo ni nada",
+      "por donde empiezo",
+      "por dónde empiezo",
+      "como se empieza",
+      "cómo se empieza",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡No te preocupes para nada! De hecho, la gran mayoría de nuestros clientes llegan exactamente así: con una idea en mente o anotada en una libreta. Nuestro trabajo es justamente ayudarte a darle forma desde cero: desde el nombre, los colores y el estilo visual, hasta la estructura del producto.",
+          "IVÁN: Tú eres el experto en la necesidad de tu negocio y nosotros nos encargamos de toda la ingeniería. Platícanos un poco: ¿de qué se trata tu idea o qué problema quieres resolver?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 5. ¿QUÉ PASA SI NO ME GUSTA EL DISEÑO? / GARANTÍAS Y REVISIONES
+  // =========================================================================
+  {
+    id: "garantias_cambios",
+    priority: 102,
+    keywords: [
+      "que pasa si no me gusta",
+      "qué pasa si no me gusta",
+      "y si no me gusta",
+      "no me gusta el diseno",
+      "no me gusta el diseño",
+      "hacen cambios",
+      "cuantas revisiones",
+      "cuántas revisiones",
+      "puedo pedir cambios",
+      "si hay errores",
+      "que garantia tengo",
+      "qué garantía tengo",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Precisamente por eso nunca programamos nada a ciegas. Antes de escribir una sola línea de código, te entregamos un prototipo interactivo en Figma donde pruebas cada pantalla, color y botón en tu propio celular. Hacemos todas las rondas de ajustes necesarias hasta que te encante al 100%.",
+          "IVÁN: Y en la parte técnica, todos nuestros desarrollos cuentan con garantía contra fallas y soporte post-lanzamiento. ¿Tienes en mente alguna referencia o estándar visual que te guste?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 6. ¿QUÉ NECESITAN DE MÍ PARA EMPEZAR?
+  // =========================================================================
+  {
+    id: "que_necesitan_de_mi",
+    priority: 101,
+    keywords: [
+      "que necesitan de mi",
+      "qué necesitan de mí",
+      "que se necesita para empezar",
+      "qué se necesita para empezar",
+      "que requisitos",
+      "qué requisitos",
+      "que debo entregar",
+      "qué debo entregar",
+      "que informacion necesitan",
+      "qué información necesitan",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Para arrancar no necesitas ningún documento complejo; solo platicar con nosotros sobre tu visión: qué problema resuelve tu negocio, a quién va dirigido y si tienes referencias de marcas que te agraden.",
+          "IVÁN: Nosotros te hacemos las preguntas clave y nos encargamos de traducir tu idea a especificaciones técnicas y arquitectura de software. ¿De qué trata tu proyecto?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 7. ELEGIR LOGO / BRANDING / IDENTIDAD VISUAL (CONSULTORÍA)
   // =========================================================================
   {
     id: "branding_logo",
@@ -36,13 +261,6 @@ const RULES: MatchRule[] = [
       "paleta de colores",
       "diseño de marca",
       "diseno de marca",
-      "que necesito para diseñar mi marca",
-      "qué necesito para diseñar mi marca",
-      "que necesito para disenar mi marca",
-      "que se necesita para diseñar mi marca",
-      "que se necesita para disenar",
-      "como diseñan la marca",
-      "como disenan la marca",
       "como elegir el logo",
       "cómo elegir el logo",
       "como elegir un logo",
@@ -66,9 +284,6 @@ const RULES: MatchRule[] = [
       "definir mi marca",
       "logo para mi negocio",
       "logo de mi marca",
-      "estilo visual",
-      "tipografia",
-      "tipografía",
     ],
     responses: [
       {
@@ -91,7 +306,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 2. MARKETING DIGITAL, ESTRATEGIAS, GROWTH, PAUTAS & PUBLICIDAD
+  // 8. MARKETING DIGITAL, ESTRATEGIAS, GROWTH, PAUTAS & PUBLICIDAD
   // =========================================================================
   {
     id: "marketing_growth",
@@ -163,7 +378,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 3. DESARROLLO DE APPS MÓVILES (iOS Y ANDROID)
+  // 9. DESARROLLO DE APPS MÓVILES (iOS Y ANDROID)
   // =========================================================================
   {
     id: "apps_moviles",
@@ -207,7 +422,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 4. PLATAFORMAS WEB, SAAS, SISTEMAS & TIENDAS ONLINE
+  // 10. PLATAFORMAS WEB, SAAS, SISTEMAS & TIENDAS ONLINE
   // =========================================================================
   {
     id: "plataformas_web",
@@ -256,7 +471,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 5. INTELIGENCIA ARTIFICIAL, AGENTES & AUTOMATIZACIONES
+  // 11. INTELIGENCIA ARTIFICIAL, AGENTES & AUTOMATIZACIONES
   // =========================================================================
   {
     id: "ia_agentes",
@@ -304,7 +519,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 6. PRECIOS, COSTOS & COTIZACIÓN
+  // 12. PRECIOS, COSTOS & COTIZACIÓN
   // =========================================================================
   {
     id: "precios_cotizacion",
@@ -329,6 +544,8 @@ const RULES: MatchRule[] = [
       "paquetes",
       "cuanto cobran",
       "cuánto cobran",
+      "es muy caro",
+      "es caro",
     ],
     responses: [
       {
@@ -351,7 +568,7 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 7. PROCESO DE TRABAJO & METODOLOGÍA (CÓMO TRABAJAN / PASOS)
+  // 13. PROCESO DE TRABAJO & METODOLOGÍA (CÓMO TRABAJAN / PASOS)
   // =========================================================================
   {
     id: "proceso_trabajo",
@@ -380,58 +597,14 @@ const RULES: MatchRule[] = [
         type: "both",
         text: [
           "SOFÍA: 1. Primero tenemos una sesión para aterrizar tu idea y creamos un prototipo interactivo en Figma para que pruebes y apruebes cada detalle visual y pantallas directamente en tu celular.",
-          "IVÁN: 2. Luego programamos la tecnología y te damos acceso a un enlace privado con avances continuos para que pruebes todo antes del lanzamiento oficial. ¿Para cuándo tienes planeado el estreno de tu proyecto?",
+          "IVÁN: 2. Luego programamos la tecnología y te damos acceso a un enlace privado con avances continuos para que pruebes todo antes del lanzamiento oficial. ¿Para cuándo te gustaría estrenar tu proyecto?",
         ],
       },
     ],
   },
 
   // =========================================================================
-  // 8. ESCALABILIDAD, ALTA CONCURRENCIA, TRÁFICO & ARQUITECTURA
-  // =========================================================================
-  {
-    id: "escalabilidad",
-    priority: 88,
-    keywords: [
-      "escalable",
-      "escalables",
-      "escalabilidad",
-      "escalar",
-      "concurrencia",
-      "concurrente",
-      "usuarios simultaneos",
-      "usuarios simultáneos",
-      "muchos usuarios",
-      "trafico alto",
-      "tráfico alto",
-      "alto trafico",
-      "alto tráfico",
-      "millones de usuarios",
-      "miles de usuarios",
-      "soporta trafico",
-      "soporta tráfico",
-      "se cae",
-      "se caiga",
-      "crecimiento",
-      "crecer",
-      "rendimiento a escala",
-      "arquitectura cloud",
-      "servidores potentes",
-    ],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Construimos con arquitecturas modernas sobre Next.js, PostgreSQL con pool de conexiones y Cloudflare Edge para responder en milisegundos incluso ante picos altos de visitas.",
-          "¿Tienes alguna estimación del volumen de usuarios o transacciones mensuales que esperas recibir en tu plataforma?",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 9. PROPIEDAD DEL CÓDIGO, DERECHOS & REPOSITORIOS
+  // 14. PROPIEDAD DEL CÓDIGO & DERECHOS
   // =========================================================================
   {
     id: "propiedad_codigo",
@@ -441,30 +614,15 @@ const RULES: MatchRule[] = [
       "código es mío",
       "el codigo es nuestro",
       "el código es nuestro",
-      "codigo me pertenece",
-      "código me pertenece",
-      "me pertenece",
-      "pertenece",
-      "de quien es el codigo",
-      "de quién es el código",
-      "quien es el dueño",
-      "quién es el dueño",
-      "soy dueño",
-      "somos dueños",
       "propiedad intelectual",
-      "propiedad del codigo",
-      "propiedad del código",
       "derechos de autor",
       "codigo fuente",
       "código fuente",
       "repositorio",
-      "repositorios",
       "github",
-      "licencia",
-      "ataduras",
-      "dependencia",
-      "entregan el codigo",
-      "entregan el código",
+      "de quien es el codigo",
+      "de quién es el código",
+      "somos dueños",
     ],
     responses: [
       {
@@ -473,176 +631,6 @@ const RULES: MatchRule[] = [
         text: [
           "El código fuente, los repositorios en GitHub, las bases de datos y la propiedad intelectual son 100% de tu empresa desde el día de entrega. Cero dependencias forzosas ni candados.",
           "¿Cuentas con equipo técnico interno en tu empresa o prefieres que nosotros nos encarguemos del mantenimiento y hosting?",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 10. INTEGRACIONES: PASARELAS DE PAGO, STRIPE, WHATSAPP, FACTURACIÓN SAT
-  // =========================================================================
-  {
-    id: "integraciones_pagos",
-    priority: 85,
-    keywords: [
-      "pasarela",
-      "pasarelas",
-      "stripe",
-      "mercadopago",
-      "mercado pago",
-      "paypal",
-      "spei",
-      "tarjeta",
-      "tarjetas",
-      "cobros",
-      "cobrar en linea",
-      "cobros en línea",
-      "facturacion",
-      "facturación",
-      "facturas",
-      "sat",
-      "cfdi",
-      "whatsapp api",
-      "google maps",
-      "webhook",
-      "webhooks",
-      "api externa",
-      "apis externas",
-    ],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Integramos cualquier servicio que tu negocio necesite: pagos con tarjeta y MSI vía Stripe/Mercado Pago, transferencias SPEI automatizadas, timbrado de facturas SAT CFDI 4.0 o WhatsApp Cloud API.",
-          "¿Tienes ya alguna pasarela, banco o sistema de facturación con el que operes actualmente?",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 11. GARANTÍA TÉCNICA, BUGS, SOPORTE & MONITOREO
-  // =========================================================================
-  {
-    id: "garantia_soporte",
-    priority: 80,
-    keywords: [
-      "garantia",
-      "garantía",
-      "que pasa si falla",
-      "qué pasa si falla",
-      "soporte",
-      "mantenimiento",
-      "bugs",
-      "errores",
-      "falla",
-      "actualizaciones",
-      "respaldos",
-      "backup",
-      "post venta",
-      "postventa",
-      "monitoreo",
-      "poliza",
-      "póliza",
-    ],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Todos nuestros desarrollos incluyen garantía técnica contra fallas o bugs y monitoreo de servidores, además de respaldos diarios automáticos en la nube.",
-          "¿Tu proyecto requerirá soporte continuo en horarios específicos o mejoras evolutivas mensuales?",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 12. MODALIDADES DE INVERSIÓN: PROYECTO A MEDIDA VS RENTA TECNOLÓGICA
-  // =========================================================================
-  {
-    id: "modalidades_pago",
-    priority: 78,
-    keywords: [
-      "modalidad",
-      "modalidades",
-      "renta",
-      "rentar",
-      "suscripcion",
-      "suscripción",
-      "mensualidad",
-      "formas de pago",
-      "planes de pago",
-      "financiamiento",
-      "meses sin intereses",
-      "etapas de pago",
-      "hitos",
-    ],
-    responses: [
-      {
-        speaker: "IVÁN",
-        type: "ivan",
-        text: [
-          "Manejamos dos esquemas según la etapa de tu negocio:\n1. Desarrollo a Medida por Proyecto: Pagos por avances y la propiedad total del código.\n2. Renta Tecnológica Todo Incluido: Inversión inicial accesible con una tarifa mensual que cubre infraestructura en la nube, servidores y soporte continuo.",
-          "¿Cuál de estos dos modelos se acomoda mejor a la etapa de tu empresa?",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 13. MIGRACIÓN, REDISEÑO & MEJORA DE SISTEMAS EXISTENTES
-  // =========================================================================
-  {
-    id: "migracion_rediseno",
-    priority: 77,
-    keywords: [
-      "ya tengo una pagina",
-      "ya tengo una página",
-      "ya tengo sistema",
-      "ya tengo app",
-      "rediseñar",
-      "rediseño",
-      "migrar",
-      "migracion",
-      "migración",
-      "modernizar",
-      "mejorar mi web",
-      "cambiar de proveedor",
-    ],
-    responses: [
-      {
-        speaker: "DUAL",
-        type: "both",
-        text: [
-          "SOFÍA: ¡Podemos modernizarlo y darle nueva vida! Cuéntanos: ¿qué aspectos sientes que hoy no están funcionando en tu página o sistema actual (diseño, lentitud o poca conversión de clientes)?",
-          "IVÁN: Y nos encargamos de migrar tu base de datos y backend sin perder información de clientes ni interrumpir las ventas de tu negocio.",
-        ],
-      },
-    ],
-  },
-
-  // =========================================================================
-  // 14. COMBINADO: LOGO + APP / SOFTWARE INTEGRAL
-  // =========================================================================
-  {
-    id: "combo_logo_app",
-    priority: 76,
-    keywords: [
-      "logo y una aplicacion",
-      "logo y una aplicación",
-      "logo y app",
-      "marca y app",
-      "marca y sistema",
-    ],
-    responses: [
-      {
-        speaker: "DUAL",
-        type: "both",
-        text: [
-          "SOFÍA: ¡Es la mejor decisión! Creamos toda la identidad visual y estilo de tu marca para que tu producto transmita solidez y confianza desde el inicio.",
-          "IVÁN: Y en paralelo programamos la aplicación para que el diseño y la tecnología se sincronicen a la perfección. ¿Qué tipo de servicio o producto ofrecerás en la plataforma?",
         ],
       },
     ],
@@ -759,15 +747,16 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
       if (testKeywordMatch(normalizedQuery, normalizedKw)) {
         matchedKeywordsCount++;
         const isPhrase = normalizedKw.includes(" ");
-        const lengthBonus = normalizedKw.length * 4;
-        const phraseBonus = isPhrase ? 80 : 0;
+        // Multi-word phrases receive substantial weight so exact questions win over single words
+        const phraseBonus = isPhrase ? (normalizedKw.split(" ").length * 150) : 0;
+        const lengthBonus = normalizedKw.length * 5;
 
-        score += rule.priority * 15 + lengthBonus + phraseBonus;
+        score += rule.priority * 20 + lengthBonus + phraseBonus;
       }
     }
 
     if (matchedKeywordsCount > 1) {
-      score += matchedKeywordsCount * 40;
+      score += matchedKeywordsCount * 60;
     }
 
     if (score > highestScore && score > 0) {
@@ -860,4 +849,3 @@ export function getIntelligentHumanReply(userQuery: string): ChatBotResponse {
     ],
   };
 }
-
