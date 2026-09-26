@@ -254,7 +254,7 @@ export default function ProjectCaseStudyModal({
           <div className="space-y-4 relative z-10 animate-in fade-in duration-200">
             <div className="p-4 rounded-2xl bg-[#FF3858]/10 border border-[#FF3858]/30 flex items-start gap-4">
               <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-[#FF3858]/20 border border-[#FF3858]/50 p-1 flex items-center justify-center">
-                <Image src="/images/sofia_standing_brush.png" alt="Sofía" width={36} height={36} className="object-contain" />
+                <Image src="/images/sofia_avatar.png" alt="Sofía" width={40} height={40} className="object-contain" />
               </div>
               <div className="space-y-1">
                 <h4 className="text-sm font-bold text-white uppercase font-mono">
@@ -285,7 +285,7 @@ export default function ProjectCaseStudyModal({
           <div className="space-y-4 relative z-10 animate-in fade-in duration-200">
             <div className="p-4 rounded-2xl bg-[#00D1FF]/10 border border-[#00D1FF]/30 flex items-start gap-4">
               <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-1 flex items-center justify-center">
-                <Image src="/images/ivan_idea_laptop.png" alt="Iván" width={36} height={36} className="object-contain" />
+                <Image src="/images/ivan_avatar.png" alt="Iván" width={40} height={40} className="object-contain" />
               </div>
               <div className="space-y-1">
                 <h4 className="text-sm font-bold text-white uppercase font-mono">
@@ -322,8 +322,8 @@ export default function ProjectCaseStudyModal({
               }}
               className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-full bg-[#FF3858]/15 hover:bg-[#FF3858]/25 border border-[#FF3858]/40 text-[#FF3858] hover:text-white font-bold text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
-              <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0">
-                <Image src="/images/sofia_pink_beanbag.png" alt="Sofía - Asesora Creativa" width={16} height={16} className="object-contain" />
+              <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
+                <Image src="/images/sofia_avatar.png" alt="Sofía - Asesora Creativa" width={20} height={20} className="object-contain" />
               </div>
               <span>Duda de Diseño (Sofía)</span>
             </button>
@@ -336,8 +336,8 @@ export default function ProjectCaseStudyModal({
               }}
               className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-full bg-[#00D1FF]/15 hover:bg-[#00D1FF]/25 border border-[#00D1FF]/40 text-[#00D1FF] hover:text-white font-bold text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
-              <div className="w-4 h-4 rounded-full overflow-hidden flex-shrink-0">
-                <Image src="/images/ivan_standing_stylus.png" alt="Iván - Arquitecto de Software" width={16} height={16} className="object-contain" />
+              <div className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0">
+                <Image src="/images/ivan_avatar.png" alt="Iván - Arquitecto de Software" width={20} height={20} className="object-contain" />
               </div>
               <span>Duda Técnica (Iván)</span>
             </button>

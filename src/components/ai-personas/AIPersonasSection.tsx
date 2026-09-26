@@ -24,7 +24,7 @@ const SOFIA_VIDEO: PersonaVideoData = {
   videoSrcMobile: "/videos/sofia_presentacion_celular.mp4",
   themeColor: "#FF3858",
   secondaryColor: "#FF7A00",
-  avatarImg: "/images/sofia_seated_art.jpg",
+  avatarImg: "/images/sofia_avatar.png",
   icon: "🖌️",
 };
 
@@ -36,7 +36,7 @@ const IVAN_VIDEO: PersonaVideoData = {
   videoSrcMobile: "/videos/ivan_presentacion_celular.mp4",
   themeColor: "#00D1FF",
   secondaryColor: "#3A86FF",
-  avatarImg: "/images/ivan_seated_tech.jpg",
+  avatarImg: "/images/ivan_avatar.png",
   icon: "⚡",
 };
 

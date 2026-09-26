@@ -32,11 +32,11 @@ export default function FAQSection() {
 
         {/* Avatars */}
         <div className="flex items-center -space-x-3 pt-1">
-          <div className="w-14 h-14 rounded-full bg-[#FF3858]/20 border-2 border-[#FF3858]/50 p-1 flex items-center justify-center shadow-[0_0_20px_rgba(255,56,88,0.4)]">
-            <Image src="/images/sofia_pink_beanbag.png" alt="Sofía" width={42} height={42} className="object-contain" />
+          <div className="w-14 h-14 rounded-full bg-[#FF3858]/20 border-2 border-[#FF3858]/50 p-1 flex items-center justify-center shadow-[0_0_20px_rgba(255,56,88,0.4)] overflow-hidden">
+            <Image src="/images/sofia_avatar.png" alt="Sofía" width={48} height={48} className="object-contain" />
           </div>
-          <div className="w-14 h-14 rounded-full bg-[#00D1FF]/20 border-2 border-[#00D1FF]/50 p-1 flex items-center justify-center shadow-[0_0_20px_rgba(0,209,255,0.4)]">
-            <Image src="/images/ivan_standing_stylus.png" alt="Iván" width={42} height={42} className="object-contain" />
+          <div className="w-14 h-14 rounded-full bg-[#00D1FF]/20 border-2 border-[#00D1FF]/50 p-1 flex items-center justify-center shadow-[0_0_20px_rgba(0,209,255,0.4)] overflow-hidden">
+            <Image src="/images/ivan_avatar.png" alt="Iván" width={48} height={48} className="object-contain" />
           </div>
         </div>
 

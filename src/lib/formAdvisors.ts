@@ -11,7 +11,7 @@ export const ADVISOR_PROFILES: Record<"sofia" | "ivan" | "both", AdvisorProfile>
   sofia: {
     name: "Sofía",
     role: "Directora de Creatividad & UX",
-    avatar: "/images/sofia_seated_art.jpg",
+    avatar: "/images/sofia_avatar.png",
     color: "#FF3858",
     badgeBg: "rgba(255, 56, 88, 0.15)",
     badgeBorder: "rgba(255, 56, 88, 0.4)",
@@ -19,7 +19,7 @@ export const ADVISOR_PROFILES: Record<"sofia" | "ivan" | "both", AdvisorProfile>
   ivan: {
     name: "Iván",
     role: "Director de Arquitectura & Dev",
-    avatar: "/images/ivan_seated_tech.jpg",
+    avatar: "/images/ivan_avatar.png",
     color: "#00D1FF",
     badgeBg: "rgba(0, 209, 255, 0.15)",
     badgeBorder: "rgba(0, 209, 255, 0.4)",

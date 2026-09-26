@@ -754,8 +754,8 @@ export default function FAQPage() {
                   : "bg-white/5 border border-white/15 text-[#FF3858] hover:bg-[#FF3858]/10"
               }`}
             >
-              <div className="w-4 h-4 rounded-full overflow-hidden bg-black/50 border border-white/30 flex-shrink-0 flex items-center justify-center">
-                <img src="/images/sofia_pink_beanbag.png" alt="Sofía" className="w-full h-full object-contain" />
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-black/50 border border-white/30 flex-shrink-0 flex items-center justify-center">
+                <img src="/images/sofia_avatar.png" alt="Sofía" className="w-full h-full object-contain" />
               </div>
               <span>SOFÍA (UX &amp; ARTE)</span>
             </button>
@@ -767,8 +767,8 @@ export default function FAQPage() {
                   : "bg-white/5 border border-white/15 text-[#00D1FF] hover:bg-[#00D1FF]/10"
               }`}
             >
-              <div className="w-4 h-4 rounded-full overflow-hidden bg-black/50 border border-white/30 flex-shrink-0 flex items-center justify-center">
-                <img src="/images/ivan_standing_stylus.png" alt="Iván" className="w-full h-full object-contain" />
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-black/50 border border-white/30 flex-shrink-0 flex items-center justify-center">
+                <img src="/images/ivan_avatar.png" alt="Iván" className="w-full h-full object-contain" />
               </div>
               <span>IVÁN (INGENIERÍA &amp; CODE)</span>
             </button>
@@ -846,9 +846,9 @@ export default function FAQPage() {
                             <img
                               src={
                                 ans.speaker.includes("SOFÍA")
-                                  ? "/images/sofia_pink_beanbag.png"
+                                  ? "/images/sofia_avatar.png"
                                   : ans.speaker.includes("IVÁN")
-                                  ? "/images/ivan_standing_stylus.png"
+                                  ? "/images/ivan_avatar.png"
                                   : "/images/favicon_transparent.png"
                               }
                               alt={ans.speaker}
@@ -937,7 +937,7 @@ export default function FAQPage() {
                   <div className="flex items-center gap-2">
                     {/* Small avatar thumbnail */}
                     <div
-                      className="w-5 h-5 rounded-full overflow-hidden flex-shrink-0 border flex items-center justify-center bg-black shadow-md"
+                      className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border flex items-center justify-center bg-black shadow-md"
                       style={{
                         borderColor:
                           item.type === "sofia"
@@ -952,11 +952,9 @@ export default function FAQPage() {
                       <img
                         src={
                           item.type === "sofia"
-                            ? "/images/sofia_pink_beanbag.png"
+                            ? "/images/sofia_avatar.png"
                             : item.type === "ivan"
-                            ? "/images/ivan_standing_stylus.png"
-                            : item.type === "user"
-                            ? "/images/favicon_transparent.png"
+                            ? "/images/ivan_avatar.png"
                             : "/images/favicon_transparent.png"
                         }
                         alt={item.senderName}

@@ -126,12 +126,12 @@ export default function CapabilityDetailModal({
           {/* Sofía (UX & Visual) */}
           <div className="p-4 sm:p-5 rounded-2xl bg-[#FF3858]/10 border border-[#FF3858]/30 space-y-2 backdrop-blur-md">
             <div className="flex items-center gap-2.5">
-              <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-[#FF3858]/20 border border-[#FF3858]/50">
+              <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-[#FF3858]/20 border border-[#FF3858]/50">
                 <Image
-                  src="/images/sofia_pink_beanbag.png"
+                  src="/images/sofia_avatar.png"
                   alt="Sofía"
-                  width={24}
-                  height={24}
+                  width={28}
+                  height={28}
                   className="object-contain"
                 />
               </div>
@@ -147,12 +147,12 @@ export default function CapabilityDetailModal({
           {/* Iván (Code & Architecture) */}
           <div className="p-4 sm:p-5 rounded-2xl bg-[#00D1FF]/10 border border-[#00D1FF]/30 space-y-2 backdrop-blur-md">
             <div className="flex items-center gap-2.5">
-              <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-[#00D1FF]/20 border border-[#00D1FF]/50">
+              <div className="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 bg-[#00D1FF]/20 border border-[#00D1FF]/50">
                 <Image
-                  src="/images/ivan_standing_stylus.png"
+                  src="/images/ivan_avatar.png"
                   alt="Iván"
-                  width={24}
-                  height={24}
+                  width={28}
+                  height={28}
                   className="object-contain"
                 />
               </div>

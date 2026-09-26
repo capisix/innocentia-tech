@@ -477,18 +477,18 @@ export default function FloatingChatWidget({
                 <div className="flex items-center -space-x-2">
                   <div className="w-10 h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)] overflow-hidden relative">
                     <Image
-                      src="/images/sofia_seated_art.jpg"
+                      src="/images/sofia_avatar.png"
                       alt="Sofía"
                       fill
-                      className="object-cover object-top rounded-full"
+                      className="object-contain"
                     />
                   </div>
                   <div className="w-10 h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)] overflow-hidden relative">
                     <Image
-                      src="/images/ivan_seated_tech.jpg"
+                      src="/images/ivan_avatar.png"
                       alt="Iván"
                       fill
-                      className="object-cover object-top rounded-full"
+                      className="object-contain"
                     />
                   </div>
                 </div>
@@ -587,12 +587,12 @@ export default function FloatingChatWidget({
                       <Image
                         src={
                           msg.sender === "sofia"
-                            ? "/images/sofia_seated_art.jpg"
-                            : "/images/ivan_seated_tech.jpg"
+                            ? "/images/sofia_avatar.png"
+                            : "/images/ivan_avatar.png"
                         }
                         alt={msg.sender}
                         fill
-                        className="object-cover object-top rounded-full"
+                        className="object-contain"
                       />
                     </div>
                   )}
@@ -632,10 +632,10 @@ export default function FloatingChatWidget({
                     isTyping === "sofia" ? "border-[#FF3858]" : "border-[#00D1FF]"
                   }`}>
                     <Image
-                      src={isTyping === "sofia" ? "/images/sofia_seated_art.jpg" : "/images/ivan_seated_tech.jpg"}
+                      src={isTyping === "sofia" ? "/images/sofia_avatar.png" : "/images/ivan_avatar.png"}
                       alt="Escribiendo"
                       fill
-                      className="object-cover object-top"
+                      className="object-contain"
                     />
                   </div>
                   <div className="flex items-center gap-1.5 text-xs font-mono text-gray-300">
@@ -730,10 +730,10 @@ export default function FloatingChatWidget({
               >
                 <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 rounded-full overflow-hidden border-2 border-[#FF3858]/80 shadow-[0_0_15px_rgba(255,56,88,0.6)]">
                   <Image
-                    src="/images/sofia_seated_art.jpg"
+                    src="/images/sofia_avatar.png"
                     alt="Sofía"
                     fill
-                    className="object-cover object-top"
+                    className="object-contain"
                   />
                   <div className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-[#FFD166] animate-ping" />
                 </div>
@@ -761,10 +761,10 @@ export default function FloatingChatWidget({
               >
                 <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0 rounded-full overflow-hidden border-2 border-[#00D1FF]/80 shadow-[0_0_15px_rgba(0,209,255,0.6)]">
                   <Image
-                    src="/images/ivan_seated_tech.jpg"
+                    src="/images/ivan_avatar.png"
                     alt="Iván"
                     fill
-                    className="object-cover object-top"
+                    className="object-contain"
                   />
                   <div className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-[#00D1FF] animate-ping" />
                 </div>
@@ -814,10 +814,10 @@ export default function FloatingChatWidget({
             >
               <div className="flex items-center -space-x-2">
                 <div className="w-6 h-6 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/60 flex items-center justify-center overflow-hidden relative shadow-[0_0_8px_rgba(255,56,88,0.5)]">
-                  <Image src="/images/sofia_seated_art.jpg" alt="Sofía" fill className="object-cover object-top" />
+                  <Image src="/images/sofia_avatar.png" alt="Sofía" fill className="object-contain" />
                 </div>
                 <div className="w-6 h-6 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/60 flex items-center justify-center overflow-hidden relative shadow-[0_0_8px_rgba(0,209,255,0.5)]">
-                  <Image src="/images/ivan_seated_tech.jpg" alt="Iván" fill className="object-cover object-top" />
+                  <Image src="/images/ivan_avatar.png" alt="Iván" fill className="object-contain" />
                 </div>
               </div>
               <div className="text-left whitespace-nowrap">
@@ -837,18 +837,18 @@ export default function FloatingChatWidget({
                 <div className="flex items-center -space-x-2">
                   <div className="w-8 h-8 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/60 p-0.5 flex items-center justify-center overflow-hidden relative shadow-[0_0_10px_rgba(255,56,88,0.4)]">
                     <Image
-                      src="/images/sofia_seated_art.jpg"
+                      src="/images/sofia_avatar.png"
                       alt="Sofía"
                       fill
-                      className="object-cover object-top rounded-full"
+                      className="object-contain"
                     />
                   </div>
                   <div className="w-8 h-8 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/60 p-0.5 flex items-center justify-center overflow-hidden relative shadow-[0_0_10px_rgba(0,209,255,0.4)]">
                     <Image
-                      src="/images/ivan_seated_tech.jpg"
+                      src="/images/ivan_avatar.png"
                       alt="Iván"
                       fill
-                      className="object-cover object-top rounded-full"
+                      className="object-contain"
                     />
                   </div>
                 </div>
@@ -926,10 +926,10 @@ export default function FloatingChatWidget({
                       msg.sender === "sofia" ? "border-[#FF3858]/60" : "border-[#00D1FF]/60"
                     }`}>
                       <Image
-                        src={msg.sender === "sofia" ? "/images/sofia_seated_art.jpg" : "/images/ivan_seated_tech.jpg"}
+                        src={msg.sender === "sofia" ? "/images/sofia_avatar.png" : "/images/ivan_avatar.png"}
                         alt={msg.sender}
                         fill
-                        className="object-cover object-top"
+                        className="object-contain"
                       />
                     </div>
                   )}
@@ -962,10 +962,10 @@ export default function FloatingChatWidget({
                     isTyping === "sofia" ? "border-[#FF3858]" : "border-[#00D1FF]"
                   }`}>
                     <Image
-                      src={isTyping === "sofia" ? "/images/sofia_seated_art.jpg" : "/images/ivan_seated_tech.jpg"}
+                      src={isTyping === "sofia" ? "/images/sofia_avatar.png" : "/images/ivan_avatar.png"}
                       alt="Escribiendo"
                       fill
-                      className="object-cover object-top"
+                      className="object-contain"
                     />
                   </div>
                   <div className="flex items-center gap-1 text-[10px] font-mono text-gray-400">
