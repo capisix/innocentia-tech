@@ -362,10 +362,9 @@ export default function FloatingChatWidget({
     const hasFormLink = text.includes("crear-proyecto");
 
     const hasWhatsAppMention =
-      text.includes("WhatsApp") ||
-      text.includes("whatsapp") ||
       text.includes("960 177 1556") ||
-      text.includes("9601771556");
+      text.includes("9601771556") ||
+      text.includes("wa.me");
 
     const handleFormClick = (e: React.MouseEvent) => {
       e.preventDefault();

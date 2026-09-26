@@ -17,6 +17,43 @@ interface MatchRule {
 
 const RULES: MatchRule[] = [
   // =========================================================================
+  // 0.0 GIRO ESPECÍFICO: YATES, RENTA DE EMBARCACIONES, TURISMO & LUJO
+  // =========================================================================
+  {
+    id: "giro_yates_turismo",
+    priority: 120,
+    keywords: [
+      "yate",
+      "yates",
+      "rentar mi yate",
+      "rentar un yate",
+      "renta de yates",
+      "renta de yate",
+      "rentar yates",
+      "embarcacion",
+      "embarcaciones",
+      "lancha",
+      "lanchas",
+      "catamaran",
+      "catamarán",
+      "paseo en barco",
+      "turismo de lujo",
+      "experiencias nauticas",
+      "experiencias náuticas",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡Claro que sí! Las campañas para renta de yates y experiencias náuticas son fascinantes. En este sector el factor visual lo es todo: fotos y tomas de drone al atardecer, copys aspiracionales que vendan la experiencia (cumpleaños, despedidas, paseos privados o días de descanso en alta mar) y anuncios en Instagram/Facebook segmentados a perfiles de alto poder adquisitivo y turistas en la zona.",
+          "IVÁN: Y en la parte de conversión, armamos un embudo directo a tu WhatsApp con respuestas rápidas para enviar catálogo de fotos del yate, tarifas por hora o día, amenidades incluidas y disponibilidad de fechas de forma inmediata. ¿En qué puerto o destino tienes tu embarcación (Cancún, Progreso/Yucatán, Los Cabos, Vallarta)?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
   // 0.1 GIRO ESPECÍFICO: RESTAURANTES, GASTRONOMÍA, CAFETERÍAS & BARES
   // =========================================================================
   {
@@ -482,16 +519,16 @@ const RULES: MatchRule[] = [
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: Para armar una estrategia que realmente funcione y conecte con la gente adecuada: ¿Qué producto o servicio es hoy tu principal fuente de ingresos o el que más te interesa impulsar?",
-          "IVÁN: Conocer eso nos ayuda a definir el canal perfecto (Meta Ads, Google o WhatsApp) y la configuración técnica de captación. ¿Has probado hacer publicidad antes o sería tu primera campaña?",
+          "SOFÍA: ¡Totalmente! Para armar una campaña que conecte y genere resultados, lo primero es el impacto visual: diseñamos anuncios y videos con copys persuasivos pensados en el perfil de tus clientes ideales.",
+          "IVÁN: Y configuramos la segmentación (Meta Ads o Google) conectada a un embudo directo a tu WhatsApp para que atiendas a los interesados en el momento exacto. Cuéntanos: ¿en qué ciudad o destino te gustaría captar más clientes?",
         ],
       },
       {
         speaker: "DUAL",
         type: "both",
         text: [
-          "SOFÍA: En marketing cuidamos que cada anuncio visual transmita confianza inmediata y despierte el interés de tus clientes potenciales.",
-          "IVÁN: ¿Qué objetivo principal buscas alcanzar en este momento: dar a conocer una marca nueva o generar prospectos diarios calificados para cerrar ventas por WhatsApp?",
+          "SOFÍA: En marketing cuidamos que cada anuncio visual transmita confianza inmediata y despierte el deseo de compra.",
+          "IVÁN: ¿Qué objetivo principal buscas alcanzar en este momento: dar a conocer una marca nueva o generar prospectos diarios para cerrar ventas directas?",
         ],
       },
     ],
