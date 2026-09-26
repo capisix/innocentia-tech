@@ -314,36 +314,45 @@ export default function FloatingChatWidget({
         ]);
       }, 1000);
     } else {
-      // Natural staggered conversation: Sofía first, then Iván
+      // Natural staggered conversation based on actual speaker in reply.text
+      const firstRaw = reply.text[0] || "";
+      const isFirstIvan = /^IVÁN:\s*/i.test(firstRaw);
+      const firstSender: "ivan" | "sofia" = isFirstIvan ? "ivan" : "sofia";
+      const firstCleanText = firstRaw.replace(/^(SOFÍA|IVÁN):\s*/i, "");
+
+      setIsTyping(firstSender);
       setTimeout(() => {
-        const sofiaText = reply.text[0]?.replace(/^SOFÍA:\s*/, "") || "";
         setMessages((prev) => [
           ...prev,
           {
             id: (Date.now() + 1).toString(),
-            sender: "sofia",
-            text: sofiaText,
+            sender: firstSender,
+            text: firstCleanText,
           },
         ]);
 
         if (reply.text.length > 1) {
-          setIsTyping("ivan");
+          const secondRaw = reply.text[1] || "";
+          const isSecondIvan = /^IVÁN:\s*/i.test(secondRaw);
+          const secondSender: "ivan" | "sofia" = isSecondIvan ? "ivan" : "sofia";
+          const secondCleanText = secondRaw.replace(/^(SOFÍA|IVÁN):\s*/i, "");
+
+          setIsTyping(secondSender);
           setTimeout(() => {
             setIsTyping(null);
-            const ivanText = reply.text[1]?.replace(/^IVÁN:\s*/, "") || "";
             setMessages((prev) => [
               ...prev,
               {
                 id: (Date.now() + 2).toString(),
-                sender: "ivan",
-                text: ivanText,
+                sender: secondSender,
+                text: secondCleanText,
               },
             ]);
           }, 1400);
         } else {
           setIsTyping(null);
         }
-      }, 1100);
+      }, 1000);
     }
   };
 
