@@ -17,6 +17,126 @@ interface MatchRule {
 
 const RULES: MatchRule[] = [
   // =========================================================================
+  // 0.1 GIRO ESPECÍFICO: RESTAURANTES, GASTRONOMÍA, CAFETERÍAS & BARES
+  // =========================================================================
+  {
+    id: "giro_restaurante",
+    priority: 115,
+    keywords: [
+      "restaurante",
+      "restaurantes",
+      "logo de un restaurante",
+      "logo para un restaurante",
+      "logo para restaurante",
+      "logo restaurante",
+      "marca de restaurante",
+      "cafeteria",
+      "cafetería",
+      "cafe",
+      "café",
+      "bar",
+      "taqueria",
+      "taquería",
+      "comida",
+      "gastronomia",
+      "gastronomía",
+      "gourmet",
+      "antojitos",
+      "reposteria",
+      "repostería",
+      "pasteleria",
+      "pastelería",
+      "pizzeria",
+      "pizzería",
+      "menu digital",
+      "menú digital",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡Los proyectos gastronómicos son de mis favoritos! Para el logo de un restaurante, la identidad visual debe despertar apetito y reflejar la experiencia en la mesa:\n\n1. El concepto culinario: ¿qué tipo de comida ofrecen (cortes, mariscos, comida mexicana tradicional, italiana, café de especialidad o autor)?\n2. La atmósfera: ¿buscas que se sienta cálido y familiar, rústico, juvenil y dinámico, o una propuesta íntima y elegante?\n3. Aplicación real: cuidamos que el logo luzca impecable en menús impresos y digitales (QR), uniformes del staff, empaques to-go, servilletas y letreros luminosos.\n\n¿Ya tienes definido el concepto del menú o el nombre de tu restaurante?",
+          "IVÁN: Y a nivel tecnológico, podemos conectar tu identidad a un menú digital interactivo, sistema de reservas o pedidos directos por WhatsApp para que no dependas de las altas comisiones de apps externas. ¿Cuentas con servicio en mesa o te enfocas en delivery?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 0.2 GIRO ESPECÍFICO: INMOBILIARIAS, BIENES RAÍCES & ARQUITECTURA
+  // =========================================================================
+  {
+    id: "giro_inmobiliaria",
+    priority: 114,
+    keywords: [
+      "inmobiliaria",
+      "inmobiliarias",
+      "bienes raices",
+      "bienes raíces",
+      "desarrollo inmobiliario",
+      "desarrolladora",
+      "lotes",
+      "terrenos",
+      "departamentos",
+      "constructora",
+      "arquitectura",
+      "propiedades",
+      "logo inmobiliaria",
+      "web inmobiliaria",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: En el sector inmobiliario la imagen debe transmitir absoluta solidez, prestigio y confianza para inversionistas y compradores. Diseñamos marcas con líneas sobrias y elegantes, renders visuales y dossiers digitales de venta de alto impacto.",
+          "IVÁN: Y a nivel de ingeniería podemos crear un catálogo interactivo con disponibilidad de lotes en tiempo real, cotizador de financiamiento y conexión directa a tu CRM. ¿Qué tipo de desarrollos comercializas?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 0.3 GIRO ESPECÍFICO: SALUD, CLÍNICAS, MÉDICOS & BIENESTAR
+  // =========================================================================
+  {
+    id: "giro_salud",
+    priority: 114,
+    keywords: [
+      "clinica",
+      "clínica",
+      "medico",
+      "médico",
+      "doctores",
+      "dental",
+      "dentista",
+      "odontologia",
+      "odontología",
+      "spa",
+      "estetica",
+      "estética",
+      "salud",
+      "psicologia",
+      "psicología",
+      "dermatologia",
+      "dermatología",
+      "consultorio",
+      "hospital",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Para el sector salud y bienestar, cuidamos que los colores y la tipografía transmitan higiene, empatía y calma clínica, alejándonos de lo frío y distante para crear cercanía humana con tus pacientes.",
+          "IVÁN: Y podemos integrar un sistema de agenda médica en línea o recordatorios automáticos por WhatsApp para reducir ausencias a consultas. ¿Cuál es la especialidad principal de tu clínica?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
   // 1. ¿ES DIFÍCIL / COMPLICADO DISEÑAR O CREAR UN SISTEMA O APP? (PREGUNTA DIRECTA)
   // =========================================================================
   {
