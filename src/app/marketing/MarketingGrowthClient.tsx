@@ -95,7 +95,20 @@ const CAMPAIGN_PLANS: CampaignPlan[] = [
 export default function MarketingGrowthClient() {
   const [selectedPlan, setSelectedPlan] = useState<CampaignPlan>(CAMPAIGN_PLANS[1]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("mobile");
   const [adBudget, setAdBudget] = useState<number>(25000); // MXN per month
+
+  const openVideo = (forceFormat?: "mobile" | "desktop") => {
+    if (forceFormat) {
+      setVideoFormat(forceFormat);
+    } else {
+      const isMobile =
+        typeof window !== "undefined" &&
+        (window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
+      setVideoFormat(isMobile ? "mobile" : "desktop");
+    }
+    setIsVideoModalOpen(true);
+  };
 
   // ROI Simulator calculations
   const estimatedClicks = Math.round(adBudget / 6.5);
@@ -162,7 +175,7 @@ export default function MarketingGrowthClient() {
 
               <button
                 type="button"
-                onClick={() => setIsVideoModalOpen(true)}
+                onClick={() => openVideo()}
                 className="px-5 py-4 rounded-full bg-black/70 hover:bg-black/90 border border-white/20 hover:border-[#00D1FF] text-white font-mono text-xs font-bold flex items-center gap-2.5 transition-all cursor-pointer shadow-lg hover:scale-105"
               >
                 <div className="w-6 h-6 rounded-full bg-[#00D1FF] flex items-center justify-center shadow-[0_0_10px_#00D1FF]">
@@ -192,7 +205,7 @@ export default function MarketingGrowthClient() {
           {/* Right Column: Iván Master Artwork */}
           <div className="lg:col-span-5 relative flex justify-center">
             <div
-              onClick={() => setIsVideoModalOpen(true)}
+              onClick={() => openVideo()}
               className="relative w-full max-w-[460px] aspect-square rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_50px_rgba(0,209,255,0.35)] border border-[#00D1FF]/40 bg-black/60"
             >
               <Image
@@ -550,36 +563,71 @@ export default function MarketingGrowthClient() {
       {/* IVÁN VIDEO PRESENTATION MODAL */}
       {/* ========================================================================= */}
       {isVideoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl animate-in fade-in duration-300">
-          <div className="relative w-full max-w-4xl rounded-3xl bg-[#060D18] border border-[#00D1FF]/50 overflow-hidden shadow-2xl space-y-4 p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
+          <div className={`relative w-full ${
+            videoFormat === "mobile" ? "max-w-md w-[92vw] sm:w-[380px]" : "max-w-4xl w-[92vw]"
+          } rounded-3xl bg-[#060D18] border border-[#00D1FF]/50 overflow-hidden shadow-2xl space-y-3 p-3.5 sm:p-5 transition-all duration-300`}>
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center text-lg shadow-md">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center text-base sm:text-lg shadow-md flex-shrink-0">
                   ⚡
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white font-mono">IVÁN • PRESENTACIÓN OFICIAL</h3>
-                  <span className="text-xs text-[#00D1FF] font-mono">Lead Tech & Growth Strategist en Innocentia Tech</span>
+                  <h3 className="text-sm sm:text-base font-bold text-white font-mono leading-tight">IVÁN • PRESENTACIÓN OFICIAL</h3>
+                  <span className="text-[11px] sm:text-xs text-[#00D1FF] font-mono block">Lead Tech & Growth Strategist en Innocentia Tech</span>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsVideoModalOpen(false)}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
+
+              <div className="flex items-center gap-2">
+                {/* Format Toggle Pill */}
+                <div className="hidden sm:flex items-center bg-black/60 border border-white/10 rounded-full p-0.5 text-[10px] font-mono">
+                  <button
+                    type="button"
+                    onClick={() => setVideoFormat("mobile")}
+                    className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                      videoFormat === "mobile"
+                        ? "bg-[#00D1FF] text-black font-bold shadow-md"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    📱 Celular
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVideoFormat("desktop")}
+                    className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                      videoFormat === "desktop"
+                        ? "bg-[#00D1FF] text-black font-bold shadow-md"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    🖥️ PC
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsVideoModalOpen(false)}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                  aria-label="Cerrar video"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
+            <div className={`relative ${
+              videoFormat === "mobile" ? "aspect-[9/16] max-h-[75vh]" : "aspect-video max-h-[80vh]"
+            } rounded-2xl overflow-hidden bg-black shadow-inner flex items-center justify-center`}>
               <video
-                src="/videos/ivan_segmentacion.mp4"
+                key={videoFormat}
+                src={videoFormat === "mobile" ? "/videos/ivan_segmentacion_celular.mp4" : "/videos/ivan_segmentacion.mp4"}
                 controls
                 autoPlay
                 playsInline
                 preload="metadata"
                 disablePictureInPicture
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>

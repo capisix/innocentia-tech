@@ -587,10 +587,23 @@ const BRAND_EMOTIONS = [
 export default function BrandingStudioClient() {
   const [selectedPkg, setSelectedPkg] = useState<BrandingPackage>(BRANDING_PACKAGES[1]);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("mobile");
   const [selectedFilter, setSelectedFilter] = useState<"todos" | "logos" | "packaging" | "merch" | "identidad">("todos");
   const [activeShowcaseItem, setActiveShowcaseItem] = useState<BrandShowcaseItem | null>(null);
   const [selectedPersonalityIdx, setSelectedPersonalityIdx] = useState(0);
   const [selectedEmotionIdx, setSelectedEmotionIdx] = useState(0);
+
+  const openVideo = (forceFormat?: "mobile" | "desktop") => {
+    if (forceFormat) {
+      setVideoFormat(forceFormat);
+    } else {
+      const isMobile =
+        typeof window !== "undefined" &&
+        (window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
+      setVideoFormat(isMobile ? "mobile" : "desktop");
+    }
+    setIsVideoModalOpen(true);
+  };
 
   // Harmonies & UI Lab States
   const [selectedHarmonyCategory, setSelectedHarmonyCategory] = useState<string>("todas");
@@ -744,7 +757,7 @@ export default function BrandingStudioClient() {
           {/* Right Column: Sofia Master Artwork */}
           <div className="lg:col-span-5 relative flex justify-center">
             <div
-              onClick={() => setIsVideoModalOpen(true)}
+              onClick={() => openVideo()}
               className="relative w-full max-w-[460px] aspect-square rounded-3xl overflow-hidden cursor-pointer group shadow-[0_20px_50px_rgba(255,56,88,0.35)] border border-[#FF3858]/40 bg-black/60"
             >
               <Image
@@ -2227,36 +2240,71 @@ export default function BrandingStudioClient() {
       {/* SOFÍA VIDEO PRESENTATION MODAL */}
       {/* ========================================================================= */}
       {isVideoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl animate-in fade-in duration-300">
-          <div className="relative w-full max-w-4xl rounded-3xl bg-[#0B0609] border border-[#FF3858]/50 overflow-hidden shadow-2xl space-y-4 p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
+          <div className={`relative w-full ${
+            videoFormat === "mobile" ? "max-w-md w-[92vw] sm:w-[380px]" : "max-w-4xl w-[92vw]"
+          } rounded-3xl bg-[#0B0609] border border-[#FF3858]/50 overflow-hidden shadow-2xl space-y-3 p-3.5 sm:p-5 transition-all duration-300`}>
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center text-lg shadow-md">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-[#FF3858] to-[#FF7A00] flex items-center justify-center text-base sm:text-lg shadow-md flex-shrink-0">
                   🖌️
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white font-mono">SOFÍA • PRESENTACIÓN OFICIAL</h3>
-                  <span className="text-xs text-[#FF5470] font-mono">Creative Director en Innocentia Tech</span>
+                  <h3 className="text-sm sm:text-base font-bold text-white font-mono leading-tight">SOFÍA • PRESENTACIÓN OFICIAL</h3>
+                  <span className="text-[11px] sm:text-xs text-[#FF5470] font-mono block">Creative Director en Innocentia Tech</span>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsVideoModalOpen(false)}
-                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
+
+              <div className="flex items-center gap-2">
+                {/* Format Toggle Pill */}
+                <div className="hidden sm:flex items-center bg-black/60 border border-white/10 rounded-full p-0.5 text-[10px] font-mono">
+                  <button
+                    type="button"
+                    onClick={() => setVideoFormat("mobile")}
+                    className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                      videoFormat === "mobile"
+                        ? "bg-[#FF3858] text-white font-bold shadow-md"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    📱 Celular
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setVideoFormat("desktop")}
+                    className={`px-2.5 py-1 rounded-full transition-all cursor-pointer ${
+                      videoFormat === "desktop"
+                        ? "bg-[#FF3858] text-white font-bold shadow-md"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    🖥️ PC
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsVideoModalOpen(false)}
+                  className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                  aria-label="Cerrar video"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
+            <div className={`relative ${
+              videoFormat === "mobile" ? "aspect-[9/16] max-h-[75vh]" : "aspect-video max-h-[80vh]"
+            } rounded-2xl overflow-hidden bg-black shadow-inner flex items-center justify-center`}>
               <video
-                src="/videos/sofia_branding.mp4"
+                key={videoFormat}
+                src={videoFormat === "mobile" ? "/videos/sofia_branding_celular.mp4" : "/videos/sofia_branding.mp4"}
                 controls
                 autoPlay
                 playsInline
                 preload="metadata"
                 disablePictureInPicture
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
