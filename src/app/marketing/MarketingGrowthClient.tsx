@@ -102,9 +102,9 @@ export default function MarketingGrowthClient() {
     if (forceFormat) {
       setVideoFormat(forceFormat);
     } else {
-      const isMobile =
-        typeof window !== "undefined" &&
-        (window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
+      const isTouchAgent = typeof navigator !== "undefined" && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const isNarrowScreen = typeof window !== "undefined" && (window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
+      const isMobile = isTouchAgent || isNarrowScreen;
       setVideoFormat(isMobile ? "mobile" : "desktop");
     }
     setIsVideoModalOpen(true);

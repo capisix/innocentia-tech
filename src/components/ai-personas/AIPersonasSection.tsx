@@ -79,19 +79,23 @@ const HASHTAG_SETS = [
   },
 ];
 
+const checkIsMobileDevice = (): boolean => {
+  if (typeof window === "undefined") return false;
+  const isTouchAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isNarrowScreen = window.innerWidth < 1024 || window.innerHeight > window.innerWidth;
+  return isTouchAgent || isNarrowScreen;
+};
+
 export default function AIPersonasSection() {
   const [activeVideo, setActiveVideo] = useState<PersonaVideoData | null>(null);
-  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("desktop");
+  const [videoFormat, setVideoFormat] = useState<"mobile" | "desktop">("mobile");
   const [activeTagSet, setActiveTagSet] = useState(0);
 
   const openVideo = (data: PersonaVideoData, forceFormat?: "mobile" | "desktop") => {
     if (forceFormat) {
       setVideoFormat(forceFormat);
     } else {
-      const isMobileDevice =
-        typeof window !== "undefined" &&
-        (window.innerWidth < 1024 || window.innerHeight > window.innerWidth);
-      setVideoFormat(isMobileDevice ? "mobile" : "desktop");
+      setVideoFormat(checkIsMobileDevice() ? "mobile" : "desktop");
     }
     setActiveVideo(data);
   };
@@ -145,7 +149,7 @@ export default function AIPersonasSection() {
             <div className="space-y-4 sm:space-y-5 flex flex-col justify-between">
               {/* DESKTOP & TABLET VIEW: FULL BLEED ARTWORK (100% Flush to Border, Click-to-Play Video) */}
               <div 
-                onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
+                onClick={() => openVideo(SOFIA_VIDEO)}
                 className="hidden md:block relative w-full aspect-square overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#07070E] border border-[#FF3858]/40 shadow-[0_15px_45px_rgba(255,56,88,0.25)] hover:shadow-[0_20px_60px_rgba(255,56,88,0.45)] hover:border-[#FF3858]/80 transition-all duration-500 cursor-pointer group/art select-none"
                 title="Haz clic para ver el video de presentación de Sofía"
               >
@@ -192,7 +196,7 @@ export default function AIPersonasSection() {
 
               {/* MOBILE VIEW (Dedicated Portrait Artwork) */}
               <div 
-                onClick={() => openVideo(SOFIA_VIDEO, "mobile")}
+                onClick={() => openVideo(SOFIA_VIDEO)}
                 className="block md:hidden relative w-full aspect-[576/1024] rounded-[24px] overflow-hidden bg-[#07070E] border border-[#FF3858]/40 shadow-[0_15px_45px_rgba(255,56,88,0.25)] cursor-pointer group/mobart active:scale-[0.99] transition-transform select-none"
                 title="Toca para ver el video de presentación de Sofía"
               >
@@ -286,7 +290,7 @@ export default function AIPersonasSection() {
                 {/* Botón de Presentación */}
                 <button
                   type="button"
-                  onClick={() => openVideo(SOFIA_VIDEO, "desktop")}
+                  onClick={() => openVideo(SOFIA_VIDEO)}
                   className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#1A0812] via-black to-[#1A0812] hover:from-[#2E0B1F] hover:to-[#2E0B1F] backdrop-blur-xl border border-[#FF3858]/70 hover:border-[#FF3858] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(255,56,88,0.25)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(255,56,88,0.5)] transition-all cursor-pointer group/btn"
                 >
                   <div className="flex items-center gap-2.5">
@@ -316,7 +320,7 @@ export default function AIPersonasSection() {
             <div className="space-y-4 sm:space-y-5 flex flex-col justify-between">
               {/* DESKTOP & TABLET VIEW: FULL BLEED ARTWORK (100% Flush to Border, Click-to-Play Video) */}
               <div 
-                onClick={() => openVideo(IVAN_VIDEO, "desktop")}
+                onClick={() => openVideo(IVAN_VIDEO)}
                 className="hidden md:block relative w-full aspect-square overflow-hidden rounded-[26px] sm:rounded-[32px] bg-[#040810] border border-[#00D1FF]/40 shadow-[0_15px_45px_rgba(0,209,255,0.25)] hover:shadow-[0_20px_60px_rgba(0,209,255,0.45)] hover:border-[#00D1FF]/80 transition-all duration-500 cursor-pointer group/art select-none"
                 title="Haz clic para ver el video de presentación de Iván"
               >
@@ -363,7 +367,7 @@ export default function AIPersonasSection() {
 
               {/* MOBILE VIEW (Dedicated Portrait Artwork) */}
               <div 
-                onClick={() => openVideo(IVAN_VIDEO, "mobile")}
+                onClick={() => openVideo(IVAN_VIDEO)}
                 className="block md:hidden relative w-full aspect-[576/1024] rounded-[24px] overflow-hidden bg-[#040810] border border-[#00D1FF]/40 shadow-[0_15px_45px_rgba(0,209,255,0.25)] cursor-pointer group/mobart active:scale-[0.99] transition-transform select-none"
                 title="Toca para ver el video de presentación de Iván"
               >
@@ -457,7 +461,7 @@ export default function AIPersonasSection() {
                 {/* Botón de Presentación */}
                 <button
                   type="button"
-                  onClick={() => openVideo(IVAN_VIDEO, "desktop")}
+                  onClick={() => openVideo(IVAN_VIDEO)}
                   className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#06101E] via-black to-[#06101E] hover:from-[#0B1E38] hover:to-[#0B1E38] backdrop-blur-xl border border-[#00D1FF]/70 hover:border-[#00D1FF] text-white font-mono font-bold tracking-wide flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.8),0_0_20px_rgba(0,209,255,0.25)] hover:shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.5)] transition-all cursor-pointer group/btn"
                 >
                   <div className="flex items-center gap-2.5">
@@ -525,7 +529,7 @@ export default function AIPersonasSection() {
               {/* Master Full-Bleed Vertical Studio Artwork for Dual (576x1024 Native 9:16 Aspect Ratio) */}
               <div className="rounded-[28px] sm:rounded-[32px] bg-[#07070E]/90 backdrop-blur-2xl border border-cyan-400/30 p-3 sm:p-4 space-y-3.5 shadow-[0_15px_45px_rgba(0,209,255,0.2),0_15px_45px_rgba(255,56,88,0.2)]">
                 <div 
-                  onClick={() => openVideo(DUAL_VIDEO, "mobile")}
+                  onClick={() => openVideo(DUAL_VIDEO)}
                   className="relative w-full aspect-[576/1024] rounded-[22px] overflow-hidden cursor-pointer group/mobdual shadow-2xl border border-white/15 active:scale-[0.99] transition-transform"
                   title="Toca para ver el video de presentación Dual Core"
                 >
@@ -547,7 +551,7 @@ export default function AIPersonasSection() {
                 {/* Mobile Action Presentation Button */}
                 <button
                   type="button"
-                  onClick={() => openVideo(DUAL_VIDEO, "mobile")}
+                  onClick={() => openVideo(DUAL_VIDEO)}
                   className="w-full py-3.5 px-4 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 backdrop-blur-2xl border border-cyan-400/80 text-white font-mono text-xs font-bold tracking-wide flex items-center justify-between shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_30px_rgba(0,209,255,0.35)] cursor-pointer active:scale-98 transition-all group/btn"
                 >
                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#FF3858] flex items-center justify-center shadow-[0_0_12px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
@@ -812,7 +816,7 @@ export default function AIPersonasSection() {
                 {/* Interactive Action Button (Pinned to Bottom) */}
                 <button
                   type="button"
-                  onClick={() => openVideo(DUAL_VIDEO, "desktop")}
+                  onClick={() => openVideo(DUAL_VIDEO)}
                   className="w-full mt-auto px-4 py-3 rounded-full bg-gradient-to-r from-[#00D1FF]/25 via-black/90 to-[#FF3858]/25 hover:from-[#00D1FF]/40 hover:to-[#FF3858]/40 border border-[#00D1FF]/60 hover:border-white text-white font-mono text-xs font-black tracking-wider flex items-center justify-between shadow-[0_0_30px_rgba(0,209,255,0.25)] hover:shadow-[0_0_45px_rgba(0,209,255,0.5)] transition-all cursor-pointer hover:scale-[1.01] active:scale-98 group/btn"
                 >
                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00D1FF] to-[#3A86FF] flex items-center justify-center shadow-[0_0_12px_#00D1FF] flex-shrink-0 group-hover/btn:scale-110 transition-transform">
@@ -841,7 +845,7 @@ export default function AIPersonasSection() {
 
                 {/* Main Illustration Container - Expanded & Prominent */}
                 <div 
-                  onClick={() => openVideo(DUAL_VIDEO, "desktop")}
+                  onClick={() => openVideo(DUAL_VIDEO)}
                   className="relative w-full flex-1 min-h-[350px] lg:min-h-[390px] cursor-pointer group/art transition-transform duration-500 hover:scale-[1.015] flex items-center justify-center my-1"
                   title="Haz clic para ver cómo trabajan juntos Sofía e Iván"
                 >
