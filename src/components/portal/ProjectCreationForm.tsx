@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   CheckCircle2,
@@ -18,8 +19,16 @@ import {
   Sparkles,
   Phone,
   FileText,
+  HelpCircle,
+  X,
 } from "../../lib/icons";
 import { generateProjectPdf } from "../../lib/generateProjectPdf";
+import {
+  getAdvisorTip,
+  ADVISOR_PROFILES,
+  openAdvisorChat,
+  FormAdvisorTip,
+} from "../../lib/formAdvisors";
 
 interface ProjectCreationFormProps {
   initialVendorCode?: string;
@@ -83,6 +92,16 @@ export default function ProjectCreationForm({
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [budgetRange, setBudgetRange] = useState("150k_350k");
+
+  // Advisor Modal State (Sofía / Iván advice per choice)
+  const [activeAdvisorTip, setActiveAdvisorTip] = useState<FormAdvisorTip | null>(null);
+
+  const handleOpenAdvisor = (identifier: string) => {
+    const tip = getAdvisorTip(identifier);
+    if (tip) {
+      setActiveAdvisorTip(tip);
+    }
+  };
 
   // Read URL query params if client arrives via referral link
   useEffect(() => {
@@ -557,6 +576,147 @@ ${techSection}
 
   return (
     <div className="w-full space-y-6 text-left animate-in fade-in duration-300">
+      {/* ======================================================== */}
+      {/* MODAL DE ASESORÍA CONTEXTUAL (SOFÍA O IVÁN) */}
+      {/* ======================================================== */}
+      {activeAdvisorTip && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+          onClick={() => setActiveAdvisorTip(null)}
+        >
+          <div
+            className="relative w-full max-w-lg rounded-3xl bg-[#090913] border border-white/20 p-6 sm:p-7 space-y-5 shadow-[0_0_60px_rgba(0,0,0,0.9)] animate-in zoom-in-95 duration-200 text-left overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Background glowing aura */}
+            <div
+              className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-3xl opacity-25 pointer-events-none"
+              style={{
+                backgroundColor:
+                  activeAdvisorTip.advisorKey === "sofia"
+                    ? "#FF3858"
+                    : activeAdvisorTip.advisorKey === "ivan"
+                    ? "#00D1FF"
+                    : "#A855F7",
+              }}
+            />
+
+            {/* Botón cerrar */}
+            <button
+              type="button"
+              onClick={() => setActiveAdvisorTip(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/5 hover:bg-white/15 text-gray-400 hover:text-white transition-all cursor-pointer z-10"
+              aria-label="Cerrar asesoría"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header con Foto del Asesor */}
+            <div className="flex items-center gap-3.5 pr-8">
+              <div className="relative flex-shrink-0">
+                <div
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 shadow-lg relative"
+                  style={{
+                    borderColor:
+                      activeAdvisorTip.advisorKey === "sofia"
+                        ? "#FF3858"
+                        : activeAdvisorTip.advisorKey === "ivan"
+                        ? "#00D1FF"
+                        : "#A855F7",
+                  }}
+                >
+                  <Image
+                    src={ADVISOR_PROFILES[activeAdvisorTip.advisorKey].avatar}
+                    alt={ADVISOR_PROFILES[activeAdvisorTip.advisorKey].name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-black animate-pulse" />
+              </div>
+
+              <div className="space-y-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span
+                    className="text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded-full border"
+                    style={{
+                      color: ADVISOR_PROFILES[activeAdvisorTip.advisorKey].color,
+                      backgroundColor: ADVISOR_PROFILES[activeAdvisorTip.advisorKey].badgeBg,
+                      borderColor: ADVISOR_PROFILES[activeAdvisorTip.advisorKey].badgeBorder,
+                    }}
+                  >
+                    Asesoría de {ADVISOR_PROFILES[activeAdvisorTip.advisorKey].name}
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-400 font-semibold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                    En línea
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-bold text-white font-mono truncate">
+                  {ADVISOR_PROFILES[activeAdvisorTip.advisorKey].role}
+                </h4>
+                <p className="text-[11px] text-gray-400 font-mono">
+                  Especialista de Innocentia asignado a esta decisión
+                </p>
+              </div>
+            </div>
+
+            {/* Título de la Opción & Tagline */}
+            <div className="space-y-1.5 border-y border-white/10 py-3">
+              <span className="text-[10px] uppercase font-mono text-gray-400 tracking-wider block">
+                Acerca de tu elección:
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-white font-mono leading-snug">
+                {activeAdvisorTip.optionTitle}
+              </h3>
+              <p className="text-xs font-mono italic text-[#00D1FF]">
+                "{activeAdvisorTip.tagline}"
+              </p>
+            </div>
+
+            {/* Puntos de Asesoría */}
+            <div className="space-y-2.5 text-xs font-mono text-gray-300 leading-relaxed max-h-56 overflow-y-auto pr-1">
+              {activeAdvisorTip.advice.map((para, idx) => (
+                <p key={idx} className="bg-white/[0.03] p-3 rounded-xl border border-white/5">
+                  {para}
+                </p>
+              ))}
+
+              {activeAdvisorTip.recommendationWhen && (
+                <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-mono">
+                  <strong className="block text-emerald-400 mb-0.5">🎯 Recomendación estratégica:</strong>
+                  {activeAdvisorTip.recommendationWhen}
+                </div>
+              )}
+            </div>
+
+            {/* Botones de Acción */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  const prompt = activeAdvisorTip.chatPrompt;
+                  setActiveAdvisorTip(null);
+                  openAdvisorChat(prompt, true);
+                }}
+                className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-[#00D1FF] to-[#FF3858] hover:from-[#00E5FF] hover:to-[#FF5575] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(0,209,255,0.35)] cursor-pointer hover:scale-[1.02]"
+              >
+                <MessageSquare className="w-4 h-4 text-black flex-shrink-0" />
+                <span>Preguntarle en el Chat en Vivo</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveAdvisorTip(null)}
+                className="w-full sm:w-auto py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs uppercase transition-all cursor-pointer"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CLIENT ALREADY REGISTERED SUMMARY (Visible desde el Paso 2 en adelante) */}
       {isClientRegistered && safeStepIndex > 0 && (
         <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
@@ -936,31 +1096,66 @@ ${techSection}
                   {projectTypes.map((t) => {
                     const Icon = t.icon;
                     const isSelected = selectedProjectTypes.includes(t.id);
+                    const tip = getAdvisorTip(t.id);
+                    const advisorName =
+                      tip?.advisorKey === "sofia"
+                        ? "Sofía"
+                        : tip?.advisorKey === "both"
+                        ? "Sofía & Iván"
+                        : "Iván";
+                    const advisorColor =
+                      tip?.advisorKey === "sofia"
+                        ? "#FF3858"
+                        : tip?.advisorKey === "both"
+                        ? "#A855F7"
+                        : "#00D1FF";
                     return (
                       <div
                         key={t.id}
                         onClick={() => toggleProjectType(t.id)}
-                        className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer space-y-2 select-none ${
+                        className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer space-y-2 select-none relative group ${
                           isSelected
                             ? "bg-white/10 border-[#00D1FF] shadow-[0_0_20px_rgba(0,209,255,0.25)] scale-[1.01]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/25"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
+                            className="w-10 h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0"
                             style={{ backgroundColor: `${t.color}25`, border: `1px solid ${t.color}` }}
                           >
                             <Icon className="w-5 h-5" style={{ color: t.color }} />
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              onChange={() => toggleProjectType(t.id)}
-                              className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
-                            />
-                            {isSelected && <CheckCircle2 className="w-4 h-4 text-[#00D1FF]" />}
+
+                          <div className="flex items-center gap-2">
+                            {tip && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenAdvisor(t.id);
+                                }}
+                                title={`Consultar recomendación de ${advisorName}`}
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold transition-all border hover:scale-105 cursor-pointer shadow-sm"
+                                style={{
+                                  color: advisorColor,
+                                  borderColor: `${advisorColor}50`,
+                                  backgroundColor: `${advisorColor}15`,
+                                }}
+                              >
+                                <HelpCircle className="w-3.5 h-3.5" style={{ color: advisorColor }} />
+                                <span>Asesoría {advisorName}</span>
+                              </button>
+                            )}
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => toggleProjectType(t.id)}
+                                className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
+                              />
+                              {isSelected && <CheckCircle2 className="w-4 h-4 text-[#00D1FF]" />}
+                            </div>
                           </div>
                         </div>
                         <h4 className="text-sm font-bold text-white font-mono">{t.title}</h4>
@@ -989,6 +1184,19 @@ ${techSection}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {serviceOptions.map((srv) => {
                     const isChecked = selectedServices.includes(srv.id);
+                    const tip = getAdvisorTip(srv.id);
+                    const advisorName =
+                      tip?.advisorKey === "sofia"
+                        ? "Sofía"
+                        : tip?.advisorKey === "both"
+                        ? "Sofía & Iván"
+                        : "Iván";
+                    const advisorColor =
+                      tip?.advisorKey === "sofia"
+                        ? "#FF3858"
+                        : tip?.advisorKey === "both"
+                        ? "#A855F7"
+                        : "#00D1FF";
                     return (
                       <div
                         key={srv.id}
@@ -999,7 +1207,7 @@ ${techSection}
                             : "bg-white/[0.02] border-white/10 hover:border-white/25"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <span
                             className="text-[10px] font-mono font-bold uppercase px-2.5 py-1 rounded-full border"
                             style={{
@@ -1010,12 +1218,34 @@ ${techSection}
                           >
                             {srv.badge}
                           </span>
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => {}}
-                            className="w-5 h-5 accent-[#00D1FF] cursor-pointer pointer-events-none"
-                          />
+
+                          <div className="flex items-center gap-2">
+                            {tip && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenAdvisor(srv.id);
+                                }}
+                                title={`Consultar recomendación de ${advisorName}`}
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold transition-all border hover:scale-105 cursor-pointer shadow-sm"
+                                style={{
+                                  color: advisorColor,
+                                  borderColor: `${advisorColor}50`,
+                                  backgroundColor: `${advisorColor}15`,
+                                }}
+                              >
+                                <HelpCircle className="w-3.5 h-3.5" style={{ color: advisorColor }} />
+                                <span>Asesoría {advisorName}</span>
+                              </button>
+                            )}
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {}}
+                              className="w-5 h-5 accent-[#00D1FF] cursor-pointer pointer-events-none"
+                            />
+                          </div>
                         </div>
                         <h4 className="text-sm sm:text-base font-bold text-white font-mono leading-snug">
                           {srv.title}
@@ -1052,6 +1282,7 @@ ${techSection}
                 <div className="space-y-3">
                   {brandingOptions.map((opt) => {
                     const isChecked = brandNeeds.includes(opt.label);
+                    const tip = getAdvisorTip(opt.id);
                     return (
                       <div
                         key={opt.id}
@@ -1062,16 +1293,32 @@ ${techSection}
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <span className="text-xs sm:text-sm font-bold text-white font-mono">
                             {opt.label}
                           </span>
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => {}}
-                            className="w-4 h-4 accent-[#FF3858] cursor-pointer pointer-events-none"
-                          />
+                          <div className="flex items-center gap-2">
+                            {tip && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenAdvisor(opt.id);
+                                }}
+                                title="Consultar asesoría de Sofía"
+                                className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold transition-all border bg-[#FF3858]/10 text-[#FF3858] border-[#FF3858]/30 hover:bg-[#FF3858]/20 hover:scale-105 cursor-pointer shadow-sm flex-shrink-0"
+                              >
+                                <HelpCircle className="w-3.5 h-3.5 text-[#FF3858]" />
+                                <span>Asesoría Sofía</span>
+                              </button>
+                            )}
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {}}
+                              className="w-4 h-4 accent-[#FF3858] cursor-pointer pointer-events-none"
+                            />
+                          </div>
                         </div>
                         <p className="text-[11px] text-gray-400 font-mono">{opt.hint}</p>
                       </div>
@@ -1103,6 +1350,7 @@ ${techSection}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {techOptions.map((opt) => {
                     const isChecked = techFeatures.includes(opt.label);
+                    const tip = getAdvisorTip(opt.id);
                     return (
                       <div
                         key={opt.id}
@@ -1113,16 +1361,32 @@ ${techSection}
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <span className="text-xs sm:text-sm font-bold text-white font-mono">
                             {opt.label}
                           </span>
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => {}}
-                            className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
-                          />
+                          <div className="flex items-center gap-2">
+                            {tip && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleOpenAdvisor(opt.id);
+                                }}
+                                title="Consultar asesoría técnica de Iván"
+                                className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold transition-all border bg-[#00D1FF]/10 text-[#00D1FF] border-[#00D1FF]/30 hover:bg-[#00D1FF]/20 hover:scale-105 cursor-pointer shadow-sm flex-shrink-0"
+                              >
+                                <HelpCircle className="w-3.5 h-3.5 text-[#00D1FF]" />
+                                <span>Asesoría Iván</span>
+                              </button>
+                            )}
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => {}}
+                              className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
+                            />
+                          </div>
                         </div>
                         <p className="text-[11px] text-gray-400 font-mono">{opt.hint}</p>
                       </div>
@@ -1183,21 +1447,40 @@ ${techSection}
                       Rango de Inversión Estimado:
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {budgetOptions.map((b) => (
-                        <div
-                          key={b.id}
-                          onClick={() => setBudgetRange(b.id)}
-                          className={`p-3.5 rounded-2xl border transition-all cursor-pointer text-xs font-mono space-y-1 select-none ${
-                            budgetRange === b.id
-                              ? "bg-purple-950/40 border-purple-400 text-white shadow-md ring-1 ring-purple-400/50"
-                              : "bg-white/[0.02] border-white/10 text-gray-400 hover:border-white/25"
-                          }`}
-                        >
-                          <strong className="text-white block">{b.title}</strong>
-                          <span className="text-[#00D1FF] text-[10px] block">{b.usd}</span>
-                          <p className="text-[10px] text-gray-400">{b.desc}</p>
-                        </div>
-                      ))}
+                      {budgetOptions.map((b) => {
+                        const tip = getAdvisorTip(b.id);
+                        return (
+                          <div
+                            key={b.id}
+                            onClick={() => setBudgetRange(b.id)}
+                            className={`p-3.5 rounded-2xl border transition-all cursor-pointer text-xs font-mono space-y-1.5 select-none ${
+                              budgetRange === b.id
+                                ? "bg-purple-950/40 border-purple-400 text-white shadow-md ring-1 ring-purple-400/50"
+                                : "bg-white/[0.02] border-white/10 text-gray-400 hover:border-white/25"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-1">
+                              <strong className="text-white block">{b.title}</strong>
+                              {tip && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenAdvisor(b.id);
+                                  }}
+                                  title="Ver recomendación sobre este rango de inversión"
+                                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold border bg-purple-500/10 text-purple-300 border-purple-500/30 hover:bg-purple-500/20 hover:scale-105 cursor-pointer flex-shrink-0"
+                                >
+                                  <HelpCircle className="w-3 h-3 text-purple-400" />
+                                  <span>Asesoría</span>
+                                </button>
+                              )}
+                            </div>
+                            <span className="text-[#00D1FF] text-[10px] block">{b.usd}</span>
+                            <p className="text-[10px] text-gray-400">{b.desc}</p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 

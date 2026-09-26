@@ -356,6 +356,33 @@ export default function FloatingChatWidget({
     }
   };
 
+  const handleSendMessageRef = useRef(handleSendMessage);
+  useEffect(() => {
+    handleSendMessageRef.current = handleSendMessage;
+  });
+
+  useEffect(() => {
+    const handleOpenChatEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ prompt?: string; autoSend?: boolean }>;
+      setIsOpen(true);
+      if (customEvent.detail?.prompt) {
+        if (customEvent.detail.autoSend) {
+          // Send immediately
+          setTimeout(() => {
+            handleSendMessageRef.current(customEvent.detail?.prompt);
+          }, 150);
+        } else {
+          setInputValue(customEvent.detail.prompt);
+        }
+      }
+    };
+
+    window.addEventListener("innocentia-open-chat", handleOpenChatEvent);
+    return () => {
+      window.removeEventListener("innocentia-open-chat", handleOpenChatEvent);
+    };
+  }, []);
+
   const renderMessageBubble = (text: string, isSmall: boolean = false) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlRegex);
