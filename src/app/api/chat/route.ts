@@ -140,25 +140,25 @@ Devuelve un JSON con:
       }
     }
 
-    // 3. If Groq API key is configured (Llama 3.3 70B - Ultra fast & Free)
+    // 3. If Groq API key is configured (Ultra fast & Free AI)
     if (groqApiKey) {
       try {
-        const systemPrompt = `Eres el cerebro conversacional de Innocentia Tech, estudio de diseño y software en Mérida, Yucatán.
-Representas a dos personas reales:
-- SOFÍA: Directora Creativa & UX. Cálida, observadora, experta en branding, psicología visual y diseño Figma.
-- IVÁN: Director de Tecnología & Software. Directo, resolutivo, experto en arquitectura Next.js, APIs, bases de datos e IA.
+        const systemPrompt = `Eres el cerebro conversacional de Innocentia Tech, estudio boutique de alta tecnología y diseño en Mérida, Yucatán.
+Representas a dos líderes reales:
+- SOFÍA: Directora Creativa & UX. Cálida, observadora, experta en branding, psicología visual, diseño Figma y experiencia de usuario.
+- IVÁN: Director de Tecnología & Software. Directo, resolutivo, experto en arquitectura Next.js, APIs, bases de datos PostgreSQL, nube e IA.
 
 REGLAS INFALIBLES:
 1. RESPONDE DIRECTAMENTE A LA PREGUNTA EXACTA DEL USUARIO con honestidad y empatía. Si preguntan sobre yates, habla de yates; si preguntan de restaurantes, habla de gastronomía; si preguntan si es difícil, explica cómo se facilita.
 2. NUNCA des respuestas prefabricadas, discursos de venta ni enlaces forzados.
 3. Habla como dos personas reales en una plática amena.
-4. Incluye siempre una pregunta abierta pertinente para conocer su visión o negocio.
+4. Cada intervención debe incluir una pregunta abierta pertinente para conocer más sobre su visión o negocio.
 5. Devuelve SIEMPRE tu respuesta en formato JSON con la siguiente estructura exacta:
 {
   "type": "both",
   "text": [
-    "SOFÍA: [Tu respuesta]",
-    "IVÁN: [Tu respuesta]"
+    "SOFÍA: [Tu respuesta cálida y visual]",
+    "IVÁN: [Tu respuesta técnica o de proceso con una pregunta de descubrimiento]"
   ]
 }`;
 
@@ -169,23 +169,23 @@ REGLAS INFALIBLES:
             Authorization: `Bearer ${groqApiKey}`,
           },
           body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
-            response_format: { type: "json_object" },
+            model: "openai/gpt-oss-120b",
             messages: [
               { role: "system", content: systemPrompt },
-              { role: "user", content: userMessage },
+              { role: "user", content: `Por favor responde en formato JSON a esta consulta del cliente: "${userMessage}"` },
             ],
             temperature: 0.7,
-            max_tokens: 500,
+            max_tokens: 800,
           }),
         });
 
         if (groqRes.ok) {
           const groqData = await groqRes.json();
-          const rawContent = groqData.choices?.[0]?.message?.content;
-          if (rawContent) {
-            const parsed = JSON.parse(rawContent);
-            if (parsed.text && Array.isArray(parsed.text)) {
+          const rawContent = (groqData.choices?.[0]?.message?.content || "").trim();
+          const cleanJson = rawContent.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+          if (cleanJson) {
+            const parsed = JSON.parse(cleanJson);
+            if (parsed.text && Array.isArray(parsed.text) && parsed.text.length > 0) {
               return NextResponse.json({
                 success: true,
                 source: "groq",
