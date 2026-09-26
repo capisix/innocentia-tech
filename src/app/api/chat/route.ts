@@ -21,6 +21,7 @@ export async function POST(req: Request) {
 
     const geminiApiKey = process.env.GEMINI_API_KEY;
     const openaiApiKey = process.env.OPENAI_API_KEY;
+    const groqApiKey = process.env.GROQ_API_KEY;
 
     // 1. If Gemini API key is configured, use Gemini 1.5 Flash / 2.0 Flash
     if (geminiApiKey) {
@@ -139,7 +140,66 @@ Devuelve un JSON con:
       }
     }
 
-    // 3. Fallback to advanced consultative engine
+    // 3. If Groq API key is configured (Llama 3.3 70B - Ultra fast & Free)
+    if (groqApiKey) {
+      try {
+        const systemPrompt = `Eres el cerebro conversacional de Innocentia Tech, estudio de diseño y software en Mérida, Yucatán.
+Representas a dos personas reales:
+- SOFÍA: Directora Creativa & UX. Cálida, observadora, experta en branding, psicología visual y diseño Figma.
+- IVÁN: Director de Tecnología & Software. Directo, resolutivo, experto en arquitectura Next.js, APIs, bases de datos e IA.
+
+REGLAS INFALIBLES:
+1. RESPONDE DIRECTAMENTE A LA PREGUNTA EXACTA DEL USUARIO con honestidad y empatía. Si preguntan sobre yates, habla de yates; si preguntan de restaurantes, habla de gastronomía; si preguntan si es difícil, explica cómo se facilita.
+2. NUNCA des respuestas prefabricadas, discursos de venta ni enlaces forzados.
+3. Habla como dos personas reales en una plática amena.
+4. Incluye siempre una pregunta abierta pertinente para conocer su visión o negocio.
+5. Devuelve SIEMPRE tu respuesta en formato JSON con la siguiente estructura exacta:
+{
+  "type": "both",
+  "text": [
+    "SOFÍA: [Tu respuesta]",
+    "IVÁN: [Tu respuesta]"
+  ]
+}`;
+
+        const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${groqApiKey}`,
+          },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            response_format: { type: "json_object" },
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userMessage },
+            ],
+            temperature: 0.7,
+            max_tokens: 500,
+          }),
+        });
+
+        if (groqRes.ok) {
+          const groqData = await groqRes.json();
+          const rawContent = groqData.choices?.[0]?.message?.content;
+          if (rawContent) {
+            const parsed = JSON.parse(rawContent);
+            if (parsed.text && Array.isArray(parsed.text)) {
+              return NextResponse.json({
+                success: true,
+                source: "groq",
+                response: parsed,
+              });
+            }
+          }
+        }
+      } catch (groqError) {
+        console.error("Groq API error, falling back to local engine:", groqError);
+      }
+    }
+
+    // 4. Fallback to advanced consultative engine
     const localReply = getIntelligentHumanReply(userMessage);
     return NextResponse.json({
       success: true,
