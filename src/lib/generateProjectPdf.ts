@@ -625,7 +625,7 @@ export function generateProjectPdf(data: ProjectPdfData) {
         <!-- Header -->
         <div class="doc-header">
           <div class="logo-box">
-            <img src="https://innocentia.tech/images/logo_official_header.png" onerror="this.onerror=null; this.src='/images/logo_official_header.png';" alt="INNOCENTIA" class="logo-img" />
+            <img src="https://innocentia.tech/images/logo_official_header.png?v=20" onerror="this.onerror=null; this.src='/images/logo_official_header.png?v=20';" alt="INNOCENTIA" class="logo-img" />
           </div>
           <div class="header-right">
             <div class="header-prop-title">Propuesta Comercial</div>
@@ -728,7 +728,7 @@ export function generateProjectPdf(data: ProjectPdfData) {
         <!-- Header -->
         <div class="doc-header">
           <div class="logo-box">
-            <img src="https://innocentia.tech/images/logo_official_header.png" onerror="this.onerror=null; this.src='/images/logo_official_header.png';" alt="INNOCENTIA" class="logo-img" />
+            <img src="https://innocentia.tech/images/logo_official_header.png?v=20" onerror="this.onerror=null; this.src='/images/logo_official_header.png?v=20';" alt="INNOCENTIA" class="logo-img" />
           </div>
           <div class="header-right">
             <div class="header-prop-title">Propuesta Comercial</div>

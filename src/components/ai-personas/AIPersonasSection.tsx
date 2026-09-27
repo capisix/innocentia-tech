@@ -968,7 +968,7 @@ export default function AIPersonasSection() {
               <div className="flex flex-col items-start md:items-end justify-center md:border-l md:border-white/20 md:pl-4 text-left md:text-right gap-1">
                 <div className="relative h-8 w-40">
                   <Image
-                    src="/images/logo_official_header.png?v=2"
+                    src="/images/logo_official_header.png?v=20"
                     alt="Innocentia Tech Official Logo"
                     fill
                     className="object-contain object-left md:object-right filter brightness-110 drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]"

@@ -1636,7 +1636,7 @@ function PortalMainContent() {
           <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
             <Link href="/" className="flex items-center gap-2 group cursor-pointer">
               <img
-                src="/images/logo_official_header.png?v=2"
+                src="/images/logo_official_header.png?v=20"
                 alt="INNOCENTIA"
                 className="h-9 sm:h-10 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform duration-300"
               />

@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     siteName: "Innocentia Tech",
     images: [
       {
-        url: "https://innocentia.tech/images/og_preview.png?v=11",
-        secureUrl: "https://innocentia.tech/images/og_preview.png?v=11",
+        url: "https://innocentia.tech/images/og_preview.png?v=20",
+        secureUrl: "https://innocentia.tech/images/og_preview.png?v=20",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -34,15 +34,15 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Innocentia Tech • Desarrollo de Software, Apps Móviles e IA",
     description: "Ingeniería de software a medida, apps móviles fluidas a 60 FPS y soluciones con Inteligencia Artificial.",
-    images: ["https://innocentia.tech/images/og_preview.png?v=11"],
+    images: ["https://innocentia.tech/images/og_preview.png?v=20"],
   },
   icons: {
     icon: [
-      { url: "/images/favicon_transparent.png?v=12", type: "image/png" },
-      { url: "/favicon.ico?v=12" },
+      { url: "/images/favicon_transparent.png?v=20", type: "image/png" },
+      { url: "/favicon.ico?v=20" },
     ],
-    shortcut: "/images/favicon_transparent.png?v=12",
-    apple: "/apple-icon.png?v=12",
+    shortcut: "/images/favicon_transparent.png?v=20",
+    apple: "/apple-icon.png?v=20",
   },
 };
 
@@ -58,15 +58,15 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* Favicon Transparente Oficial */}
-        <link rel="icon" type="image/png" href="/images/favicon_transparent.png?v=12" />
-        <link rel="shortcut icon" href="/favicon.ico?v=12" />
-        <link rel="apple-touch-icon" href="/apple-icon.png?v=12" />
+        <link rel="icon" type="image/png" href="/images/favicon_transparent.png?v=20" />
+        <link rel="shortcut icon" href="/favicon.ico?v=20" />
+        <link rel="apple-touch-icon" href="/apple-icon.png?v=20" />
 
         {/* OpenGraph & Social Preview Fallbacks (Fondo Blanco Oficial para WhatsApp/Redes) */}
         <meta property="og:title" content="Innocentia Tech • Laboratorio de Software & IA" />
         <meta property="og:description" content="Donde la imaginación se convierte en tecnología. Apps móviles, desarrollo web de alta escala y soluciones con IA." />
-        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=11" />
-        <meta property="og:image:secure_url" content="https://innocentia.tech/images/og_preview.png?v=11" />
+        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=20" />
+        <meta property="og:image:secure_url" content="https://innocentia.tech/images/og_preview.png?v=20" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />

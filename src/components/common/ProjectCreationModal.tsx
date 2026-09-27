@@ -23,7 +23,7 @@ export default function ProjectCreationModal({ isOpen, onClose }: ProjectCreatio
         <div className="flex items-start sm:items-center justify-between border-b border-white/10 pb-3.5 relative z-10 gap-3">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3">
             <img
-              src="/images/logo_official_header.png?v=2"
+              src="/images/logo_official_header.png?v=20"
               alt="INNOCENTIA TECH"
               className="h-6 sm:h-8 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)]"
             />

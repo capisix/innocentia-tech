@@ -495,7 +495,7 @@ export default function FloatingChatWidget({
 
                 <div className="flex items-center gap-3">
                   <img
-                    src="/images/logo_official_header.png?v=2"
+                    src="/images/logo_official_header.png?v=20"
                     alt="INNOCENTIA"
                     className="h-7 w-auto object-contain hidden sm:block"
                   />

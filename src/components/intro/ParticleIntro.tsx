@@ -134,7 +134,7 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
           {/* Top Header Watermark Badge */}
           <div className="absolute top-6 left-6 z-20 flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/60 border border-white/15 backdrop-blur-xl pointer-events-none shadow-xl">
             <img
-              src="/images/favicon_transparent.png"
+              src="/images/favicon_transparent.png?v=20"
               alt="Innocentia"
               className="w-4 h-4 object-contain animate-pulse"
             />

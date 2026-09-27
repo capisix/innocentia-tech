@@ -64,7 +64,7 @@ export default function CapabilityDetailModal({
         <div className="flex items-start sm:items-center justify-between border-b border-white/10 pb-4 relative z-10 gap-3">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
             <img
-              src="/images/logo_official_header.png?v=2"
+              src="/images/logo_official_header.png?v=20"
               alt="INNOCENTIA TECH"
               className="h-5 sm:h-7 w-auto object-contain"
             />

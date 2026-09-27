@@ -66,7 +66,7 @@ export default function Footer() {
           <div className="space-y-2 max-w-xl">
             <div className="flex items-center gap-3">
               <img
-                src="/images/logo_official_header.png?v=2"
+                src="/images/logo_official_header.png?v=20"
                 alt="INNOCENTIA TECH"
                 className="h-9 sm:h-10 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)]"
               />

@@ -56,7 +56,7 @@ export default function Navbar({ onOpenProjectModal }: NavbarProps) {
           {/* Official Innocentia Logo */}
           <Link href="/" className="flex items-center group cursor-pointer">
             <img
-              src="/images/logo_official_header.png?v=2"
+              src="/images/logo_official_header.png?v=20"
               alt="INNOCENTIA TECH"
               className="h-10 sm:h-12 w-auto max-w-[200px] sm:max-w-[240px] object-contain filter drop-shadow-[0_0_12px_rgba(255,56,88,0.4)] group-hover:scale-105 transition-transform duration-300"
             />
