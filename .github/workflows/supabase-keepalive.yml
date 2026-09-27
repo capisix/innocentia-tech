@@ -2,8 +2,8 @@ name: Supabase Keep-Alive Ping
 
 on:
   schedule:
-    # Runs every 2 days at 06:00 UTC
-    - cron: '0 6 */2 * *'
+    # Runs twice daily at 04:00 and 16:00 UTC to ensure Supabase never enters inactive state
+    - cron: '0 4,16 * * *'
   workflow_dispatch:
 
 jobs:
@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Ping Innocentia Keep-Alive Endpoint
         run: |
-          echo "Sending keep-alive ping to Innocentia API..."
-          curl -s -f -X GET "https://innocentia.tech/api/cron/keepalive" || curl -s -f -X GET "https://ckqbxgntxpalwanfkusq.supabase.co/auth/v1/health" || true
-          echo "Keep-alive ping completed."
+          echo "Sending keep-alive ping to Innocentia API & Supabase..."
+          curl -s -S -X GET "https://innocentia.tech/api/cron/keepalive"
+          echo ""
+          curl -s -S -X GET "https://ckqbxgntxpalwanfkusq.supabase.co/auth/v1/health" || true
+          echo ""
+          echo "Keep-alive ping completed successfully."

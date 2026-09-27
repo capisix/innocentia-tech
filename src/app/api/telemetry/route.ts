@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSupabaseConfig, supabaseRestQuery } from "../../../lib/supabase/client";
 
 export const dynamic = "force-dynamic";
 
@@ -294,6 +295,25 @@ export async function GET(req: Request) {
   });
 }
 
+// Throttled passive keepalive: touches Supabase database table at most once every 10 minutes
+let lastPassiveKeepaliveTimestamp = 0;
+async function passiveSupabaseKeepalive() {
+  const now = Date.now();
+  if (now - lastPassiveKeepaliveTimestamp < 10 * 60 * 1000) return;
+  lastPassiveKeepaliveTimestamp = now;
+
+  try {
+    const config = getSupabaseConfig();
+    if (config.anonKey) {
+      await supabaseRestQuery("leads", {
+        params: { select: "id", limit: "1" },
+      });
+    }
+  } catch {
+    // Fail silently in background without affecting telemetry
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -312,6 +332,9 @@ export async function POST(req: Request) {
 
     connectedVisitors.add(visitorId);
     purgeExpiredSessions(now);
+
+    // Trigger passive background Supabase activity
+    passiveSupabaseKeepalive().catch(() => {});
 
     return NextResponse.json({
       success: true,
