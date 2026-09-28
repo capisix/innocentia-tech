@@ -697,8 +697,8 @@ ${techSection}
                 type="button"
                 onClick={() => {
                   const prompt = activeAdvisorTip.chatPrompt;
+                  openAdvisorChat(prompt, true, true);
                   setActiveAdvisorTip(null);
-                  openAdvisorChat(prompt, true);
                 }}
                 style={{
                   backgroundColor: "#00D1FF",

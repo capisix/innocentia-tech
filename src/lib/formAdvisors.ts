@@ -479,10 +479,10 @@ export function getAdvisorTip(identifier: string): FormAdvisorTip | undefined {
 }
 
 // Utility to dispatch the chat trigger event anywhere in the app
-export function openAdvisorChat(prompt: string, autoSend: boolean = false) {
+export function openAdvisorChat(prompt: string, autoSend: boolean = false, maximize: boolean = true) {
   if (typeof window !== "undefined") {
     const event = new CustomEvent("innocentia-open-chat", {
-      detail: { prompt, autoSend },
+      detail: { prompt, autoSend, maximize },
     });
     window.dispatchEvent(event);
   }
