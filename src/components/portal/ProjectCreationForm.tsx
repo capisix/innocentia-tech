@@ -700,16 +700,27 @@ ${techSection}
                   setActiveAdvisorTip(null);
                   openAdvisorChat(prompt, true);
                 }}
-                className="w-full sm:flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-[#00D1FF] to-[#FF3858] hover:from-[#00E5FF] hover:to-[#FF5575] text-black font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(0,209,255,0.35)] cursor-pointer hover:scale-[1.02]"
+                style={{
+                  backgroundColor: "#00D1FF",
+                  backgroundImage: "linear-gradient(135deg, #00D1FF 0%, #FF3858 100%)",
+                  color: "#050B14",
+                }}
+                className="w-full sm:flex-1 py-3.5 px-5 rounded-xl font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_25px_rgba(0,209,255,0.45)] cursor-pointer hover:scale-[1.02] hover:brightness-110 active:scale-95 border-0"
               >
-                <MessageSquare className="w-4 h-4 text-black flex-shrink-0" />
-                <span>Preguntarle en el Chat en Vivo</span>
+                <MessageSquare className="w-4 h-4 flex-shrink-0" style={{ color: "#050B14", strokeWidth: 2.5 }} />
+                <span style={{ color: "#050B14", fontWeight: 900 }}>
+                  Preguntarle a {ADVISOR_PROFILES[activeAdvisorTip.advisorKey]?.name || "Asesor"} en Vivo
+                </span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveAdvisorTip(null)}
-                className="w-full sm:w-auto py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-xs uppercase transition-all cursor-pointer"
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.12)",
+                  color: "#FFFFFF",
+                }}
+                className="w-full sm:w-auto py-3.5 px-6 rounded-xl hover:bg-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer border border-white/20 hover:border-white/40"
               >
                 Entendido
               </button>
@@ -1647,10 +1658,15 @@ ${techSection}
                   type="button"
                   onClick={handleSubmitProject}
                   disabled={!isStepFinalValid}
-                  className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-400 via-[#00D1FF] to-[#FF3858] hover:from-emerald-300 hover:to-[#FF4D6D] disabled:opacity-40 disabled:pointer-events-none text-black font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105"
+                  style={{
+                    backgroundColor: "#00D1FF",
+                    backgroundImage: "linear-gradient(135deg, #34D399 0%, #00D1FF 50%, #FF3858 100%)",
+                    color: "#050B14",
+                  }}
+                  className="px-8 py-3.5 rounded-full hover:brightness-110 disabled:opacity-40 disabled:pointer-events-none font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105 border-0"
                 >
-                  <Send className="w-4 h-4 text-black" />
-                  <span>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
+                  <Send className="w-4 h-4 flex-shrink-0" style={{ color: "#050B14", strokeWidth: 2.5 }} />
+                  <span style={{ color: "#050B14", fontWeight: 900 }}>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
                 </button>
               )}
             </div>
