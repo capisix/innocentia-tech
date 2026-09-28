@@ -179,6 +179,95 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
+  // 0.4 GIRO ESPECÍFICO: TALLERES MECÁNICOS, AUTOMOTRIZ & REFACCIONARIAS
+  // =========================================================================
+  {
+    id: "giro_taller_mecanico",
+    priority: 120,
+    keywords: [
+      "mecanico",
+      "mecánico",
+      "taller",
+      "taller mecanico",
+      "taller mecánico",
+      "automotriz",
+      "talleres",
+      "hojalateria",
+      "refaccionaria",
+      "frenos",
+      "suspension",
+      "mecanica",
+      "mecánica",
+    ],
+    responses: [
+      {
+        speaker: "SOFÍA",
+        type: "sofia",
+        text: [
+          "¡Un taller mecánico con una imagen formal y bien cuidada destaca de inmediato sobre toda la competencia tradicional! Para el sector automotriz, la clave de la marca es proyectar absoluta **confianza, honestidad y orden**:\n\n• **Identidad Visual:** Diseñamos un logo con tipografía robusta y colores que transmiten solidez (como tonos industriales grafito, azul profundo o acentos en rojo), pensado para lucir impecable en fachadas, uniformes del equipo, notas de servicio membretadas y letreros exteriores.\n• **Cero Complicaciones:** ¡No necesitas saber nada de diseño ni traer referencias, nosotros nos encargamos de prepararte las propuestas visuales!",
+          "¿Cómo se llama actualmente tu taller o qué nombre te gustaría ponerle?",
+        ],
+      },
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡Me encanta la meta de hacer crecer tu taller! Nos encargamos de diseñar una marca sólida y confiable para que tus clientes sientan garantía desde que ven tu fachada o tu uniforme.",
+          "IVÁN: Y para ayudarte a atraer más clientes y organizar el crecimiento: optimizamos tu presencia en Google Maps y WhatsApp, e incluso podemos crear un sistema sencillo para cotizar y registrar servicios. ¿Cuáles son los trabajos que más realizas en tu taller?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 0.5 CLIENTE SIN REFERENCIAS / DUEÑO DE NEGOCIO QUE BUSCA CRECER
+  // =========================================================================
+  {
+    id: "usuario_sin_idea_asesoria",
+    priority: 125,
+    keywords: [
+      "no tengo idea",
+      "no se",
+      "no sé",
+      "solo soy",
+      "sólo soy",
+      "no conozco de diseño",
+      "no se de diseño",
+      "no sé de diseño",
+      "no entiendo de diseño",
+      "no tengo referencias",
+      "tu dime",
+      "tú dime",
+      "recomiendame",
+      "recomiéndame",
+      "que me recomiendas",
+      "qué me recomiendas",
+      "ayudame a empezar",
+      "ayúdame a empezar",
+      "para crecer",
+      "todo lo que me sirva",
+    ],
+    responses: [
+      {
+        speaker: "SOFÍA",
+        type: "sofia",
+        text: [
+          "¡Para nada te preocupes! Precisamente para eso estamos aquí: no necesitas tener ideas de diseño ni referencias previas. Nuestro trabajo es aterrizar todo de forma clara y presentarte opciones visuales profesionales listas para tu negocio.",
+          "Para empezar a crear tus propuestas: ¿cómo se llama actualmente tu negocio o cómo te gustaría llamarlo?",
+        ],
+      },
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡No te preocupes por no tener ideas de diseño! Nosotros nos encargamos de crear una imagen visual atractiva y profesional para tu negocio.",
+          "IVÁN: Y de mi lado te ayudamos con todo lo necesario para crecer y captar clientes: presencia en Google, canal de WhatsApp y herramientas para tu día a día. ¿Cuáles son los servicios o productos estrella de tu negocio?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
   // 1. ¿ES DIFÍCIL / COMPLICADO DISEÑAR O CREAR UN SISTEMA O APP?
   // =========================================================================
   {
@@ -489,7 +578,47 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
-  // 7. DESARROLLO DE APPS MÓVILES (iOS Y ANDROID) (100% IVÁN)
+  // 6.5 SISTEMAS DE RESERVAS, CITAS Y AGENDAMIENTO WEB (DUAL & SENCILLO)
+  // =========================================================================
+  {
+    id: "reservas_citas_web",
+    priority: 115,
+    keywords: [
+      "reservar",
+      "reservas",
+      "citas",
+      "agenda",
+      "agendamiento",
+      "pagina de reservas",
+      "página de reservas",
+      "sistema de citas",
+      "sistema de reservas",
+      "agendar",
+      "calendario",
+      "turnos",
+      "apartar",
+    ],
+    responses: [
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: ¡Excelente idea! Diseñamos una página muy visual, limpia y atractiva para que tus clientes sientan total confianza desde que entran y puedan reservar en menos de 1 minuto desde su celular.",
+          "IVÁN: Y en la parte de funcionamiento: creamos un sistema ágil donde tus clientes eligen día, hora y servicio disponible, con confirmación directa a WhatsApp y recordatorios automáticos para que no se te cruce ninguna cita.\n\n¿Te gustaría que generemos el [Blueprint de tu Proyecto](/crear-proyecto) para ver el alcance exacto, tiempos de entrega y cotización formal?",
+        ],
+      },
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Podemos crear una página web de reservas muy rápida y sencilla para tus clientes: eligen el servicio, la fecha y el horario disponible desde su teléfono, y a ti te llega la notificación inmediata a WhatsApp o a tu panel de control.\n\n¿Te gustaría que generemos el [Blueprint de tu Proyecto](/crear-proyecto) para armar la propuesta técnica y costos exactos?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 7. DESARROLLO DE APPS MÓVILES (iOS Y ANDROID) (100% IVÁN - LENGUAJE CLARO)
   // =========================================================================
   {
     id: "apps_moviles",
@@ -517,15 +646,15 @@ const RULES: MatchRule[] = [
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "Desarrollamos aplicaciones móviles nativas y cross-platform para iOS y Android con rendimiento fluido a 60 FPS: geolocalización, notificaciones push, pasarelas de pago, modo offline y publicación en Apple App Store y Google Play Store.",
-          "¿Qué funcionalidades clave imaginas para tu app y qué problema resolverá para tus usuarios?",
+          "Desarrollamos aplicaciones móviles para iPhone (iOS) y Android que son súper rápidas y fáciles de usar: mapas y ubicación, notificaciones directas al teléfono de tus clientes, cobros seguros con tarjeta y publicación oficial en la App Store y Google Play.",
+          "¿Qué funciones principales imaginas para tu app o qué problema le resolverá a tus clientes?",
         ],
       },
     ],
   },
 
   // =========================================================================
-  // 8. SISTEMAS WEB, SAAS, CRM, ERP & PLATAFORMAS (100% IVÁN)
+  // 8. SISTEMAS WEB, SAAS, CRM, ERP & PLATAFORMAS (100% IVÁN - LENGUAJE CLARO)
   // =========================================================================
   {
     id: "sistemas_saas",
@@ -553,8 +682,8 @@ const RULES: MatchRule[] = [
         speaker: "IVÁN",
         type: "ivan",
         text: [
-          "Construimos plataformas web y sistemas SaaS a medida sobre Next.js 15, bases de datos PostgreSQL y microservicios serverless en la nube: gestión de usuarios por roles, paneles administrativos, cotizadores automáticos y reportes en tiempo real.",
-          "¿Qué procesos operativos o flujos de trabajo de tu negocio te gustaría automatizar con este sistema?",
+          "Construimos sistemas y plataformas web a la medida de tu negocio utilizando tecnología moderna (Next.js 15 para máxima velocidad en Google y bases de datos seguras): paneles para administrar tu operación, control de clientes y ventas, cotizadores automáticos y reportes en tiempo real.",
+          "¿Qué tareas o procesos de tu empresa te gustaría tener bajo control o automatizar?",
         ],
       },
     ],

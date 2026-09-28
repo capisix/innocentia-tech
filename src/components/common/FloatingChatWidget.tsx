@@ -384,9 +384,10 @@ export default function FloatingChatWidget({
   }, []);
 
   const renderMessageBubble = (text: string, isSmall: boolean = false) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
-    const hasFormLink = text.includes("crear-proyecto");
+    const hasFormLink =
+      text.includes("crear-proyecto") ||
+      text.toLowerCase().includes("blueprint") ||
+      text.toLowerCase().includes("formulario");
 
     const hasWhatsAppMention =
       text.includes("960 177 1556") ||
@@ -403,31 +404,12 @@ export default function FloatingChatWidget({
       }
     };
 
+    // Clean markdown link format [Text](url) to display just Text nicely in chat bubble
+    const cleanText = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$1");
+
     return (
       <div className="space-y-2 whitespace-pre-line">
-        <p>
-          {parts.map((part, i) => {
-            if (part.match(urlRegex)) {
-              return (
-                <a
-                  key={i}
-                  href={part.includes("crear-proyecto") || part.includes("onboarding") ? "/crear-proyecto" : part}
-                  onClick={(e) => {
-                    if (part.includes("crear-proyecto") || part.includes("onboarding")) {
-                      handleFormClick(e);
-                    }
-                  }}
-                  target={part.startsWith("http") && !part.includes("innocentia.tech") ? "_blank" : undefined}
-                  rel="noopener noreferrer"
-                  className="text-[#00D1FF] underline hover:text-white font-bold transition-colors cursor-pointer inline-block break-all"
-                >
-                  {part}
-                </a>
-              );
-            }
-            return part;
-          })}
-        </p>
+        <p>{cleanText}</p>
 
         <div className="flex flex-wrap items-center gap-2 pt-1.5">
           {hasFormLink && (
@@ -438,8 +420,8 @@ export default function FloatingChatWidget({
                 isSmall ? "px-3 py-2 text-[10px]" : "px-4 py-2.5 text-xs"
               }`}
             >
-              <span className="text-sm">🚀</span>
-              <span>Registrar Proyecto</span>
+              <span className="text-sm">📐</span>
+              <span>Generar Blueprint de Proyecto</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </button>
           )}

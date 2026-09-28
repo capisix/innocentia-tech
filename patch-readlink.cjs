@@ -47,6 +47,60 @@ if (process.platform === "win32") {
   }
 }
 
+const path = require("path");
+
+function ensurePagesManifest(p) {
+  if (typeof p === "string" && p.includes("pages-manifest.json")) {
+    try {
+      if (!fs.existsSync(p)) {
+        fs.mkdirSync(path.dirname(p), { recursive: true });
+        fs.writeFileSync(p, "{}", "utf8");
+      }
+    } catch (e) {}
+  }
+}
+
+const origOpen = fs.open;
+fs.open = function(pathArg, ...args) {
+  ensurePagesManifest(pathArg);
+  return origOpen.call(fs, pathArg, ...args);
+};
+
+const origOpenSync = fs.openSync;
+fs.openSync = function(pathArg, ...args) {
+  ensurePagesManifest(pathArg);
+  return origOpenSync.call(fs, pathArg, ...args);
+};
+
+const origReadFile = fs.readFile;
+fs.readFile = function(pathArg, ...args) {
+  ensurePagesManifest(pathArg);
+  return origReadFile.call(fs, pathArg, ...args);
+};
+
+const origReadFileSync = fs.readFileSync;
+fs.readFileSync = function(pathArg, ...args) {
+  ensurePagesManifest(pathArg);
+  return origReadFileSync.call(fs, pathArg, ...args);
+};
+
+if (fs.promises) {
+  if (fs.promises.open) {
+    const origPromisesOpen = fs.promises.open;
+    fs.promises.open = async function(pathArg, ...args) {
+      ensurePagesManifest(pathArg);
+      return await origPromisesOpen.call(fs.promises, pathArg, ...args);
+    };
+  }
+  if (fs.promises.readFile) {
+    const origPromisesReadFile = fs.promises.readFile;
+    fs.promises.readFile = async function(pathArg, ...args) {
+      ensurePagesManifest(pathArg);
+      return await origPromisesReadFile.call(fs.promises, pathArg, ...args);
+    };
+  }
+}
+
 const Module = require("module");
 const origLoad = Module._load;
 

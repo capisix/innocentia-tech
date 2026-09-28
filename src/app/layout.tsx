@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     siteName: "Innocentia Tech",
     images: [
       {
-        url: "https://innocentia.tech/images/og_preview.png?v=20",
-        secureUrl: "https://innocentia.tech/images/og_preview.png?v=20",
+        url: "https://innocentia.tech/images/og_preview.png?v=25",
+        secureUrl: "https://innocentia.tech/images/og_preview.png?v=25",
         width: 1200,
         height: 630,
         type: "image/png",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Innocentia Tech • Desarrollo de Software, Apps Móviles e IA",
     description: "Ingeniería de software a medida, apps móviles fluidas a 60 FPS y soluciones con Inteligencia Artificial.",
-    images: ["https://innocentia.tech/images/og_preview.png?v=20"],
+    images: ["https://innocentia.tech/images/og_preview.png?v=25"],
   },
   icons: {
     icon: [
@@ -65,8 +65,8 @@ export default function RootLayout({
         {/* OpenGraph & Social Preview Fallbacks (Fondo Blanco Oficial para WhatsApp/Redes) */}
         <meta property="og:title" content="Innocentia Tech • Laboratorio de Software & IA" />
         <meta property="og:description" content="Donde la imaginación se convierte en tecnología. Apps móviles, desarrollo web de alta escala y soluciones con IA." />
-        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=20" />
-        <meta property="og:image:secure_url" content="https://innocentia.tech/images/og_preview.png?v=20" />
+        <meta property="og:image" content="https://innocentia.tech/images/og_preview.png?v=25" />
+        <meta property="og:image:secure_url" content="https://innocentia.tech/images/og_preview.png?v=25" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -74,7 +74,7 @@ export default function RootLayout({
         <meta property="og:url" content="https://innocentia.tech" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://innocentia.tech/images/og_preview.png?v=11" />
+        <meta name="twitter:image" content="https://innocentia.tech/images/og_preview.png?v=25" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -148,7 +148,7 @@ export default function RootLayout({
                   "@type": "ProfessionalService",
                   "@id": "https://innocentia.tech/#localbusiness",
                   "name": "Innocentia Tech • Desarrollo de Software e IA en Mérida Yucatán",
-                  "image": "https://innocentia.tech/images/og_preview.png?v=11",
+                  "image": "https://innocentia.tech/images/og_preview.png?v=25",
                   "url": "https://innocentia.tech",
                   "telephone": "+529601771556",
                   "priceRange": "$$$",
