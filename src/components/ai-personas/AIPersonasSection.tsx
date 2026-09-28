@@ -1044,11 +1044,11 @@ export default function AIPersonasSection() {
                   </div>
                 </div>
 
-                {/* Right controls: Format Switcher + Close Button */}
-                <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
-                  {/* Format Selector Tabs (Only when both desktop & mobile videos exist) */}
+                {/* Right controls: Format Switcher (Desktop only) + Close Button */}
+                <div className="flex items-center justify-end gap-2 flex-shrink-0">
+                  {/* Format Selector Tabs (Only on desktop screens when both desktop & mobile videos exist) */}
                   {activeVideo.videoSrcDesktop !== activeVideo.videoSrcMobile ? (
-                    <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.06] border border-white/15">
+                    <div className="hidden sm:flex items-center gap-1 p-1 rounded-full bg-white/[0.06] border border-white/15">
                       <button
                         type="button"
                         onClick={() => setVideoFormat("mobile")}
@@ -1077,7 +1077,7 @@ export default function AIPersonasSection() {
                       </button>
                     </div>
                   ) : (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.06] border border-white/15 text-[10px] sm:text-[11px] font-mono font-bold text-gray-300">
+                    <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.06] border border-white/15 text-[10px] sm:text-[11px] font-mono font-bold text-gray-300">
                       <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: activeVideo.themeColor }} />
                       <span>PRESENTACIÓN HD</span>
                     </div>
