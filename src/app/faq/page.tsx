@@ -632,7 +632,13 @@ export default function FAQPage() {
         });
       } else {
         // Dynamic Human-like Conversational Engine
-        const reply = getIntelligentHumanReply(query);
+        const reply = getIntelligentHumanReply(
+          query,
+          terminalHistory.map((t) => ({
+            sender: t.type,
+            text: typeof t.content === "string" ? t.content : t.content.join(" "),
+          }))
+        );
         const isSofia = reply.type === "sofia";
         const isIvan = reply.type === "ivan";
 

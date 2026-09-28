@@ -270,7 +270,7 @@ export default function FloatingChatWidget({
 
     setIsTyping("sofia");
 
-    let reply = getIntelligentHumanReply(text);
+    let reply = getIntelligentHumanReply(text, updatedHistory);
 
     try {
       const res = await fetch("/api/chat", {
@@ -469,13 +469,13 @@ export default function FloatingChatWidget({
       {/* FULL-SCREEN MAXIMIZED CHAT MODAL (Z-[9999]) */}
       {/* ========================================================== */}
       {isOpen && isMaximized && (
-        <div className="fixed inset-0 z-[9999] bg-[#020204]/95 backdrop-blur-3xl flex items-center justify-center p-3 sm:p-6 md:p-10 animate-in fade-in duration-300">
-          <div className="w-full max-w-5xl h-full max-h-[850px] rounded-[32px] bg-[#07070D] border border-white/20 shadow-[0_0_80px_rgba(255,56,88,0.25)] flex flex-col overflow-hidden text-left relative">
+        <div className="fixed inset-0 z-[9999] bg-[#020204]/95 backdrop-blur-3xl flex items-center justify-center p-0 sm:p-6 md:p-10 animate-in fade-in duration-300">
+          <div className="w-full max-w-5xl h-[100dvh] sm:h-full sm:max-h-[850px] rounded-none sm:rounded-[32px] bg-[#07070D] border-0 sm:border sm:border-white/20 shadow-[0_0_80px_rgba(255,56,88,0.25)] flex flex-col overflow-hidden text-left relative">
             {/* Top Modal Header */}
-            <div className="px-6 py-4 bg-white/[0.03] border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center -space-x-2">
-                  <div className="w-10 h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)] overflow-hidden relative">
+            <div className="px-3.5 sm:px-6 py-2.5 sm:py-4 bg-white/[0.03] border-b border-white/10 flex items-center justify-between gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="flex items-center -space-x-2 flex-shrink-0">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(255,56,88,0.4)] overflow-hidden relative flex-shrink-0">
                     <Image
                       src="/images/sofia_avatar.png"
                       alt="Sofía"
@@ -483,7 +483,7 @@ export default function FloatingChatWidget({
                       className="object-contain"
                     />
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)] overflow-hidden relative">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/50 p-0.5 flex items-center justify-center shadow-[0_0_15px_rgba(0,209,255,0.4)] overflow-hidden relative flex-shrink-0">
                     <Image
                       src="/images/ivan_avatar.png"
                       alt="Iván"
@@ -493,21 +493,21 @@ export default function FloatingChatWidget({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <img
                     src="/images/logo_official_header.png?v=20"
                     alt="INNOCENTIA"
-                    className="h-7 w-auto object-contain hidden sm:block"
+                    className="h-7 w-auto object-contain hidden sm:block flex-shrink-0"
                   />
-                  <div className="h-6 w-px bg-white/20 hidden sm:block" />
-                  <div>
-                    <h3 className="text-base sm:text-lg font-black tracking-wide text-white uppercase flex items-center gap-2">
-                      <span>DUAL CORE STUDIO</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                  <div className="h-6 w-px bg-white/20 hidden sm:block flex-shrink-0" />
+                  <div className="min-w-0">
+                    <h3 className="text-xs sm:text-base md:text-lg font-black tracking-wide text-white uppercase flex items-center gap-1.5 sm:gap-2 truncate">
+                      <span className="truncate">DUAL CORE STUDIO</span>
+                      <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex-shrink-0">
                         MODO EXTENDIDO
                       </span>
                     </h3>
-                    <p className="text-xs text-gray-400 font-mono">
+                    <p className="text-[10px] sm:text-xs text-gray-400 font-mono truncate">
                       Sofía (UX & Creatividad) • Iván (Arquitectura & Código)
                     </p>
                   </div>
@@ -515,52 +515,66 @@ export default function FloatingChatWidget({
               </div>
 
               {/* Action Buttons (WhatsApp / Reset / Minimize / Close) */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                {/* Desktop Full WhatsApp Badge */}
                 <a
                   href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3.5 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all cursor-pointer"
+                  title="WhatsApp: +52 960 177 1556"
+                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all cursor-pointer flex-shrink-0"
                 >
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                   <span>WhatsApp: +52 960 177 1556</span>
                 </a>
+
+                {/* Mobile WhatsApp Button */}
+                <a
+                  href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="WhatsApp: +52 960 177 1556"
+                  className="flex md:hidden p-2 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-mono font-bold transition-all cursor-pointer flex-shrink-0"
+                >
+                  <span>💬</span>
+                </a>
+
                 <button
                   type="button"
                   onClick={handleResetChat}
-                  title="Reiniciar conversación (Se conserva por 2h o puedes reiniciarla manualmente)"
-                  className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="Reiniciar conversación"
+                  className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer flex-shrink-0"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Nueva conversación</span>
+                  <span className="hidden lg:inline">Nueva conversación</span>
                 </button>
                 <button
                   onClick={toggleMaximize}
                   title="Modo Flotante"
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer flex-shrink-0"
                 >
                   <Minimize2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleClose}
                   title="Cerrar Chat"
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer"
+                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all cursor-pointer flex-shrink-0"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
             </div>
 
             {/* Quick Chips in Maximized View */}
-            <div className="px-6 py-2.5 bg-white/[0.01] border-b border-white/5 flex items-center gap-2 overflow-x-auto scrollbar-none">
-              <span className="text-[11px] font-mono text-gray-500 uppercase flex-shrink-0">
+            <div className="px-3.5 sm:px-6 py-2 sm:py-2.5 bg-white/[0.01] border-b border-white/5 flex items-center gap-2 overflow-x-auto scrollbar-none flex-shrink-0">
+              <span className="text-[10px] sm:text-[11px] font-mono text-gray-500 uppercase flex-shrink-0">
                 Sugerencias:
               </span>
               {quickQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSendMessage(q.query)}
-                  className="px-3.5 py-1 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/10 text-xs text-gray-300 hover:text-white whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1 sm:px-3.5 rounded-full bg-white/[0.04] hover:bg-white/10 border border-white/10 text-[11px] sm:text-xs text-gray-300 hover:text-white whitespace-nowrap transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer"
                 >
                   <span>{q.label}</span>
                 </button>
@@ -568,17 +582,17 @@ export default function FloatingChatWidget({
             </div>
 
             {/* Maximized Messages Stream */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-gradient-to-b from-transparent to-black/40">
+            <div className="flex-1 p-3 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 bg-gradient-to-b from-transparent to-black/40 min-h-0">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex items-start gap-3 ${
+                  className={`flex items-start gap-2.5 sm:gap-3 ${
                     msg.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
                   {msg.sender !== "user" && (
                     <div
-                      className={`w-9 h-9 rounded-full p-0.5 flex-shrink-0 flex items-center justify-center border overflow-hidden relative shadow-lg ${
+                      className={`w-7 h-7 sm:w-9 sm:h-9 rounded-full p-0.5 flex-shrink-0 flex items-center justify-center border overflow-hidden relative shadow-lg ${
                         msg.sender === "sofia"
                           ? "bg-[#FF3858]/20 border-[#FF3858]/60 shadow-[0_0_12px_rgba(255,56,88,0.4)]"
                           : "bg-[#00D1FF]/20 border-[#00D1FF]/60 shadow-[0_0_12px_rgba(0,209,255,0.4)]"
@@ -598,7 +612,7 @@ export default function FloatingChatWidget({
                   )}
 
                   <div
-                    className={`max-w-[75%] sm:max-w-[65%] p-4 rounded-2xl text-sm leading-relaxed ${
+                    className={`max-w-[85%] sm:max-w-[65%] p-3 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed break-words ${
                       msg.sender === "user"
                         ? "bg-gradient-to-r from-[#FF3858] to-[#FF7A00] text-white rounded-br-none shadow-[0_5px_20px_rgba(255,56,88,0.3)]"
                         : msg.sender === "sofia"
@@ -609,7 +623,7 @@ export default function FloatingChatWidget({
                     {msg.sender !== "user" && (
                       <div className="flex items-center gap-2 mb-1.5">
                         <span
-                          className={`text-[10px] font-bold uppercase font-mono px-2 py-0.5 rounded-full ${
+                          className={`text-[9px] sm:text-[10px] font-bold uppercase font-mono px-2 py-0.5 rounded-full ${
                             msg.sender === "sofia"
                               ? "bg-[#FF3858]/20 text-[#FF3858]"
                               : "bg-[#00D1FF]/20 text-[#00D1FF]"
@@ -627,8 +641,8 @@ export default function FloatingChatWidget({
               ))}
 
               {isTyping && (
-                <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.04] border border-white/10 w-fit animate-pulse">
-                  <div className={`w-7 h-7 rounded-full overflow-hidden relative border ${
+                <div className="flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] border border-white/10 w-fit animate-pulse">
+                  <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden relative border ${
                     isTyping === "sofia" ? "border-[#FF3858]" : "border-[#00D1FF]"
                   }`}>
                     <Image
@@ -644,7 +658,7 @@ export default function FloatingChatWidget({
                       <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: "300ms" }} />
                     </span>
-                    <span className="font-semibold ml-1">
+                    <span className="font-semibold ml-1 text-[11px] sm:text-xs">
                       {isTyping === "sofia" ? "Sofía está escribiendo..." : "Iván está escribiendo..."}
                     </span>
                   </div>
@@ -654,33 +668,33 @@ export default function FloatingChatWidget({
             </div>
 
             {/* Bottom Input Area */}
-            <div className="p-4 sm:p-6 bg-black/80 border-t border-white/10 space-y-3">
+            <div className="p-3 sm:p-6 bg-black/90 border-t border-white/10 space-y-2 sm:space-y-3 flex-shrink-0">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                className="flex items-center gap-3"
+                className="flex items-center gap-2 sm:gap-3"
               >
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Describe tu idea, requerimientos o preguntas técnicas..."
-                  className="flex-1 bg-white/[0.05] border border-white/15 focus:border-[#00D1FF] rounded-full px-5 py-3.5 text-sm text-white placeholder-gray-500 focus:outline-none transition-colors"
+                  placeholder="Describe tu idea, requerimientos o preguntas..."
+                  className="flex-1 bg-white/[0.05] border border-white/15 focus:border-[#00D1FF] rounded-full px-4 sm:px-5 py-2.5 sm:py-3.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:scale-105 transition-all shadow-[0_0_25px_rgba(0,209,255,0.4)] cursor-pointer"
+                  className="px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-full bg-gradient-to-r from-[#FF3858] via-purple-600 to-[#00D1FF] text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 hover:scale-105 active:scale-95 transition-all shadow-[0_0_25px_rgba(0,209,255,0.4)] cursor-pointer flex-shrink-0"
                 >
                   <span>Enviar</span>
-                  <Send className="w-4 h-4" />
+                  <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </form>
 
               {/* Blueprint Action Banner */}
-              <div className="flex flex-col sm:flex-row items-center justify-between text-xs pt-1 gap-2">
-                <span className="text-gray-400 font-mono text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs pt-0.5 sm:pt-1 gap-1.5 sm:gap-2">
+                <span className="text-gray-400 font-mono text-center sm:text-left text-[10px] sm:text-xs">
                   ¿Listo para formalizar tu idea con un alcance técnico oficial?
                 </span>
                 <button
@@ -688,10 +702,10 @@ export default function FloatingChatWidget({
                     handleClose();
                     onOpenProjectModal?.();
                   }}
-                  className="text-[#00D1FF] hover:text-white font-bold font-mono uppercase flex items-center gap-1.5 cursor-pointer transition-colors"
+                  className="text-[#00D1FF] hover:text-white font-bold font-mono uppercase flex items-center gap-1 cursor-pointer transition-colors text-[10px] sm:text-xs flex-shrink-0"
                 >
                   <span>Generar Blueprint de Proyecto</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
               </div>
             </div>
