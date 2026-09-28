@@ -20,6 +20,7 @@ import {
   Phone,
   FileText,
   HelpCircle,
+  Info,
   X,
 } from "../../lib/icons";
 import { generateProjectPdf } from "../../lib/generateProjectPdf";
@@ -958,9 +959,19 @@ ${techSection}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs font-mono">
                   {/* Nombre de la Empresa */}
                   <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">
-                      Nombre de la Empresa o Negocio *
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label className="text-gray-300 block font-bold">
+                        Nombre de la Empresa o Negocio *
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenAdvisor("client_company")}
+                        className="inline-flex items-center gap-1 text-[10px] font-mono text-[#00D1FF] bg-[#00D1FF]/10 hover:bg-[#00D1FF]/20 border border-[#00D1FF]/40 px-2.5 py-0.5 rounded-full cursor-pointer transition-all hover:scale-105"
+                      >
+                        <Info className="w-3 h-3 text-[#00D1FF]" />
+                        <span>ℹ️ Ver explicación</span>
+                      </button>
+                    </div>
                     <input
                       type="text"
                       required
@@ -988,9 +999,19 @@ ${techSection}
 
                   {/* Giro / Industria */}
                   <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">
-                      Giro o Industria del Negocio *
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label className="text-gray-300 block font-bold">
+                        Giro o Industria del Negocio *
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenAdvisor("client_industry")}
+                        className="inline-flex items-center gap-1 text-[10px] font-mono text-[#FF3858] bg-[#FF3858]/10 hover:bg-[#FF3858]/20 border border-[#FF3858]/40 px-2.5 py-0.5 rounded-full cursor-pointer transition-all hover:scale-105"
+                      >
+                        <Info className="w-3 h-3 text-[#FF3858]" />
+                        <span>ℹ️ Ver explicación</span>
+                      </button>
+                    </div>
                     <input
                       type="text"
                       required
@@ -1047,7 +1068,17 @@ ${techSection}
 
                   {/* WhatsApp / Teléfono */}
                   <div className="space-y-1">
-                    <label className="text-gray-300 block font-bold">WhatsApp / Teléfono Móvil *</label>
+                    <div className="flex items-center justify-between">
+                      <label className="text-gray-300 block font-bold">WhatsApp / Teléfono Móvil *</label>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenAdvisor("client_phone")}
+                        className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 px-2.5 py-0.5 rounded-full cursor-pointer transition-all hover:scale-105"
+                      >
+                        <Info className="w-3 h-3 text-emerald-400" />
+                        <span>ℹ️ Ver explicación</span>
+                      </button>
+                    </div>
                     <input
                       type="tel"
                       required
@@ -1135,16 +1166,16 @@ ${techSection}
                                   e.stopPropagation();
                                   handleOpenAdvisor(t.id);
                                 }}
-                                title={`Consultar recomendación de ${advisorName}`}
-                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold transition-all border hover:scale-105 cursor-pointer shadow-sm"
+                                title={`Ver explicación detallada y recomendación de ${advisorName}`}
+                                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold transition-all border shadow-[0_0_12px_rgba(0,209,255,0.2)] hover:scale-105 cursor-pointer z-10"
                                 style={{
                                   color: advisorColor,
-                                  borderColor: `${advisorColor}50`,
-                                  backgroundColor: `${advisorColor}15`,
+                                  borderColor: `${advisorColor}60`,
+                                  backgroundColor: `${advisorColor}18`,
                                 }}
                               >
-                                <HelpCircle className="w-3.5 h-3.5" style={{ color: advisorColor }} />
-                                <span>Asesoría {advisorName}</span>
+                                <Info className="w-3.5 h-3.5 flex-shrink-0 animate-pulse" style={{ color: advisorColor }} />
+                                <span>ℹ️ Ver explicación</span>
                               </button>
                             )}
                             <div className="flex items-center gap-1.5">
@@ -1227,16 +1258,16 @@ ${techSection}
                                   e.stopPropagation();
                                   handleOpenAdvisor(srv.id);
                                 }}
-                                title={`Consultar recomendación de ${advisorName}`}
-                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold transition-all border hover:scale-105 cursor-pointer shadow-sm"
+                                title={`Ver explicación detallada de ${advisorName}`}
+                                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold transition-all border shadow-sm hover:scale-105 cursor-pointer z-10"
                                 style={{
                                   color: advisorColor,
-                                  borderColor: `${advisorColor}50`,
-                                  backgroundColor: `${advisorColor}15`,
+                                  borderColor: `${advisorColor}60`,
+                                  backgroundColor: `${advisorColor}18`,
                                 }}
                               >
-                                <HelpCircle className="w-3.5 h-3.5" style={{ color: advisorColor }} />
-                                <span>Asesoría {advisorName}</span>
+                                <Info className="w-3.5 h-3.5 flex-shrink-0 animate-pulse" style={{ color: advisorColor }} />
+                                <span>ℹ️ Ver explicación</span>
                               </button>
                             )}
                             <input
@@ -1305,11 +1336,11 @@ ${techSection}
                                   e.stopPropagation();
                                   handleOpenAdvisor(opt.id);
                                 }}
-                                title="Consultar asesoría de Sofía"
-                                className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold transition-all border bg-[#FF3858]/10 text-[#FF3858] border-[#FF3858]/30 hover:bg-[#FF3858]/20 hover:scale-105 cursor-pointer shadow-sm flex-shrink-0"
+                                title="Ver explicación y recomendación de Sofía"
+                                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold transition-all border bg-[#FF3858]/15 text-[#FF3858] border-[#FF3858]/40 hover:bg-[#FF3858]/25 hover:scale-105 cursor-pointer shadow-[0_0_10px_rgba(255,56,88,0.2)] flex-shrink-0 z-10"
                               >
-                                <HelpCircle className="w-3.5 h-3.5 text-[#FF3858]" />
-                                <span>Asesoría Sofía</span>
+                                <Info className="w-3.5 h-3.5 text-[#FF3858] flex-shrink-0 animate-pulse" />
+                                <span>ℹ️ Ver explicación</span>
                               </button>
                             )}
                             <input
@@ -1373,11 +1404,11 @@ ${techSection}
                                   e.stopPropagation();
                                   handleOpenAdvisor(opt.id);
                                 }}
-                                title="Consultar asesoría técnica de Iván"
-                                className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold transition-all border bg-[#00D1FF]/10 text-[#00D1FF] border-[#00D1FF]/30 hover:bg-[#00D1FF]/20 hover:scale-105 cursor-pointer shadow-sm flex-shrink-0"
+                                title="Ver explicación técnica y recomendación de Iván"
+                                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold transition-all border bg-[#00D1FF]/15 text-[#00D1FF] border-[#00D1FF]/40 hover:bg-[#00D1FF]/25 hover:scale-105 cursor-pointer shadow-[0_0_10px_rgba(0,209,255,0.2)] flex-shrink-0 z-10"
                               >
-                                <HelpCircle className="w-3.5 h-3.5 text-[#00D1FF]" />
-                                <span>Asesoría Iván</span>
+                                <Info className="w-3.5 h-3.5 text-[#00D1FF] flex-shrink-0 animate-pulse" />
+                                <span>ℹ️ Ver explicación</span>
                               </button>
                             )}
                             <input
@@ -1468,11 +1499,11 @@ ${techSection}
                                     e.stopPropagation();
                                     handleOpenAdvisor(b.id);
                                   }}
-                                  title="Ver recomendación sobre este rango de inversión"
-                                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold border bg-purple-500/10 text-purple-300 border-purple-500/30 hover:bg-purple-500/20 hover:scale-105 cursor-pointer flex-shrink-0"
+                                  title="Ver explicación sobre este rango de inversión"
+                                  className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border bg-purple-500/15 text-purple-300 border-purple-500/40 hover:bg-purple-500/30 hover:scale-105 cursor-pointer flex-shrink-0 shadow-sm z-10"
                                 >
-                                  <HelpCircle className="w-3 h-3 text-purple-400" />
-                                  <span>Asesoría</span>
+                                  <Info className="w-3 h-3 text-purple-400 flex-shrink-0 animate-pulse" />
+                                  <span>ℹ️ Ver explicación</span>
                                 </button>
                               )}
                             </div>
@@ -1498,7 +1529,7 @@ ${techSection}
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {/* Fase 1 */}
-                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#FF3858]/30 space-y-1.5 shadow-sm">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#FF3858]/30 space-y-2 shadow-sm">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-mono font-bold text-[#FF3858] uppercase px-2 py-0.5 rounded-full bg-[#FF3858]/10 border border-[#FF3858]/30">
                             Fase 1 • UI/UX
@@ -1511,10 +1542,18 @@ ${techSection}
                         <p className="text-[10px] text-gray-400 font-mono leading-relaxed">
                           Arquitectura de información, wireframes y validación visual navegable a 60fps de todas las pantallas antes de programar.
                         </p>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenAdvisor("phase_figma")}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border bg-[#FF3858]/15 text-[#FF3858] border-[#FF3858]/40 hover:bg-[#FF3858]/25 hover:scale-105 cursor-pointer shadow-sm w-fit"
+                        >
+                          <Info className="w-3 h-3 text-[#FF3858] animate-pulse" />
+                          <span>ℹ️ Ver explicación</span>
+                        </button>
                       </div>
 
                       {/* Fase 2 */}
-                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#00D1FF]/30 space-y-1.5 shadow-sm">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#00D1FF]/30 space-y-2 shadow-sm">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-mono font-bold text-[#00D1FF] uppercase px-2 py-0.5 rounded-full bg-[#00D1FF]/10 border border-[#00D1FF]/30">
                             Fase 2 • MVP
@@ -1527,10 +1566,18 @@ ${techSection}
                         <p className="text-[10px] text-gray-400 font-mono leading-relaxed">
                           Base de datos cifrada, backend escalable, módulos operativos base y acceso a entorno privado de pruebas para tu equipo.
                         </p>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenAdvisor("phase_mvp")}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border bg-[#00D1FF]/15 text-[#00D1FF] border-[#00D1FF]/40 hover:bg-[#00D1FF]/25 hover:scale-105 cursor-pointer shadow-sm w-fit"
+                        >
+                          <Info className="w-3 h-3 text-[#00D1FF] animate-pulse" />
+                          <span>ℹ️ Ver explicación</span>
+                        </button>
                       </div>
 
                       {/* Fase 3 */}
-                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 space-y-1.5 shadow-sm">
+                      <div className="p-4 rounded-2xl bg-white/[0.03] border border-emerald-500/30 space-y-2 shadow-sm">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30">
                             Fase 3 • Lanzamiento
@@ -1543,6 +1590,14 @@ ${techSection}
                         <p className="text-[10px] text-gray-400 font-mono leading-relaxed">
                           Pasarelas de pago, WebSockets, WhatsApp API, pruebas de estrés y publicación en tiendas (App Store/Play Store) y servidores cloud.
                         </p>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenAdvisor("phase_launch")}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border bg-emerald-500/15 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/25 hover:scale-105 cursor-pointer shadow-sm w-fit"
+                        >
+                          <Info className="w-3 h-3 text-emerald-400 animate-pulse" />
+                          <span>ℹ️ Ver explicación</span>
+                        </button>
                       </div>
                     </div>
 

@@ -435,6 +435,14 @@ export const HelpCircle = createIcon(
   </g>
 );
 
+export const Info = createIcon(
+  <g>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" x2="12" y1="16" y2="12" />
+    <line x1="12" x2="12.01" y1="8" y2="8" />
+  </g>
+);
+
 export const TrendingDown = createIcon(
   <g>
     <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />

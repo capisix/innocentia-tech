@@ -318,6 +318,48 @@ export const FORM_ADVISOR_TIPS: Record<string, FormAdvisorTip> = {
   },
 
   // ==========================================
+  // PASO 1: DATOS DE EMPRESA Y CONTACTO
+  // ==========================================
+  client_company: {
+    id: "client_company",
+    advisorKey: "both",
+    optionTitle: "🏢 Datos de la Empresa y Titular",
+    tagline: "Personalización exacta de la propuesta comercial y confidencialidad garantizada",
+    advice: [
+      "Sofía e Iván te explican: Conocer el nombre de tu empresa nos permite evaluar el sector comercial, la competencia existente y asignarte al especialista técnico adecuado.",
+      "Toda la información ingresada está protegida bajo estricto acuerdo de confidencialidad comercial de Innocentia Tech.",
+    ],
+    recommendationWhen: "Obligatorio para generar tu Ficha Oficial de Proyecto con folio y validez técnica.",
+    chatPrompt: "Hola equipo de Innocentia, ¿cómo protegen la confidencialidad de la información y qué beneficios tengo al registrar mi empresa?",
+  },
+
+  client_industry: {
+    id: "client_industry",
+    advisorKey: "sofia",
+    optionTitle: "📊 Giro o Industria de tu Negocio",
+    tagline: "Arquitectura adaptada a las reglas y necesidades específicas de tu sector",
+    advice: [
+      "Cada industria tiene dinámicas distintas: un restaurante necesita comandas e inventarios rápidos; un e-commerce requiere pasarelas de pago y logística de envíos; una inmobiliaria requiere filtros de propiedades y CRM de prospectos.",
+      "Al indicarnos tu giro, cargamos automáticamente las mejores prácticas de UI/UX y la arquitectura técnica más rentable para tu sector.",
+    ],
+    recommendationWhen: "Indispensable para enfocar la cotización en las funciones que verdaderamente aumentan tus ventas.",
+    chatPrompt: "Hola Sofía, ¿qué estrategias de diseño y tecnología recomiendan para destacar en mi giro comercial?",
+  },
+
+  client_phone: {
+    id: "client_phone",
+    advisorKey: "ivan",
+    optionTitle: "📲 WhatsApp y Teléfono de Contacto",
+    tagline: "Canal directo para envío de ficha PDF, cotización y avances en tiempo real",
+    advice: [
+      "Utilizamos tu número de WhatsApp exclusivamente para enviarte la confirmación con tu Folio de Proyecto, la cotización formal en PDF y agendar una llamada breve de asesoría.",
+      "Nunca te enviaremos spam ni compartiremos tu contacto con terceros ajenos a Innocentia Tech.",
+    ],
+    recommendationWhen: "Ingresa tu número celular con lada nacional o internacional para recibir la confirmación instantánea.",
+    chatPrompt: "Hola Iván, ¿en cuánto tiempo me contactan por WhatsApp después de enviar mi cotización?",
+  },
+
+  // ==========================================
   // PASO 6: PRESUPUESTO
   // ==========================================
   "50k_150k": {
@@ -358,6 +400,48 @@ export const FORM_ADVISOR_TIPS: Record<string, FormAdvisorTip> = {
     recommendationWhen: "Ideal para: corporativos, franquicias, plataformas SaaS con proyección internacional o startups con financiamiento.",
     chatPrompt: "Hola equipo, para un proyecto corporativo de alta escala (+$350k MXN), ¿cómo estructuramos la arquitectura y las fases de entrega?",
   },
+
+  // ==========================================
+  // PASO 6: HITOS & FASES DE TIEMPO
+  // ==========================================
+  phase_figma: {
+    id: "phase_figma",
+    advisorKey: "sofia",
+    optionTitle: "🎨 Fase 1: Prototipo Figma Navegable UI/UX",
+    tagline: "Mira, interactúa y aprueba tu producto antes de tirar una sola línea de código",
+    advice: [
+      "Diseño en Figma navegable con flujo real de pantallas a 60fps. Podrás abrir el diseño en tu teléfono o computadora y probar los botones, menús y formularios como si ya fuera la app final.",
+      "Esto elimina malentendidos y asegura que el producto final sea exactamente lo que tu negocio necesita.",
+    ],
+    recommendationWhen: "Duración estimada: 1 a 2 semanas con entregas de avances constantes.",
+    chatPrompt: "Hola Sofía, ¿cómo funciona el proceso de validación del prototipo Figma interactivo?",
+  },
+
+  phase_mvp: {
+    id: "phase_mvp",
+    advisorKey: "ivan",
+    optionTitle: "⚡ Fase 2: Desarrollo & Versión Funcional (MVP)",
+    tagline: "Programación de bases de datos, APIs y módulos operativos centrales",
+    advice: [
+      "Montamos la arquitectura en servidores cloud (AWS / Vercel), la base de datos PostgreSQL cifrada y los módulos principales de tu sistema.",
+      "Te damos acceso a un enlace privado de pruebas para que tú y tu equipo puedan probar la plataforma en vivo conforme se va programando.",
+    ],
+    recommendationWhen: "Duración estimada: 2 a 6 semanas según la complejidad y módulos seleccionados.",
+    chatPrompt: "Hola Iván, ¿cómo tengo acceso al entorno privado de pruebas durante la programación?",
+  },
+
+  phase_launch: {
+    id: "phase_launch",
+    advisorKey: "both",
+    optionTitle: "🚀 Fase 3: Integraciones & Despliegue en Producción",
+    tagline: "Publicación en App Store / Play Store, pasarelas de pago y soporte de salida en vivo",
+    advice: [
+      "Conectamos pasarelas de pago, API de WhatsApp, WebSockets en tiempo real y gestionamos todo el proceso de aprobación en las tiendas de Apple y Google.",
+      "Realizamos pruebas de estrés y monitoreo de seguridad para garantizar que el día del lanzamiento todo funcione a la perfección.",
+    ],
+    recommendationWhen: "Duración estimada: 4 a 10 semanas hasta el despliegue comercial definitivo.",
+    chatPrompt: "Hola equipo, ¿cómo nos asisten en la publicación oficial en tiendas de aplicaciones y servidores?",
+  },
 };
 
 // Helper lookup by key or by label text
@@ -368,6 +452,14 @@ export function getAdvisorTip(identifier: string): FormAdvisorTip | undefined {
 
   // Fallback search by matching keywords in label
   const idLower = identifier.toLowerCase();
+  if (idLower.includes("empresa") || idLower.includes("compañía")) return FORM_ADVISOR_TIPS["client_company"];
+  if (idLower.includes("giro") || idLower.includes("industria")) return FORM_ADVISOR_TIPS["client_industry"];
+  if (idLower.includes("teléfono") || idLower.includes("whatsapp")) return FORM_ADVISOR_TIPS["client_phone"];
+
+  if (idLower.includes("figma") || idLower.includes("fase 1") || idLower.includes("prototipo")) return FORM_ADVISOR_TIPS["phase_figma"];
+  if (idLower.includes("mvp") || idLower.includes("fase 2") || idLower.includes("desarrollo")) return FORM_ADVISOR_TIPS["phase_mvp"];
+  if (idLower.includes("lanzamiento") || idLower.includes("fase 3") || idLower.includes("despliegue")) return FORM_ADVISOR_TIPS["phase_launch"];
+
   if (idLower.includes("logotipo") || idLower.includes("logo")) return FORM_ADVISOR_TIPS["logo_design"];
   if (idLower.includes("identidad")) return FORM_ADVISOR_TIPS["identity_design"];
   if (idLower.includes("proyección") || idLower.includes("posicionamiento")) return FORM_ADVISOR_TIPS["brand_projection"];
