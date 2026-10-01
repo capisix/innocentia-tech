@@ -654,6 +654,104 @@ const RULES: MatchRule[] = [
   },
 
   // =========================================================================
+  // 7.5 LENGUAJES DE PROGRAMACIÓN & STACK TECNOLÓGICO (100% IVÁN)
+  // =========================================================================
+  {
+    id: "tech_stack_lenguajes",
+    priority: 130,
+    keywords: [
+      "lenguaje",
+      "lenguajes",
+      "que tipo lenguaje",
+      "qué tipo lenguaje",
+      "que tipo de lenguaje",
+      "qué tipo de lenguaje",
+      "que lenguaje programamos",
+      "qué lenguaje programamos",
+      "que lenguaje se usa",
+      "qué lenguaje se usa",
+      "que lenguaje usan",
+      "qué lenguaje usan",
+      "en que lenguaje",
+      "en qué lenguaje",
+      "con que lenguaje",
+      "con qué lenguaje",
+      "que tecnologias",
+      "qué tecnologías",
+      "stack tecnologico",
+      "stack tecnológico",
+      "stack",
+      "typescript",
+      "javascript",
+      "react",
+      "nextjs",
+      "next.js",
+      "node",
+      "nodejs",
+      "python",
+      "sql",
+      "postgresql",
+      "flutter",
+      "react native",
+    ],
+    responses: [
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Para garantizar velocidad máxima, seguridad y escalabilidad, trabajamos con el stack tecnológico más moderno de la industria:\n\n• **Frontend (Lo que ve el usuario):** TypeScript con React y Next.js 15 (el estándar de alto rendimiento que usan plataformas como OpenAI y Twitch para cargar al instante y posicionar en Google).\n• **Backend & APIs (El cerebro del sistema):** Node.js y Python para procesar la lógica de negocio, pasarelas de pago y modelos de Inteligencia Artificial.\n• **Bases de Datos:** PostgreSQL y Supabase para almacenar información de clientes de forma segura y encriptada.\n• **Apps Móviles:** React Native y Flutter para iPhone (iOS) y Android.\n\nTodo desarrollado con código limpio, modular y con entrega total del repositorio en GitHub. ¿Tienes alguna preferencia técnica o buscas que te asesoremos sobre la mejor arquitectura para tu idea?",
+        ],
+      },
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Programamos sobre TypeScript y Next.js 15 para plataformas web ultrarrápidas, Node.js y Python para servicios en la nube e Inteligencia Artificial, y bases de datos PostgreSQL de alto rendimiento.\n\n¿Estás pensando en una plataforma web, una app móvil o un sistema de automatización interna?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
+  // 7.6 AUTOMATIZACIÓN DE PAGOS, CALENDARIOS & RESERVAS (IVÁN / DUAL)
+  // =========================================================================
+  {
+    id: "automatizacion_pagos_calendarios",
+    priority: 128,
+    keywords: [
+      "pagos y los calendarios",
+      "pagos y calendarios",
+      "automatice los pagos",
+      "automatice pagos",
+      "automatizar pagos",
+      "automatizar cobros",
+      "cobros y calendarios",
+      "cobros y calendario",
+      "citas y pagos",
+      "reservas y pagos",
+      "pasarela de pago y calendario",
+      "stripe y calendario",
+    ],
+    responses: [
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "¡Es una de las mejores automatizaciones para ahorrar horas de trabajo y evitar cancelaciones! Conectamos dos soluciones clave:\n\n1. **Cobros en Línea Seguros:** Integramos Stripe o Mercado Pago para que tus clientes paguen con tarjeta de crédito, débito o transferencia bancaria en tiempo real.\n2. **Agenda & Calendario Inteligente:** En cuanto el cliente realiza el pago, el sistema aparta automáticamente el horario en tu calendario, actualiza la disponibilidad y envía confirmaciones y recordatorios por WhatsApp y correo electrónico.\n\n¿Qué tipo de servicios o productos vas a cobrar y agendar en esta plataforma?",
+        ],
+      },
+      {
+        speaker: "DUAL",
+        type: "both",
+        text: [
+          "SOFÍA: Diseñamos una interfaz visual limpia, intuitiva y profesional para que tus clientes puedan reservar y pagar en menos de 1 minuto desde su celular.",
+          "IVÁN: Y por detrás conectamos las pasarelas de pago (Stripe/Mercado Pago) con sincronización de Google Calendar y alertas por WhatsApp para que recibas el dinero y las citas confirmadas sin mover un dedo.\n\n¿Te gustaría que generemos el [Blueprint de tu Proyecto](/crear-proyecto) para definir los flujos y costos exactos?",
+        ],
+      },
+    ],
+  },
+
+  // =========================================================================
   // 8. SISTEMAS WEB, SAAS, CRM, ERP & PLATAFORMAS (100% IVÁN - LENGUAJE CLARO)
   // =========================================================================
   {
@@ -684,6 +782,14 @@ const RULES: MatchRule[] = [
         text: [
           "Construimos sistemas y plataformas web a la medida de tu negocio utilizando tecnología moderna (Next.js 15 para máxima velocidad en Google y bases de datos seguras): paneles para administrar tu operación, control de clientes y ventas, cotizadores automáticos y reportes en tiempo real.",
           "¿Qué tareas o procesos de tu empresa te gustaría tener bajo control o automatizar?",
+        ],
+      },
+      {
+        speaker: "IVÁN",
+        type: "ivan",
+        text: [
+          "Desarrollamos soluciones de software a la medida: desde sistemas administrativos internos (ERP/CRM) hasta portales de clientes y automatizaciones en la nube con acceso por roles y seguridad avanzada.",
+          "¿Este sistema sería de uso interno para tu equipo o una plataforma a la que entrarán tus clientes finales?",
         ],
       },
     ],
@@ -944,14 +1050,29 @@ export function getIntelligentHumanReply(
     testKeywordMatch(normalizedQuery, "clinica") ||
     testKeywordMatch(normalizedQuery, "inmobiliaria");
 
-  const isTechMentioned =
-    testKeywordMatch(normalizedQuery, "app") ||
-    testKeywordMatch(normalizedQuery, "aplicacion") ||
-    testKeywordMatch(normalizedQuery, "web") ||
-    testKeywordMatch(normalizedQuery, "sistema") ||
-    testKeywordMatch(normalizedQuery, "programar") ||
+  const isCodeFocused =
     testKeywordMatch(normalizedQuery, "codigo") ||
+    testKeywordMatch(normalizedQuery, "código") ||
+    testKeywordMatch(normalizedQuery, "programar") ||
+    testKeywordMatch(normalizedQuery, "programamos") ||
+    testKeywordMatch(normalizedQuery, "programan") ||
+    testKeywordMatch(normalizedQuery, "lenguaje") ||
+    testKeywordMatch(normalizedQuery, "lenguajes") ||
+    testKeywordMatch(normalizedQuery, "stack") ||
+    testKeywordMatch(normalizedQuery, "app") ||
+    testKeywordMatch(normalizedQuery, "apps") ||
+    testKeywordMatch(normalizedQuery, "software") ||
+    testKeywordMatch(normalizedQuery, "sistema") ||
+    testKeywordMatch(normalizedQuery, "sistemas") ||
+    testKeywordMatch(normalizedQuery, "base de datos") ||
+    testKeywordMatch(normalizedQuery, "bases de datos") ||
+    testKeywordMatch(normalizedQuery, "web") ||
     testKeywordMatch(normalizedQuery, "servidor") ||
+    testKeywordMatch(normalizedQuery, "api") ||
+    testKeywordMatch(normalizedQuery, "apis") ||
+    testKeywordMatch(normalizedQuery, "pagos") ||
+    testKeywordMatch(normalizedQuery, "calendario") ||
+    testKeywordMatch(normalizedQuery, "calendarios") ||
     testKeywordMatch(normalizedQuery, "cobrar");
 
   // =========================================================================
@@ -959,7 +1080,7 @@ export function getIntelligentHumanReply(
   // If Sofía has already interacted 2+ times and the conversation is maturing,
   // Iván steps in warmly to offer the technological implementation!
   // =========================================================================
-  if (sofiaInteractions >= 2 && (isDesignFocused || isTechMentioned)) {
+  if (sofiaInteractions >= 2 && (isDesignFocused || isCodeFocused)) {
     return {
       speaker: "DUAL",
       type: "both",
@@ -1004,7 +1125,22 @@ export function getIntelligentHumanReply(
   if (bestMatch && highestScore > 0) {
     const key = bestMatch.id;
     const prevIdx = lastResponseIndex[key] ?? -1;
-    const nextIdx = (prevIdx + 1) % bestMatch.responses.length;
+    let nextIdx = (prevIdx + 1) % bestMatch.responses.length;
+
+    // Anti-repetition check against the previous bot message
+    const previousBotTexts = (history || [])
+      .filter((m) => m.sender !== "user")
+      .map((m) => (Array.isArray(m.text) ? m.text.join(" ") : String(m.text || "")));
+    const lastBotText = previousBotTexts[previousBotTexts.length - 1] || "";
+
+    if (
+      bestMatch.responses.length > 1 &&
+      lastBotText &&
+      lastBotText.includes(bestMatch.responses[nextIdx].text[0].substring(0, 30))
+    ) {
+      nextIdx = (nextIdx + 1) % bestMatch.responses.length;
+    }
+
     lastResponseIndex[key] = nextIdx;
     const selected = bestMatch.responses[nextIdx];
 
@@ -1028,8 +1164,19 @@ export function getIntelligentHumanReply(
       speaker: "DUAL",
       type: "both",
       text: [
-        `SOFÍA: Para tu estrategia de marketing sobre "${rawQuery}": diseñamos anuncios y creativos visuales de alto impacto que conecten con tu audiencia ideal.`,
-        "IVÁN: Y configuramos segmentación cruzada y embudos directos a WhatsApp para maximizar tus ventas. ¿Cuál es tu producto o servicio estrella y a qué público buscas llegar?",
+        "SOFÍA: Para tu estrategia de marketing: diseñamos anuncios y creativos visuales de alto impacto que conecten con tu público ideal.",
+        "IVÁN: Y configuramos segmentación cruzada y embudos directos a WhatsApp para maximizar tus ventas. ¿Cuál es tu producto o servicio estrella y a qué clientes buscas llegar?",
+      ],
+    };
+  }
+
+  if (isCodeFocused) {
+    return {
+      speaker: "IVÁN",
+      type: "ivan",
+      text: [
+        "Desarrollamos soluciones técnicas a medida utilizando tecnología moderna (Next.js 15, TypeScript, Node.js y bases de datos PostgreSQL): desde páginas web ultrarrápidas y pasarelas de pago hasta aplicaciones móviles y automatizaciones en la nube.",
+        "¿Qué funciones principales o flujos de trabajo te gustaría que tenga tu sistema o plataforma?",
       ],
     };
   }
@@ -1039,38 +1186,19 @@ export function getIntelligentHumanReply(
       speaker: "SOFÍA",
       type: "sofia",
       text: [
-        `¡Me parece una excelente iniciativa! Sobre "${rawQuery}": ¿Cuál es la idea o concepto que quieres desarrollar para tu marca y de qué trata tu negocio?`,
-        "Cuéntame si ya tienes referencias visuales o un nombre en mente para empezar a darle forma.",
+        "¡Me parece una excelente iniciativa! Diseñamos identidades de marca memorables, logotipos profesionales y prototipos interactivos en Figma para que visualices tu proyecto antes de programar.",
+        "¿De qué trata tu negocio o qué idea te gustaría comenzar a desarrollar?",
       ],
     };
   }
 
-  const isCodeFocused =
-    testKeywordMatch(normalizedQuery, "codigo") ||
-    testKeywordMatch(normalizedQuery, "programar") ||
-    testKeywordMatch(normalizedQuery, "app") ||
-    testKeywordMatch(normalizedQuery, "software") ||
-    testKeywordMatch(normalizedQuery, "sistema") ||
-    testKeywordMatch(normalizedQuery, "base de datos") ||
-    testKeywordMatch(normalizedQuery, "web");
-
-  if (isCodeFocused) {
-    return {
-      speaker: "IVÁN",
-      type: "ivan",
-      text: [
-        `Sobre tu consulta de "${rawQuery}": para recomendarte la arquitectura técnica más adecuada, ¿qué problema principal o necesidad operativa buscas resolver en tu empresa?`,
-        "¿Se trata de una plataforma web para tus clientes o una herramienta para tu equipo de trabajo?",
-      ],
-    };
-  }
-
-  // Default natural welcoming response from Sofía
+  // Default natural collaborative welcoming response (Human & Non-robotic)
   return {
-    speaker: "SOFÍA",
-    type: "sofia",
+    speaker: "DUAL",
+    type: "both",
     text: [
-      `¡Qué interesante lo que mencionas sobre "${rawQuery}"! Para conocer mejor tu visión: ¿cuál es la idea qué quieres desarrollar o cómo te gustaría que comencemos a desarrollar tu proyecto?`,
+      "SOFÍA: ¡Hola! Con mucho gusto te asesoramos: yo te ayudo con toda la parte creativa, diseño de marca, logotipo y experiencia visual.",
+      "IVÁN: Y yo me encargo de resolver la parte técnica, programación de sistemas web, aplicaciones móviles o pasarelas de pago. ¿Cuál es la idea o proyecto que te gustaría desarrollar?",
     ],
   };
 }

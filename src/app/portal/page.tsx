@@ -7786,6 +7786,13 @@ function PortalMainContent() {
           setIsAuthModalOpen(false);
         }}
       />
+
+      <UserProfileModal
+        isOpen={isUserProfileModalOpen}
+        onClose={() => setIsUserProfileModalOpen(false)}
+        activeUser={safeActiveUser}
+        onUpdateUser={handleUpdateUserProfile}
+      />
     </main>
   );
 }
