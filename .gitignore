@@ -38,5 +38,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-.vercel
+.vercel
+.whatsapp_auth/
+whatsapp_auth/

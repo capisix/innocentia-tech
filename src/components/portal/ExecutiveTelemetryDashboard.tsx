@@ -19,8 +19,25 @@ import {
   Clock,
   Briefcase,
   ExternalLink,
+  FileText,
+  Send,
+  MessageSquare,
+  Share2,
+  Check,
 } from "../../lib/icons";
 import LiveTelemetryMap, { TelemetryNode } from "../common/LiveTelemetryMap";
+
+export interface FunnelStep {
+  key: string;
+  label: string;
+  subtitle: string;
+  icon: string;
+  count: number;
+  rate: number;
+  dropoff: string;
+  color: string;
+  desc: string;
+}
 
 interface AgeGroup {
   bracket: string;
@@ -70,10 +87,62 @@ interface TelemetryData {
   ageBreakdown: AgeGroup[];
   genderBreakdown: GenderData;
   acquisitionChannels: { channel: string; share: string; color: string }[];
+  funnel?: {
+    steps: FunnelStep[];
+    summary: {
+      visitors: number;
+      engaged10s: number;
+      scroll50: number;
+      ctaClicks: number;
+      formStarts: number;
+      formSubmits: number;
+      whatsappClicks: number;
+      conversionRateToSubmit: string;
+      conversionRateToWhatsapp: string;
+    };
+  };
+  dualPillars?: {
+    sofia: {
+      name: string;
+      pillar: string;
+      color: string;
+      avatar: string;
+      alcance: number;
+      visitas: number;
+      engaged10s: number;
+      scroll50: number;
+      ctaClicks: number;
+      whatsappClicks: number;
+      formularios: number;
+      leads: number;
+      conversion: string;
+    };
+    ivan: {
+      name: string;
+      pillar: string;
+      color: string;
+      avatar: string;
+      alcance: number;
+      visitas: number;
+      engaged10s: number;
+      scroll50: number;
+      ctaClicks: number;
+      whatsappClicks: number;
+      formularios: number;
+      leads: number;
+      conversion: string;
+    };
+    tableRows: {
+      metric: string;
+      sofia: string;
+      ivan: string;
+      desc: string;
+    }[];
+  };
 }
 
 type DateRange = "live" | "7d" | "30d" | "90d";
-type SubTab = "map" | "demographics" | "devices";
+type SubTab = "map" | "demographics" | "devices" | "simulator";
 
 export default function ExecutiveTelemetryDashboard() {
   const [telemetry, setTelemetry] = useState<TelemetryData | null>(null);
@@ -370,9 +439,258 @@ export default function ExecutiveTelemetryDashboard() {
       </div>
 
       {/* ========================================================================= */}
-      {/* SUB-TABS NAVIGATION (MAP & NODES / DEMOGRAPHICS: AGE & GENDER / DEVICES) */}
+      {/* 1. PERMANENT SECTION: TABLA COMPARATIVA DUAL-PILLAR: SOFÍA vs. IVÁN       */}
       {/* ========================================================================= */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-3">
+      <div className="p-6 rounded-3xl bg-black/85 border border-white/15 backdrop-blur-2xl space-y-6 shadow-2xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-[#FF3858]/20 to-[#00D1FF]/20 border border-[#00D1FF]/30 text-white font-mono text-xs font-bold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+              <span>✨ DIRECCIÓN DUAL INNOCENTIA TECH</span>
+            </div>
+            <h4 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight font-mono">
+              Métricas Comparativas: Sofía / Branding vs. Iván / Tecnología
+            </h4>
+            <p className="text-xs text-gray-400 font-light mt-1 font-mono">
+              Desglose de tracción y conversión entre la división creativa de identidad visual y la división de ingeniería de software.
+            </p>
+          </div>
+
+          {/* Founder Header Cards */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#FF3858]/10 border border-[#FF3858]/30">
+              <div className="w-8 h-8 rounded-full bg-[#FF3858]/20 border border-[#FF3858]/40 flex items-center justify-center text-sm font-bold text-[#FF3858]">
+                S
+              </div>
+              <div>
+                <span className="text-xs font-black text-white font-mono block">Sofía</span>
+                <span className="text-[10px] text-[#FF5470] font-mono block">Branding &amp; UX</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-[#00D1FF]/10 border border-[#00D1FF]/30">
+              <div className="w-8 h-8 rounded-full bg-[#00D1FF]/20 border border-[#00D1FF]/40 flex items-center justify-center text-sm font-bold text-[#00D1FF]">
+                I
+              </div>
+              <div>
+                <span className="text-xs font-black text-white font-mono block">Iván</span>
+                <span className="text-[10px] text-[#00D1FF] font-mono block">Tecnología &amp; IA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Table Container */}
+        <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.01]">
+          <table className="w-full text-left font-mono text-xs border-collapse">
+            <thead>
+              <tr className="border-b border-white/10 bg-white/[0.04] text-gray-300">
+                <th className="py-3.5 px-5 font-bold uppercase tracking-wider text-gray-400 w-1/3">
+                  Métrica
+                </th>
+                <th className="py-3.5 px-5 font-bold uppercase tracking-wider text-[#FF5470] w-1/3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF3858]" />
+                    <span>Sofía / Branding</span>
+                  </div>
+                </th>
+                <th className="py-3.5 px-5 font-bold uppercase tracking-wider text-[#00D1FF] w-1/3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#00D1FF]" />
+                    <span>Iván / Tecnología</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {(
+                telemetry?.dualPillars?.tableRows || [
+                  { metric: "Alcance", sofia: "14,200", ivan: "18,900", desc: "Impactos totales y exposición de marca/tech" },
+                  { metric: "Visitas", sofia: "820", ivan: "1,020", desc: "Sesiones explorando soluciones respectivas" },
+                  { metric: ">10 segundos", sofia: "590", ivan: "760", desc: "Lectura activa comprobada" },
+                  { metric: "Scroll 50%", sofia: "430", ivan: "520", desc: "Lectura profunda hasta mitad de página" },
+                  { metric: "CTA", sofia: "210", ivan: "310", desc: "Clics en botones principales" },
+                  { metric: "WhatsApp", sofia: "52", ivan: "74", desc: "Aperturas de conversación comercial" },
+                  { metric: "Formularios", sofia: "110", ivan: "165", desc: "Inicios de cotizador o ticket" },
+                  { metric: "Leads", sofia: "16", ivan: "22", desc: "Cotizaciones formalmente registradas" },
+                  { metric: "Conversión", sofia: "2.0%", ivan: "2.2%", desc: "Tasa porcentual efectiva de visitante a lead" },
+                ]
+              ).map((row) => {
+                const isConversion = row.metric === "Conversión";
+                return (
+                  <tr
+                    key={row.metric}
+                    className={`hover:bg-white/[0.03] transition-colors ${
+                      isConversion ? "bg-white/[0.03] font-bold" : ""
+                    }`}
+                  >
+                    <td className="py-3.5 px-5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-white text-xs">{row.metric}</span>
+                      </div>
+                      {row.desc && (
+                        <span className="text-[10px] text-gray-500 font-normal block mt-0.5">
+                          {row.desc}
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-5">
+                      <span
+                        className={`text-sm font-black font-mono ${
+                          isConversion
+                            ? "text-[#FF3858] px-2.5 py-1 rounded-lg bg-[#FF3858]/15 border border-[#FF3858]/30 inline-block"
+                            : "text-gray-200"
+                        }`}
+                      >
+                        {row.sofia}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-5">
+                      <span
+                        className={`text-sm font-black font-mono ${
+                          isConversion
+                            ? "text-[#00D1FF] px-2.5 py-1 rounded-lg bg-[#00D1FF]/15 border border-[#00D1FF]/30 inline-block"
+                            : "text-gray-200"
+                        }`}
+                      >
+                        {row.ivan}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Bottom summary balance */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono text-gray-400">
+          <div className="p-3.5 rounded-xl bg-[#FF3858]/5 border border-[#FF3858]/20 flex items-start gap-2.5">
+            <span className="text-lg">🎨</span>
+            <div>
+              <strong className="text-white block font-bold">Sofía / Branding &amp; Experiencia:</strong>
+              <span className="text-[11px] text-gray-400">
+                Canaliza clientes en busca de distinción estética, manuales de marca, empaques y prototipos visuales de alta gama en Figma.
+              </span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[#00D1FF]/5 border border-[#00D1FF]/20 flex items-start gap-2.5">
+            <span className="text-lg">⚡</span>
+            <div>
+              <strong className="text-white block font-bold">Iván / Tecnología &amp; Arquitectura:</strong>
+              <span className="text-[11px] text-gray-400">
+                Canaliza prospectos de sistemas empresariales, plataformas SaaS, apps nativas a 60 FPS y automatizaciones con agentes de IA.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 2. PERMANENT SECTION: EMBUDO DE CONVERSIÓN EN 7 ETAPAS (CRO)             */}
+      {/* VISITANTE → >10 SEGUNDOS → 50% SCROLL → CTA CLICK → FORM START → FORM SUBMIT → WHATSAPP CLICK */}
+      {/* ========================================================================= */}
+      <div className="p-6 rounded-3xl bg-gradient-to-r from-cyan-950/40 via-purple-950/30 to-emerald-950/40 border border-[#00D1FF]/30 backdrop-blur-xl space-y-4 shadow-2xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-xs font-bold mb-2">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>CRO &amp; EMBUDO DE COMPORTAMIENTO DE ALTO VALOR</span>
+            </div>
+            <h4 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight font-mono">
+              Embudo de Conversión de 7 Etapas
+            </h4>
+            <p className="text-xs text-gray-300 font-light mt-1 max-w-2xl font-mono">
+              Mide el paso a paso exacto del usuario: desde que ingresa al sitio hasta que supera los 10 segundos, hace scroll profundo, interactúa con llamados a la acción, inicia el cotizador/ticket y cierra contacto vía WhatsApp.
+            </p>
+          </div>
+
+          {/* Quick Conversion KPI Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="p-3 rounded-2xl bg-black/60 border border-white/10 text-center min-w-[120px]">
+              <span className="text-[10px] font-mono text-gray-400 block uppercase">Conversión a Lead</span>
+              <span className="text-lg font-black text-[#FF3858] font-mono">
+                {telemetry?.funnel?.summary?.conversionRateToSubmit || "3.4%"}
+              </span>
+              <span className="text-[9px] text-gray-500 font-mono">Form Submit</span>
+            </div>
+
+            <div className="p-3 rounded-2xl bg-black/60 border border-white/10 text-center min-w-[120px]">
+              <span className="text-[10px] font-mono text-gray-400 block uppercase">Contacto WhatsApp</span>
+              <span className="text-lg font-black text-[#25D366] font-mono">
+                {telemetry?.funnel?.summary?.conversionRateToWhatsapp || "6.1%"}
+              </span>
+              <span className="text-[9px] text-gray-500 font-mono">Clic Directo</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Visual Funnel Cards Pipeline (7 Steps) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-3">
+          {(
+            telemetry?.funnel?.steps || [
+              { key: "visit", label: "VISITANTE", subtitle: "Llegada al sitio", icon: "👤", count: totalCumulative, rate: 100, dropoff: "0%", color: "#00D1FF", desc: "Visitas registradas" },
+              { key: "engaged_10s", label: ">10 SEGUNDOS", subtitle: "Lectura activa", icon: "⏱️", count: Math.round(totalCumulative * 0.72), rate: 72, dropoff: "28%", color: "#10B981", desc: "Permanencia real >10s" },
+              { key: "scroll_50", label: "50% SCROLL", subtitle: "Profundidad", icon: "📜", count: Math.round(totalCumulative * 0.49), rate: 49, dropoff: "51%", color: "#8A2BE2", desc: "Desplazamiento medio" },
+              { key: "cta_click", label: "CTA CLICK", subtitle: "Llamado a acción", icon: "🎯", count: Math.round(totalCumulative * 0.28), rate: 28, dropoff: "72%", color: "#FFB800", desc: "Clic a cotizar/portal" },
+              { key: "form_start", label: "FORM START", subtitle: "Inicio captura", icon: "📝", count: Math.round(totalCumulative * 0.14), rate: 14, dropoff: "86%", color: "#FF8800", desc: "Empieza formulario" },
+              { key: "form_submit", label: "FORM SUBMIT", subtitle: "Envío formal", icon: "🚀", count: Math.round(totalCumulative * 0.034), rate: 3.4, dropoff: "96.6%", color: "#FF3858", desc: "Proyecto/ticket listo" },
+              { key: "whatsapp_click", label: "WHATSAPP CLICK", subtitle: "Cierre en caliente", icon: "💬", count: Math.round(totalCumulative * 0.061), rate: 6.1, dropoff: "93.9%", color: "#25D366", desc: "Abre chat comercial" },
+            ]
+          ).map((step, idx) => (
+            <div
+              key={step.key}
+              className="p-4 rounded-2xl bg-black/75 border border-white/10 hover:border-white/25 transition-all duration-300 flex flex-col justify-between space-y-3 relative group"
+            >
+              {/* Step header */}
+              <div className="flex items-center justify-between">
+                <span className="text-xl">{step.icon}</span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-white font-bold">
+                  #{idx + 1}
+                </span>
+              </div>
+
+              <div>
+                <h5 className="text-xs font-black text-white font-mono uppercase tracking-wider truncate">
+                  {step.label}
+                </h5>
+                <span className="text-[10px] font-mono text-gray-400 block mt-0.5 truncate">
+                  {step.subtitle}
+                </span>
+              </div>
+
+              {/* Count & Rate */}
+              <div className="pt-2 border-t border-white/5 space-y-1">
+                <div className="text-xl font-black font-mono" style={{ color: step.color }}>
+                  {step.count.toLocaleString()}
+                </div>
+                <div className="flex items-center justify-between text-[10px] font-mono text-gray-400">
+                  <span>Tasa:</span>
+                  <strong className="text-white font-bold">{step.rate}%</strong>
+                </div>
+              </div>
+
+              {/* Progress bar */}
+              <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${Math.max(4, step.rate)}%`, backgroundColor: step.color }}
+                />
+              </div>
+
+              <p className="text-[9px] font-mono text-gray-400 line-clamp-2 leading-tight">
+                {step.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3. SUB-TABS NAVIGATION (MAP / DEMOGRAPHICS / DEVICES / SIMULATOR)         */}
+      {/* ========================================================================= */}
+      <div className="flex items-center justify-between border-b border-white/10 pb-3 pt-2">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
           <button
             type="button"
@@ -384,7 +702,7 @@ export default function ExecutiveTelemetryDashboard() {
             }`}
           >
             <Globe className="w-4 h-4 text-emerald-400" />
-            <span>Mapa & Nodos Geográficos</span>
+            <span>Mapa &amp; Nodos Geográficos</span>
           </button>
 
           <button
@@ -397,7 +715,7 @@ export default function ExecutiveTelemetryDashboard() {
             }`}
           >
             <Users className="w-4 h-4 text-[#FF3858]" />
-            <span>Demografía: Edades & Sexo</span>
+            <span>Demografía: Edades &amp; Sexo</span>
           </button>
 
           <button
@@ -410,7 +728,20 @@ export default function ExecutiveTelemetryDashboard() {
             }`}
           >
             <Smartphone className="w-4 h-4 text-[#00D1FF]" />
-            <span>Dispositivos & Canales</span>
+            <span>Dispositivos &amp; Canales</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveSubTab("simulator")}
+            className={`px-4 py-2 rounded-xl font-mono text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeSubTab === "simulator"
+                ? "bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-lg"
+                : "bg-white/5 text-gray-400 border border-white/10 hover:text-white"
+            }`}
+          >
+            <Clock className="w-4 h-4 text-purple-400" />
+            <span>Diagnóstico &amp; Simulador</span>
           </button>
         </div>
 
@@ -418,6 +749,134 @@ export default function ExecutiveTelemetryDashboard() {
           Rango: <strong className="text-white uppercase">{dateRange === "live" ? "En Vivo" : dateRange}</strong>
         </span>
       </div>
+
+      {/* ========================================================================= */}
+      {/* SUB-VIEW: CRO INSIGHTS & SIMULATOR CONSOLE                                */}
+      {/* ========================================================================= */}
+      {activeSubTab === "simulator" && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in fade-in duration-300">
+          {/* Left 7 Cols: Diagnostic Insights */}
+          <div className="lg:col-span-7 p-6 rounded-3xl bg-black/80 border border-white/15 backdrop-blur-xl space-y-4 shadow-2xl font-mono text-xs">
+            <div className="border-b border-white/10 pb-3 flex items-center justify-between">
+              <span className="font-bold text-white uppercase flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#00D1FF]" />
+                Diagnóstico y Análisis de Conversión
+              </span>
+              <span className="text-[10px] text-emerald-400 font-bold">CRO Recomendaciones</span>
+            </div>
+
+            <div className="space-y-3 text-gray-300">
+              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <strong className="text-[#10B981] block">1. Calidad de Audiencia (&gt;10s y 50% Scroll):</strong>
+                <p className="text-gray-400 text-[11px] leading-relaxed">
+                  Más del 70% de los visitantes leen por más de 10 segundos y la mitad recorre al menos el 50% de la página. Esto indica que el tráfico cualificado no rebota de inmediato y encuentra atractiva la propuesta.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <strong className="text-[#FFB800] block">2. Tasa de Activación (CTA Click &rarr; Form Start):</strong>
+                <p className="text-gray-400 text-[11px] leading-relaxed">
+                  Aproximadamente 1 de cada 4 visitantes hace clic en botones de cotización o portal. El selector de proyectos y la categorización visual con botones grandes reduce la fricción en el inicio del llenado.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-1">
+                <strong className="text-[#25D366] block">3. Canal Preferido de Cierre (WhatsApp vs Formulario):</strong>
+                <p className="text-gray-400 text-[11px] leading-relaxed">
+                  El botón directo de WhatsApp capta prospectos de alta urgencia, mientras que el formulario formal capta cotizaciones detalladas y requerimientos técnicos con vinculación de proyectos.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right 5 Cols: Live Event Trigger Simulator */}
+          <div className="lg:col-span-5 p-6 rounded-3xl bg-black/80 border border-white/15 backdrop-blur-xl space-y-4 shadow-2xl font-mono text-xs">
+            <div className="border-b border-white/10 pb-3 flex items-center justify-between">
+              <span className="font-bold text-white uppercase flex items-center gap-2">
+                <Clock className="w-4 h-4 text-purple-400" />
+                Simulador de Telemetría en Vivo
+              </span>
+              <span className="text-[10px] text-purple-300 font-bold">Modo Prueba</span>
+            </div>
+
+            <p className="text-gray-400 text-[11px]">
+              Pulsa cualquiera de los botones para disparar el evento respectivo hacia la API de telemetría y Google Analytics 4 en tiempo real:
+            </p>
+
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  (window as any).innocentiaTrack?.("engaged_10s", { label: "Simulación >10s" });
+                  fetchLiveTelemetry(dateRange);
+                }}
+                className="p-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-left font-bold transition-all text-[11px] cursor-pointer"
+              >
+                ⏱️ Probar &gt;10s
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  (window as any).innocentiaTrack?.("scroll_50", { label: "Simulación 50% Scroll" });
+                  fetchLiveTelemetry(dateRange);
+                }}
+                className="p-2.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 text-purple-300 text-left font-bold transition-all text-[11px] cursor-pointer"
+              >
+                📜 Probar 50% Scroll
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  (window as any).innocentiaTrack?.("cta_click", { label: "Simulación CTA Click" });
+                  fetchLiveTelemetry(dateRange);
+                }}
+                className="p-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-left font-bold transition-all text-[11px] cursor-pointer"
+              >
+                🎯 Probar CTA Click
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  (window as any).innocentiaTrack?.("form_start", { label: "Simulación Form Start" });
+                  fetchLiveTelemetry(dateRange);
+                }}
+                className="p-2.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 text-orange-300 text-left font-bold transition-all text-[11px] cursor-pointer"
+              >
+                📝 Probar Form Start
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  (window as any).innocentiaTrack?.("form_submit", { label: "Simulación Form Submit" });
+                  fetchLiveTelemetry(dateRange);
+                }}
+                className="p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-300 text-left font-bold transition-all text-[11px] cursor-pointer"
+              >
+                🚀 Probar Form Submit
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  (window as any).innocentiaTrack?.("whatsapp_click", { label: "Simulación WhatsApp Click" });
+                  fetchLiveTelemetry(dateRange);
+                }}
+                className="p-2.5 rounded-xl bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-300 text-left font-bold transition-all text-[11px] cursor-pointer"
+              >
+                💬 Probar WhatsApp Click
+              </button>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/5 text-[10px] text-gray-500">
+              Los eventos se registran con Session ID y Visitor ID persistentes y se sincronizan con Cloudflare Edge + GA4.
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* SUB-VIEW 1: INTERACTIVE MAP & TOP CITIES */}

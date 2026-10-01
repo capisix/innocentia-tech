@@ -193,7 +193,7 @@ REGLAS INFALIBLES DE CONVERSACIÓN (¡OBLIGATORIAS!):
             Authorization: `Bearer ${groqApiKey}`,
           },
           body: JSON.stringify({
-            model: "openai/gpt-oss-120b",
+            model: "qwen/qwen3.8-27b",
             messages: groqMessages,
             temperature: 0.7,
             max_tokens: 800,
