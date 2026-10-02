@@ -60,11 +60,65 @@ REGLAS CRÍTICAS DE CONVERSACIÓN HUMANA:
   "text": ["Párrafo principal natural y conciso...", "Pregunta breve para avanzar"]
 }`;
 
+function detectLanguage(text, history = []) {
+  const clean = text.toLowerCase().trim();
+
+  const enWords = [
+    "i", "im", "i'm", "my", "me", "we", "our", "you", "your", "he", "she", "they", "it",
+    "is", "are", "am", "was", "were", "be", "been", "have", "has", "had", "do", "does", "did",
+    "will", "would", "can", "could", "should", "want", "need", "like", "make", "create",
+    "build", "develop", "promote", "product", "products", "brand", "branding", "logo", "website",
+    "app", "software", "price", "cost", "quote", "how", "what", "when", "where", "why", "which",
+    "who", "hello", "hi", "hey", "yes", "no", "thanks", "thank", "please", "good", "great", "nice"
+  ];
+
+  const esWords = [
+    "hola", "buenos", "buenas", "dias", "tardes", "noches", "quiero", "quisiera", "necesito",
+    "busco", "marca", "diseño", "pagina", "página", "sitio", "cuanto", "cuánto", "precio",
+    "costo", "cotizacion", "cotización", "gracias", "por favor", "ayuda", "hacer", "crear",
+    "desarrollar", "negocio", "empresa", "sistema", "restaurante", "tienda", "venta", "ventas",
+    "si", "sí", "tacos", "comida", "bien"
+  ];
+
+  const words = clean.replace(/[^\w\s]/g, " ").split(/\s+/).filter(Boolean);
+  let enCount = 0;
+  let esCount = 0;
+
+  for (const w of words) {
+    if (enWords.includes(w)) enCount++;
+    if (esWords.includes(w)) esCount++;
+  }
+
+  if (enCount > esCount) return "en";
+  if (esCount > enCount) return "es";
+
+  if (/^(yes|yeah|yep|hi|hello|hey|sure|ok|okay|nice|cool)$/i.test(clean)) return "en";
+  if (/^(si|sí|hola|buenas|ola|sip|va|vale|simon|simón)$/i.test(clean)) return "es";
+
+  for (let i = history.length - 1; i >= 0; i--) {
+    if (history[i].sender === "user") {
+      const prev = history[i].text.toLowerCase();
+      if (/\b(product|promote|website|logo|brand|help|need|want|build|yes|hi|hello)\b/i.test(prev)) return "en";
+      if (/\b(hola|marca|diseño|quiero|sistema|pagina|web|cuanto)\b/i.test(prev)) return "es";
+    }
+  }
+
+  return "es";
+}
+
 async function getSmartAIResponse(cleanText, history = []) {
+  const lang = detectLanguage(cleanText, history);
+
   if (groqApiKey) {
     try {
+      const langDirective = lang === "en"
+        ? `CRITICAL MANDATORY INSTRUCTION: The user is speaking in ENGLISH. You MUST answer 100% in natural, fluent, professional ENGLISH. Do NOT output any Spanish words.
+If the user mentions promoting a product, branding, logo or design: respond as SOFÍA ("type": "sofia", "speaker": "SOFÍA") with warm, insightful advice on visual identity and packaging.
+If the user mentions software, website, platform, POS or e-commerce: respond as IVÁN ("type": "ivan", "speaker": "IVÁN").`
+        : `INSTRUCCIÓN DE IDIOMA: El usuario habla en ESPAÑOL. Responde de forma 100% natural y cercana en español.`;
+
       const groqMessages = [
-        { role: "system", content: systemInstruction },
+        { role: "system", content: `${systemInstruction}\n\n${langDirective}` },
         ...history.slice(-8).map((m) => ({
           role: m.sender === "user" ? "user" : "assistant",
           content: m.text,
@@ -81,7 +135,7 @@ async function getSmartAIResponse(cleanText, history = []) {
         body: JSON.stringify({
           model: "qwen/qwen3.8-27b",
           messages: groqMessages,
-          temperature: 0.7,
+          temperature: 0.6,
           max_tokens: 600,
         }),
       });
@@ -92,6 +146,7 @@ async function getSmartAIResponse(cleanText, history = []) {
         const cleanJson = content.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
         const parsed = JSON.parse(cleanJson);
         if (parsed.text && Array.isArray(parsed.text) && parsed.text.length > 0) {
+          parsed.lang = lang;
           return parsed;
         }
       }
@@ -100,8 +155,33 @@ async function getSmartAIResponse(cleanText, history = []) {
     }
   }
 
-  // Fallback to local heuristic engine
-  return getIntelligentHumanReply(cleanText, history);
+  // Fallback engine
+  if (lang === "en") {
+    if (cleanText.toLowerCase().includes("product") || cleanText.toLowerCase().includes("brand") || cleanText.toLowerCase().includes("logo")) {
+      return {
+        speaker: "SOFÍA",
+        type: "sofia",
+        lang: "en",
+        text: [
+          "Promoting a product is all about impactful visual identity, memorable branding, and sleek packaging that builds trust right away.",
+          "Could you tell me a bit more about what kind of product you are offering so I can guide you on the best creative strategy?"
+        ]
+      };
+    }
+    return {
+      speaker: "DUAL",
+      type: "both",
+      lang: "en",
+      text: [
+        "Hi! Welcome to Innocentia Tech. We design custom software, high-end branding, and digital platforms for modern businesses worldwide.",
+        "What type of project or idea would you like to build with us?"
+      ]
+    };
+  }
+
+  const fallback = getIntelligentHumanReply(cleanText, history);
+  fallback.lang = "es";
+  return fallback;
 }
 
 async function startWhatsAppBot() {
@@ -273,10 +353,12 @@ async function startWhatsAppBot() {
         let responseText = "";
         let header = "";
 
+        const isEn = reply.lang === "en";
+
         if (reply.type === "sofia") {
-          header = "✨ *SOFÍA • UX & DISEÑO* 🎨\n──────────";
+          header = isEn ? "✨ *SOFÍA • UX & DESIGN* 🎨\n──────────" : "✨ *SOFÍA • UX & DISEÑO* 🎨\n──────────";
         } else if (reply.type === "ivan") {
-          header = "⚡ *IVÁN • DEV & TECH* 💻\n──────────";
+          header = isEn ? "⚡ *IVÁN • DEV & TECH* 💻\n──────────" : "⚡ *IVÁN • DEV & TECH* 💻\n──────────";
         } else {
           header = "🚀 *INNOCENTIA TECH* 💎\n──────────";
         }
