@@ -36,6 +36,18 @@ if (!fs.existsSync(AUTH_DIR)) {
   fs.mkdirSync(AUTH_DIR, { recursive: true });
 }
 
+// Auto-restore session from environment variable (persists session across Render cloud restarts)
+const credsPath = path.join(AUTH_DIR, "creds.json");
+if (process.env.WA_SESSION_DATA && !fs.existsSync(credsPath)) {
+  try {
+    const rawData = Buffer.from(process.env.WA_SESSION_DATA, "base64").toString("utf8");
+    fs.writeFileSync(credsPath, rawData, "utf8");
+    console.log("🔑 Sesión de WhatsApp restaurada automáticamente desde WA_SESSION_DATA.");
+  } catch (err) {
+    console.error("Error restaurando WA_SESSION_DATA:", err);
+  }
+}
+
 // Conversation memory per phone number / JID
 const sessionHistories = new Map();
 
