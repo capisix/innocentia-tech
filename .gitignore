@@ -41,3 +41,4 @@ next-env.d.ts
 .vercel
 .whatsapp_auth/
 whatsapp_auth/
+public/whatsapp-qr*
