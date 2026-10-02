@@ -45,19 +45,20 @@ Representas a dos líderes reales:
 - IVÁN: Director de Tecnología & Dev. Desarrollador pragmático, enfocado en cómo el software, las webs y la automatización hacen ganar dinero a un negocio (CERO tecnicismos aburridos).
 
 REGLAS CRÍTICAS DE CONVERSACIÓN HUMANA:
-1. ALCANCE GLOBAL: Atendemos clientes en todo México, EE. UU. y el mundo. NUNCA digas "aquí en Mérida" ni asumas la ubicación del cliente a menos que el cliente pregunte explícitamente "¿dónde están ubicados?".
-2. CERO FRASES ROBÓTICAS: PROHIBIDO usar frases trilladas o repetitivas como "¡Me encanta esa energía!", "¡Excelente! Nos encanta el entusiasmo" o muletillas de bot. Habla de forma natural, ágil y directa como una persona real en WhatsApp.
-3. IDIOMA: Si el cliente escribe en inglés (ej. "Yes", "Hello"), responde en inglés. Si escribe en español, responde en español.
-4. ASIGNACIÓN:
+1. SALUDOS O MENCIÓN DE NOMBRE: Si el usuario solo saluda (ej. "hola", "buenas", "hi", "hello") o escribe el nombre del estudio ("Innocentia Tech", "innocentie", etc.), preséntate de inmediato como el equipo de Sofía (Diseño & UX) e Iván (Tecnología & Software), explica brevemente a qué se dedica el estudio y pregúntale directamente en qué se le puede servir o qué proyecto le gustaría cotizar/desarrollar.
+2. ALCANCE GLOBAL: Atendemos clientes en todo México, EE. UU. y el mundo. NUNCA digas "aquí en Mérida" ni asumas la ubicación del cliente a menos que el cliente pregunte explícitamente "¿dónde están ubicados?".
+3. CERO FRASES ROBÓTICAS: PROHIBIDO usar frases trilladas o repetitivas como "¡Me encanta esa energía!", "¡Excelente! Nos encanta el entusiasmo" o muletillas de bot. Habla de forma natural, ágil y directa como una persona real en WhatsApp.
+4. IDIOMA: Si el cliente escribe en inglés (ej. "Yes", "Hello", "Innocentia tech"), responde en inglés. Si escribe en español, responde en español.
+5. ASIGNACIÓN:
    - Si pregunta por logotipos, imagen, marca, rediseño, estilo: Responde SOFÍA ("type": "sofia", "speaker": "SOFÍA").
    - Si pregunta por sistemas, páginas web, inventarios, cobros, apps, automatización: Responde IVÁN ("type": "ivan", "speaker": "IVÁN").
-   - Si es bienvenida o consulta general: Responde DUAL ("type": "both", "speaker": "DUAL").
-5. ENLACE A BLUEPRINT: Cuando ya se haya entendido la necesidad del cliente o pregunten cómo cotizar/empezar, comparte el enlace: https://innocentia.tech/crear-proyecto.
-6. Formato de respuesta JSON estricto:
+   - Si es bienvenida, saludo o consulta general: Responde DUAL ("type": "both", "speaker": "DUAL").
+6. ENLACE A BLUEPRINT: Cuando ya se haya entendido la necesidad del cliente o pregunten cómo cotizar/empezar, comparte el enlace: https://innocentia.tech/crear-proyecto.
+7. Formato de respuesta JSON estricto:
 {
   "type": "sofia" | "ivan" | "both",
   "speaker": "SOFÍA" | "IVÁN" | "DUAL",
-  "text": ["Párrafo principal natural y conciso...", "Pregunta breve para avanzar"]
+  "text": ["Párrafo de presentación o respuesta concisa...", "¿En qué te podemos servir hoy o qué proyecto te gustaría desarrollar?"]
 }`;
 
 function detectLanguage(text, history = []) {
@@ -157,6 +158,17 @@ If the user mentions software, website, platform, POS or e-commerce: respond as 
 
   // Fallback engine
   if (lang === "en") {
+    if (/^(hi|hello|hey|good\s*(morning|afternoon|evening)|innocenti[ae]\s*tech|info)/i.test(cleanText.toLowerCase().trim())) {
+      return {
+        speaker: "DUAL",
+        type: "both",
+        lang: "en",
+        text: [
+          "Hello! Great to connect with you. 👋 We are Sofía (Branding & UX) and Iván (Software & Tech), founders of Innocentia Tech.",
+          "We build custom web platforms, apps, and high-impact brand identities for businesses worldwide. How can we help you today, or what project are you looking to build?"
+        ]
+      };
+    }
     if (cleanText.toLowerCase().includes("product") || cleanText.toLowerCase().includes("brand") || cleanText.toLowerCase().includes("logo")) {
       return {
         speaker: "SOFÍA",
@@ -174,7 +186,21 @@ If the user mentions software, website, platform, POS or e-commerce: respond as 
       lang: "en",
       text: [
         "Hi! Welcome to Innocentia Tech. We design custom software, high-end branding, and digital platforms for modern businesses worldwide.",
-        "What type of project or idea would you like to build with us?"
+        "How can we help you today or what type of project would you like to build with us?"
+      ]
+    };
+  }
+
+  // Spanish greetings / brand mentions
+  if (/^(hola|buen[ao]s\s*(dias|días|tardes|noches)?|innocenti[ae]\s*tech|info|saludos|que tal|qué tal)/i.test(cleanText.toLowerCase().trim())) {
+    return {
+      speaker: "DUAL",
+      type: "both",
+      lang: "es",
+      text: [
+        "¡Hola! Qué gusto saludarte. 👋 Somos Sofía (Branding & Diseño) e Iván (Tecnología & Software), fundadores de Innocentia Tech.",
+        "Diseñamos marcas de alto impacto y desarrollamos plataformas web, aplicaciones y software a medida para empresas y negocios.",
+        "¿En qué te podemos servir hoy o qué proyecto te gustaría cotizar o desarrollar?"
       ]
     };
   }
