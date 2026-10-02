@@ -457,6 +457,7 @@ const server = http.createServer((req, res) => {
 <html>
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="refresh" content="5">
   <title>Vincular WhatsApp - Innocentia Tech</title>
   <style>
     body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
