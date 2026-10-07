@@ -47,9 +47,11 @@ const DEFAULT_EXTRAS_PRICES: { [key: string]: number } = {
 export default function InternalPricingMatrix({
   userRole = "socio",
   userName = "Equipo Innocentia",
+  onProjectCreatedFromQuote,
 }: {
   userRole?: string;
   userName?: string;
+  onProjectCreatedFromQuote?: (project: any) => void;
 } = {}) {
   const [activeTab, setActiveTab] = useState<"renta" | "proyecto" | "diseno" | "calculadora" | "reglas">("calculadora");
   const [calcModalidad, setCalcModalidad] = useState<"renta" | "proyecto">("proyecto");
@@ -354,6 +356,45 @@ export default function InternalPricingMatrix({
       vendorCode: customData?.vendorCode || (userRole === "socio" ? "SOCIO-DIR-01" : "VEN-CORP-101"),
       vendorCommission: comisionVendedor,
     };
+
+    // Auto-create Project in "En Aprobación" status
+    const newProjectFromQuote = {
+      id: fullProposal.folio,
+      name: fullProposal.projectName || `${fullProposal.clientCompany} (${fullProposal.tier.toUpperCase()})`,
+      client: fullProposal.clientName,
+      clientEmail: fullProposal.clientEmail,
+      sellerId: userRole === "socio" ? "usr_partner_daniel" : "usr_ceo_ivan",
+      sellerName: fullProposal.vendorName,
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design Lead)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "En Aprobación" as const,
+      progress: 5,
+      currentSprint: `Cotización ${fullProposal.folio} emitida • En espera de aprobación y anticipo`,
+      budget: fullProposal.total || 0,
+      paidAmount: 0,
+      targetDate: "Por Definir (Kick-off)",
+      unreadAlerts: 1,
+      demoUrl: `https://innocentia.tech/crear-proyecto?ref=${fullProposal.folio}&cli=${fullProposal.clientId || "CLI-01"}`,
+    };
+
+    onProjectCreatedFromQuote?.(newProjectFromQuote);
+
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("innocentia_portal_projects");
+        const existing: any[] = saved ? JSON.parse(saved) : [];
+        if (!existing.some((p) => p.id === newProjectFromQuote.id)) {
+          localStorage.setItem("innocentia_portal_projects", JSON.stringify([newProjectFromQuote, ...existing]));
+        }
+      } catch (e) {}
+
+      window.dispatchEvent(
+        new CustomEvent("innocentia-project-created", {
+          detail: newProjectFromQuote,
+        })
+      );
+    }
 
     setDispatchProposalData(fullProposal);
     setIsDispatchModalOpen(true);
@@ -1506,6 +1547,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
           isOpen={isDispatchModalOpen}
           onClose={() => setIsDispatchModalOpen(false)}
           proposalData={dispatchProposalData}
+          onProjectCreated={onProjectCreatedFromQuote}
         />
       )}
     </div>

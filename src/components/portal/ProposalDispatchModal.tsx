@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   Send,
@@ -25,15 +25,58 @@ export interface ProposalDispatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   proposalData: ProjectPdfData;
+  onProjectCreated?: (project: any) => void;
 }
 
 export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
   isOpen,
   onClose,
   proposalData,
+  onProjectCreated,
 }) => {
   const [activeChannel, setActiveChannel] = useState<"whatsapp" | "email" | "pdf" | "link">("whatsapp");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isOpen && proposalData && typeof window !== "undefined") {
+      const folioId = proposalData.folio || "PROP-" + Date.now().toString().slice(-4);
+      const companyName = proposalData.clientCompany || proposalData.projectName || "Empresa";
+      const totalAmount = proposalData.total || proposalData.subtotal || 0;
+      const vendorPerson = proposalData.vendorName || "Asesor Comercial";
+
+      const newProj = {
+        id: folioId,
+        name: proposalData.projectName || `${companyName} (${proposalData.tier ? proposalData.tier.toUpperCase() : "PROYECTO"})`,
+        client: proposalData.clientName || "Cliente Prospecto",
+        clientEmail: proposalData.clientEmail || "contacto@cliente.com",
+        sellerId: "usr_sales_quote",
+        sellerName: vendorPerson,
+        devLead: "Ing. Rodrigo Pacheco",
+        uxLead: "Sofía (Innocentia Design Lead)",
+        devopsLead: "Iván Castillo (CEO)",
+        status: "En Aprobación" as const,
+        progress: 5,
+        currentSprint: `Cotización ${folioId} generada por ${vendorPerson} • En espera de aprobación comercial`,
+        budget: totalAmount,
+        paidAmount: 0,
+        targetDate: "Por Definir (Kick-off)",
+        unreadAlerts: 1,
+        demoUrl: `https://innocentia.tech/crear-proyecto?ref=${folioId}&cli=${proposalData.clientId || "CLI-01"}`,
+      };
+
+      try {
+        const saved = localStorage.getItem("innocentia_portal_projects");
+        const existing: any[] = saved ? JSON.parse(saved) : [];
+        if (!existing.some((p) => p.id === newProj.id)) {
+          const updated = [newProj, ...existing];
+          localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
+        }
+      } catch (e) {}
+
+      window.dispatchEvent(new CustomEvent("innocentia-project-created", { detail: newProj }));
+      onProjectCreated?.(newProj);
+    }
+  }, [isOpen, proposalData?.folio]);
 
   if (!isOpen) return null;
 
@@ -180,6 +223,19 @@ https://innocentia.tech`;
               {vendor} ({vendorCode})
             </span>
           </div>
+        </div>
+
+        {/* Status in Portal Badge */}
+        <div className="flex items-center justify-between p-3 rounded-2xl bg-purple-500/10 border border-purple-500/30 text-xs font-mono">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+            <span className="text-gray-300">
+              Estado de Proyecto en Portal: <strong className="text-purple-300">En Aprobación</strong>
+            </span>
+          </div>
+          <span className="text-[10px] text-purple-400 font-bold uppercase tracking-wider">
+            Folio {folio}
+          </span>
         </div>
 
         {/* Channels Selector Tabs */}

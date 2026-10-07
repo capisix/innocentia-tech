@@ -126,7 +126,7 @@ interface AssignedProject {
   devLead: string;
   uxLead: string;
   devopsLead?: string;
-  status: "En Desarrollo" | "Por Iniciar" | "Completado" | "En Revisión";
+  status: "En Desarrollo" | "Por Iniciar" | "Completado" | "En Revisión" | "En Producción" | "En Aprobación";
   progress: number;
   currentSprint: string;
   budget: number;
@@ -767,6 +767,59 @@ function PortalMainContent() {
     },
   ]);
 
+  // Hydrate projects from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("innocentia_portal_projects");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setProjects((prev) => {
+              const combined = [...parsed];
+              prev.forEach((def) => {
+                if (!combined.some((p) => p.id === def.id)) {
+                  combined.push(def);
+                }
+              });
+              return combined;
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Error loading saved projects:", e);
+      }
+    }
+  }, []);
+
+  const handleCreateProjectFromQuote = (newProject: AssignedProject) => {
+    setProjects((prev) => {
+      const exists = prev.some((p) => p.id === newProject.id);
+      const updated = exists ? prev.map((p) => (p.id === newProject.id ? newProject : p)) : [newProject, ...prev];
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
+        } catch (e) {}
+      }
+      return updated;
+    });
+    setReminderToast(`✓ Cotización registrada en proyectos como "En Aprobación" (${newProject.id}).`);
+    setTimeout(() => setReminderToast(null), 5000);
+  };
+
+  useEffect(() => {
+    const handleProjectCreatedEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<AssignedProject>;
+      if (customEvent.detail && customEvent.detail.id) {
+        handleCreateProjectFromQuote(customEvent.detail);
+      }
+    };
+    window.addEventListener("innocentia-project-created", handleProjectCreatedEvent);
+    return () => {
+      window.removeEventListener("innocentia-project-created", handleProjectCreatedEvent);
+    };
+  }, []);
+
   // Audit Logs State con Metadata de Estados de Pago y Fechas - Solo registros reales de infraestructura y setup
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([
     {
@@ -930,8 +983,8 @@ function PortalMainContent() {
 
   const handleSaveAssignment = () => {
     if (!selectedProjectForAssign) return;
-    setProjects((prev) =>
-      prev.map((p) =>
+    setProjects((prev) => {
+      const updated = prev.map((p) =>
         p.id === selectedProjectForAssign.id
           ? {
               ...p,
@@ -941,8 +994,16 @@ function PortalMainContent() {
               status: assignStatus,
             }
           : p
-      )
-    );
+      );
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      return updated;
+    });
 
     // Add to Audit Log
     const newLog: AuditLogEntry = {
@@ -2216,6 +2277,8 @@ function PortalMainContent() {
                             ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
                             : proj.status === "Por Iniciar"
                             ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                            : proj.status === "En Aprobación"
+                            ? "bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-pulse"
                             : "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]/40"
                         }`}
                       >
@@ -2398,6 +2461,8 @@ function PortalMainContent() {
                                   ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
                                   : proj.status === "Por Iniciar"
                                   ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
+                                  : proj.status === "En Aprobación"
+                                  ? "bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.3)]"
                                   : "bg-white/10 text-gray-300 border-white/15"
                               }`}
                             >
@@ -3924,7 +3989,11 @@ function PortalMainContent() {
             )}
 
             {ceoTab === "tabulador" && (
-              <InternalPricingMatrix userRole="ceo" userName={activeUser.name} />
+              <InternalPricingMatrix
+                userRole="ceo"
+                userName={activeUser.name}
+                onProjectCreatedFromQuote={handleCreateProjectFromQuote}
+              />
             )}
 
             {ceoTab === "telemetria" && (
@@ -5870,6 +5939,7 @@ function PortalMainContent() {
                     {[
                       { id: "todos", label: `Todos los Proyectos (${projects.length})` },
                       { id: "daniel", label: `🌮 Mis Proyectos (Daniel Torre)` },
+                      { id: "aprobacion", label: `🟣 En Aprobación (${projects.filter(p => p.status === "En Aprobación").length})` },
                       { id: "produccion", label: `⚡ En Producción` },
                       { id: "desarrollo", label: `🛠️ En Desarrollo / Revisión` },
                     ].map((f) => (
@@ -6027,6 +6097,7 @@ function PortalMainContent() {
                             proj.id.includes("TACOSLARRY")
                           );
                         }
+                        if (partnerProjectFilter === "aprobacion") return proj.status === "En Aprobación";
                         if (partnerProjectFilter === "produccion") return proj.status === "En Producción" || proj.status === "Completado";
                         if (partnerProjectFilter === "desarrollo") return proj.status === "En Desarrollo" || proj.status === "En Revisión";
                         return true;
@@ -6073,6 +6144,8 @@ function PortalMainContent() {
                                   className={`text-[10px] font-mono font-bold px-3 py-1 rounded-full border flex-shrink-0 ${
                                     proj.status === "En Producción" || proj.status === "Completado"
                                       ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                                      : proj.status === "En Aprobación"
+                                      ? "bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.3)] animate-pulse"
                                       : proj.status === "Por Iniciar"
                                       ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
                                       : "bg-[#00D1FF]/20 text-[#00D1FF] border-[#00D1FF]/40"
@@ -6196,7 +6269,11 @@ function PortalMainContent() {
             )}
 
             {partnerTab === "tabulador" && (
-              <InternalPricingMatrix userRole="socio" userName={activeUser.name} />
+              <InternalPricingMatrix
+                userRole="socio"
+                userName={activeUser.name}
+                onProjectCreatedFromQuote={handleCreateProjectFromQuote}
+              />
             )}
 
             {partnerTab === "telemetria" && (
@@ -6514,7 +6591,11 @@ function PortalMainContent() {
             )}
 
             {devTab === "tabulador" && (
-              <InternalPricingMatrix userRole="dev" userName={activeUser.name} />
+              <InternalPricingMatrix
+                userRole="dev"
+                userName={activeUser.name}
+                onProjectCreatedFromQuote={handleCreateProjectFromQuote}
+              />
             )}
 
             {devTab === "chat" && (
@@ -6834,7 +6915,11 @@ function PortalMainContent() {
 
             {/* TAB 4: TABULADOR & PRICING */}
             {advisorTab === "tabulador" && (
-              <InternalPricingMatrix userRole="asesor" userName={safeActiveUser.name} />
+              <InternalPricingMatrix
+                userRole="asesor"
+                userName={safeActiveUser.name}
+                onProjectCreatedFromQuote={handleCreateProjectFromQuote}
+              />
             )}
 
             {/* TAB 5: COMMISSIONS */}
@@ -7101,9 +7186,11 @@ function PortalMainContent() {
                   onChange={(e) => setAssignStatus(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
                 >
-                  <option value="En Desarrollo">En Desarrollo</option>
+                  <option value="En Aprobación">En Aprobación (Cotización Emitida)</option>
                   <option value="Por Iniciar">Por Iniciar</option>
+                  <option value="En Desarrollo">En Desarrollo</option>
                   <option value="En Revisión">En Revisión</option>
+                  <option value="En Producción">En Producción</option>
                   <option value="Completado">Completado</option>
                 </select>
               </div>
