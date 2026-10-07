@@ -124,10 +124,10 @@ export default function FloatingChatWidget({
   };
 
   useEffect(() => {
-    // Initial popup after 12 seconds so user sees it quickly on entry
+    // Proactive quote balloons only start after 3 minutes (180,000 ms)
     const initialTimer = setTimeout(() => {
       triggerRandomBalloon();
-    }, 12000);
+    }, 180000);
 
     // Recurring cycle every 3 minutes (180,000 ms)
     const interval = setInterval(() => {

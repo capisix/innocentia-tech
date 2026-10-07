@@ -77,15 +77,15 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
       video.play().catch(() => {});
     });
 
-    // Fast fallback: If video data hasn't loaded within 1.8s, skip immediately
+    // Fast fallback: If video data hasn't loaded within 4s, skip smoothly
     const fastBufferFallback = setTimeout(() => {
       if (!isVideoLoaded) {
         doComplete();
       }
-    }, 1800);
+    }, 4000);
 
-    // Fallback maximum safety timeout in case video event stalls
-    const maxSafetyTimeout = setTimeout(doComplete, 7500);
+    // Fallback safety timeout (18s) in case video event stalls
+    const maxSafetyTimeout = setTimeout(doComplete, 18000);
 
     return () => {
       video.removeEventListener("timeupdate", updateProgress);
@@ -111,7 +111,7 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-50 bg-[#040407] flex flex-col items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-[100000] bg-[#040407] flex flex-col items-center justify-center overflow-hidden"
         >
           {/* Background Ambient Glow */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#040407] via-transparent to-[#040407]/80 z-10 pointer-events-none" />
@@ -158,9 +158,9 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
           </button>
 
           {/* Bottom Controls Bar */}
-          <div className="absolute bottom-8 left-8 right-8 z-20 flex items-center justify-between gap-4">
+          <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8 right-6 sm:right-8 z-30 flex items-center justify-between gap-4">
             {/* Progress Bar Container */}
-            <div className="hidden sm:flex items-center gap-3 flex-1 max-w-md bg-black/50 border border-white/10 p-2 rounded-full backdrop-blur-xl">
+            <div className="hidden sm:flex items-center gap-3 flex-1 max-w-md bg-black/70 border border-white/15 p-2.5 rounded-full backdrop-blur-xl shadow-xl">
               <span className="text-[9px] font-mono text-gray-400 pl-2">EXPERIENCIA INICIAL</span>
               <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div
@@ -170,12 +170,12 @@ export default function ParticleIntro({ onComplete }: ParticleIntroProps) {
               </div>
             </div>
 
-            {/* Skip Intro Button */}
+            {/* Skip Video Button */}
             <button
               onClick={handleSkip}
-              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 hover:border-[#00D1FF] backdrop-blur-2xl text-xs font-mono font-bold text-white hover:text-[#00D1FF] flex items-center gap-2 transition-all cursor-pointer shadow-[0_0_25px_rgba(0,0,0,0.9)] hover:scale-105 active:scale-95 ml-auto"
+              className="px-6 py-3 rounded-full bg-black/70 hover:bg-black/95 border border-white/30 hover:border-[#00D1FF] backdrop-blur-2xl text-xs font-mono font-bold text-white hover:text-[#00D1FF] flex items-center gap-2 transition-all cursor-pointer shadow-[0_0_35px_rgba(0,0,0,0.95)] hover:scale-105 active:scale-95 ml-auto z-30"
             >
-              <span>SALTAR INTRO</span>
+              <span>SALTAR VIDEO</span>
               <ArrowRight className="w-4 h-4 text-[#00D1FF]" />
             </button>
           </div>
