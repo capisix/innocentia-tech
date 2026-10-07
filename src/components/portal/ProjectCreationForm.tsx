@@ -876,32 +876,37 @@ ${techSection}
                 <div className="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xs flex items-center justify-center font-mono">
                   3
                 </div>
-                <h5 className="text-xs font-bold text-white font-mono">Contacto Directo</h5>
+                <h5 className="text-xs font-bold text-white font-mono">Revisión & Contacto</h5>
                 <p className="text-[11px] text-gray-400 font-mono leading-tight">
-                  Te contactamos por WhatsApp o llamada para resolver dudas y coordinar los primeros pasos.
+                  El equipo directivo revisa tu ficha en el portal y se comunica para dar luz verde al inicio.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Contacto Directo */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-black to-[#00D1FF]/10 border border-emerald-500/40 max-w-xl mx-auto space-y-3 text-center">
-            <div className="flex items-center justify-center gap-2 text-emerald-400 font-mono font-bold text-xs">
-              <MessageSquare className="w-4 h-4 text-emerald-400" />
-              <span>¿Tienes alguna duda urgente o requerimiento especial?</span>
+          {/* Acceso Directo al Portal y Seguimiento */}
+          <div className="p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 via-black to-[#00D1FF]/10 border border-purple-500/40 max-w-xl mx-auto space-y-3 text-center shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+            <div className="flex items-center justify-center gap-2 text-[#00D1FF] font-mono font-bold text-xs">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+              <span>Proyecto Vinculado Exitosamente al Sistema</span>
             </div>
             <p className="text-[11px] text-gray-300 font-mono">
-              Puedes hablar directamente con un especialista de Innocentia Tech vía WhatsApp indicando tu Folio <strong>{createdProjectFolio}</strong>.
+              Tu proyecto ya está registrado bajo el folio <strong>{createdProjectFolio}</strong> con estado <strong>En Aprobación</strong>. No requieres realizar ninguna acción adicional por WhatsApp.
             </p>
-            <a
-              href={`https://wa.me/529601771556?text=${encodeURIComponent(`Hola Innocentia Tech, acabo de enviar mi cotización con Folio ${createdProjectFolio} para mi empresa ${clientCompany}. Me gustaría consultar una duda sobre mi proyecto.`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_25px_rgba(16,185,129,0.4)] cursor-pointer hover:scale-105"
-            >
-              <Phone className="w-4 h-4 text-black" />
-              <span>Consultar Dudas por WhatsApp (+52 960 177 1556)</span>
-            </a>
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+              <Link
+                href="/seguimiento"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer hover:scale-105"
+              >
+                <span>📋 Ver en Seguimiento</span>
+              </Link>
+              <Link
+                href="/portal"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all border border-white/20 cursor-pointer"
+              >
+                <span>Ir al Portal Privado ↗</span>
+              </Link>
+            </div>
           </div>
 
           {/* Botones de Acción */}
