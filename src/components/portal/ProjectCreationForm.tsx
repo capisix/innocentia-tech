@@ -605,10 +605,6 @@ ${techSection}
         date: new Date().toLocaleDateString("es-MX"),
       });
     }
-
-    // Open WhatsApp pre-filled message
-    const encoded = encodeURIComponent(projectSummary);
-    window.open(`https://wa.me/529601771556?text=${encoded}`, "_blank");
   };
 
   return (
@@ -800,19 +796,19 @@ ${techSection}
           </div>
 
           <div className="space-y-3 max-w-xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold uppercase border border-emerald-500/40">
-              <Clock className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-              <span>Solicitud Recibida • En Evaluación Técnica</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-mono font-bold uppercase border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)] animate-pulse">
+              <span className="w-2 h-2 rounded-full bg-purple-400" />
+              <span>Proyecto Creado en el Sistema • Estado: En Aprobación</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-white uppercase font-mono tracking-tight">
-              ¡Tu Proyecto Está en Marcha!
+              ¡Proyecto Registrado con Éxito!
             </h2>
             <div className="inline-block px-4 py-1.5 rounded-xl bg-white/10 border border-white/20 text-[#00D1FF] font-mono font-bold text-sm sm:text-base">
               Folio Oficial: {createdProjectFolio}
             </div>
             <p className="text-xs sm:text-sm text-gray-300 font-mono leading-relaxed">
-              Hola <strong>{clientName}</strong>, hemos recibido con éxito las especificaciones para{" "}
-              <strong>"{projectName || "Tu Proyecto"}"</strong> de <strong>{clientCompany}</strong> ({clientIndustry}).
+              Hola <strong>{clientName}</strong>, tu proyecto{" "}
+              <strong>"{projectName || `Proyecto Digital para ${clientCompany}`}"</strong> de <strong>{clientCompany}</strong> ({clientIndustry}) ha sido registrado formalmente en la plataforma con el estado <strong>"En Aprobación"</strong>.
             </p>
           </div>
 
@@ -842,9 +838,11 @@ ${techSection}
                 {selectedServices.map((s) => (s === "brand_marketing" ? "Marca & Marketing" : "Software / App")).join(" + ")}
               </strong>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Estado de la Solicitud:</span>
-              <strong className="text-amber-400 font-bold">⏳ Análisis de Requerimientos en Curso</strong>
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400">Estado en Sistema:</span>
+              <strong className="text-purple-300 font-bold px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-xs shadow-sm">
+                🟣 En Aprobación
+              </strong>
             </div>
           </div>
 
