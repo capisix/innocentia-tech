@@ -1189,14 +1189,14 @@ ${techSection}
                                 <span>ℹ️ Ver explicación</span>
                               </button>
                             )}
-                            <div className="flex items-center gap-1.5">
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={() => toggleProjectType(t.id)}
-                                className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
-                              />
-                              {isSelected && <CheckCircle2 className="w-4 h-4 text-[#00D1FF]" />}
+                            <div
+                              className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all flex-shrink-0 ${
+                                isSelected
+                                  ? "bg-[#00D1FF] border-[#00D1FF] text-black shadow-[0_0_10px_rgba(0,209,255,0.4)]"
+                                  : "border-white/30 bg-black/40 text-transparent hover:border-white/50"
+                              }`}
+                            >
+                              {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                             </div>
                           </div>
                         </div>
@@ -1281,12 +1281,15 @@ ${techSection}
                                 <span>ℹ️ Ver explicación</span>
                               </button>
                             )}
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {}}
-                              className="w-5 h-5 accent-[#00D1FF] cursor-pointer pointer-events-none"
-                            />
+                            <div
+                              className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all flex-shrink-0 ${
+                                isChecked
+                                  ? "bg-[#00D1FF] border-[#00D1FF] text-black shadow-[0_0_10px_rgba(0,209,255,0.4)]"
+                                  : "border-white/30 bg-black/40 text-transparent hover:border-white/50"
+                              }`}
+                            >
+                              {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                            </div>
                           </div>
                         </div>
                         <h4 className="text-sm sm:text-base font-bold text-white font-mono leading-snug">
@@ -1329,40 +1332,48 @@ ${techSection}
                       <div
                         key={opt.id}
                         onClick={() => toggleBrandNeed(opt.label)}
-                        className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 select-none ${
+                        className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between overflow-hidden select-none ${
                           isChecked
                             ? "bg-[#FF3858]/10 border-[#FF3858]/60 shadow-[0_0_15px_rgba(255,56,88,0.2)]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs sm:text-sm font-bold text-white font-mono">
-                            {opt.label}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            {tip && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleOpenAdvisor(opt.id);
-                                }}
-                                title="Ver explicación y recomendación de Sofía"
-                                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold transition-all border bg-[#FF3858]/15 text-[#FF3858] border-[#FF3858]/40 hover:bg-[#FF3858]/25 hover:scale-105 cursor-pointer shadow-[0_0_10px_rgba(255,56,88,0.2)] flex-shrink-0 z-10"
+                        <div className="space-y-2">
+                          <div className="flex items-start justify-between gap-3">
+                            <h4 className="text-xs sm:text-sm font-bold text-white font-mono leading-snug flex-1 min-w-0">
+                              {opt.label}
+                            </h4>
+                            <div className="flex-shrink-0 pt-0.5">
+                              <div
+                                className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
+                                  isChecked
+                                    ? "bg-[#FF3858] border-[#FF3858] text-white shadow-[0_0_10px_rgba(255,56,88,0.4)]"
+                                    : "border-white/30 bg-black/40 text-transparent hover:border-white/50"
+                                }`}
                               >
-                                <Info className="w-3.5 h-3.5 text-[#FF3858] flex-shrink-0 animate-pulse" />
-                                <span>ℹ️ Ver explicación</span>
-                              </button>
-                            )}
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {}}
-                              className="w-4 h-4 accent-[#FF3858] cursor-pointer pointer-events-none"
-                            />
+                                {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                              </div>
+                            </div>
                           </div>
+                          <p className="text-[11px] text-gray-400 font-mono leading-relaxed">{opt.hint}</p>
                         </div>
-                        <p className="text-[11px] text-gray-400 font-mono">{opt.hint}</p>
+
+                        {tip && (
+                          <div className="pt-3 mt-1 border-t border-white/5 flex justify-end">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenAdvisor(opt.id);
+                              }}
+                              title="Ver explicación y recomendación de Sofía"
+                              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold transition-all border bg-[#FF3858]/15 text-[#FF3858] border-[#FF3858]/40 hover:bg-[#FF3858]/25 hover:scale-105 cursor-pointer shadow-[0_0_10px_rgba(255,56,88,0.2)] flex-shrink-0"
+                            >
+                              <Info className="w-3.5 h-3.5 text-[#FF3858] flex-shrink-0 animate-pulse" />
+                              <span>ℹ️ Ver explicación</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -1397,40 +1408,48 @@ ${techSection}
                       <div
                         key={opt.id}
                         onClick={() => toggleTechFeature(opt.label)}
-                        className={`p-4 rounded-2xl border transition-all cursor-pointer space-y-1.5 select-none ${
+                        className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between overflow-hidden select-none ${
                           isChecked
                             ? "bg-[#00D1FF]/10 border-[#00D1FF]/60 shadow-[0_0_15px_rgba(0,209,255,0.2)]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs sm:text-sm font-bold text-white font-mono">
-                            {opt.label}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            {tip && (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleOpenAdvisor(opt.id);
-                                }}
-                                title="Ver explicación técnica y recomendación de Iván"
-                                className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold transition-all border bg-[#00D1FF]/15 text-[#00D1FF] border-[#00D1FF]/40 hover:bg-[#00D1FF]/25 hover:scale-105 cursor-pointer shadow-[0_0_10px_rgba(0,209,255,0.2)] flex-shrink-0 z-10"
+                        <div className="space-y-2">
+                          <div className="flex items-start justify-between gap-3">
+                            <h4 className="text-xs sm:text-sm font-bold text-white font-mono leading-snug flex-1 min-w-0">
+                              {opt.label}
+                            </h4>
+                            <div className="flex-shrink-0 pt-0.5">
+                              <div
+                                className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
+                                  isChecked
+                                    ? "bg-[#00D1FF] border-[#00D1FF] text-black shadow-[0_0_10px_rgba(0,209,255,0.4)]"
+                                    : "border-white/30 bg-black/40 text-transparent hover:border-white/50"
+                                }`}
                               >
-                                <Info className="w-3.5 h-3.5 text-[#00D1FF] flex-shrink-0 animate-pulse" />
-                                <span>ℹ️ Ver explicación</span>
-                              </button>
-                            )}
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {}}
-                              className="w-4 h-4 accent-[#00D1FF] cursor-pointer pointer-events-none"
-                            />
+                                {isChecked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                              </div>
+                            </div>
                           </div>
+                          <p className="text-[11px] text-gray-400 font-mono leading-relaxed">{opt.hint}</p>
                         </div>
-                        <p className="text-[11px] text-gray-400 font-mono">{opt.hint}</p>
+
+                        {tip && (
+                          <div className="pt-3 mt-1 border-t border-white/5 flex justify-end">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenAdvisor(opt.id);
+                              }}
+                              title="Ver explicación técnica y recomendación de Iván"
+                              className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold transition-all border bg-[#00D1FF]/15 text-[#00D1FF] border-[#00D1FF]/40 hover:bg-[#00D1FF]/25 hover:scale-105 cursor-pointer shadow-[0_0_10px_rgba(0,209,255,0.2)] flex-shrink-0"
+                            >
+                              <Info className="w-3.5 h-3.5 text-[#00D1FF] flex-shrink-0 animate-pulse" />
+                              <span>ℹ️ Ver explicación</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
