@@ -269,9 +269,15 @@ export default function InternalPricingMatrix({
 
   // Update Individual Module Price
   const handleUpdateExtraPrice = (id: string, newPrice: number) => {
+    const validPrice = Math.max(0, isNaN(newPrice) ? 0 : newPrice);
     setExtraPrices((prev) => ({
       ...prev,
-      [id]: Math.max(0, isNaN(newPrice) ? 0 : newPrice),
+      [id]: validPrice,
+    }));
+    // Auto-select module when editing price so it immediately reflects in the quote
+    setSelectedExtras((prev) => ({
+      ...prev,
+      [id]: true,
     }));
   };
 
@@ -971,20 +977,18 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                     return (
                       <div
                         key={extra.id}
-                        className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-2.5 ${
+                        onClick={() => togglePresetExtra(extra.id)}
+                        className={`p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-2.5 cursor-pointer select-none ${
                           isChecked
                             ? "bg-[#00D1FF]/10 border-[#00D1FF] shadow-[0_0_15px_rgba(0,209,255,0.12)]"
                             : "bg-white/[0.02] border-white/10 hover:border-white/20"
                         }`}
                       >
                         {/* Header & Checkbox */}
-                        <div
-                          onClick={() => togglePresetExtra(extra.id)}
-                          className="flex items-start justify-between gap-2 cursor-pointer select-none"
-                        >
+                        <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2.5">
                             <div
-                              className={`p-1.5 rounded-lg flex-shrink-0 ${
+                              className={`p-1.5 rounded-lg flex-shrink-0 transition-colors ${
                                 isChecked ? "bg-[#00D1FF] text-black" : "bg-white/5 text-gray-400"
                               }`}
                             >
@@ -1003,13 +1007,22 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                           <input
                             type="checkbox"
                             checked={isChecked}
-                            onChange={() => togglePresetExtra(extra.id)}
-                            className="mt-1 accent-[#00D1FF] cursor-pointer"
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              togglePresetExtra(extra.id);
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                            className="mt-1 w-4 h-4 rounded accent-[#00D1FF] cursor-pointer flex-shrink-0"
                           />
                         </div>
 
                         {/* Editable Price Bar */}
-                        <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2 text-xs font-mono">
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className="pt-2 border-t border-white/10 flex items-center justify-between gap-2 text-xs font-mono"
+                        >
                           <div className="flex items-center gap-1.5">
                             <span className="text-[10px] text-gray-400">Precio:</span>
                             {isPriceModified && (
@@ -1034,6 +1047,7 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                               type="number"
                               value={currentPrice}
                               onClick={(e) => e.stopPropagation()}
+                              onFocus={(e) => e.stopPropagation()}
                               onChange={(e) => {
                                 const val = e.target.value === "" ? 0 : Number(e.target.value);
                                 handleUpdateExtraPrice(extra.id, isNaN(val) ? 0 : val);
