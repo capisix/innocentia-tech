@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import ProjectCreationForm from "../portal/ProjectCreationForm";
 import { X } from "../../lib/icons";
 
@@ -10,6 +10,12 @@ interface ProjectCreationModalProps {
 }
 
 export default function ProjectCreationModal({ isOpen, onClose }: ProjectCreationModalProps) {
+  useEffect(() => {
+    const handleClose = () => onClose();
+    window.addEventListener("innocentia-close-project-modal", handleClose);
+    return () => window.removeEventListener("innocentia-close-project-modal", handleClose);
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -51,7 +57,7 @@ export default function ProjectCreationModal({ isOpen, onClose }: ProjectCreatio
 
         {/* Form Body */}
         <div className="relative z-10 max-h-[80vh] overflow-y-auto pr-1">
-          <ProjectCreationForm onProjectCreated={() => {}} />
+          <ProjectCreationForm onClose={onClose} onProjectCreated={() => {}} />
         </div>
       </div>
     </div>

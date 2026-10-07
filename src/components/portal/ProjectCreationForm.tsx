@@ -36,6 +36,7 @@ interface ProjectCreationFormProps {
   initialVendorName?: string;
   isEmbeddedInPortal?: boolean;
   onProjectCreated?: (projectData: any) => void;
+  onClose?: () => void;
 }
 
 export type StepKey = "contact" | "solution_type" | "services" | "branding" | "tech" | "scope_budget";
@@ -45,6 +46,7 @@ export default function ProjectCreationForm({
   initialVendorName = "",
   isEmbeddedInPortal = false,
   onProjectCreated,
+  onClose,
 }: ProjectCreationFormProps) {
   // Navigation & Completion State
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -896,12 +898,24 @@ ${techSection}
             <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
               <Link
                 href="/seguimiento"
+                onClick={() => {
+                  if (onClose) onClose();
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("innocentia-close-project-modal"));
+                  }
+                }}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer hover:scale-105"
               >
                 <span>📋 Ver en Seguimiento</span>
               </Link>
               <Link
                 href="/portal"
+                onClick={() => {
+                  if (onClose) onClose();
+                  if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("innocentia-close-project-modal"));
+                  }
+                }}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono font-bold text-xs uppercase tracking-wider transition-all border border-white/20 cursor-pointer"
               >
                 <span>Ir al Portal Privado ↗</span>
@@ -937,12 +951,23 @@ ${techSection}
               <span>📄 Descargar Ficha Oficial en PDF</span>
             </button>
 
-            <Link
-              href="/"
-              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold uppercase transition-all shadow-md"
+            <button
+              type="button"
+              onClick={() => {
+                if (onClose) {
+                  onClose();
+                }
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("innocentia-close-project-modal"));
+                  if (window.location.pathname !== "/") {
+                    window.location.href = "/";
+                  }
+                }
+              }}
+              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono font-bold uppercase transition-all shadow-md cursor-pointer hover:scale-105"
             >
               ← Volver al Sitio Principal (innocentia.tech)
-            </Link>
+            </button>
 
             <button
               type="button"
