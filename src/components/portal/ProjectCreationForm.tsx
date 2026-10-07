@@ -400,7 +400,7 @@ export default function ProjectCreationForm({
   const isStepServicesValid = selectedServices.length > 0;
   const isStepBrandingValid = !selectedServices.includes("brand_marketing") || brandNeeds.length > 0;
   const isStepTechValid = !selectedServices.includes("software_dev") || techFeatures.length > 0;
-  const isStepFinalValid = projectName.trim().length >= 3 && projectDescription.trim().length >= 10;
+  const isStepFinalValid = true;
 
   const isCurrentStepValid = () => {
     if (currentStep.key === "contact") return isStepContactValid;
@@ -408,7 +408,7 @@ export default function ProjectCreationForm({
     if (currentStep.key === "services") return isStepServicesValid;
     if (currentStep.key === "branding") return isStepBrandingValid;
     if (currentStep.key === "tech") return isStepTechValid;
-    if (currentStep.key === "scope_budget") return isStepFinalValid;
+    if (currentStep.key === "scope_budget") return true;
     return true;
   };
 
@@ -439,7 +439,15 @@ export default function ProjectCreationForm({
 
   const handleSubmitProject = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isStepFinalValid) return;
+
+    const safeProjectName =
+      projectName.trim() ||
+      (clientCompany ? `Proyecto Digital para ${clientCompany}` : "Solución Digital Innocentia");
+    const safeProjectDescription =
+      projectDescription.trim() ||
+      `Desarrollo y diseño de ${selectedServices
+        .map((s) => (s === "brand_marketing" ? "identidad de marca" : "plataforma tecnológica"))
+        .join(" y ")} para ${clientCompany || "la empresa"}.`;
 
     const folio = "PROJ-" + Math.floor(100000 + Math.random() * 900000);
     setCreatedProjectFolio(folio);
@@ -471,7 +479,7 @@ export default function ProjectCreationForm({
 • *Ciudad:* ${clientCity || "No especificada"}
 
 📌 *DETALLES DEL PROYECTO:*
-• *Nombre del Proyecto:* ${projectName}
+• *Nombre del Proyecto:* ${safeProjectName}
 • *Tipo de Solución:* ${selectedProjectTitles || "Solución Digital Innocentia"}
 • *Pilares Solicitados:* ${selectedServices.map((s) => (s === "brand_marketing" ? "Diseño de Marca & Marketing" : "Desarrollo de Software / App")).join(" + ")}
 • *Rango de Inversión:* ${budgetOptions.find((b) => b.id === budgetRange)?.title} (${budgetOptions.find((b) => b.id === budgetRange)?.usd})
@@ -480,7 +488,7 @@ ${brandSection}
 ${techSection}
 
 📝 *DESCRIPCIÓN DE LA IDEA O NECESIDAD:*
-"${projectDescription}"
+"${safeProjectDescription}"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔒 *Solicitud registrada exitosamente en Innocentia Tech.*
     `.trim();
@@ -499,19 +507,47 @@ ${techSection}
           clientEmail,
           vendorCode: vendorCode || "SIN-ASESOR",
           vendorName: vendorName || "Sin Asesor",
-          projectName,
+          projectName: safeProjectName,
           projectType: selectedProjectTypes.join(", "),
           selectedServices,
           brandNeeds,
           techFeatures,
           budgetRange,
           timeline: estimatedTimeline,
-          description: projectDescription,
+          description: safeProjectDescription,
           date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
           status: "Nueva Solicitud",
         };
         localStorage.setItem("innocentia_incoming_leads", JSON.stringify([newLeadItem, ...stored]));
         window.dispatchEvent(new Event("innocentia_lead_created"));
+
+        // Auto-create project in portal with status "En Aprobación"
+        const existingProjects = JSON.parse(localStorage.getItem("innocentia_portal_projects") || "[]");
+        const budgetAmount =
+          budgetRange === "350k_plus" ? 350000 : budgetRange === "150k_350k" ? 220000 : 85000;
+        const newProjectObj = {
+          id: folio,
+          name: safeProjectName,
+          client: clientName,
+          clientEmail: clientEmail,
+          sellerId: vendorCode || "usr_ceo_ivan",
+          sellerName: vendorName || "Iván Castillo (CEO)",
+          devLead: "Ing. Rodrigo Pacheco",
+          uxLead: "Sofía (Innocentia Design Lead)",
+          devopsLead: "Iván Castillo (CEO)",
+          status: "En Aprobación" as const,
+          progress: 5,
+          currentSprint: `Cotización ${folio} enviada desde formulario • En espera de aprobación`,
+          budget: budgetAmount,
+          paidAmount: 0,
+          targetDate: estimatedTimeline || "6 a 12 semanas",
+          unreadAlerts: 1,
+          demoUrl: `https://innocentia.tech/crear-proyecto?ref=${folio}`,
+        };
+        if (!existingProjects.some((p: any) => p.id === folio)) {
+          localStorage.setItem("innocentia_portal_projects", JSON.stringify([newProjectObj, ...existingProjects]));
+        }
+        window.dispatchEvent(new CustomEvent("innocentia-project-created", { detail: newProjectObj }));
       }
     } catch (e) {
       console.error(e);
@@ -1475,11 +1511,10 @@ ${techSection}
                   {/* Nombre del Proyecto */}
                   <div className="space-y-1 text-xs font-mono">
                     <label className="text-gray-300 block font-bold">
-                      Nombre o Idea de tu Proyecto *
+                      Nombre o Idea de tu Proyecto <span className="text-gray-400 font-normal">(Opcional)</span>
                     </label>
                     <input
                       type="text"
-                      required
                       placeholder="Ej. App de Entregas a Domicilio, Plataforma de Citas Médicas, Portal Inmobiliario, etc."
                       value={projectName}
                       onChange={(e) => setProjectName(e.target.value)}
@@ -1490,11 +1525,10 @@ ${techSection}
                   {/* Pregunta Directa & Amigable */}
                   <div className="space-y-1 text-xs font-mono">
                     <label className="text-gray-300 block font-bold">
-                      ¿De qué trata tu proyecto o qué necesidad buscas resolver? *
+                      ¿De qué trata tu proyecto o qué necesidad buscas resolver? <span className="text-gray-400 font-normal">(Opcional)</span>
                     </label>
                     <textarea
                       rows={3}
-                      required
                       placeholder="Cuéntanos brevemente qué deseas construir, quiénes serán los usuarios y qué funciones principales te gustaría que tenga..."
                       value={projectDescription}
                       onChange={(e) => setProjectDescription(e.target.value)}
@@ -1676,16 +1710,15 @@ ${techSection}
                 <button
                   type="button"
                   onClick={handleSubmitProject}
-                  disabled={!isStepFinalValid}
                   style={{
                     backgroundColor: "#00D1FF",
                     backgroundImage: "linear-gradient(135deg, #34D399 0%, #00D1FF 50%, #FF3858 100%)",
                     color: "#050B14",
                   }}
-                  className="px-8 py-3.5 rounded-full hover:brightness-110 disabled:opacity-40 disabled:pointer-events-none font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105 border-0"
+                  className="px-8 py-3.5 rounded-full hover:brightness-110 font-mono font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-[0_0_30px_rgba(0,209,255,0.4)] cursor-pointer transition-all hover:scale-105 border-0"
                 >
                   <Send className="w-4 h-4 flex-shrink-0" style={{ color: "#050B14", strokeWidth: 2.5 }} />
-                  <span style={{ color: "#050B14", fontWeight: 900 }}>Crear Proyecto &amp; Enviar Ficha por WhatsApp</span>
+                  <span style={{ color: "#050B14", fontWeight: 900 }}>Enviar formulario</span>
                 </button>
               )}
             </div>
