@@ -972,6 +972,8 @@ function PortalMainContent() {
   const [assignUxLead, setAssignUxLead] = useState("");
   const [assignDevopsLead, setAssignDevopsLead] = useState("");
   const [assignStatus, setAssignStatus] = useState<any>("En Desarrollo");
+  const [assignSellerId, setAssignSellerId] = useState("");
+  const [assignSellerName, setAssignSellerName] = useState("");
 
   const openAssignModal = (proj: AssignedProject) => {
     setSelectedProjectForAssign(proj);
@@ -979,6 +981,19 @@ function PortalMainContent() {
     setAssignUxLead(proj.uxLead);
     setAssignDevopsLead(proj.devopsLead || "Iván Castillo (CEO)");
     setAssignStatus(proj.status);
+
+    let sId = proj.sellerId || "";
+    let sName = proj.sellerName || "Sin Asesor Asignado";
+    if (!sId) {
+      if (sName.toLowerCase().includes("jess")) sId = "usr_sales_jess";
+      else if (sName.toLowerCase().includes("farid")) sId = "usr_sales_farid";
+      else if (sName.toLowerCase().includes("carlos")) sId = "usr_sales_01";
+      else if (sName.toLowerCase().includes("daniel")) sId = "usr_partner_daniel";
+      else if (sName.toLowerCase().includes("ivan") || sName.toLowerCase().includes("iván")) sId = "usr_ceo_ivan";
+      else sId = "sin_asesor";
+    }
+    setAssignSellerId(sId);
+    setAssignSellerName(sName);
   };
 
   const handleSaveAssignment = () => {
@@ -992,6 +1007,8 @@ function PortalMainContent() {
               uxLead: assignUxLead,
               devopsLead: assignDevopsLead,
               status: assignStatus,
+              sellerId: assignSellerId === "sin_asesor" ? "" : assignSellerId,
+              sellerName: assignSellerName,
             }
           : p
       );
@@ -1014,7 +1031,7 @@ function PortalMainContent() {
       authorRole: activeUser.roleTitle,
       sourceAccount: "Panel de Dirección",
       target: selectedProjectForAssign.name,
-      details: `Reasignación técnica: Dev Lead (${assignDevLead}), UX Lead (${assignUxLead}), DevOps (${assignDevopsLead || 'N/A'}), Estado: ${assignStatus}.`,
+      details: `Reasignación técnica y comercial: Asesor/Vendedor (${assignSellerName}), Dev Lead (${assignDevLead}), UX Lead (${assignUxLead}), DevOps (${assignDevopsLead || 'N/A'}), Estado: ${assignStatus}.`,
     };
     setAuditLogs((prev) => [newLog, ...prev]);
 
@@ -2315,7 +2332,15 @@ function PortalMainContent() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-400">Vendedor Asignado:</span>
-                        <span className="text-[#FF3858] font-bold">{proj.sellerName}</span>
+                        <span
+                          className={`font-bold ${
+                            proj.sellerName && !proj.sellerName.toLowerCase().includes("sin asesor")
+                              ? "text-emerald-400"
+                              : "text-[#FF3858]"
+                          }`}
+                        >
+                          {proj.sellerName || "Sin Asesor Asignado"}
+                        </span>
                       </div>
                     </div>
 
@@ -7176,6 +7201,37 @@ function PortalMainContent() {
                 >
                   <option value="Iván Castillo (CEO)">Iván Castillo (CEO / Super Admin)</option>
                   <option value="Ing. Rodrigo Pacheco">Ing. Rodrigo Pacheco (Fullstack)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-amber-400 font-bold mb-1 flex items-center justify-between">
+                  <span>Asesor Comercial / Vendedor Asignado:</span>
+                  <span className="text-[10px] text-gray-400 font-normal">Comisiones y seguimiento comercial</span>
+                </label>
+                <select
+                  value={assignSellerId}
+                  onChange={(e) => {
+                    const selId = e.target.value;
+                    setAssignSellerId(selId);
+                    if (selId === "usr_sales_jess") setAssignSellerName("Jessica Torre (VEN-JESS-101)");
+                    else if (selId === "usr_sales_farid") setAssignSellerName("Farid Abdul Oziel (VEN-FARID-303)");
+                    else if (selId === "usr_sales_01") setAssignSellerName("Carlos Mendoza (VEND_CARLOS)");
+                    else if (selId === "usr_partner_daniel") setAssignSellerName("Daniel Torre (Socio / Operaciones)");
+                    else if (selId === "usr_ceo_ivan") setAssignSellerName("Iván Castillo (CEO)");
+                    else {
+                      setAssignSellerId("sin_asesor");
+                      setAssignSellerName("Sin Asesor Asignado");
+                    }
+                  }}
+                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-amber-500/40 text-white focus:outline-none focus:border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+                >
+                  <option value="sin_asesor">Sin Asesor Asignado (General Innocentia)</option>
+                  <option value="usr_sales_jess">Jessica Torre (Asesora Comercial • Boldberry / VEN-JESS-101)</option>
+                  <option value="usr_sales_farid">Farid Abdul Oziel (Asesor Comercial • VEN-FARID-303)</option>
+                  <option value="usr_sales_01">Carlos Mendoza (Asesor Comercial • VEND_CARLOS)</option>
+                  <option value="usr_partner_daniel">Daniel Torre (Socio Co-Fundador & Operaciones)</option>
+                  <option value="usr_ceo_ivan">Iván Castillo (CEO / Dirección General)</option>
                 </select>
               </div>
 

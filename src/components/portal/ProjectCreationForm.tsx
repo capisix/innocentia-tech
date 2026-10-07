@@ -532,8 +532,8 @@ ${techSection}
           name: safeProjectName,
           client: clientName,
           clientEmail: clientEmail,
-          sellerId: vendorCode || "usr_ceo_ivan",
-          sellerName: vendorName || "Iván Castillo (CEO)",
+          sellerId: vendorCode && vendorCode !== "SIN-ASESOR" ? vendorCode : "",
+          sellerName: vendorName && vendorCode !== "SIN-ASESOR" ? vendorName : "Sin Asesor Asignado",
           devLead: "Ing. Rodrigo Pacheco",
           uxLead: "Sofía (Innocentia Design Lead)",
           devopsLead: "Iván Castillo (CEO)",
@@ -1174,6 +1174,38 @@ ${techSection}
                       onChange={(e) => setClientCity(e.target.value)}
                       className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white placeholder:text-gray-600 focus:outline-none focus:border-[#00D1FF]"
                     />
+                  </div>
+
+                  {/* Asesor Comercial / Vendedor */}
+                  <div className="space-y-1.5 sm:col-span-2 pt-2 border-t border-white/10">
+                    <label className="text-amber-400 block font-bold text-xs uppercase font-mono flex items-center justify-between">
+                      <span>¿Fuiste atendido por algún Asesor Comercial? (Opcional)</span>
+                      <span className="text-[10px] text-gray-400 font-normal">Asignación directa</span>
+                    </label>
+                    <select
+                      value={vendorCode}
+                      onChange={(e) => {
+                        const code = e.target.value;
+                        setVendorCode(code);
+                        if (code === "VEN-JESS-101" || code === "usr_sales_jess") setVendorName("Jessica Torre (VEN-JESS-101)");
+                        else if (code === "VEN-FARID-303" || code === "usr_sales_farid") setVendorName("Farid Abdul Oziel (VEN-FARID-303)");
+                        else if (code === "VEND_CARLOS" || code === "usr_sales_01") setVendorName("Carlos Mendoza (VEND_CARLOS)");
+                        else if (code === "usr_partner_daniel") setVendorName("Daniel Torre (Socio / Operaciones)");
+                        else if (code === "usr_ceo_ivan") setVendorName("Iván Castillo (CEO)");
+                        else {
+                          setVendorCode("SIN-ASESOR");
+                          setVendorName("Sin Asesor Asignado");
+                        }
+                      }}
+                      className="w-full px-4 py-3 rounded-2xl bg-black border border-white/20 text-white focus:outline-none focus:border-amber-400 text-xs font-mono"
+                    >
+                      <option value="SIN-ASESOR">Directo con Innocentia Tech (Sin Asesor Asignado)</option>
+                      <option value="usr_sales_jess">Jessica Torre (Asesora Comercial • Boldberry / VEN-JESS-101)</option>
+                      <option value="usr_sales_farid">Farid Abdul Oziel (Asesor Comercial • VEN-FARID-303)</option>
+                      <option value="usr_sales_01">Carlos Mendoza (Asesor Comercial • VEND_CARLOS)</option>
+                      <option value="usr_partner_daniel">Daniel Torre (Socio Co-Fundador & Operaciones)</option>
+                      <option value="usr_ceo_ivan">Iván Castillo (Director General & CEO)</option>
+                    </select>
                   </div>
                 </div>
               </div>
