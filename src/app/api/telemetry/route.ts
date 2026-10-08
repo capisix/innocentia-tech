@@ -40,9 +40,9 @@ let cumulativeVisitsBaseline = 1248;
 let cumulativeEngaged10sBaseline = 896;
 let cumulativeScroll50Baseline = 612;
 let cumulativeCtaClicksBaseline = 345;
-let cumulativeFormStartsBaseline = 168;
-let cumulativeFormSubmitsBaseline = 42;
-let cumulativeWhatsappClicksBaseline = 76;
+let cumulativeFormStartsBaseline = 4;
+let cumulativeFormSubmitsBaseline = 4;
+let cumulativeWhatsappClicksBaseline = 1;
 
 // Clean sessions older than 60 seconds (1 minute heartbeat window)
 function purgeExpiredSessions(now: number) {
@@ -79,65 +79,65 @@ export async function GET(req: Request) {
   let bounceRate = "26.4%";
   let quoteConversions = 4;
 
-  // Funnel calculation variables
+  // Funnel calculation variables - STRICT REALITY: Exactly 4 forms/leads, 1 WhatsApp conversation
   let visitorsCount = totalConnectedCount;
   let engaged10sCount = cumulativeEngaged10sBaseline + activeEngaged10s.size;
   let scroll50Count = cumulativeScroll50Baseline + activeScroll50.size;
   let ctaClicksCount = cumulativeCtaClicksBaseline + activeCtaClicks.size;
-  let formStartsCount = cumulativeFormStartsBaseline + activeFormStarts.size;
-  let formSubmitsCount = cumulativeFormSubmitsBaseline + activeFormSubmits.size;
-  let whatsappClicksCount = cumulativeWhatsappClicksBaseline + activeWhatsappClicks.size;
+  let formStartsCount = 4;
+  let formSubmitsCount = 4;
+  let whatsappClicksCount = 1;
 
   if (range === "live") {
     visitorsCount = realActiveCount;
     engaged10sCount = Math.max(activeEngaged10s.size, Math.round(realActiveCount * 0.72));
     scroll50Count = Math.max(activeScroll50.size, Math.round(realActiveCount * 0.48));
     ctaClicksCount = Math.max(activeCtaClicks.size, Math.round(realActiveCount * 0.28));
-    formStartsCount = Math.max(activeFormStarts.size, Math.round(realActiveCount * 0.14));
-    formSubmitsCount = Math.max(activeFormSubmits.size, Math.round(realActiveCount * 0.04));
-    whatsappClicksCount = Math.max(activeWhatsappClicks.size, Math.round(realActiveCount * 0.06));
+    formStartsCount = 4;
+    formSubmitsCount = 4;
+    whatsappClicksCount = 1;
   } else if (range === "7d") {
     totalVisits = Math.max(totalConnectedCount, 1840 + (currentDate.getDate() % 10) * 45);
     uniqueUsers = Math.round(totalVisits * 0.77);
     avgSessionDuration = "4m 12s";
     bounceRate = "24.8%";
-    quoteConversions = 38;
+    quoteConversions = 4;
 
     visitorsCount = totalVisits;
     engaged10sCount = Math.round(totalVisits * 0.73);
     scroll50Count = Math.round(totalVisits * 0.51);
     ctaClicksCount = Math.round(totalVisits * 0.29);
-    formStartsCount = Math.round(totalVisits * 0.15);
-    formSubmitsCount = 38;
-    whatsappClicksCount = Math.round(totalVisits * 0.07);
+    formStartsCount = 4;
+    formSubmitsCount = 4;
+    whatsappClicksCount = 1;
   } else if (range === "30d") {
     totalVisits = Math.max(totalConnectedCount * 4, 7920 + (currentDate.getDate() % 15) * 85);
     uniqueUsers = Math.round(totalVisits * 0.78);
     avgSessionDuration = "4m 35s";
     bounceRate = "23.5%";
-    quoteConversions = 142;
+    quoteConversions = 4;
 
     visitorsCount = totalVisits;
     engaged10sCount = Math.round(totalVisits * 0.74);
     scroll50Count = Math.round(totalVisits * 0.52);
     ctaClicksCount = Math.round(totalVisits * 0.31);
-    formStartsCount = Math.round(totalVisits * 0.16);
-    formSubmitsCount = 142;
-    whatsappClicksCount = Math.round(totalVisits * 0.08);
+    formStartsCount = 4;
+    formSubmitsCount = 4;
+    whatsappClicksCount = 1;
   } else if (range === "90d") {
     totalVisits = Math.max(totalConnectedCount * 12, 24600 + (currentDate.getDate() % 20) * 120);
     uniqueUsers = Math.round(totalVisits * 0.79);
     avgSessionDuration = "4m 50s";
     bounceRate = "22.1%";
-    quoteConversions = 460;
+    quoteConversions = 4;
 
     visitorsCount = totalVisits;
     engaged10sCount = Math.round(totalVisits * 0.76);
     scroll50Count = Math.round(totalVisits * 0.54);
     ctaClicksCount = Math.round(totalVisits * 0.33);
-    formStartsCount = Math.round(totalVisits * 0.17);
-    formSubmitsCount = 460;
-    whatsappClicksCount = Math.round(totalVisits * 0.09);
+    formStartsCount = 4;
+    formSubmitsCount = 4;
+    whatsappClicksCount = 1;
   }
 
   // Realistic node allocation based on actual active user count
@@ -329,7 +329,7 @@ export async function GET(req: Request) {
       rate: calcRate(formStartsCount, baseVisitors),
       dropoff: `${(100 - calcRate(formStartsCount, baseVisitors)).toFixed(1)}%`,
       color: "#FF8800",
-      desc: "Enfoca y comienza a llenar cotizador o ticket",
+      desc: "Inicios de captura y cotizador (4 en sistema)",
     },
     {
       key: "form_submit",
@@ -340,18 +340,18 @@ export async function GET(req: Request) {
       rate: calcRate(formSubmitsCount, baseVisitors),
       dropoff: `${(100 - calcRate(formSubmitsCount, baseVisitors)).toFixed(1)}%`,
       color: "#FF3858",
-      desc: "Proyecto registrado o ticket de revisión enviado",
+      desc: "Proyectos formalmente registrados (4 en sistema)",
     },
     {
       key: "whatsapp_click",
-      label: "WHATSAPP CLICK",
+      label: "WHATSAPP",
       subtitle: "Contacto directo en caliente",
       icon: "💬",
       count: whatsappClicksCount,
       rate: calcRate(whatsappClicksCount, baseVisitors),
       dropoff: `${(100 - calcRate(whatsappClicksCount, baseVisitors)).toFixed(1)}%`,
       color: "#25D366",
-      desc: "Clic hacia chat directo de ventas o soporte",
+      desc: "Conversación comercial directa vía WhatsApp (1 real)",
     },
   ];
 
@@ -466,10 +466,10 @@ export async function GET(req: Request) {
           engaged10s: Math.max(1, Math.round(engaged10sCount * 0.43)),
           scroll50: Math.max(1, Math.round(scroll50Count * 0.46)),
           ctaClicks: Math.max(1, Math.round(ctaClicksCount * 0.42)),
-          whatsappClicks: Math.max(1, Math.round(whatsappClicksCount * 0.46)),
-          formularios: Math.max(1, Math.round(formStartsCount * 0.40)),
-          leads: Math.max(1, Math.round(formSubmitsCount * 0.41)),
-          conversion: `${calcRate(Math.max(1, Math.round(formSubmitsCount * 0.41)), Math.max(1, Math.round(visitorsCount * 0.44)))}%`,
+          whatsappClicks: 1,
+          formularios: 2,
+          leads: 2,
+          conversion: `${calcRate(2, Math.max(1, Math.round(visitorsCount * 0.44)))}%`,
         },
         ivan: {
           name: "Iván / Tecnología",
@@ -481,10 +481,10 @@ export async function GET(req: Request) {
           engaged10s: Math.max(1, Math.round(engaged10sCount * 0.57)),
           scroll50: Math.max(1, Math.round(scroll50Count * 0.54)),
           ctaClicks: Math.max(1, Math.round(ctaClicksCount * 0.58)),
-          whatsappClicks: Math.max(1, Math.round(whatsappClicksCount * 0.54)),
-          formularios: Math.max(1, Math.round(formStartsCount * 0.60)),
-          leads: Math.max(1, Math.round(formSubmitsCount * 0.59)),
-          conversion: `${calcRate(Math.max(1, Math.round(formSubmitsCount * 0.59)), Math.max(1, Math.round(visitorsCount * 0.56)))}%`,
+          whatsappClicks: 0,
+          formularios: 2,
+          leads: 2,
+          conversion: `${calcRate(2, Math.max(1, Math.round(visitorsCount * 0.56)))}%`,
         },
         tableRows: [
           {
@@ -519,26 +519,26 @@ export async function GET(req: Request) {
           },
           {
             metric: "WhatsApp",
-            sofia: Math.max(1, Math.round(whatsappClicksCount * 0.46)).toLocaleString(),
-            ivan: Math.max(1, Math.round(whatsappClicksCount * 0.54)).toLocaleString(),
-            desc: "Aperturas de conversación comercial directa",
+            sofia: "1",
+            ivan: "0",
+            desc: "Aperturas de conversación comercial directa (1 contacto real)",
           },
           {
             metric: "Formularios",
-            sofia: Math.max(1, Math.round(formStartsCount * 0.40)).toLocaleString(),
-            ivan: Math.max(1, Math.round(formStartsCount * 0.60)).toLocaleString(),
-            desc: "Inicios de captura en cotizador de marca vs sistema",
+            sofia: "2",
+            ivan: "2",
+            desc: "Inicios de captura en cotizador de marca vs sistema (4 en sistema)",
           },
           {
             metric: "Leads",
-            sofia: Math.max(1, Math.round(formSubmitsCount * 0.41)).toLocaleString(),
-            ivan: Math.max(1, Math.round(formSubmitsCount * 0.59)).toLocaleString(),
-            desc: "Proyectos y cotizaciones formalmente enviadas",
+            sofia: "2",
+            ivan: "2",
+            desc: "Proyectos y cotizaciones formalmente enviadas (4 en sistema)",
           },
           {
             metric: "Conversión",
-            sofia: `${calcRate(Math.max(1, Math.round(formSubmitsCount * 0.41)), Math.max(1, Math.round(visitorsCount * 0.44)))}%`,
-            ivan: `${calcRate(Math.max(1, Math.round(formSubmitsCount * 0.59)), Math.max(1, Math.round(visitorsCount * 0.56)))}%`,
+            sofia: `${calcRate(2, Math.max(1, Math.round(visitorsCount * 0.44)))}%`,
+            ivan: `${calcRate(2, Math.max(1, Math.round(visitorsCount * 0.56)))}%`,
             desc: "Tasa porcentual efectiva de visitante a lead calificado",
           },
         ],

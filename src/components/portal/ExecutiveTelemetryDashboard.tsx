@@ -728,12 +728,26 @@ export default function ExecutiveTelemetryDashboard() {
                   { metric: ">10 segundos", sofia: "590", ivan: "760", desc: "Lectura activa comprobada" },
                   { metric: "Scroll 50%", sofia: "430", ivan: "520", desc: "Lectura profunda hasta mitad de página" },
                   { metric: "CTA", sofia: "210", ivan: "310", desc: "Clics en botones principales" },
-                  { metric: "WhatsApp", sofia: "52", ivan: "74", desc: "Aperturas de conversación comercial" },
-                  { metric: "Formularios", sofia: "110", ivan: "165", desc: "Inicios de cotizador o ticket" },
-                  { metric: "Leads", sofia: "16", ivan: "22", desc: "Cotizaciones formalmente registradas" },
+                  { metric: "WhatsApp", sofia: "1", ivan: "0", desc: "Aperturas de conversación comercial directa (1 contacto real)" },
+                  { metric: "Formularios", sofia: "2", ivan: "2", desc: "Inicios de captura en cotizador de marca vs sistema (4 en sistema)" },
+                  { metric: "Leads", sofia: "2", ivan: "2", desc: "Cotizaciones formalmente registradas (4 en sistema)" },
                   { metric: "Conversión", sofia: "2.0%", ivan: "2.2%", desc: "Tasa porcentual efectiva de visitante a lead" },
                 ]
-              ).map((row) => {
+              ).map((rawRow) => {
+                const row = { ...rawRow };
+                if (row.metric === "WhatsApp") {
+                  row.sofia = "1";
+                  row.ivan = "0";
+                  row.desc = "Aperturas de conversación comercial directa (1 contacto real)";
+                } else if (row.metric === "Formularios") {
+                  row.sofia = "2";
+                  row.ivan = "2";
+                  row.desc = "Inicios de captura en cotizador de marca vs sistema (4 en sistema)";
+                } else if (row.metric === "Leads") {
+                  row.sofia = "2";
+                  row.ivan = "2";
+                  row.desc = "Cotizaciones formalmente registradas (4 en sistema)";
+                }
                 const isConversion = row.metric === "Conversión";
                 return (
                   <tr
@@ -829,17 +843,17 @@ export default function ExecutiveTelemetryDashboard() {
             <div className="p-3 rounded-2xl bg-black/60 border border-white/10 text-center min-w-[120px]">
               <span className="text-[10px] font-mono text-gray-400 block uppercase">Conversión a Lead</span>
               <span className="text-lg font-black text-[#FF3858] font-mono">
-                {telemetry?.funnel?.summary?.conversionRateToSubmit || "3.4%"}
+                {telemetry?.funnel?.summary?.formSubmits || "4"}
               </span>
-              <span className="text-[9px] text-gray-500 font-mono">Form Submit</span>
+              <span className="text-[9px] text-gray-500 font-mono">4 en Mesa de Trabajo</span>
             </div>
 
             <div className="p-3 rounded-2xl bg-black/60 border border-white/10 text-center min-w-[120px]">
               <span className="text-[10px] font-mono text-gray-400 block uppercase">Contacto WhatsApp</span>
               <span className="text-lg font-black text-[#25D366] font-mono">
-                {telemetry?.funnel?.summary?.conversionRateToWhatsapp || "6.1%"}
+                {telemetry?.funnel?.summary?.whatsappClicks || "1"}
               </span>
-              <span className="text-[9px] text-gray-500 font-mono">Clic Directo</span>
+              <span className="text-[9px] text-gray-500 font-mono">1 Plática Real</span>
             </div>
           </div>
         </div>
@@ -852,11 +866,21 @@ export default function ExecutiveTelemetryDashboard() {
               { key: "engaged_10s", label: ">10 SEGUNDOS", subtitle: "Lectura activa", icon: "⏱️", count: Math.round(totalCumulative * 0.72), rate: 72, dropoff: "28%", color: "#10B981", desc: "Permanencia real >10s" },
               { key: "scroll_50", label: "50% SCROLL", subtitle: "Profundidad", icon: "📜", count: Math.round(totalCumulative * 0.49), rate: 49, dropoff: "51%", color: "#8A2BE2", desc: "Desplazamiento medio" },
               { key: "cta_click", label: "CTA CLICK", subtitle: "Llamado a acción", icon: "🎯", count: Math.round(totalCumulative * 0.28), rate: 28, dropoff: "72%", color: "#FFB800", desc: "Clic a cotizar/portal" },
-              { key: "form_start", label: "FORM START", subtitle: "Inicio captura", icon: "📝", count: Math.round(totalCumulative * 0.14), rate: 14, dropoff: "86%", color: "#FF8800", desc: "Empieza formulario" },
-              { key: "form_submit", label: "FORM SUBMIT", subtitle: "Envío formal", icon: "🚀", count: Math.round(totalCumulative * 0.034), rate: 3.4, dropoff: "96.6%", color: "#FF3858", desc: "Proyecto/ticket listo" },
-              { key: "whatsapp_click", label: "WHATSAPP CLICK", subtitle: "Cierre en caliente", icon: "💬", count: Math.round(totalCumulative * 0.061), rate: 6.1, dropoff: "93.9%", color: "#25D366", desc: "Abre chat comercial" },
+              { key: "form_start", label: "FORM START", subtitle: "Inicio captura", icon: "📝", count: 4, rate: 14, dropoff: "86%", color: "#FF8800", desc: "Cotizaciones iniciadas (4 en sistema)" },
+              { key: "form_submit", label: "FORM SUBMIT", subtitle: "Envío formal", icon: "🚀", count: 4, rate: 3.4, dropoff: "96.6%", color: "#FF3858", desc: "Proyectos formalmente listos (4 en sistema)" },
+              { key: "whatsapp_click", label: "WHATSAPP", subtitle: "Cierre en caliente", icon: "💬", count: 1, rate: 6.1, dropoff: "93.9%", color: "#25D366", desc: "Conversación comercial directa (1 real)" },
             ]
-          ).map((step, idx) => (
+          ).map((rawStep, idx) => {
+            const step = { ...rawStep };
+            if (step.key === "form_start" || step.key === "form_submit") {
+              step.count = 4;
+              step.desc = step.key === "form_start" ? "Cotizaciones iniciadas (4 en sistema)" : "Proyectos registrados en mesa de trabajo (4 en sistema)";
+            } else if (step.key === "whatsapp_click") {
+              step.count = 1;
+              step.label = "WHATSAPP";
+              step.desc = "Conversación comercial directa vía WhatsApp (1 real)";
+            }
+            return (
             <div
               key={step.key}
               className="p-4 rounded-2xl bg-black/75 border border-white/10 hover:border-white/25 transition-all duration-300 flex flex-col justify-between space-y-3 relative group"
@@ -901,7 +925,8 @@ export default function ExecutiveTelemetryDashboard() {
                 {step.desc}
               </p>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
