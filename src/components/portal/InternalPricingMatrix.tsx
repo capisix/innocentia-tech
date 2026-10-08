@@ -13,7 +13,6 @@ import {
   TrendingUp,
   Smartphone,
   Globe,
-  Crown,
   Plus,
   Trash2,
   Edit3,
@@ -1700,17 +1699,6 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                         </strong>
                       </div>
                     )}
-                  </div>
-
-                  {/* Seller Commission Highlight */}
-                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between text-xs font-mono mt-3">
-                    <span className="text-rose-300 font-bold flex items-center gap-1.5">
-                      <Crown className="w-4 h-4 text-[#FF3858]" />
-                      Comisión Asesor (15%):
-                    </span>
-                    <span className="text-[#FF3858] text-base font-black font-mono">
-                      ${comisionVendedor.toLocaleString()} MXN
-                    </span>
                   </div>
                 </div>
               </div>
