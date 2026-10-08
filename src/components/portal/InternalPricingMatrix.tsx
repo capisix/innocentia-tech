@@ -149,9 +149,9 @@ export default function InternalPricingMatrix({
       name: "Identidad de Marca Integral",
       defaultPrice: DEFAULT_EXTRAS_PRICES.brand_identity,
       icon: Palette,
-      desc: "Incluye estudio de mercado y 3 propuestas conceptuales completas de identidad de marca.",
+      desc: "Incluye estudio de mercado, 3 propuestas conceptuales completas, manual de identidad de marca, logo vector en diferentes colores y opciones aplicables.",
       tag: "Estudio + 3 Propuestas",
-      badge: "Estudio y 3 Propuestas",
+      badge: "Estudio + 3 Propuestas + Manual",
     },
     {
       id: "brand_naming",
@@ -167,9 +167,9 @@ export default function InternalPricingMatrix({
       name: "Diseño de Logotipo & Sistema Visual",
       defaultPrice: DEFAULT_EXTRAS_PRICES.brand_logo,
       icon: Paintbrush,
-      desc: "Diseño de logotipo, isotipo, variantes cromáticas, selección tipográfica y manual de normas de marca.",
+      desc: "Diseño de logotipo e isotipo, manual de identidad de marca, logo vector en diferentes versiones cromáticas y opciones aplicables.",
       tag: "Logotipo",
-      badge: "Manual Gráfico",
+      badge: "Manual + Logo Vector",
     },
     {
       id: "marketing_campaign",
@@ -449,6 +449,64 @@ export default function InternalPricingMatrix({
       });
     });
 
+    // Construct dynamic formal scope & deliverables for the PDF and client proposal
+    const scopeItems: ProposalScopeItem[] = [];
+    let scopeCounter = 1;
+    const addScope = (title: string) => {
+      scopeItems.push({
+        number: scopeCounter.toString().padStart(2, "0"),
+        title,
+      });
+      scopeCounter++;
+    };
+
+    // 1. Branding & Logo Deliverables (Explicitly prioritized and detailed)
+    if (selectedExtras.brand_identity) {
+      addScope("Estudio de mercado preliminar y 3 propuestas conceptuales completas de identidad de marca.");
+      addScope("Manual de identidad de marca, logo vector en diferentes colores y opciones aplicables.");
+    } else if (selectedExtras.brand_logo) {
+      addScope("Manual de identidad de marca, logo vector en diferentes colores y opciones aplicables.");
+    } else {
+      addScope("Manual de identidad de marca, logo vector en diferentes colores y opciones aplicables.");
+    }
+
+    if (selectedExtras.brand_naming) {
+      addScope("Estrategia de Naming comercial, validación fonética y verificación de disponibilidad de dominio y redes.");
+    }
+
+    if (selectedExtras.marketing_campaign) {
+      addScope("Estrategia de lanzamiento y campaña de marketing digital, segmentación de audiencias y creativos publicitarios.");
+    }
+
+    // 2. UI/UX Design Deliverables
+    if (designPrice > 0 || calcDiseno !== "base") {
+      addScope("Diseño de interfaz UI/UX de alta fidelidad, flujos de navegación y prototipo interactivo.");
+    }
+
+    // 3. Technical Platform / Software Deliverables (if not purely branding)
+    if (basePrice > 0 && calcTier !== "solo_branding") {
+      addScope("Desarrollo de plataforma web progresiva (PWA) optimizada para dispositivos móviles y escritorio.");
+      addScope("Arquitectura de backend con microservicios y base de datos relacional en la nube.");
+    }
+
+    if (selectedExtras.whatsapp_bot) {
+      addScope("Integración de notificaciones push, automatización de mensajería y canal de atención.");
+    }
+
+    if (selectedExtras.stripe_payments) {
+      addScope("Pasarela de pagos en línea con cobros seguros y webhooks bancarios.");
+    }
+
+    if (selectedExtras.audit_reports) {
+      addScope("Panel de control administrativo con métricas en tiempo real y exportación de reportes.");
+    } else if (basePrice > 0 && calcTier !== "solo_branding") {
+      addScope("Panel de control administrativo con métricas en tiempo real y exportación de reportes.");
+    }
+
+    customExtrasList.forEach((c) => {
+      addScope(`Módulo a la medida: ${c.name}`);
+    });
+
     const fullProposal: ProjectPdfData = {
       folio: customData?.folio || `COT-${Math.floor(100000 + Math.random() * 900000)}`,
       clientId: customData?.clientId || `CLI-${Math.floor(10000 + Math.random() * 90000)}`,
@@ -465,6 +523,7 @@ export default function InternalPricingMatrix({
       monthlyPrice: calcModalidad === "renta" ? monthlyPrice : undefined,
       designPrice: designPrice,
       quoteItems: quoteItems,
+      scopeItems: scopeItems,
       extras: includedModules,
       extrasCost: totalExtrasCost,
       subtotal: subtotalInvestment,

@@ -92,11 +92,12 @@ export function generateProjectPdf(data: ProjectPdfData) {
 
   // Scope Items
   const defaultScope: ProposalScopeItem[] = [
-    { number: "01", title: "Diseño de interfaz UI/UX de alta fidelidad, flujos de navegación y prototipo interactivo." },
-    { number: "02", title: "Desarrollo de plataforma web progresiva (PWA) optimizada para dispositivos móviles y escritorio." },
-    { number: "03", title: "Arquitectura de backend con microservicios y base de datos relacional en la nube." },
-    { number: "04", title: "Integración de notificaciones push, automatización de mensajería y canal de atención." },
-    { number: "05", title: "Panel de control administrativo con métricas en tiempo real y exportación de reportes." },
+    { number: "01", title: "Manual de identidad de marca, logo vector diferentes colores y opciones aplicables." },
+    { number: "02", title: "Diseño de interfaz UI/UX de alta fidelidad, flujos de navegación y prototipo interactivo." },
+    { number: "03", title: "Desarrollo de plataforma web progresiva (PWA) optimizada para dispositivos móviles y escritorio." },
+    { number: "04", title: "Arquitectura de backend con microservicios y base de datos relacional en la nube." },
+    { number: "05", title: "Integración de notificaciones push, automatización de mensajería y canal de atención." },
+    { number: "06", title: "Panel de control administrativo con métricas en tiempo real y exportación de reportes." },
   ];
   let scopeList = (data.scopeItems && data.scopeItems.length > 0) ? data.scopeItems : defaultScope;
   if ((!data.scopeItems || data.scopeItems.length === 0) && (data.designNeeds || data.techFeatures)) {
