@@ -107,13 +107,13 @@ export default function AboutUsSection() {
             }`}
           >
             {activeTab === "manifiesto" ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 {/* Left Card: El Manifiesto (Exact design from Foto 3) */}
-                <div className="lg:col-span-6 xl:col-span-6 bg-gradient-to-b from-[#130718]/90 via-[#0a0712]/95 to-[#070b16]/95 border border-pink-500/25 rounded-[32px] p-7 sm:p-9 lg:p-10 shadow-[0_0_50px_rgba(255,0,122,0.12)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-2xl">
+                <div className="lg:col-span-5 xl:col-span-5 bg-gradient-to-b from-[#130718]/90 via-[#0a0712]/95 to-[#070b16]/95 border border-pink-500/25 rounded-[32px] p-7 sm:p-9 lg:p-9 shadow-[0_0_50px_rgba(255,0,122,0.12)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-2xl">
                   {/* Ambient corner light */}
                   <div className="absolute top-0 left-0 w-48 h-48 bg-[#FF007A]/10 blur-[80px] pointer-events-none" />
 
-                  <div className="space-y-5 relative z-10">
+                  <div className="space-y-4 relative z-10">
                     {/* Header Overline */}
                     <div className="flex items-center gap-3">
                       <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.25em] text-[#FF007A] uppercase">
@@ -123,7 +123,7 @@ export default function AboutUsSection() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-3xl sm:text-4xl lg:text-[42px] font-black text-white tracking-tight leading-[1.12]">
+                    <h3 className="text-2xl sm:text-3xl lg:text-[38px] font-black text-white tracking-tight leading-[1.14]">
                       El origen de toda{" "}
                       <span className="block">
                         innovación es la{" "}
@@ -134,7 +134,7 @@ export default function AboutUsSection() {
                     </h3>
 
                     {/* Paragraphs */}
-                    <div className="space-y-4 text-xs sm:text-sm lg:text-[14px] text-gray-300 font-light leading-relaxed">
+                    <div className="space-y-3.5 text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
                       <p>
                         Antes de existir una aplicación, alguien imaginó una mejor forma de conectar a las personas. Antes de existir una inteligencia artificial, alguien se preguntó si era posible construir una herramienta capaz de aprender.
                       </p>
@@ -148,7 +148,7 @@ export default function AboutUsSection() {
                   </div>
 
                   {/* Dual Founder Footer Bar: Sofía + Infinity + Iván (Exact design from user) */}
-                  <div className="pt-6 border-t border-white/10 relative z-10 flex items-center justify-center">
+                  <div className="pt-5 border-t border-white/10 relative z-10 flex items-center justify-center">
                     <img
                       src="/images/principios/manifiesto_footer.png"
                       alt="Sofía Imagina — Iván Construye"
@@ -158,33 +158,23 @@ export default function AboutUsSection() {
                   </div>
                 </div>
 
-                {/* Right Card: Looping Video (Exact video from Foto 4) */}
-                <div className="lg:col-span-6 xl:col-span-6 relative bg-black border border-cyan-500/25 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col justify-end group min-h-[440px] lg:min-h-[500px]">
-                  {/* Looping Infinity Founders Video */}
-                  <video
-                    src="/videos/Energy_flowing_in_infinity_symbol_20261008100316.mp4"
-                    poster="/videos/energy_infinity_poster.jpg"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover object-top absolute inset-0"
-                  />
+                {/* Right Card: Full 16:9 Looping Video - 100% Complete & Uncropped */}
+                <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center">
+                  <div className="relative w-full aspect-video rounded-[32px] overflow-hidden border border-cyan-500/30 bg-black shadow-[0_0_60px_rgba(0,240,255,0.2)]">
+                    {/* Looping Infinity Founders Video */}
+                    <video
+                      src="/videos/Energy_flowing_in_infinity_symbol_20261008100316.mp4"
+                      poster="/videos/energy_infinity_poster.jpg"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-contain bg-black select-none pointer-events-none"
+                    />
 
-                  {/* Top subtle vignette */}
-                  <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
-
-                  {/* Bottom Gradient Mask & Clean Quote: Completely masks the video's cropped bottom text and renders the clean, responsive typography */}
-                  <div className="relative z-10 w-full pt-16 pb-7 px-6 sm:px-8 bg-gradient-to-t from-black from-55% via-black/95 via-80% to-transparent flex flex-col items-center text-center space-y-1.5">
-                    <p className="text-xs sm:text-sm lg:text-[15px] font-light text-gray-200 italic max-w-lg leading-relaxed drop-shadow-sm">
-                      “La imaginación marca el rumbo y la ingeniería construye el camino.”
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-300 font-mono tracking-wide">
-                      Dos hemisferios,{" "}
-                      <span className="bg-gradient-to-r from-[#FF007A] to-[#00F0FF] bg-clip-text text-transparent font-bold not-italic">
-                        una intención.
-                      </span>”
-                    </p>
+                    {/* Subtle ambient neon glow behind corners */}
+                    <div className="absolute top-0 right-0 w-36 h-36 bg-cyan-500/10 blur-[60px] pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-36 h-36 bg-pink-500/10 blur-[60px] pointer-events-none" />
                   </div>
                 </div>
               </div>
