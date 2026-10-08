@@ -620,8 +620,15 @@ const server = http.createServer((req, res) => {
   );
 });
 
-server.listen(PORT, () => {
-  console.log(`🌐 Servidor HTTP activo en el puerto ${PORT} (listo para Render/Railway)`);
+process.on("uncaughtException", (err) => {
+  addLog(`⚠️ Uncaught Exception: ${err.message}`);
+});
+process.on("unhandledRejection", (reason) => {
+  addLog(`⚠️ Unhandled Rejection: ${reason}`);
+});
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🌐 Servidor HTTP activo en 0.0.0.0:${PORT} (listo para Render/Railway)`);
 });
 
 startWhatsAppBot();
