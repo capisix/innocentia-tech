@@ -94,28 +94,36 @@ export default function InternalPricingMatrix({
 
   // Auto-load preloaded lead from localStorage if coming from Mesa de Trabajo
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem("innocentia_calculator_lead");
-        if (stored) {
-          const lead = JSON.parse(stored);
-          if (lead && lead.clientName) {
-            setCalcClientName(`${lead.clientName} (${lead.clientCompany})`);
-            setActiveTab("calculadora");
-            if (lead.projectType === "mobile_app") {
-              setCalcTier("movil");
-            } else if (lead.projectType === "web_platform") {
-              setCalcTier("plataforma");
-            } else {
-              setCalcTier("mvp");
+    const loadStoredLead = () => {
+      try {
+        if (typeof window !== "undefined") {
+          const stored = localStorage.getItem("innocentia_calculator_lead");
+          if (stored) {
+            const lead = JSON.parse(stored);
+            if (lead && lead.clientName) {
+              const companySuffix = lead.clientCompany ? ` (${lead.clientCompany})` : "";
+              setCalcClientName(`${lead.clientName}${companySuffix}`);
+              setActiveTab("calculadora");
+              const pTypeStr = Array.isArray(lead.projectType) ? lead.projectType.join(" ") : String(lead.projectType || "");
+              if (pTypeStr.includes("mobile") || pTypeStr.includes("movil") || pTypeStr.includes("app")) {
+                setCalcTier("movil");
+              } else if (pTypeStr.includes("web") || pTypeStr.includes("plataforma") || pTypeStr.includes("sistema")) {
+                setCalcTier("plataforma");
+              } else {
+                setCalcTier("mvp");
+              }
+              setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} (${lead.projectName || "Proyecto Digital"}).`);
             }
-            setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} (${lead.projectName}).`);
           }
         }
+      } catch (err) {
+        console.error("Error reading calculator lead:", err);
       }
-    } catch (err) {
-      console.error("Error reading calculator lead:", err);
-    }
+    };
+
+    loadStoredLead();
+    window.addEventListener("innocentia-load-calculator-lead", loadStoredLead);
+    return () => window.removeEventListener("innocentia-load-calculator-lead", loadStoredLead);
   }, []);
 
   // Catalog of standard preset extras

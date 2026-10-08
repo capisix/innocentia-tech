@@ -551,6 +551,19 @@ function PortalMainContent() {
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
   const [advisorTab, setAdvisorTab] = useState<"leads_formulario" | "citas_calendario" | "status_proyectos" | "tabulador" | "comisiones" | "chat">("leads_formulario");
 
+  // Listen to switch to tabulador event
+  useEffect(() => {
+    const handleSwitch = () => {
+      if (activeRole === "ceo") setCeoTab("tabulador");
+      else if (activeRole === "socio") setPartnerTab("tabulador");
+      else if (activeRole === "dev") setDevTab("tabulador");
+      else if (activeRole === "asesor") setAdvisorTab("tabulador");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    window.addEventListener("innocentia-switch-to-tabulador", handleSwitch);
+    return () => window.removeEventListener("innocentia-switch-to-tabulador", handleSwitch);
+  }, [activeRole]);
+
   // Handlers for Seller Appointments
   const handleAddSellerAppointment = (newApt: Omit<CommercialAppointment, "id">) => {
     const created: CommercialAppointment = {
@@ -4026,7 +4039,11 @@ function PortalMainContent() {
             )}
 
             {ceoTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="ceo" userName={activeUser.name} />
+              <ProjectTeamFeedAndChat
+                userRole="ceo"
+                userName={activeUser.name}
+                onOpenCalculator={() => setCeoTab("tabulador")}
+              />
             )}
           </div>
         )}
@@ -6306,7 +6323,11 @@ function PortalMainContent() {
             )}
 
             {partnerTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="socio" userName={activeUser.name} />
+              <ProjectTeamFeedAndChat
+                userRole="socio"
+                userName={activeUser.name}
+                onOpenCalculator={() => setPartnerTab("tabulador")}
+              />
             )}
           </div>
         )}
@@ -6624,7 +6645,11 @@ function PortalMainContent() {
             )}
 
             {devTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="dev" userName={activeUser.name} />
+              <ProjectTeamFeedAndChat
+                userRole="dev"
+                userName={activeUser.name}
+                onOpenCalculator={() => setDevTab("tabulador")}
+              />
             )}
           </div>
         )}
@@ -7007,7 +7032,11 @@ function PortalMainContent() {
 
             {/* TAB 6: CHAT */}
             {advisorTab === "chat" && (
-              <ProjectTeamFeedAndChat userRole="asesor" userName={safeActiveUser.name} />
+              <ProjectTeamFeedAndChat
+                userRole="asesor"
+                userName={safeActiveUser.name}
+                onOpenCalculator={() => setAdvisorTab("tabulador")}
+              />
             )}
 
             {/* MODAL: AGENDAR NUEVA CITA COMERCIAL */}

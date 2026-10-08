@@ -81,6 +81,7 @@ interface ChatMessage {
 interface ProjectTeamFeedAndChatProps {
   userRole?: string;
   userName?: string;
+  onOpenCalculator?: () => void;
 }
 
 export const MULTIPLATFORM_DEMOS = [
@@ -119,6 +120,7 @@ export const MULTIPLATFORM_DEMOS = [
 export default function ProjectTeamFeedAndChat({
   userRole = "socio",
   userName = "Daniel Torre",
+  onOpenCalculator,
 }: ProjectTeamFeedAndChatProps) {
   // Available Projects - Proyecto Activo Axana
   const projects: ProjectItem[] = [
@@ -239,8 +241,17 @@ export default function ProjectTeamFeedAndChat({
     try {
       if (typeof window !== "undefined") {
         localStorage.setItem("innocentia_calculator_lead", JSON.stringify(lead));
-        setCalculatorBridgeNotice(`✓ Datos de "${lead.clientName}" listos para cotizar.`);
-        setTimeout(() => setCalculatorBridgeNotice(null), 4000);
+        setCalculatorBridgeNotice(`✓ Datos de "${lead.clientName}" cargados en el Cotizador.`);
+
+        // Dispatch events to update matrix and switch tab immediately
+        window.dispatchEvent(new CustomEvent("innocentia-load-calculator-lead", { detail: lead }));
+        window.dispatchEvent(new CustomEvent("innocentia-switch-to-tabulador", { detail: lead }));
+
+        if (onOpenCalculator) {
+          onOpenCalculator();
+        }
+
+        setTimeout(() => setCalculatorBridgeNotice(null), 5000);
       }
     } catch (err) {
       console.error("Error setting calculator lead:", err);
@@ -417,18 +428,32 @@ ${pricingText}
 
       {/* Bridge Notification Toast */}
       {calculatorBridgeNotice && (
-        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex items-center justify-between shadow-xl animate-in fade-in slide-in-from-top-2">
+        <div className="p-4 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xl animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{calculatorBridgeNotice} Abre la pestaña <strong>"Tabulador y Cotizador Base"</strong> para armar la cotización con precios y extras.</span>
           </div>
-          <button
-            type="button"
-            onClick={() => setCalculatorBridgeNotice(null)}
-            className="text-xs text-gray-400 hover:text-white cursor-pointer"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                if (onOpenCalculator) onOpenCalculator();
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("innocentia-switch-to-tabulador"));
+                }
+              }}
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black uppercase transition-all shadow-md cursor-pointer hover:scale-105"
+            >
+              Abrir Cotizador Ahora →
+            </button>
+            <button
+              type="button"
+              onClick={() => setCalculatorBridgeNotice(null)}
+              className="text-xs text-gray-400 hover:text-white cursor-pointer px-1.5 py-1"
+            >
+              ✕
+            </button>
+          </div>
         </div>
       )}
 
