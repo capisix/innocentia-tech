@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import {
@@ -172,7 +172,7 @@ export default function ServicesNeuralNetwork({ onOpenProjectModal }: ServicesNe
   ];
 
   return (
-    <section id="servicios" className="relative py-20 bg-[#040407] overflow-hidden border-t border-white/10">
+    <section id="servicios" className="relative py-20 bg-transparent overflow-hidden border-t border-white/5">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 space-y-12">
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6">

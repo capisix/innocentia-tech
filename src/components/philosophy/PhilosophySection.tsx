@@ -40,7 +40,7 @@ export default function PhilosophySection() {
   ];
 
   return (
-    <section id="filosofia" className="relative py-16 bg-[#040407] overflow-hidden border-t border-b border-white/10">
+    <section id="filosofia" className="relative py-16 bg-transparent overflow-hidden border-t border-b border-white/5">
       <div className="max-w-[1440px] mx-auto px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         {/* Left Column: Title & Text */}
         <div className="lg:col-span-4 space-y-4 text-left">
