@@ -55,7 +55,7 @@ export default function AboutUsSection() {
   ];
 
   return (
-    <section id="nosotros" className="relative py-20 bg-[#030306] overflow-hidden border-t border-white/10">
+    <section id="nosotros" className="relative py-20 bg-transparent overflow-hidden border-t border-white/5">
       {/* Background ambient radial glows */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#FF007A]/5 blur-[140px] pointer-events-none rounded-full" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00F0FF]/5 blur-[140px] pointer-events-none rounded-full" />
@@ -75,7 +75,7 @@ export default function AboutUsSection() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         {/* Navigation Tabs Header */}
         <div className="flex justify-center">
-          <div className="inline-flex p-1.5 rounded-full bg-black/60 border border-white/15 backdrop-blur-2xl shadow-2xl">
+          <div className="inline-flex p-1.5 rounded-full bg-black/40 border border-white/15 backdrop-blur-2xl shadow-2xl">
             <button
               onClick={() => handleTabChange("manifiesto")}
               className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
@@ -109,7 +109,7 @@ export default function AboutUsSection() {
             {activeTab === "manifiesto" ? (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 {/* Left Card: El Manifiesto (Exact design from Foto 3) */}
-                <div className="lg:col-span-5 xl:col-span-5 bg-gradient-to-b from-[#130718]/90 via-[#0a0712]/95 to-[#070b16]/95 border border-pink-500/25 rounded-[32px] p-7 sm:p-9 lg:p-9 shadow-[0_0_50px_rgba(255,0,122,0.12)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-2xl">
+                <div className="lg:col-span-5 xl:col-span-5 bg-gradient-to-b from-[#130718]/50 via-[#0a0712]/60 to-[#070b16]/65 border border-pink-500/25 rounded-[32px] p-7 sm:p-9 lg:p-9 shadow-[0_0_50px_rgba(255,0,122,0.12)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-xl">
                   {/* Ambient corner light */}
                   <div className="absolute top-0 left-0 w-48 h-48 bg-[#FF007A]/10 blur-[80px] pointer-events-none" />
 
@@ -160,7 +160,7 @@ export default function AboutUsSection() {
 
                 {/* Right Card: Full 16:9 Looping Video - 100% Complete & Uncropped */}
                 <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center">
-                  <div className="relative w-full aspect-video rounded-[32px] overflow-hidden border border-cyan-500/30 bg-black shadow-[0_0_60px_rgba(0,240,255,0.2)]">
+                  <div className="relative w-full aspect-video rounded-[32px] overflow-hidden border border-cyan-500/30 bg-black/40 backdrop-blur-xl shadow-[0_0_60px_rgba(0,240,255,0.2)]">
                     {/* Looping Infinity Founders Video */}
                     <video
                       src="/videos/Energy_flowing_in_infinity_symbol_20261008100316.mp4"
@@ -169,7 +169,7 @@ export default function AboutUsSection() {
                       loop
                       muted
                       playsInline
-                      className="w-full h-full object-contain bg-black select-none pointer-events-none"
+                      className="w-full h-full object-contain bg-transparent select-none pointer-events-none"
                     />
 
                     {/* Subtle ambient neon glow behind corners */}
