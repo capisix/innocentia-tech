@@ -36,7 +36,7 @@ export default function PublicTelemetryHUD() {
   }, []);
 
   return (
-    <aside aria-label="Telemetría en tiempo real" className="fixed bottom-6 left-6 z-40">
+    <aside aria-label="Telemetría en tiempo real" className="fixed bottom-6 left-6 z-40 hidden md:block">
       {/* Floating Public HUD Pill */}
       {!isOpen && (
         <button

@@ -784,18 +784,18 @@ export default function FloatingChatWidget({
         {/* Clean Trigger Dual Buttons: WhatsApp Direct + Dual Core AI */}
         {!isOpen && (
           <div className="flex items-center gap-2.5">
-            {/* Direct WhatsApp Quick Launch */}
+            {/* Direct WhatsApp Quick Launch (Desktop Only) */}
             <a
               href="https://wa.me/529601771556?text=Hola%20Innocentia%20Tech,%20estoy%20en%20el%20sitio%20web%20y%20me%20gustar%C3%ADa%20atenci%C3%B3n%20personalizada."
               target="_blank"
               rel="noopener noreferrer"
               title="Abrir WhatsApp Oficial (+52 960 177 1556)"
-              className="group flex items-center gap-2 px-3.5 py-2.5 sm:px-4 sm:py-3.5 rounded-full bg-[#040407]/95 border border-emerald-500/40 hover:border-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer"
+              className="hidden md:flex items-center gap-2 px-4 py-3 rounded-full bg-[#040407]/95 border border-emerald-500/40 hover:border-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.35)] backdrop-blur-2xl transition-all hover:scale-105 cursor-pointer"
             >
               <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/60 flex items-center justify-center text-sm">
                 💬
               </div>
-              <div className="text-left hidden sm:block whitespace-nowrap">
+              <div className="text-left whitespace-nowrap">
                 <span className="text-xs font-bold text-emerald-400 block leading-tight">WhatsApp</span>
                 <span className="text-[9px] text-gray-400 font-mono">+52 960 177 1556</span>
               </div>
