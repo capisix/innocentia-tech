@@ -152,7 +152,7 @@ export default function AboutUsSection() {
                     <img
                       src="/images/principios/manifiesto_footer.png"
                       alt="Sofía Imagina — Iván Construye"
-                      className="w-full max-w-[435px] h-auto object-contain select-none mix-blend-screen"
+                      className="w-full max-w-[440px] h-auto object-contain select-none mix-blend-screen transition-transform duration-300 hover:scale-[1.025] filter drop-shadow-[0_0_15px_rgba(168,85,247,0.45)]"
                     />
                     <span className="sr-only">Sofía Imagina, Iván Construye - Dos hemisferios, una intención</span>
                   </div>
