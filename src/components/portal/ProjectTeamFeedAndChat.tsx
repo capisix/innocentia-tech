@@ -140,8 +140,25 @@ export default function ProjectTeamFeedAndChat({
   const [selectedProjectId, setSelectedProjectId] = useState<string>("proj-axana");
   const [activeTab, setActiveTab] = useState<"leads" | "chat" | "blog">("leads");
 
-  // Incoming Leads State (Formulario contestado de Axana asignado a Jessica Torre)
+  // Incoming Leads State (Axana y Sra. Corina asignados a Jessica Torre)
   const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
+    {
+      id: "COT-126708",
+      clientName: "Sra. Corina",
+      clientCompany: "Hotel Venezuela",
+      clientPhone: "+58 412 876 5432",
+      clientEmail: "gerencia@hotelvenezuela.com",
+      vendorCode: "VEN-JESS-101",
+      vendorName: "Jessica Torre",
+      projectName: "Solución Integral para Sra. Corina (Hotel Venezuela)",
+      projectType: "branding_pwa",
+      budgetRange: "$86,300 MXN",
+      timeline: "4 a 6 semanas",
+      description: "Cotización formal emitida de $86,300 MXN con 11 módulos integrales: Identidad de Marca, Naming, Logo, Chatbot WhatsApp, Stripe, Cloud, PWA, Auditoría, Soporte 24/7, Multi-Idioma y Dominio SSL.",
+      date: "08 Oct 2026 (Ayer / En Aprobación)",
+      status: "Cotización Emitida",
+      assignedVendor: "Jessica Torre",
+    },
     {
       id: "PROJ-AXANA-2026",
       clientName: "Axana",

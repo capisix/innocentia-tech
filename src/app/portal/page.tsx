@@ -1775,8 +1775,20 @@ function PortalMainContent() {
     },
   ]);
 
-  // Seller Leads & Linked Form System (Proyectos Registrados Axana & Open House Yucatán con Jessica Torre)
+  // Seller Leads & Linked Form System (Sra. Corina, Axana & Open House Yucatán con Jessica Torre)
   const [sellerLeads, setSellerLeads] = useState<SellerLead[]>([
+    {
+      id: "COT-126708",
+      clientName: "Sra. Corina",
+      company: "Hotel Venezuela (Sistema Web & PWA + Branding)",
+      phone: "+58 412 876 5432",
+      status: "Cotización Emitida ($86,300 MXN)",
+      date: "08 Oct 2026 (Ayer / En Aprobación)",
+      estimatedBudget: "$86,300 MXN",
+      hasNewNotification: true,
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre",
+    },
     {
       id: "LEAD-OPENHOUSE-2026",
       clientName: "Eduardo Cáceres",

@@ -77,7 +77,7 @@ export async function GET(req: Request) {
   let uniqueUsers = Math.round(totalConnectedCount * 0.78);
   let avgSessionDuration = "3m 48s";
   let bounceRate = "26.4%";
-  let quoteConversions = 3;
+  let quoteConversions = 4;
 
   // Funnel calculation variables
   let visitorsCount = totalConnectedCount;
