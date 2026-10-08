@@ -16,6 +16,7 @@ import ExecutiveTelemetryDashboard from "../../components/portal/ExecutiveTeleme
 import OpenHousePropTechDemo from "../../components/portal/OpenHousePropTechDemo";
 import OpenHouseMobileAppDemo from "../../components/portal/OpenHouseMobileAppDemo";
 import MultiCommerceOpenHouse360 from "../../components/portal/MultiCommerceOpenHouse360";
+import { generateProjectPdf, ProjectPdfData, ProposalQuoteItem } from "../../lib/generateProjectPdf";
 import {
   Sparkles,
   ArrowRight,
@@ -778,6 +779,25 @@ function PortalMainContent() {
       unreadAlerts: 0,
       demoUrl: "https://multicommerce-omega.vercel.app/tacoslarry",
     },
+    {
+      id: "COT-126708",
+      name: "Solución Integral para Sra. Corina (Hotel Venezuela)",
+      client: "Sra. Corina (Hotel Venezuela)",
+      clientEmail: "gerencia@hotelvenezuela.com",
+      sellerId: "usr_sales_jess",
+      sellerName: "Jessica Torre (VEN-JESS-101)",
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design Lead)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "En Aprobación",
+      progress: 10,
+      currentSprint: "Cotización COT-126708 generada por Jessica Torre • En espera de aprobación comercial",
+      budget: 86300,
+      paidAmount: 0,
+      targetDate: "30 de Octubre de 2026",
+      unreadAlerts: 0,
+      demoUrl: "https://innocentia.tech/crear-proyecto?ref=COT-126708",
+    },
   ]);
 
   // Hydrate projects from localStorage with automatic deduplication & seller fix
@@ -957,6 +977,181 @@ function PortalMainContent() {
       window.removeEventListener("innocentia-project-created", handleProjectCreatedEvent);
     };
   }, []);
+
+  // Open project in Cotizador with full quotation preloaded
+  const handleOpenProjectInCalculator = (proj: AssignedProject) => {
+    try {
+      const isCorina =
+        String(proj.client || proj.name || "").toLowerCase().includes("corina") ||
+        String(proj.client || proj.name || "").toLowerCase().includes("hotel venezuela") ||
+        proj.id === "COT-126708";
+
+      const leadData = {
+        id: proj.id || (isCorina ? "COT-126708" : "PRJ-01"),
+        folio: proj.id || (isCorina ? "COT-126708" : "PRJ-01"),
+        clientName: isCorina ? "Sra. Corina" : (proj.client || proj.name),
+        clientCompany: isCorina ? "Hotel Venezuela" : "Empresa Prospecto",
+        clientPhone: isCorina ? "+58 412 876 5432" : "+52 (WhatsApp)",
+        clientEmail: isCorina ? "gerencia@hotelvenezuela.com" : (proj.clientEmail || "contacto@cliente.com"),
+        vendorName: isCorina ? "Jessica Torre" : (proj.sellerName?.replace(/\s*\(.*\)/, "") || "Jessica Torre"),
+        vendorCode: isCorina ? "VEN-JESS-101" : "VEN-JESS-101",
+        budget: proj.budget || 86300,
+        projectType: isCorina ? ["branding", "mobile", "cloud"] : ["web", "platform"],
+      };
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("innocentia_calculator_lead", JSON.stringify(leadData));
+        window.dispatchEvent(new CustomEvent("innocentia-load-calculator-lead", { detail: leadData }));
+        window.dispatchEvent(new CustomEvent("innocentia-switch-to-tabulador", { detail: leadData }));
+      }
+
+      if (activeRole === "ceo") setCeoTab("tabulador");
+      else if (activeRole === "socio") setPartnerTab("tabulador");
+      else if (activeRole === "asesor") setAdvisorTab("tabulador");
+      else if (activeRole === "dev") setDevTab("tabulador");
+    } catch (err) {
+      console.error("Error opening project in calculator:", err);
+    }
+  };
+
+  // View / Print formal quotation PDF for project
+  const handleViewProjectQuotePdf = (proj: AssignedProject) => {
+    try {
+      const isCorina =
+        String(proj.client || proj.name || "").toLowerCase().includes("corina") ||
+        String(proj.client || proj.name || "").toLowerCase().includes("hotel venezuela") ||
+        proj.id === "COT-126708";
+
+      const corinaItems: ProposalQuoteItem[] = [
+        {
+          concept: "Identidad de Marca Integral (Estudio + 3 Propuestas)",
+          amount: 10000,
+        },
+        {
+          concept: "Naming Estratégico & Fonética",
+          amount: 4000,
+        },
+        {
+          concept: "Diseño de Logotipo & Sistema Visual",
+          amount: 6000,
+        },
+        {
+          concept: "Chatbot IA & Conexión WhatsApp Business Oficial",
+          amount: 1600,
+        },
+        {
+          concept: "Pasarela de Pagos Stripe / SPEI / Checkout Seguro",
+          amount: 12000,
+        },
+        {
+          concept: "Infraestructura Cloud Dedicada & BD Aurora/PostgreSQL",
+          amount: 15000,
+        },
+        {
+          concept: "Módulo App Móvil PWA con Notificaciones Push",
+          amount: 18000,
+        },
+        {
+          concept: "Panel de Auditoría Inmutable & Reportes PDF Ejecutivos",
+          amount: 8000,
+        },
+        {
+          concept: "Póliza de Soporte Prioritario 24/7 & Mantenimiento Anual",
+          amount: 1200,
+        },
+        {
+          concept: "Módulo Multi-Idioma Dinámico (Español / Inglés)",
+          amount: 6000,
+        },
+        {
+          concept: "Dominio Corporativo .tech/.com, DNS & Certificado SSL",
+          amount: 4500,
+        },
+      ];
+
+      const pdfData: ProjectPdfData = isCorina
+        ? {
+            folio: proj.id || "COT-126708",
+            date: "08 de octubre de 2026",
+            validityDays: 15,
+            projectName: "Solución Integral para Sra. Corina (Hotel Venezuela)",
+            clientName: "Sra. Corina",
+            clientCompany: "Hotel Venezuela",
+            clientPhone: "+58 412 876 5432",
+            clientEmail: "gerencia@hotelvenezuela.com",
+            vendorName: "Jessica Torre",
+            vendorCode: "VEN-JESS-101",
+            quoteItems: corinaItems,
+            subtotal: 86300,
+            total: 86300,
+            currency: "MXN",
+            scopeItems: [
+              { number: "01", title: "Estudio de mercado preliminar y 3 propuestas conceptuales completas de identidad de marca." },
+              { number: "02", title: "Manual de identidad de marca, logo vector en diferentes colores y opciones aplicables." },
+              { number: "03", title: "Estrategia de Naming comercial, validación fonética y verificación de disponibilidad de dominio." },
+              { number: "04", title: "Diseño de logotipo oficial, isotipo, variantes para fondos oscuros/claros y tipografías." },
+              { number: "05", title: "Chatbot IA contextual y conexión WhatsApp Business Oficial para atención 24/7." },
+              { number: "06", title: "Pasarela de pagos Stripe / SPEI con checkout seguro y webhooks antifraude." },
+              { number: "07", title: "Despliegue de infraestructura cloud dedicada con base de datos relacional y 99.9% SLA." },
+              { number: "08", title: "Aplicación móvil progresiva (PWA) instalable en iOS y Android con notificaciones push." },
+              { number: "09", title: "Panel de auditoría inmutable con bitácora criptográfica y exportación de reportes PDF ejecutivos." },
+              { number: "10", title: "Póliza de soporte técnico prioritario 24/7 y mantenimiento preventivo anual." },
+              { number: "11", title: "Módulo multi-idioma dinámico (Español / Inglés) con switch en tiempo real." },
+              { number: "12", title: "Dominio corporativo .tech/.com con DNS gestionado y certificado de seguridad SSL." },
+            ],
+            paymentTerms: [
+              "50% Anticipo para inicio de levantamiento, estudio de marca y desarrollo ($43,150.00 MXN).",
+              "50% Liquidación final contra entrega de entregables de marca, accesos y pase a producción ($43,150.00 MXN).",
+              "Plazo de entrega estimado: 4 a 6 semanas bajo metodología ágil con entregables continuos.",
+            ],
+            observations: [
+              "Entrega de manual de identidad de marca, archivos vectoriales (.AI, .SVG, .PDF) y variantes cromáticas.",
+              "Propiedad intelectual y código fuente 100% transferidos al cliente al liquidar el proyecto.",
+              "Garantía de 30 días posteriores al lanzamiento para ajustes sin costo.",
+            ],
+            qrUrl: "https://innocentia.tech",
+          }
+        : {
+            folio: proj.id,
+            date: new Date().toLocaleDateString("es-MX", { day: "2-digit", month: "long", year: "numeric" }),
+            validityDays: 15,
+            projectName: proj.name,
+            clientName: proj.client || "Cliente",
+            clientCompany: proj.name,
+            clientPhone: "+52 (WhatsApp)",
+            clientEmail: proj.clientEmail || "contacto@innocentia.tech",
+            vendorName: proj.sellerName?.replace(/\s*\(.*\)/, "") || "Jessica Torre",
+            vendorCode: "VEN-JESS-101",
+            quoteItems: [
+              {
+                concept: `Desarrollo Integral - ${proj.name}`,
+                amount: proj.budget,
+              },
+            ],
+            subtotal: proj.budget,
+            total: proj.budget,
+            currency: "MXN",
+            scopeItems: [
+              { number: "01", title: "Manual de identidad de marca, logo vector diferentes colores y opciones aplicables." },
+              { number: "02", title: proj.currentSprint || "Desarrollo integral de plataforma según requerimientos acordados." },
+              { number: "03", title: "Despliegue en la nube, optimización de velocidad y certificación SSL." },
+            ],
+            paymentTerms: [
+              "50% Anticipo para inicio de desarrollo de plataforma.",
+              "50% Liquidación contra pase a producción y entrega de accesos.",
+            ],
+            observations: [
+              "Garantía de 30 días posteriores al lanzamiento para soporte técnico.",
+              "Código fuente y propiedad transferidos al cliente.",
+            ],
+            qrUrl: "https://innocentia.tech",
+          };
+
+      generateProjectPdf(pdfData);
+    } catch (err) {
+      console.error("Error generating project PDF:", err);
+    }
+  };
 
   // Audit Logs State con Metadata de Estados de Pago y Fechas - Solo registros reales de infraestructura y setup
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([
@@ -2499,7 +2694,27 @@ function PortalMainContent() {
                       <span className="text-xs font-mono text-gray-300">
                         Presupuesto: <strong className="text-emerald-400">${proj.budget.toLocaleString()} MXN</strong>
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleViewProjectQuotePdf(proj)}
+                          className="px-3 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(168,85,247,0.25)] cursor-pointer"
+                          title="Descargar o ver la propuesta comercial oficial en PDF"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>Ver Cotización</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleOpenProjectInCalculator(proj)}
+                          className="px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500 hover:to-teal-500 text-emerald-300 hover:text-black border border-emerald-500/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(16,185,129,0.25)] cursor-pointer"
+                          title="Cargar esta cotización en la pestaña Cotizador"
+                        >
+                          <TrendingUp className="w-3.5 h-3.5" />
+                          <span>Abrir en Cotizador</span>
+                        </button>
+
                         {proj.demoUrl && (
                           <Link
                             href={proj.demoUrl}
@@ -7071,10 +7286,31 @@ function PortalMainContent() {
                           </div>
                         </div>
 
-                        {/* Demo App Direct Link for Seller */}
-                        {proj.demoUrl && (
-                          <div className="pt-2 border-t border-white/5 flex items-center justify-between">
-                            <span className="text-[10px] font-mono text-[#E87512] font-bold">✨ Demo Interactivo Listo</span>
+                        {/* Quote & Demo Actions for Seller */}
+                        <div className="pt-2 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleViewProjectQuotePdf(proj)}
+                              className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                              title="Descargar o ver la propuesta comercial oficial en PDF"
+                            >
+                              <FileText className="w-3.5 h-3.5" />
+                              <span>Ver Cotización</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleOpenProjectInCalculator(proj)}
+                              className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-black border border-emerald-500/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                              title="Abrir y editar en el Cotizador"
+                            >
+                              <TrendingUp className="w-3.5 h-3.5" />
+                              <span>Abrir en Cotizador</span>
+                            </button>
+                          </div>
+
+                          {proj.demoUrl && (
                             <Link
                               href={proj.demoUrl}
                               target="_blank"
@@ -7083,8 +7319,8 @@ function PortalMainContent() {
                               <span>Ver Demo (Cliente)</span>
                               <ExternalLink className="w-3.5 h-3.5" />
                             </Link>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   DollarSign,
   Briefcase,
@@ -114,110 +114,232 @@ export default function InternalPricingMatrix({
   // Commercial Discount
   const [discountPercent, setDiscountPercent] = useState<number>(0);
 
-  // Auto-load preloaded lead from localStorage if coming from Mesa de Trabajo
-  useEffect(() => {
-    const parseLead = (lead: any) => {
-      if (!lead || !lead.clientName) return;
-      const companySuffix = lead.clientCompany ? ` (${lead.clientCompany})` : "";
-      setCalcClientName(`${lead.clientName}${companySuffix}`);
-      if (lead.clientCompany) setCalcClientCompany(lead.clientCompany);
-      if (lead.clientEmail) setCalcClientEmail(lead.clientEmail);
-      if (lead.clientPhone) setCalcClientPhone(lead.clientPhone);
-      if (lead.id || lead.folio) setCalcLeadId(lead.id || lead.folio);
+  // Lead parser supporting previous quotes and Sra. Corina's exact 11-module quotation ($86,300 MXN)
+  const parseLead = useCallback((lead: any) => {
+    if (!lead || !lead.clientName) return;
+    const companySuffix = lead.clientCompany ? ` (${lead.clientCompany})` : "";
+    setCalcClientName(`${lead.clientName}${companySuffix}`);
+    if (lead.clientCompany) setCalcClientCompany(lead.clientCompany);
+    if (lead.clientEmail) setCalcClientEmail(lead.clientEmail);
+    if (lead.clientPhone) setCalcClientPhone(lead.clientPhone);
+    if (lead.id || lead.folio) setCalcLeadId(lead.id || lead.folio);
 
-      // Handle assigned seller with Jessica Torre as official advisor
-      const vName = lead.vendorName || lead.sellerName || lead.assignedVendor;
-      const cleanVendorName = (vName && !vName.toLowerCase().includes("sin asesor")) ? vName : "Jessica Torre";
-      setCalcVendorName(cleanVendorName);
+    // Handle assigned seller with Jessica Torre as official advisor
+    const vName = lead.vendorName || lead.sellerName || lead.assignedVendor;
+    const cleanVendorName = (vName && !vName.toLowerCase().includes("sin asesor")) ? vName : "Jessica Torre";
+    setCalcVendorName(cleanVendorName);
 
-      const vCode = lead.vendorCode || lead.sellerId;
-      const cleanVendorCode = (vCode && vCode !== "SIN-ASESOR") ? vCode : "VEN-JESS-101";
-      setCalcVendorCode(cleanVendorCode);
+    const vCode = lead.vendorCode || lead.sellerId;
+    const cleanVendorCode = (vCode && vCode !== "SIN-ASESOR") ? vCode : "VEN-JESS-101";
+    setCalcVendorCode(cleanVendorCode);
 
-      setActiveTab("calculadora");
+    setActiveTab("calculadora");
 
-      const cleanKey = String(lead.clientName || lead.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-      const isCorina = cleanKey.includes("corina") || cleanKey.includes("hotelvenezuela");
+    const cleanKey = String(lead.clientName || lead.id || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const isCorina = cleanKey.includes("corina") || cleanKey.includes("hotelvenezuela") || (lead.id && String(lead.id).includes("126708"));
 
-      // Check if an existing quote or project was already made for this client
-      let restoredQuote: any = null;
-      if (typeof window !== "undefined") {
-        try {
-          const directSaved = localStorage.getItem(`innocentia_quote_${cleanKey}`) || (isCorina ? localStorage.getItem("innocentia_quote_corina") : null);
-          if (directSaved) {
-            restoredQuote = JSON.parse(directSaved);
-          } else {
-            const savedProjectsStr = localStorage.getItem("innocentia_portal_projects");
-            if (savedProjectsStr) {
-              const projectsArr: any[] = JSON.parse(savedProjectsStr);
-              const match = projectsArr.find((p) => {
-                if (!p) return false;
-                if (lead.id && p.id === lead.id) return true;
-                const pClient = String(p.client || p.name || "").toLowerCase();
-                if (isCorina && (pClient.includes("corina") || pClient.includes("hotel venezuela"))) return true;
-                return cleanKey && pClient.replace(/[^a-z0-9]/g, "").includes(cleanKey);
-              });
-              if (match) {
-                if (match.quoteData) {
-                  restoredQuote = match.quoteData;
-                } else if (match.budget) {
-                  restoredQuote = { budget: match.budget, isFromProject: true };
-                }
+    if (isCorina) {
+      // Restore Sra. Corina's official quotation ($86,300 MXN - 11 Módulos exactos)
+      setCalcModalidad("proyecto");
+      setCalcTier("mvp");
+      setCalcDiseno("base");
+      setCustomBasePrice(0);
+      setCustomDesignPrice(0);
+      setDiscountPercent(0);
+      setExtraPrices((prev) => ({
+        ...prev,
+        brand_identity: 10000,
+        brand_naming: 4000,
+        brand_logo: 6000,
+        marketing_campaign: 8000,
+        whatsapp_bot: 1600,
+        stripe_payments: 12000,
+        cloud_infra: 15000,
+        pwa_mobile: 18000,
+        audit_reports: 8000,
+        support_247: 1200,
+        multi_language: 6000,
+        domain_ssl: 4500,
+      }));
+      setSelectedExtras({
+        brand_identity: true,
+        brand_naming: true,
+        brand_logo: true,
+        marketing_campaign: false,
+        whatsapp_bot: true,
+        stripe_payments: true,
+        cloud_infra: true,
+        pwa_mobile: true,
+        audit_reports: true,
+        support_247: true,
+        multi_language: true,
+        domain_ssl: true,
+      });
+      setCustomExtrasList([]);
+      setCalcClientName("Sra. Corina (Hotel Venezuela)");
+      setCalcClientCompany("Hotel Venezuela");
+      setCalcClientPhone("+58 412 876 5432");
+      setCalcClientEmail("gerencia@hotelvenezuela.com");
+      setCalcVendorName("Jessica Torre");
+      setCalcVendorCode("VEN-JESS-101");
+      setCalcLeadId("COT-126708");
+      setPreloadedLeadNotice(
+        "✓ Cotización oficial de $86,300 MXN cargada para Sra. Corina (Hotel Venezuela) • 11 Módulos desglosados • Asesora: Jessica Torre (VEN-JESS-101)."
+      );
+      try {
+        if (typeof window !== "undefined") {
+          const corinaQuoteData = {
+            calcModalidad: "proyecto",
+            calcTier: "mvp",
+            calcDiseno: "base",
+            customBasePrice: 0,
+            customDesignPrice: 0,
+            discountPercent: 0,
+            extraPrices: {
+              brand_identity: 10000,
+              brand_naming: 4000,
+              brand_logo: 6000,
+              marketing_campaign: 8000,
+              whatsapp_bot: 1600,
+              stripe_payments: 12000,
+              cloud_infra: 15000,
+              pwa_mobile: 18000,
+              audit_reports: 8000,
+              support_247: 1200,
+              multi_language: 6000,
+              domain_ssl: 4500,
+            },
+            selectedExtras: {
+              brand_identity: true,
+              brand_naming: true,
+              brand_logo: true,
+              marketing_campaign: false,
+              whatsapp_bot: true,
+              stripe_payments: true,
+              cloud_infra: true,
+              pwa_mobile: true,
+              audit_reports: true,
+              support_247: true,
+              multi_language: true,
+              domain_ssl: true,
+            },
+            customExtrasList: [],
+            budget: 86300,
+            total: 86300,
+            vendorName: "Jessica Torre",
+            vendorCode: "VEN-JESS-101",
+            sellerId: "usr_sales_jess",
+            folio: "COT-126708",
+            projectName: "Solución Integral para Sra. Corina (Hotel Venezuela)",
+            clientName: "Sra. Corina (Hotel Venezuela)",
+            clientCompany: "Hotel Venezuela",
+            clientPhone: "+58 412 876 5432",
+            clientEmail: "gerencia@hotelvenezuela.com",
+          };
+          localStorage.setItem("innocentia_quote_corina", JSON.stringify(corinaQuoteData));
+          localStorage.setItem("innocentia_quote_cot126708", JSON.stringify(corinaQuoteData));
+        }
+      } catch (e) {}
+      return;
+    }
+
+    // Check if an existing quote or project was already made for this client
+    let restoredQuote: any = null;
+    if (typeof window !== "undefined") {
+      try {
+        const directSaved = localStorage.getItem(`innocentia_quote_${cleanKey}`);
+        if (directSaved) {
+          restoredQuote = JSON.parse(directSaved);
+        } else {
+          const savedProjectsStr = localStorage.getItem("innocentia_portal_projects");
+          if (savedProjectsStr) {
+            const projectsArr: any[] = JSON.parse(savedProjectsStr);
+            const match = projectsArr.find((p) => {
+              if (!p) return false;
+              if (lead.id && p.id === lead.id) return true;
+              const pClient = String(p.client || p.name || "").toLowerCase();
+              return cleanKey && pClient.replace(/[^a-z0-9]/g, "").includes(cleanKey);
+            });
+            if (match) {
+              if (match.quoteData) {
+                restoredQuote = match.quoteData;
+              } else if (match.budget) {
+                restoredQuote = { budget: match.budget, isFromProject: true };
               }
             }
           }
-        } catch (e) {
-          console.error("Error checking existing quote:", e);
         }
+      } catch (e) {
+        console.error("Error checking existing quote:", e);
       }
+    }
 
-      if (restoredQuote) {
-        if (restoredQuote.calcModalidad) setCalcModalidad(restoredQuote.calcModalidad);
-        if (restoredQuote.calcTier) setCalcTier(restoredQuote.calcTier);
-        if (restoredQuote.calcDiseno) setCalcDiseno(restoredQuote.calcDiseno);
-        if (restoredQuote.customBasePrice !== undefined) setCustomBasePrice(restoredQuote.customBasePrice);
-        if (restoredQuote.customDesignPrice !== undefined) setCustomDesignPrice(restoredQuote.customDesignPrice);
-        if (restoredQuote.customMonthlyPrice !== undefined) setCustomMonthlyPrice(restoredQuote.customMonthlyPrice);
-        if (restoredQuote.extraPrices) setExtraPrices(restoredQuote.extraPrices);
-        if (restoredQuote.selectedExtras) setSelectedExtras(restoredQuote.selectedExtras);
-        if (restoredQuote.customExtrasList) setCustomExtrasList(restoredQuote.customExtrasList);
-        if (restoredQuote.discountPercent !== undefined) setDiscountPercent(restoredQuote.discountPercent);
+    if (restoredQuote) {
+      if (restoredQuote.calcModalidad) setCalcModalidad(restoredQuote.calcModalidad);
+      if (restoredQuote.calcTier) setCalcTier(restoredQuote.calcTier);
+      if (restoredQuote.calcDiseno) setCalcDiseno(restoredQuote.calcDiseno);
+      if (restoredQuote.customBasePrice !== undefined) setCustomBasePrice(restoredQuote.customBasePrice);
+      if (restoredQuote.customDesignPrice !== undefined) setCustomDesignPrice(restoredQuote.customDesignPrice);
+      if (restoredQuote.customMonthlyPrice !== undefined) setCustomMonthlyPrice(restoredQuote.customMonthlyPrice);
+      if (restoredQuote.extraPrices) setExtraPrices(restoredQuote.extraPrices);
+      if (restoredQuote.selectedExtras) setSelectedExtras(restoredQuote.selectedExtras);
+      if (restoredQuote.customExtrasList) setCustomExtrasList(restoredQuote.customExtrasList);
+      if (restoredQuote.discountPercent !== undefined) setDiscountPercent(restoredQuote.discountPercent);
 
-        if (restoredQuote.isFromProject && restoredQuote.budget) {
-          setCalcModalidad("proyecto");
-          setCalcTier("mvp");
-          setCalcDiseno("personalizado");
-          setCustomBasePrice(Math.max(0, restoredQuote.budget - 22000));
-        }
-
-        const restoredTotal = restoredQuote.budget || restoredQuote.total || 86300;
-        setPreloadedLeadNotice(`✓ Cotización anterior de $${Number(restoredTotal).toLocaleString()} MXN cargada para ${lead.clientName} • Asesora: ${cleanVendorName} (${cleanVendorCode}).`);
-      } else if (isCorina) {
-        // Specific restore for Sra. Corina's established quote ($86,300 MXN)
+      if (restoredQuote.isFromProject && restoredQuote.budget) {
         setCalcModalidad("proyecto");
         setCalcTier("mvp");
-        setCalcDiseno("personalizado");
-        setCustomBasePrice(64300); // $64,300 base + $22,000 diseño personalizado = $86,300 MXN
-        setPreloadedLeadNotice(`✓ Cotización anterior de $86,300 MXN cargada para Sra. Corina (Hotel Venezuela) • Asesora: Jessica Torre (VEN-JESS-101).`);
-      } else {
-        const pTypeStr = Array.isArray(lead.projectType) ? lead.projectType.join(" ") : String(lead.projectType || "");
-        if (pTypeStr.includes("mobile") || pTypeStr.includes("movil") || pTypeStr.includes("app")) {
-          setCalcTier("movil");
-        } else if (pTypeStr.includes("web") || pTypeStr.includes("plataforma") || pTypeStr.includes("sistema")) {
-          setCalcTier("plataforma");
-        } else {
-          setCalcTier("mvp");
-        }
-        setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} • Asesora: ${cleanVendorName} (${cleanVendorCode}).`);
+        setCalcDiseno("base");
+        setCustomBasePrice(restoredQuote.budget);
       }
-    };
 
+      const restoredTotal = restoredQuote.budget || restoredQuote.total;
+      setPreloadedLeadNotice(`✓ Cotización anterior de $${Number(restoredTotal).toLocaleString()} MXN cargada para ${lead.clientName} • Asesora: ${cleanVendorName} (${cleanVendorCode}).`);
+    } else {
+      const pTypeStr = Array.isArray(lead.projectType) ? lead.projectType.join(" ") : String(lead.projectType || "");
+      if (pTypeStr.includes("mobile") || pTypeStr.includes("movil") || pTypeStr.includes("app")) {
+        setCalcTier("movil");
+      } else if (pTypeStr.includes("web") || pTypeStr.includes("plataforma") || pTypeStr.includes("sistema")) {
+        setCalcTier("plataforma");
+      } else {
+        setCalcTier("mvp");
+      }
+      setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} • Asesora: ${cleanVendorName} (${cleanVendorCode}).`);
+    }
+  }, []);
+
+  // Auto-load preloaded lead from localStorage or existing projects on mount
+  useEffect(() => {
     const loadStoredLead = () => {
       try {
         if (typeof window !== "undefined") {
           const stored = localStorage.getItem("innocentia_calculator_lead");
           if (stored) {
             parseLead(JSON.parse(stored));
+          } else {
+            // Check if Corina project or quote exists
+            const savedProjectsStr = localStorage.getItem("innocentia_portal_projects");
+            let hasCorina = false;
+            if (savedProjectsStr) {
+              const projectsArr: any[] = JSON.parse(savedProjectsStr);
+              hasCorina = projectsArr.some((p) => {
+                const pClient = String(p?.client || p?.name || "").toLowerCase();
+                return pClient.includes("corina") || pClient.includes("hotel venezuela") || p?.id === "COT-126708";
+              });
+            }
+            if (hasCorina || localStorage.getItem("innocentia_quote_corina")) {
+              parseLead({
+                id: "COT-126708",
+                clientName: "Sra. Corina",
+                clientCompany: "Hotel Venezuela",
+                clientPhone: "+58 412 876 5432",
+                clientEmail: "gerencia@hotelvenezuela.com",
+                vendorName: "Jessica Torre",
+                vendorCode: "VEN-JESS-101",
+                budget: 86300,
+                projectType: ["branding", "mobile", "cloud"],
+              });
+            }
           }
         }
       } catch (err) {
@@ -232,7 +354,7 @@ export default function InternalPricingMatrix({
     loadStoredLead();
     window.addEventListener("innocentia-load-calculator-lead", handleLeadEvent);
     return () => window.removeEventListener("innocentia-load-calculator-lead", handleLeadEvent);
-  }, []);
+  }, [parseLead]);
 
   // Catalog of Branding & Marketing Services (Zona de Branding)
   const brandingCatalog = [
@@ -1190,6 +1312,28 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                   <p className="text-gray-400 text-[11px]">Calcula presupuestos a medida y genera propuestas comerciales oficiales en tiempo real.</p>
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  parseLead({
+                    id: "COT-126708",
+                    clientName: "Sra. Corina",
+                    clientCompany: "Hotel Venezuela",
+                    clientPhone: "+58 412 876 5432",
+                    clientEmail: "gerencia@hotelvenezuela.com",
+                    vendorName: "Jessica Torre",
+                    vendorCode: "VEN-JESS-101",
+                    budget: 86300,
+                    projectType: ["branding", "mobile", "cloud"],
+                  });
+                }}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30 hover:from-purple-600 hover:to-indigo-600 text-purple-200 hover:text-white border border-purple-500/40 text-xs font-mono font-bold flex items-center gap-2 transition-all shadow-md cursor-pointer hover:scale-[1.02]"
+                title="Cargar la cotización oficial de Sra. Corina (Hotel Venezuela) - 11 Módulos ($86,300 MXN)"
+              >
+                <FileText className="w-4 h-4 text-purple-300" />
+                <span>🏨 Cargar Cotización Sra. Corina ($86,300 MXN)</span>
+              </button>
             </div>
           )}
 

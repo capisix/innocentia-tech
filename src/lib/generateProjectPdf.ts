@@ -823,3 +823,5 @@ export function generateProjectPdf(data: ProjectPdfData) {
   printWindow.document.write(htmlContent);
   printWindow.document.close();
 }
+
+export default generateProjectPdf;
