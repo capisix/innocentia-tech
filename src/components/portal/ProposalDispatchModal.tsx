@@ -109,7 +109,7 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
 💰 *INVERSIÓN ESTIMADA:*
 • *Total Cotizado:* $${total.toLocaleString()} MXN
 • *Tratamiento IVA:* Por confirmar / sujeto a validación fiscal
-
+${proposalData.extras && proposalData.extras.length > 0 ? `\n📦 *ALCANCE & ENTREGABLES INCLUIDOS:*\n${proposalData.extras.map((e) => `• ${e}`).join("\n")}\n` : ""}
 💼 *ASESOR ASIGNADO:*
 • *Asesor:* ${vendor} (${vendorCode})
 
@@ -129,7 +129,7 @@ DATOS GENERALES DE LA PROPUESTA:
 - Empresa: ${company}
 - Modalidad: ${proposalData.modalityTag || "Desarrollo por Proyecto / MVP a Medida"}
 - Inversión Estimada: $${total.toLocaleString()} MXN
-
+${proposalData.extras && proposalData.extras.length > 0 ? `\nENTREGABLES Y MÓDULOS INCLUIDOS:\n${proposalData.extras.map((e) => `- ${e}`).join("\n")}\n` : ""}
 ASESOR COMERCIAL VINCULADO:
 - Asesor: ${vendor} (${vendorCode})
 - WhatsApp Soporte: +52 960 177 1556
