@@ -515,8 +515,12 @@ const server = http.createServer((req, res) => {
   if (req.url === "/reset" || req.url === "/logout") {
     try {
       if (fs.existsSync(AUTH_DIR)) {
-        fs.rmSync(AUTH_DIR, { recursive: true, force: true });
-        fs.mkdirSync(AUTH_DIR, { recursive: true });
+        const files = fs.readdirSync(AUTH_DIR);
+        for (const file of files) {
+          try {
+            fs.rmSync(path.join(AUTH_DIR, file), { recursive: true, force: true });
+          } catch {}
+        }
       }
       isWhatsAppConnected = false;
       latestQrDataUrl = "";
