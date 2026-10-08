@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 
-export default function AboutUsSection() {
+interface AboutUsSectionProps {
+  onOpenProjectModal?: () => void;
+}
+
+export default function AboutUsSection({ onOpenProjectModal }: AboutUsSectionProps = {}) {
   const [activeTab, setActiveTab] = useState<"manifiesto" | "principios">("manifiesto");
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -107,7 +111,7 @@ export default function AboutUsSection() {
             }`}
           >
             {activeTab === "manifiesto" ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
                 {/* Left Card: El Manifiesto (Exact design from Foto 3) */}
                 <div className="lg:col-span-5 xl:col-span-5 bg-gradient-to-b from-[#15081e]/85 via-[#0c0816]/90 to-[#070b16]/90 border border-pink-500/30 rounded-[32px] p-7 sm:p-9 lg:p-10 shadow-[0_0_60px_rgba(255,0,122,0.18)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-2xl">
                   {/* Ambient corner light */}
@@ -208,8 +212,9 @@ export default function AboutUsSection() {
                   </div>
                 </div>
 
-                {/* Right Card: Full 16:9 Looping Video - 100% Complete & Uncropped */}
-                <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center">
+                {/* Right Column: Full 16:9 Looping Video + CTA Banner */}
+                <div className="lg:col-span-7 xl:col-span-7 flex flex-col space-y-4 sm:space-y-5">
+                  {/* Video Container (16:9 Widescreen Complete) */}
                   <div className="relative w-full aspect-video rounded-[32px] overflow-hidden border border-cyan-500/30 bg-black/40 backdrop-blur-xl shadow-[0_0_60px_rgba(0,240,255,0.2)]">
                     {/* Looping Infinity Founders Video */}
                     <video
@@ -225,6 +230,48 @@ export default function AboutUsSection() {
                     {/* Subtle ambient neon glow behind corners */}
                     <div className="absolute top-0 right-0 w-36 h-36 bg-cyan-500/10 blur-[60px] pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-36 h-36 bg-pink-500/10 blur-[60px] pointer-events-none" />
+                  </div>
+
+                  {/* High-Converting CTA Banner: "¿Qué idea te gustaría desarrollar?" */}
+                  <div className="relative rounded-[28px] bg-gradient-to-r from-[#FF007A]/10 via-purple-950/20 to-[#00F0FF]/10 border border-white/15 p-5 sm:p-6 backdrop-blur-xl shadow-[0_0_40px_rgba(0,240,255,0.1)] flex flex-col sm:flex-row items-center justify-between gap-4 group hover:border-white/30 transition-all duration-300 text-left">
+                    <div className="space-y-1.5 text-center sm:text-left">
+                      <div className="flex items-center justify-center sm:justify-start gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
+                        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#00F0FF]">
+                          MATERIALIZA TU VISIÓN
+                        </span>
+                      </div>
+                      <h4 className="text-base sm:text-lg font-black text-white tracking-tight">
+                        ¿Qué idea te gustaría desarrollar?
+                      </h4>
+                      <p className="text-xs text-gray-300 font-light leading-relaxed">
+                        Transformamos tu concepto en software, inteligencia artificial o app funcional.
+                      </p>
+                    </div>
+
+                    {onOpenProjectModal ? (
+                      <button
+                        onClick={onOpenProjectModal}
+                        className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF007A] via-[#A855F7] to-[#00F0FF] hover:from-[#FF1493] hover:to-[#00D1FF] text-white font-black text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:shadow-[0_0_35px_rgba(255,0,122,0.6)] transition-all duration-300 hover:scale-105 flex items-center gap-2.5 flex-shrink-0 cursor-pointer"
+                      >
+                        <span>INICIAR PROYECTO</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </button>
+                    ) : (
+                      <a
+                        href="/crear-proyecto"
+                        className="px-6 py-3.5 rounded-full bg-gradient-to-r from-[#FF007A] via-[#A855F7] to-[#00F0FF] hover:from-[#FF1493] hover:to-[#00D1FF] text-white font-black text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:shadow-[0_0_35px_rgba(255,0,122,0.6)] transition-all duration-300 hover:scale-105 flex items-center gap-2.5 flex-shrink-0 cursor-pointer"
+                      >
+                        <span>INICIAR PROYECTO</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

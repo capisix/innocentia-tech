@@ -78,7 +78,7 @@ function HomeContent() {
       <PhilosophySection />
 
       {/* 04 Quiénes Somos / Manifiesto */}
-      <AboutUsSection />
+      <AboutUsSection onOpenProjectModal={openProjectModal} />
 
       {/* 05 Capacidades & Lo que somos capaces de construir */}
       <ServicesNeuralNetwork onOpenProjectModal={openProjectModal} />
