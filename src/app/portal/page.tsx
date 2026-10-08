@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import AmbientLivingCanvas from "../../components/common/AmbientLivingCanvas";
@@ -797,12 +797,11 @@ function PortalMainContent() {
               // Check if project is for Sra. Corina / Hotel Venezuela
               const clientStr = String(proj.client || proj.name || "").toLowerCase();
               const isCorina = clientStr.includes("corina") || clientStr.includes("hotel venezuela");
-              const isApprovalDraft = proj.status === "En Aprobación" || proj.status === "Nueva Solicitud";
 
-              // Unique key to prevent duplicate quote cards for the same prospect
-              const dedupKey = isApprovalDraft && isCorina
-                ? "client_corina_draft"
-                : isApprovalDraft && proj.client
+              // Unique key: ANY project belonging to Corina shares the same key to guarantee 1 single card
+              const dedupKey = isCorina
+                ? "client_corina"
+                : proj.client
                   ? `client_${String(proj.client).toLowerCase().replace(/[^a-z0-9]/g, "")}`
                   : `id_${proj.id}`;
 
@@ -813,11 +812,11 @@ function PortalMainContent() {
               seenKeys.add(dedupKey);
 
               // Ensure Jessica Torre is properly attributed for Corina's project
-              if (isCorina && (!proj.sellerName || proj.sellerName.toLowerCase().includes("administrador") || proj.sellerName.toLowerCase().includes("innocentia") || proj.sellerName.toLowerCase().includes("sin asesor"))) {
+              if (isCorina) {
                 proj = {
                   ...proj,
-                  sellerName: "Jessica Torre",
-                  sellerId: "usr_sales_jessica",
+                  sellerName: "Jessica Torre (VEN-JESS-101)",
+                  sellerId: "usr_sales_jess",
                   currentSprint: `Cotización ${proj.id} generada por Jessica Torre • En espera de aprobación comercial`,
                 };
               }
@@ -829,11 +828,23 @@ function PortalMainContent() {
             localStorage.setItem("innocentia_portal_projects", JSON.stringify(deduplicated));
 
             setProjects((prev) => {
-              const combined = [...deduplicated];
-              prev.forEach((def) => {
-                if (!combined.some((p) => p.id === def.id)) {
-                  combined.push(def);
+              const combined: AssignedProject[] = [];
+              const seenCombined = new Set<string>();
+              [...deduplicated, ...prev].forEach((item) => {
+                if (!item || !item.id) return;
+                const isItemCorina = String(item.client || item.name || "").toLowerCase().includes("corina");
+                const k = isItemCorina ? "client_corina" : `id_${item.id}`;
+                if (seenCombined.has(k)) return;
+                seenCombined.add(k);
+                if (isItemCorina) {
+                  item = {
+                    ...item,
+                    sellerName: "Jessica Torre (VEN-JESS-101)",
+                    sellerId: "usr_sales_jess",
+                    currentSprint: `Cotización ${item.id} generada por Jessica Torre • En espera de aprobación comercial`,
+                  };
                 }
+                combined.push(item);
               });
               return combined;
             });
@@ -845,6 +856,49 @@ function PortalMainContent() {
       }
     }
   }, []);
+
+  // Memoized deduplicated projects to guarantee zero duplicates are ever rendered anywhere
+  const cleanProjects = useMemo(() => {
+    const deduped: AssignedProject[] = [];
+    const seenKeys = new Set<string>();
+
+    (projects || []).forEach((proj) => {
+      if (!proj || !proj.id) return;
+      const clientStr = String(proj.client || proj.name || "").toLowerCase();
+      const isCorina = clientStr.includes("corina") || clientStr.includes("hotel venezuela");
+
+      const key = isCorina ? "client_corina" : `id_${proj.id}`;
+      if (seenKeys.has(key)) return;
+      seenKeys.add(key);
+
+      if (isCorina) {
+        proj = {
+          ...proj,
+          sellerName: "Jessica Torre (VEN-JESS-101)",
+          sellerId: "usr_sales_jess",
+          currentSprint: String(proj.currentSprint || "").toLowerCase().includes("administrador")
+            ? `Cotización ${proj.id} generada por Jessica Torre • En espera de aprobación comercial`
+            : proj.currentSprint,
+        };
+      }
+
+      deduped.push(proj);
+    });
+
+    return deduped;
+  }, [projects]);
+
+  // Synchronize state and storage whenever duplicate or unformatted project is found
+  useEffect(() => {
+    if (typeof window !== "undefined" && cleanProjects.length > 0) {
+      if (projects.length !== cleanProjects.length) {
+        setProjects(cleanProjects);
+      }
+      try {
+        localStorage.setItem("innocentia_portal_projects", JSON.stringify(cleanProjects));
+      } catch (e) {}
+    }
+  }, [cleanProjects, projects.length]);
 
   const handleCreateProjectFromQuote = (newProject: AssignedProject) => {
     setProjects((prev) => {
@@ -1747,7 +1801,7 @@ function PortalMainContent() {
     : 100000;
 
   // Advisor Dynamic Computations (Leads, Appointments, Projects & Commissions)
-  const advisorProjects = (projects || []).filter((proj) => {
+  const advisorProjects = (cleanProjects || []).filter((proj) => {
     if (safeActiveUser.role !== "asesor") return true;
     if (safeActiveUser.id === "usr_sales_jess") {
       return !proj.sellerId || proj.sellerId === "usr_sales_jess" || proj.sellerName?.toLowerCase().includes("jess");
@@ -2205,7 +2259,7 @@ function PortalMainContent() {
               <div className="px-4 py-2.5 rounded-2xl bg-black/50 border border-white/10 backdrop-blur-md">
                 <span className="text-[10px] font-mono text-gray-400 block uppercase">Proyectos Activos</span>
                 <span className="text-lg font-black text-white">
-                  {activeRole === "asesor" ? advisorActiveProjectsCount : projects.length}
+                  {activeRole === "asesor" ? advisorActiveProjectsCount : cleanProjects.length}
                 </span>
               </div>
 
@@ -2266,7 +2320,7 @@ function PortalMainContent() {
                 }`}
               >
                 <Briefcase className="w-4 h-4" />
-                <span>Todos los Proyectos ({projects.length})</span>
+                <span>Todos los Proyectos ({cleanProjects.length})</span>
               </button>
 
               <button
@@ -2361,7 +2415,7 @@ function PortalMainContent() {
             {/* CEO Tab 1: Proyectos Globales */}
             {ceoTab === "proyectos" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.map((proj) => (
+                {cleanProjects.map((proj) => (
                   <div
                     key={proj.id}
                     className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 hover:border-[#00D1FF]/50 transition-all shadow-xl space-y-4"
@@ -2515,7 +2569,7 @@ function PortalMainContent() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/10">
-                      {projects.map((proj) => (
+                      {cleanProjects.map((proj) => (
                         <tr key={proj.id} className="hover:bg-white/[0.02] transition-colors">
                           <td className="py-3.5 px-3">
                             <span className="font-bold text-white block">{proj.name}</span>
@@ -6029,12 +6083,12 @@ function PortalMainContent() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 relative z-10 pt-2 border-t border-white/10 text-xs font-mono">
                     <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
                       <span className="text-gray-400 block text-[10px] uppercase">Proyectos Registrados</span>
-                      <strong className="text-lg font-black text-white">{projects.length}</strong>
+                      <strong className="text-lg font-black text-white">{cleanProjects.length}</strong>
                     </div>
                     <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
                       <span className="text-gray-400 block text-[10px] uppercase">Presupuesto en Gestión</span>
                       <strong className="text-lg font-black text-emerald-400">
-                        ${projects.reduce((acc, p) => acc + (p.budget || 0), 0).toLocaleString()} MXN
+                        ${cleanProjects.reduce((acc, p) => acc + (p.budget || 0), 0).toLocaleString()} MXN
                       </strong>
                     </div>
                     <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
@@ -6050,9 +6104,9 @@ function PortalMainContent() {
                   {/* Filter Pills */}
                   <div className="flex items-center gap-2 flex-wrap relative z-10 pt-1">
                     {[
-                      { id: "todos", label: `Todos los Proyectos (${projects.length})` },
+                      { id: "todos", label: `Todos los Proyectos (${cleanProjects.length})` },
                       { id: "daniel", label: `🌮 Mis Proyectos (Daniel Torre)` },
-                      { id: "aprobacion", label: `🟣 En Aprobación (${projects.filter(p => p.status === "En Aprobación").length})` },
+                      { id: "aprobacion", label: `🟣 En Aprobación (${cleanProjects.filter(p => p.status === "En Aprobación").length})` },
                       { id: "produccion", label: `⚡ En Producción` },
                       { id: "desarrollo", label: `🛠️ En Desarrollo / Revisión` },
                     ].map((f) => (
@@ -6201,7 +6255,7 @@ function PortalMainContent() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {projects
+                    {cleanProjects
                       .filter((proj) => {
                         if (partnerProjectFilter === "daniel") {
                           return (
@@ -6693,7 +6747,7 @@ function PortalMainContent() {
 
             {devTab === "mis_proyectos" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {projects.filter((p) => p.devLead.includes("Rodrigo")).map((proj) => (
+                {cleanProjects.filter((p) => p.devLead.includes("Rodrigo")).map((proj) => (
                   <div key={proj.id} className="p-6 rounded-[28px] bg-[#07070E] border border-white/15 space-y-4">
                     <span className="text-[10px] font-mono text-[#00D1FF] font-bold">{proj.id}</span>
                     <h3 className="text-lg font-black text-white">{proj.name}</h3>
