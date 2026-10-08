@@ -147,71 +147,19 @@ export default function AboutUsSection() {
                     </div>
                   </div>
 
-                  {/* Dual Founder Footer Bar: Sofía + Infinity + Iván */}
-                  <div className="pt-5 border-t border-white/10 relative z-10 flex items-center justify-between gap-2 sm:gap-4">
-                    {/* Sofía */}
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="w-11 sm:w-12 h-11 sm:h-12 rounded-full border-2 border-[#FF007A] bg-[#FF007A]/10 flex items-center justify-center text-[#FF007A] shadow-[0_0_20px_rgba(255,0,122,0.6),inset_0_0_10px_rgba(255,0,122,0.2)] flex-shrink-0">
-                        {/* Calligraphy brush icon */}
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                          <path d="m18 11 3-3-4-4-3 3 4 4Z" />
-                          <path d="m14 7-8.5 8.5a2.12 2.12 0 1 0 3 3L17 10" />
-                          <path d="m3 21 3-1" />
-                        </svg>
-                      </div>
-                      <div>
-                        <span className="text-xs sm:text-sm font-black text-[#FF007A] tracking-wider uppercase block font-mono">
-                          SOFÍA
-                        </span>
-                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-300 tracking-[0.2em] uppercase block font-mono">
-                          IMAGINA
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Connecting line + Infinity + Connecting line */}
-                    <div className="flex-1 flex items-center gap-2 max-w-[120px] sm:max-w-[180px] lg:max-w-[200px]">
-                      <div className="h-[2px] flex-1 bg-gradient-to-r from-[#FF007A] to-[#A855F7]" />
-                      
-                      <div className="relative flex-shrink-0 flex items-center justify-center">
-                        <svg viewBox="0 0 64 32" className="w-9 sm:w-11 h-4.5 sm:h-5.5 drop-shadow-[0_0_15px_rgba(168,85,247,0.85)]">
-                          <path
-                            d="M18,6 C10,6 4,11 4,16 C4,21 10,26 18,26 C26,26 31,19 32,16 C33,19 38,26 46,26 C54,26 60,21 60,16 C60,11 54,6 46,6 C38,6 33,13 32,16 C31,13 26,6 18,6 Z"
-                            fill="none"
-                            stroke="url(#infinityNeonGrad)"
-                            strokeWidth="3.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-
-                      <div className="h-[2px] flex-1 bg-gradient-to-r from-[#A855F7] to-[#00F0FF]" />
-                    </div>
-
-                    {/* Iván */}
-                    <div className="flex items-center gap-2.5 sm:gap-3">
-                      <div className="w-11 sm:w-12 h-11 sm:h-12 rounded-full border-2 border-[#00F0FF] bg-[#00F0FF]/10 flex items-center justify-center text-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.6),inset_0_0_10px_rgba(0,240,255,0.2)] flex-shrink-0">
-                        {/* Code icon */}
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                          <polyline points="16 18 22 12 16 6" />
-                          <polyline points="8 6 2 12 8 18" />
-                        </svg>
-                      </div>
-                      <div>
-                        <span className="text-xs sm:text-sm font-black text-[#00F0FF] tracking-wider uppercase block font-mono">
-                          IVÁN
-                        </span>
-                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-300 tracking-[0.2em] uppercase block font-mono">
-                          CONSTRUYE
-                        </span>
-                      </div>
-                    </div>
+                  {/* Dual Founder Footer Bar: Sofía + Infinity + Iván (Exact design from user) */}
+                  <div className="pt-6 border-t border-white/10 relative z-10 flex items-center justify-center">
+                    <img
+                      src="/images/principios/manifiesto_footer.png"
+                      alt="Sofía Imagina — Iván Construye"
+                      className="w-full max-w-[435px] h-auto object-contain select-none mix-blend-screen"
+                    />
+                    <span className="sr-only">Sofía Imagina, Iván Construye - Dos hemisferios, una intención</span>
                   </div>
                 </div>
 
                 {/* Right Card: Looping Video (Exact video from Foto 4) */}
-                <div className="lg:col-span-6 xl:col-span-6 relative bg-black/90 border border-cyan-500/25 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col justify-between group min-h-[440px] lg:min-h-[500px]">
+                <div className="lg:col-span-6 xl:col-span-6 relative bg-black border border-cyan-500/25 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col justify-end group min-h-[440px] lg:min-h-[500px]">
                   {/* Looping Infinity Founders Video */}
                   <video
                     src="/videos/Energy_flowing_in_infinity_symbol_20261008100316.mp4"
@@ -220,18 +168,18 @@ export default function AboutUsSection() {
                     loop
                     muted
                     playsInline
-                    className="w-full h-full object-cover absolute inset-0"
+                    className="w-full h-full object-cover object-top absolute inset-0"
                   />
 
-                  {/* Top subtle gradient */}
+                  {/* Top subtle vignette */}
                   <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
 
-                  {/* Bottom Quote Overlay */}
-                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 bg-gradient-to-t from-black via-black/85 to-transparent flex flex-col items-center text-center space-y-1.5 z-10">
-                    <p className="text-xs sm:text-sm lg:text-[15px] font-light text-gray-200 italic max-w-lg leading-relaxed">
+                  {/* Bottom Gradient Mask & Clean Quote: Completely masks the video's cropped bottom text and renders the clean, responsive typography */}
+                  <div className="relative z-10 w-full pt-16 pb-7 px-6 sm:px-8 bg-gradient-to-t from-black from-55% via-black/95 via-80% to-transparent flex flex-col items-center text-center space-y-1.5">
+                    <p className="text-xs sm:text-sm lg:text-[15px] font-light text-gray-200 italic max-w-lg leading-relaxed drop-shadow-sm">
                       “La imaginación marca el rumbo y la ingeniería construye el camino.”
                     </p>
-                    <p className="text-xs sm:text-sm text-gray-300 font-mono">
+                    <p className="text-xs sm:text-sm text-gray-300 font-mono tracking-wide">
                       Dos hemisferios,{" "}
                       <span className="bg-gradient-to-r from-[#FF007A] to-[#00F0FF] bg-clip-text text-transparent font-bold not-italic">
                         una intención.
@@ -287,13 +235,13 @@ export default function AboutUsSection() {
                   {principios.map((p) => (
                     <div
                       key={p.num}
-                      className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group cursor-pointer"
+                      className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/15 hover:border-white/40 transition-all duration-300 hover:scale-[1.025] hover:-translate-y-1 shadow-2xl group cursor-pointer"
                       style={{
-                        boxShadow: `0 0 25px ${p.color}18`,
+                        boxShadow: `0 0 30px ${p.color}22`,
                       }}
                     >
                       <img
-                        src={`/images/principios/card_0${p.num}_full.jpg`}
+                        src={`/images/principios/card_0${p.num}_hd.png`}
                         alt={`${p.title} - ${p.desc}`}
                         className="w-full h-auto object-cover rounded-2xl sm:rounded-3xl transition-transform duration-500 group-hover:scale-[1.02]"
                       />
