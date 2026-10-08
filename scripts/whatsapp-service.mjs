@@ -50,6 +50,8 @@ if (process.env.WA_SESSION_DATA && !fs.existsSync(credsPath)) {
 
 // Conversation memory per phone number / JID
 const sessionHistories = new Map();
+let isWhatsAppConnected = false;
+let lastConnectedAt = null;
 
 const systemInstruction = `Eres el asistente conversacional humano de WhatsApp de Innocentia Tech (estudio boutique de tecnología, branding y desarrollo de software a medida).
 Representas a dos líderes reales:
@@ -306,6 +308,7 @@ async function startWhatsAppBot() {
     }
 
     if (connection === "close") {
+      isWhatsAppConnected = false;
       const statusCode = lastDisconnect?.error?.output?.statusCode;
       const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
       console.log(`❌ Conexión cerrada (Código ${statusCode}). Reintentando conexión: ${shouldReconnect}`);
@@ -316,6 +319,9 @@ async function startWhatsAppBot() {
         console.log("Sesión cerrada por el usuario. Elimina la carpeta .whatsapp_auth para volver a escanear.");
       }
     } else if (connection === "open") {
+      isWhatsAppConnected = true;
+      latestQrDataUrl = "";
+      lastConnectedAt = new Date().toISOString();
       console.log("\n==========================================================");
       console.log("✅ ¡WHATSAPP CONECTADO CON ÉXITO A INNOCENTIA TECH!");
       console.log("   El bot de Sofía e Iván está listo y atendiendo mensajes.");
@@ -488,7 +494,15 @@ const server = http.createServer((req, res) => {
   }
 
   res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ status: "online", bot: "Innocentia Tech Dual Core", timestamp: new Date().toISOString() }));
+  res.end(
+    JSON.stringify({
+      status: "online",
+      bot: "Innocentia Tech Dual Core",
+      whatsapp_connected: isWhatsAppConnected,
+      last_connected_at: lastConnectedAt,
+      timestamp: new Date().toISOString(),
+    })
+  );
 });
 
 server.listen(PORT, () => {
