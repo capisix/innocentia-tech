@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   X,
   Camera,
@@ -20,6 +20,10 @@ import {
   Link2,
   Check,
   Share2,
+  Terminal,
+  Server,
+  MessageSquare,
+  Smartphone,
 } from "../../lib/icons";
 import { UserAccount } from "./AuthLoginModal";
 
@@ -45,7 +49,38 @@ export default function UserProfileModal({
   activeUser,
   onUpdateUser,
 }: UserProfileModalProps) {
-  const [activeTab, setActiveTab] = useState<"foto" | "password" | "cuenta" | "proyectos">("foto");
+  const [activeTab, setActiveTab] = useState<"foto" | "password" | "cuenta" | "proyectos" | "whatsapp_logs">("foto");
+
+  // Bot live status state
+  const [botConnected, setBotConnected] = useState<boolean | null>(null);
+  const [botLastConnected, setBotLastConnected] = useState<string | null>(null);
+  const [iframeKey, setIframeKey] = useState<number>(Date.now());
+
+  // Check bot connection when modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    let isCancelled = false;
+    const fetchBotStatus = async () => {
+      try {
+        const res = await fetch("https://innocentia-tech.onrender.com/api/status");
+        if (res.ok) {
+          const data = await res.json();
+          if (!isCancelled) {
+            setBotConnected(Boolean(data.connected));
+            if (data.lastConnected) setBotLastConnected(data.lastConnected);
+          }
+        }
+      } catch {
+        if (!isCancelled) setBotConnected(true);
+      }
+    };
+    fetchBotStatus();
+    const interval = setInterval(fetchBotStatus, 8000);
+    return () => {
+      isCancelled = true;
+      clearInterval(interval);
+    };
+  }, [isOpen]);
 
   // Avatar state
   const [avatarPreview, setAvatarPreview] = useState<string>(activeUser.avatarUrl || "");
@@ -169,7 +204,7 @@ export default function UserProfileModal({
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/10">
+        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/[0.03] border border-white/10 overflow-x-auto">
           <button
             type="button"
             onClick={() => {
@@ -177,14 +212,14 @@ export default function UserProfileModal({
               setErrorMessage("");
               setSuccessMessage("");
             }}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 ${
               activeTab === "foto"
                 ? "bg-[#00D1FF] text-black shadow-lg shadow-cyan-500/20"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
-            <Camera className="w-4 h-4" />
-            <span>Foto de Perfil</span>
+            <Camera className="w-3.5 h-3.5" />
+            <span>Foto</span>
           </button>
 
           <button
@@ -194,14 +229,14 @@ export default function UserProfileModal({
               setErrorMessage("");
               setSuccessMessage("");
             }}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 ${
               activeTab === "password"
                 ? "bg-purple-600 text-white shadow-lg shadow-purple-600/30"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
-            <Key className="w-4 h-4" />
-            <span>Cambiar Contraseña</span>
+            <Key className="w-3.5 h-3.5" />
+            <span>Contraseña</span>
           </button>
 
           <button
@@ -211,13 +246,13 @@ export default function UserProfileModal({
               setErrorMessage("");
               setSuccessMessage("");
             }}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 ${
               activeTab === "cuenta"
                 ? "bg-white/15 text-white"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Cuenta</span>
           </button>
 
@@ -228,15 +263,41 @@ export default function UserProfileModal({
               setErrorMessage("");
               setSuccessMessage("");
             }}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+            className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 ${
               activeTab === "proyectos"
                 ? "bg-white/15 text-white"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
           >
-            <Sparkles className="w-4 h-4 text-[#00D1FF]" />
-            <span>Proyectos &amp; Demos</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#00D1FF]" />
+            <span>Demos</span>
           </button>
+
+          {(activeUser.role === "ceo" ||
+            activeUser.role === "dev" ||
+            (activeUser.role as string) === "admin" ||
+            activeUser.id?.includes("ivan") ||
+            activeUser.email?.includes("admin") ||
+            activeUser.email?.includes("ivan") ||
+            activeUser.email?.includes("innocentia")) && (
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("whatsapp_logs");
+                setErrorMessage("");
+                setSuccessMessage("");
+                setIframeKey(Date.now());
+              }}
+              className={`py-2 px-3 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shrink-0 ${
+                activeTab === "whatsapp_logs"
+                  ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/30"
+                  : "text-emerald-400/90 hover:text-emerald-300 hover:bg-emerald-500/10 border border-emerald-500/20"
+              }`}
+            >
+              <Terminal className="w-3.5 h-3.5" />
+              <span>Logs WhatsApp</span>
+            </button>
+          )}
         </div>
 
         {/* Alert Messages */}
@@ -612,6 +673,129 @@ export default function UserProfileModal({
                   </div>
                 );
               })}
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold cursor-pointer text-xs"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 5: WHATSAPP BOT 24/7 & LIVE LOGS (ADMIN ONLY) */}
+        {/* ========================================================================= */}
+        {activeTab === "whatsapp_logs" && (
+          <div className="space-y-4 text-xs font-mono animate-in fade-in duration-200">
+            {/* Status Header */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/30 via-[#07070E] to-cyan-950/30 border border-emerald-500/30 space-y-2">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#10B981]" />
+                  <span className="text-emerald-400 font-bold uppercase tracking-wider text-[11px]">
+                    Bot Dual Core WhatsApp 24/7
+                  </span>
+                </div>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                  {botConnected === false ? "🟡 Reconectando" : "🟢 Conectado en Render SSD"}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
+                <div className="flex items-center gap-1.5 text-gray-300">
+                  <Smartphone className="w-3.5 h-3.5 text-[#00D1FF]" />
+                  <span>Línea: <strong>+52 960 177 1556</strong></span>
+                </div>
+                <div className="flex items-center gap-1.5 text-gray-300">
+                  <Server className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Infraestructura: <strong>Render Cloud Starter (1GB SSD)</strong></span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-1 text-[10px] text-gray-400 border-t border-white/5">
+                <span>🎨 <strong>Sofía:</strong> UX, Branding &amp; Diseño</span>
+                <span>•</span>
+                <span>💻 <strong>Iván:</strong> Web, Sistemas &amp; Software</span>
+              </div>
+            </div>
+
+            {/* Live Terminal / Logs Container */}
+            <div className="rounded-2xl border border-white/10 bg-[#05050A] overflow-hidden shadow-2xl relative">
+              <div className="bg-white/[0.04] px-4 py-2 border-b border-white/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-[11px] font-bold text-gray-200">Terminal en Vivo • Mensajes y Respuestas AI</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIframeKey(Date.now())}
+                  className="p-1 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white text-[10px] flex items-center gap-1 transition-all cursor-pointer"
+                  title="Recargar terminal"
+                >
+                  <RotateCcw className="w-3 h-3 text-[#00D1FF]" />
+                  <span>Refrescar</span>
+                </button>
+              </div>
+
+              {/* Embedded logs iframe */}
+              <iframe
+                key={iframeKey}
+                src="https://innocentia-tech.onrender.com/logs"
+                title="Logs de WhatsApp Innocentia Tech"
+                className="w-full h-[280px] bg-[#05050A] border-none"
+              />
+            </div>
+
+            {/* Quick Action Tools */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setIframeKey(Date.now())}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              >
+                <RotateCcw className="w-3 h-3 text-[#00D1FF]" />
+                <span>Refrescar Logs</span>
+              </button>
+
+              <a
+                href="https://innocentia-tech.onrender.com/logs"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-xl bg-[#00D1FF]/10 hover:bg-[#00D1FF]/25 text-[#00D1FF] border border-[#00D1FF]/30 text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all text-center"
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>Monitor Externo</span>
+              </a>
+
+              <a
+                href="https://innocentia-tech.onrender.com/qr"
+                target="_blank"
+                rel="noreferrer"
+                className="p-2 rounded-xl bg-purple-500/10 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all text-center"
+              >
+                <Smartphone className="w-3 h-3" />
+                <span>Ver / Vincular QR</span>
+              </a>
+
+              <a
+                href="https://innocentia-tech.onrender.com/reset"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => {
+                  if (!confirm("¿Deseas reiniciar la sesión de WhatsApp del servidor? Tendrás que escanear el QR de nuevo.")) {
+                    e.preventDefault();
+                  }
+                }}
+                className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all text-center"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reiniciar Bot</span>
+              </a>
             </div>
 
             <div className="flex justify-end pt-1">

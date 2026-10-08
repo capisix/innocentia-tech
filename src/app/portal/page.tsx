@@ -1516,6 +1516,18 @@ function PortalMainContent() {
     },
     {
       id: "SRV-06",
+      name: "Render Cloud 24/7 • WhatsApp Dual Bot (1GB SSD)",
+      type: "Servidor Cloud",
+      provider: "Render Cloud (Starter SSD)",
+      costMonthly: 140,
+      renewalDate: "08 de Noviembre de 2026",
+      daysRemaining: 31,
+      status: "optimo",
+      autoDebit: true,
+      paymentAccount: "Santander Corporativa (Innocentia Tech)",
+    },
+    {
+      id: "SRV-07",
       name: "Google Workspace (4 Correos - ID: 4010-7271-4245-9196)",
       type: "Hosting",
       provider: "Google LLC",
