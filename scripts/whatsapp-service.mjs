@@ -259,11 +259,7 @@ async function startWhatsAppBot() {
     const { connection, lastDisconnect, qr } = update;
 
     if (qr) {
-      console.log("\n==========================================================");
-      console.log("📲 ESCANEA ESTE CÓDIGO QR EN TU CELULAR:");
-      console.log("   (WhatsApp Business ➔ Dispositivos vinculados ➔ Vincular)");
-      console.log("==========================================================\n");
-
+      addLog("📲 Nuevo código QR recibido de WhatsApp. Actualizando vista...");
       qrcodeTerminal.generate(qr, { small: true });
 
       // Also generate a visual HTML file and PNG image for easy scanning
@@ -277,45 +273,8 @@ async function startWhatsAppBot() {
 
         const qrDataUrl = await QRCode.toDataURL(qr, { width: 400, margin: 2 });
         latestQrDataUrl = qrDataUrl;
-        const htmlContent = `<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Vincular WhatsApp - Innocentia Tech</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { background: #07070D; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
-    .card { background: #11111E; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; max-width: 450px; box-shadow: 0 0 50px rgba(0, 209, 255, 0.2); }
-    h1 { font-size: 20px; margin-bottom: 8px; color: #00D1FF; }
-    p { color: #9CA3AF; font-size: 14px; line-height: 1.5; }
-    .qr-box { background: #fff; border-radius: 16px; padding: 15px; display: inline-block; margin: 20px 0; }
-    .qr-box img { display: block; width: 100%; max-width: 300px; height: auto; }
-    .steps { text-align: left; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 15px 20px; font-size: 13px; color: #D1D5DB; }
-    .steps ol { margin: 0; padding-left: 20px; }
-    .steps li { margin-bottom: 6px; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Vincular WhatsApp Innocentia Tech</h1>
-    <p>Escanea este código QR con la app de WhatsApp en tu teléfono:</p>
-    <div class="qr-box">
-      <img src="${qrDataUrl}" alt="Código QR WhatsApp" />
-    </div>
-    <div class="steps">
-      <ol>
-        <li>Abre <b>WhatsApp Business</b> en tu celular.</li>
-        <li>Toca <b>Ajustes</b> (o los 3 puntos) ➔ <b>Dispositivos vinculados</b>.</li>
-        <li>Toca <b>Vincular un dispositivo</b> y apunta la cámara a este código QR.</li>
-      </ol>
-    </div>
-  </div>
-</body>
-</html>`;
-        fs.writeFileSync(QR_HTML_PATH, htmlContent, "utf8");
-        console.log(`🌐 Vista visual disponible en: ${QR_HTML_PATH}`);
       } catch (err) {
-        console.error("Error generando QR HTML/PNG:", err);
+        addLog(`❌ Error generando DataURL de QR: ${err.message}`);
       }
     }
 
@@ -323,28 +282,27 @@ async function startWhatsAppBot() {
       isWhatsAppConnected = false;
       const statusCode = lastDisconnect?.error?.output?.statusCode;
       const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
-      console.log(`❌ Conexión cerrada (Código ${statusCode}). Reintentando conexión: ${shouldReconnect}`);
+      addLog(`❌ Conexión cerrada (Código ${statusCode}). Reintentando: ${shouldReconnect}`);
 
       if (shouldReconnect) {
-        setTimeout(startWhatsAppBot, 3000);
+        setTimeout(startWhatsAppBot, 2500);
       } else {
-        console.log("Sesión cerrada por el usuario. Elimina la carpeta .whatsapp_auth para volver a escanear.");
+        addLog("⚠️ Sesión cerrada/desvinculada. Limpiando credenciales para nuevo QR...");
+        try {
+          if (fs.existsSync(AUTH_DIR)) {
+            const files = fs.readdirSync(AUTH_DIR);
+            for (const file of files) {
+              try { fs.rmSync(path.join(AUTH_DIR, file), { recursive: true, force: true }); } catch {}
+            }
+          }
+        } catch {}
+        setTimeout(startWhatsAppBot, 2000);
       }
     } else if (connection === "open") {
       isWhatsAppConnected = true;
       latestQrDataUrl = "";
       lastConnectedAt = new Date().toISOString();
-      console.log("\n==========================================================");
-      console.log("✅ ¡WHATSAPP CONECTADO CON ÉXITO A INNOCENTIA TECH!");
-      console.log("   El bot de Sofía e Iván está listo y atendiendo mensajes.");
-      console.log("==========================================================\n");
-
-      // Clean QR html file once connected
-      if (fs.existsSync(QR_HTML_PATH)) {
-        try {
-          fs.unlinkSync(QR_HTML_PATH);
-        } catch {}
-      }
+      addLog("🎉 ¡WHATSAPP CONECTADO CON ÉXITO! Bot de Sofía e Iván activo 24/7.");
     }
   });
 
@@ -541,35 +499,109 @@ const server = http.createServer((req, res) => {
 
   if (req.url === "/qr") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-    if (latestQrDataUrl) {
+    if (isWhatsAppConnected) {
       res.end(`<!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="5">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="10">
+  <title>WhatsApp Conectado - Innocentia Tech</title>
+  <style>
+    body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
+    .card { background: #11111E; border: 1px solid rgba(0, 255, 128, 0.3); border-radius: 24px; padding: 35px 25px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 255, 128, 0.15); }
+    .icon { font-size: 48px; margin-bottom: 15px; }
+    h1 { font-size: 22px; color: #00FF80; margin: 0 0 10px; }
+    p { color: #9CA3AF; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+    .btn-group { display: flex; flex-direction: column; gap: 10px; }
+    .btn { display: inline-block; padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s ease; }
+    .btn-danger { background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .btn-danger:hover { background: rgba(239, 68, 68, 0.3); color: #fff; }
+    .btn-secondary { background: rgba(0, 209, 255, 0.1); color: #00D1FF; border: 1px solid rgba(0, 209, 255, 0.3); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✅</div>
+    <h1>WhatsApp Conectado</h1>
+    <p>El bot de Sofía e Iván está atendiendo clientes 24/7 de forma automática y permanente.</p>
+    <div class="btn-group">
+      <a href="/logs" class="btn btn-secondary">📊 Ver monitor de mensajes en vivo</a>
+      <a href="/reset" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas desvincular y generar un nuevo código QR?');">🔄 Desvincular / Vincular otro número</a>
+    </div>
+  </div>
+</body>
+</html>`);
+    } else if (latestQrDataUrl) {
+      res.end(`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="4">
   <title>Vincular WhatsApp - Innocentia Tech</title>
   <style>
     body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
-    .card { background: #11111E; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; max-width: 420px; box-shadow: 0 0 40px rgba(0, 209, 255, 0.2); }
-    h1 { font-size: 20px; color: #00D1FF; margin-bottom: 12px; }
-    p { color: #9CA3AF; font-size: 14px; margin-bottom: 20px; }
-    img { background: #fff; padding: 12px; border-radius: 14px; width: 280px; height: 280px; }
+    .card { background: #11111E; border: 1px solid rgba(0, 209, 255, 0.3); border-radius: 24px; padding: 30px 20px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 209, 255, 0.2); }
+    h1 { font-size: 21px; color: #00D1FF; margin: 0 0 8px; }
+    p { color: #9CA3AF; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+    .qr-container { background: #fff; padding: 12px; border-radius: 16px; display: inline-block; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
+    .qr-container img { display: block; width: 260px; height: 260px; }
+    .steps { text-align: left; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 12px 18px; margin: 18px 0; font-size: 13px; color: #D1D5DB; }
+    .steps ol { margin: 0; padding-left: 18px; }
+    .steps li { margin-bottom: 5px; }
+    .btn-reset { display: inline-block; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #FFB400; background: rgba(255, 180, 0, 0.1); border: 1px solid rgba(255, 180, 0, 0.3); text-decoration: none; margin-top: 5px; }
+    .btn-reset:hover { background: rgba(255, 180, 0, 0.25); color: #fff; }
+    .pulse { animation: pulse 2s infinite; font-size: 12px; color: #00D1FF; margin-top: 10px; }
+    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>🚀 Vincular WhatsApp Innocentia Tech</h1>
-    <p>Abre WhatsApp Business ➔ Dispositivos vinculados ➔ Vincular dispositivo:</p>
-    <img src="${latestQrDataUrl}" alt="QR WhatsApp" />
+    <p>Escanea este código con tu cuenta oficial de WhatsApp Business:</p>
+    <div class="qr-container">
+      <img src="${latestQrDataUrl}" alt="Código QR WhatsApp" />
+    </div>
+    <div class="steps">
+      <ol>
+        <li>Abre <b>WhatsApp Business</b> en tu teléfono.</li>
+        <li>Toca <b>Ajustes</b> ➔ <b>Dispositivos vinculados</b>.</li>
+        <li>Toca <b>Vincular dispositivo</b> y escanea el QR.</li>
+      </ol>
+    </div>
+    <div>
+      <a href="/reset" class="btn-reset">🔄 Forzar nuevo código QR</a>
+    </div>
+    <div class="pulse">⏳ Actualizando estado en tiempo real...</div>
   </div>
 </body>
 </html>`);
     } else {
       res.end(`<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>WhatsApp Conectado</title></head>
-<body style="background:#07070D;color:#00D1FF;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;">
-  <h2>✅ WhatsApp Bot ya está conectado y activo 24/7</h2>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="2">
+  <title>Iniciando WhatsApp - Innocentia Tech</title>
+  <style>
+    body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
+    .card { background: #11111E; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 35px 25px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 209, 255, 0.15); }
+    h1 { font-size: 20px; color: #00D1FF; margin: 0 0 12px; }
+    p { color: #9CA3AF; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+    .spinner { width: 44px; height: 44px; border: 4px solid rgba(0, 209, 255, 0.2); border-top-color: #00D1FF; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-reset { display: inline-block; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #00D1FF; background: rgba(0, 209, 255, 0.1); border: 1px solid rgba(0, 209, 255, 0.3); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="spinner"></div>
+    <h1>Generando código QR...</h1>
+    <p>Iniciando servicio de WhatsApp en la nube. La pantalla se actualizará automáticamente en 2 segundos.</p>
+    <a href="/reset" class="btn-reset">🔄 Reintentar inicio</a>
+  </div>
 </body>
 </html>`);
     }
