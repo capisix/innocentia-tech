@@ -854,10 +854,11 @@ ${pricingText}
               <button
                 type="button"
                 onClick={() => handleSendWhatsAppProposal(selectedLeadForProposal)}
-                className="w-full px-4 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:scale-105 transition-all cursor-pointer"
+                style={{ backgroundColor: "#25D366", color: "#000000" }}
+                className="w-full px-4 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(37,211,102,0.6)] hover:scale-105 transition-all cursor-pointer border border-[#25D366]"
               >
-                <span>WhatsApp</span>
-                <ArrowRight className="w-4 h-4" />
+                <span className="text-black font-black">WhatsApp</span>
+                <ArrowRight className="w-4 h-4 text-black" />
               </button>
             </div>
           </div>

@@ -370,10 +370,11 @@ https://innocentia.tech`;
                 <button
                   type="button"
                   onClick={handleOpenWhatsApp}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:scale-105 text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all cursor-pointer"
+                  style={{ backgroundColor: "#25D366", color: "#000000" }}
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] hover:scale-105 text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(37,211,102,0.6)] transition-all cursor-pointer border border-[#25D366]"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Enviar por WhatsApp</span>
+                  <Send className="w-4 h-4 text-black shrink-0" />
+                  <span className="text-black font-black">Enviar por WhatsApp</span>
                 </button>
               </div>
             </div>
@@ -440,10 +441,11 @@ https://innocentia.tech`;
                 <button
                   type="button"
                   onClick={handleOpenEmail}
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-[#00D1FF] to-blue-500 hover:scale-105 text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.4)] transition-all cursor-pointer"
+                  style={{ backgroundColor: "#00D1FF", color: "#000000" }}
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#00D1FF] hover:bg-[#00b8e6] hover:scale-105 text-black font-mono font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,209,255,0.6)] transition-all cursor-pointer border border-[#00D1FF]"
                 >
-                  <Mail className="w-4 h-4" />
-                  <span>Abrir Cliente de Correo</span>
+                  <Mail className="w-4 h-4 text-black shrink-0" />
+                  <span className="text-black font-black">Abrir Cliente de Correo</span>
                 </button>
               </div>
             </div>
