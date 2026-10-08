@@ -7174,6 +7174,8 @@ function PortalMainContent() {
                   onChange={(e) => setAssignDevLead(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none"
                 >
+                  <option value="Iván Castillo (CEO)">Iván Castillo (CEO & Lead Software Architect)</option>
+                  <option value="Iván Castillo">Iván Castillo (Arquitectura de Software)</option>
                   <option value="Ing. Rodrigo Pacheco">Ing. Rodrigo Pacheco (Senior Fullstack & AI)</option>
                   <option value="Ing. Manuel Torres">Ing. Manuel Torres (Backend & Microservices)</option>
                   <option value="Ing. Andrea Rivas">Ing. Andrea Rivas (Frontend React/Next.js)</option>
