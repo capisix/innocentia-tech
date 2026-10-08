@@ -497,114 +497,131 @@ const server = http.createServer((req, res) => {
     }
   }
 
+  if (req.url === "/api/status") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        connected: isWhatsAppConnected,
+        qr: latestQrDataUrl || null,
+        lastConnected: lastConnectedAt,
+      })
+    );
+    return;
+  }
+
   if (req.url === "/qr") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-    if (isWhatsAppConnected) {
-      res.end(`<!DOCTYPE html>
+    res.end(`<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="10">
-  <title>WhatsApp Conectado - Innocentia Tech</title>
-  <style>
-    body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
-    .card { background: #11111E; border: 1px solid rgba(0, 255, 128, 0.3); border-radius: 24px; padding: 35px 25px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 255, 128, 0.15); }
-    .icon { font-size: 48px; margin-bottom: 15px; }
-    h1 { font-size: 22px; color: #00FF80; margin: 0 0 10px; }
-    p { color: #9CA3AF; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
-    .btn-group { display: flex; flex-direction: column; gap: 10px; }
-    .btn { display: inline-block; padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 14px; text-decoration: none; transition: all 0.2s ease; }
-    .btn-danger { background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .btn-danger:hover { background: rgba(239, 68, 68, 0.3); color: #fff; }
-    .btn-secondary { background: rgba(0, 209, 255, 0.1); color: #00D1FF; border: 1px solid rgba(0, 209, 255, 0.3); }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="icon">✅</div>
-    <h1>WhatsApp Conectado</h1>
-    <p>El bot de Sofía e Iván está atendiendo clientes 24/7 de forma automática y permanente.</p>
-    <div class="btn-group">
-      <a href="/logs" class="btn btn-secondary">📊 Ver monitor de mensajes en vivo</a>
-      <a href="/reset" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas desvincular y generar un nuevo código QR?');">🔄 Desvincular / Vincular otro número</a>
-    </div>
-  </div>
-</body>
-</html>`);
-    } else if (latestQrDataUrl) {
-      res.end(`<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="4">
   <title>Vincular WhatsApp - Innocentia Tech</title>
   <style>
     body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
-    .card { background: #11111E; border: 1px solid rgba(0, 209, 255, 0.3); border-radius: 24px; padding: 30px 20px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 209, 255, 0.2); }
+    .card { background: #11111E; border: 1px solid rgba(0, 209, 255, 0.3); border-radius: 24px; padding: 32px 24px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 209, 255, 0.2); transition: all 0.3s ease; }
     h1 { font-size: 21px; color: #00D1FF; margin: 0 0 8px; }
     p { color: #9CA3AF; font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
-    .qr-container { background: #fff; padding: 12px; border-radius: 16px; display: inline-block; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
-    .qr-container img { display: block; width: 260px; height: 260px; }
+    .qr-container { background: #fff; padding: 12px; border-radius: 16px; display: inline-block; box-shadow: 0 8px 25px rgba(0,0,0,0.5); min-width: 260px; min-height: 260px; }
+    .qr-container img { display: block; width: 260px; height: 260px; object-fit: contain; }
     .steps { text-align: left; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 12px 18px; margin: 18px 0; font-size: 13px; color: #D1D5DB; }
     .steps ol { margin: 0; padding-left: 18px; }
     .steps li { margin-bottom: 5px; }
-    .btn-reset { display: inline-block; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #FFB400; background: rgba(255, 180, 0, 0.1); border: 1px solid rgba(255, 180, 0, 0.3); text-decoration: none; margin-top: 5px; }
+    .btn { display: inline-block; padding: 11px 20px; border-radius: 12px; font-weight: 600; font-size: 13px; text-decoration: none; transition: all 0.2s ease; }
+    .btn-reset { color: #FFB400; background: rgba(255, 180, 0, 0.1); border: 1px solid rgba(255, 180, 0, 0.3); }
     .btn-reset:hover { background: rgba(255, 180, 0, 0.25); color: #fff; }
-    .pulse { animation: pulse 2s infinite; font-size: 12px; color: #00D1FF; margin-top: 10px; }
-    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>🚀 Vincular WhatsApp Innocentia Tech</h1>
-    <p>Escanea este código con tu cuenta oficial de WhatsApp Business:</p>
-    <div class="qr-container">
-      <img src="${latestQrDataUrl}" alt="Código QR WhatsApp" />
-    </div>
-    <div class="steps">
-      <ol>
-        <li>Abre <b>WhatsApp Business</b> en tu teléfono.</li>
-        <li>Toca <b>Ajustes</b> ➔ <b>Dispositivos vinculados</b>.</li>
-        <li>Toca <b>Vincular dispositivo</b> y escanea el QR.</li>
-      </ol>
-    </div>
-    <div>
-      <a href="/reset" class="btn-reset">🔄 Forzar nuevo código QR</a>
-    </div>
-    <div class="pulse">⏳ Actualizando estado en tiempo real...</div>
-  </div>
-</body>
-</html>`);
-    } else {
-      res.end(`<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="2">
-  <title>Iniciando WhatsApp - Innocentia Tech</title>
-  <style>
-    body { background: #07070D; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
-    .card { background: #11111E; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 35px 25px; max-width: 440px; width: 100%; box-shadow: 0 0 50px rgba(0, 209, 255, 0.15); }
-    h1 { font-size: 20px; color: #00D1FF; margin: 0 0 12px; }
-    p { color: #9CA3AF; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
-    .spinner { width: 44px; height: 44px; border: 4px solid rgba(0, 209, 255, 0.2); border-top-color: #00D1FF; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+    .btn-danger { background: rgba(239, 68, 68, 0.15); color: #F87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .btn-danger:hover { background: rgba(239, 68, 68, 0.3); color: #fff; }
+    .btn-secondary { background: rgba(0, 209, 255, 0.1); color: #00D1FF; border: 1px solid rgba(0, 209, 255, 0.3); }
+    .spinner { width: 44px; height: 44px; border: 4px solid rgba(0, 209, 255, 0.2); border-top-color: #00D1FF; border-radius: 50%; animation: spin 1s linear infinite; margin: 80px auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .btn-reset { display: inline-block; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #00D1FF; background: rgba(0, 209, 255, 0.1); border: 1px solid rgba(0, 209, 255, 0.3); text-decoration: none; }
+    .status-text { font-size: 12px; color: #00D1FF; margin-top: 12px; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="spinner"></div>
-    <h1>Generando código QR...</h1>
-    <p>Iniciando servicio de WhatsApp en la nube. La pantalla se actualizará automáticamente en 2 segundos.</p>
-    <a href="/reset" class="btn-reset">🔄 Reintentar inicio</a>
+  <div class="card" id="mainCard">
+    <div id="loadingView">
+      <div class="spinner"></div>
+      <h1>Generando código QR...</h1>
+      <p>Iniciando servicio de WhatsApp en la nube.</p>
+    </div>
+
+    <div id="qrView" style="display: none;">
+      <h1>🚀 Vincular WhatsApp Innocentia Tech</h1>
+      <p>Escanea este código con tu cuenta oficial de WhatsApp Business:</p>
+      <div class="qr-container">
+        <img id="qrImage" src="" alt="Código QR WhatsApp" />
+      </div>
+      <div class="steps">
+        <ol>
+          <li>Abre <b>WhatsApp Business</b> en tu teléfono.</li>
+          <li>Toca <b>Ajustes</b> ➔ <b>Dispositivos vinculados</b>.</li>
+          <li>Toca <b>Vincular un dispositivo</b> y apunta la cámara a este QR.</li>
+        </ol>
+      </div>
+      <div>
+        <a href="/reset" class="btn btn-reset">🔄 Generar nuevo código QR</a>
+      </div>
+      <div class="status-text">🟢 Código activo listo para escanear</div>
+    </div>
+
+    <div id="connectedView" style="display: none;">
+      <div style="font-size: 48px; margin-bottom: 12px;">✅</div>
+      <h1 style="color: #00FF80;">WhatsApp Conectado</h1>
+      <p>El bot de Sofía e Iván está atendiendo clientes 24/7 de forma automática y permanente.</p>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+        <a href="/logs" class="btn btn-secondary">📊 Ver monitor de mensajes en vivo</a>
+        <a href="/reset" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas desvincular?');">🔄 Desvincular / Vincular otro número</a>
+      </div>
+    </div>
   </div>
+
+  <script>
+    let currentQr = "";
+    async function checkStatus() {
+      try {
+        const res = await fetch("/api/status");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const loadingView = document.getElementById("loadingView");
+        const qrView = document.getElementById("qrView");
+        const connectedView = document.getElementById("connectedView");
+        const qrImage = document.getElementById("qrImage");
+        const card = document.getElementById("mainCard");
+
+        if (data.connected) {
+          loadingView.style.display = "none";
+          qrView.style.display = "none";
+          connectedView.style.display = "block";
+          card.style.borderColor = "rgba(0, 255, 128, 0.4)";
+          card.style.boxShadow = "0 0 50px rgba(0, 255, 128, 0.2)";
+        } else if (data.qr) {
+          if (currentQr !== data.qr) {
+            currentQr = data.qr;
+            qrImage.src = data.qr;
+          }
+          loadingView.style.display = "none";
+          connectedView.style.display = "none";
+          qrView.style.display = "block";
+          card.style.borderColor = "rgba(0, 209, 255, 0.4)";
+          card.style.boxShadow = "0 0 50px rgba(0, 209, 255, 0.2)";
+        } else {
+          loadingView.style.display = "block";
+          qrView.style.display = "none";
+          connectedView.style.display = "none";
+        }
+      } catch (err) {
+        console.log("Polling status...", err);
+      }
+    }
+
+    // Initial check and seamless non-blocking background polling
+    checkStatus();
+    setInterval(checkStatus, 2000);
+  </script>
 </body>
 </html>`);
-    }
     return;
   }
 
