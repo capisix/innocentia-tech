@@ -48,6 +48,15 @@ if (process.env.WA_SESSION_DATA && !fs.existsSync(credsPath)) {
   }
 }
 
+// In-memory log buffer for remote debugging via /logs
+const logBuffer = [];
+function addLog(msg) {
+  const line = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  logBuffer.push(line);
+  if (logBuffer.length > 150) logBuffer.shift();
+  console.log(msg);
+}
+
 // Conversation memory per phone number / JID
 const sessionHistories = new Map();
 let isWhatsAppConnected = false;
@@ -347,11 +356,18 @@ async function startWhatsAppBot() {
         if (remoteJid === "status@broadcast") continue;
         if (remoteJid.endsWith("@g.us")) continue;
 
-        // Extract message text
+        // Extract message text from all WhatsApp packet variants
         const textMessage =
           msg.message?.conversation ||
           msg.message?.extendedTextMessage?.text ||
           msg.message?.imageMessage?.caption ||
+          msg.message?.ephemeralMessage?.message?.conversation ||
+          msg.message?.ephemeralMessage?.message?.extendedTextMessage?.text ||
+          msg.message?.viewOnceMessage?.message?.conversation ||
+          msg.message?.viewOnceMessage?.message?.extendedTextMessage?.text ||
+          msg.message?.viewOnceMessageV2?.message?.conversation ||
+          msg.message?.viewOnceMessageV2?.message?.extendedTextMessage?.text ||
+          msg.message?.documentWithCaptionMessage?.message?.documentMessage?.caption ||
           "";
 
         const cleanText = (textMessage || "").trim();
@@ -371,12 +387,15 @@ async function startWhatsAppBot() {
         }
 
         const myJid = sock.user?.id ? sock.user.id.split(":")[0] + "@s.whatsapp.net" : "";
-        const isSelfChat = remoteJid === myJid || remoteJid.includes(myJid.replace("@s.whatsapp.net", ""));
+        const isSelfChat = remoteJid === myJid || (myJid && remoteJid.includes(myJid.replace("@s.whatsapp.net", "")));
 
         // Ignore messages sent by me to OTHER clients, but allow self-chat and all incoming messages from clients
-        if (msg.key.fromMe && !isSelfChat) continue;
+        if (msg.key.fromMe && !isSelfChat) {
+          addLog(`ℹ️ Mensaje enviado por el usuario a [${remoteJid}]: "${cleanText}"`);
+          continue;
+        }
 
-        console.log(`\n📩 Mensaje recibido de [${remoteJid}] (fromMe=${msg.key.fromMe}): "${cleanText}"`);
+        addLog(`📩 Mensaje recibido de [${remoteJid}] (fromMe=${msg.key.fromMe}): "${cleanText}"`);
 
         // Get user session history
         if (!sessionHistories.has(remoteJid)) {
@@ -433,7 +452,7 @@ async function startWhatsAppBot() {
 
         // Send reply to WhatsApp
         await sock.sendMessage(remoteJid, { text: responseText });
-        console.log(`📤 Respuesta enviada a [${remoteJid}] (${reply.speaker}): ${reply.text[0].substring(0, 60)}...`);
+        addLog(`📤 Respuesta enviada a [${remoteJid}] (${reply.speaker}): ${reply.text[0].substring(0, 60)}...`);
 
         // Update history (keep last 8 turns)
         history.push({ sender: "user", text: cleanText });
@@ -446,16 +465,50 @@ async function startWhatsAppBot() {
         await sock.sendPresenceUpdate("available", remoteJid);
       }
     } catch (msgError) {
-      console.error("Error procesando mensaje entrante:", msgError);
+      addLog(`❌ Error procesando mensaje entrante: ${msgError.message}`);
     }
   });
 }
 
 let latestQrDataUrl = "";
 
-// Simple HTTP server for Render/Railway health checks and visual QR access
+// Simple HTTP server for Render/Railway health checks, visual QR, and live logs
 const PORT = process.env.PORT || 3000;
 const server = http.createServer((req, res) => {
+  if (req.url === "/logs") {
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="4">
+  <title>Live Logs - Innocentia WhatsApp Bot</title>
+  <style>
+    body { background: #07070D; color: #00D1FF; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", monospace; padding: 25px; margin: 0; }
+    .card { background: #11111E; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; max-width: 900px; margin: 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+    h2 { color: #fff; margin-top: 0; font-size: 18px; }
+    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 12px; margin-bottom: 15px; }
+    .connected { background: rgba(0, 255, 128, 0.15); color: #00FF80; border: 1px solid #00FF80; }
+    .waiting { background: rgba(255, 180, 0, 0.15); color: #FFB400; border: 1px solid #FFB400; }
+    .terminal { background: #05050A; border-radius: 10px; padding: 15px; font-family: monospace; font-size: 13px; line-height: 1.6; max-height: 500px; overflow-y: auto; color: #D1D5DB; }
+    .log-line { margin: 3px 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🚀 Innocentia Tech • WhatsApp Live Monitor</h2>
+    <div class="status-badge ${isWhatsAppConnected ? "connected" : "waiting"}">
+      ${isWhatsAppConnected ? "🟢 CONECTADO A WHATSAPP (24/7 ACTIVO)" : "🟡 ESPERANDO CONEXIÓN"}
+    </div>
+    <div class="terminal">
+      ${logBuffer.map((l) => `<div class="log-line">${l}</div>`).join("") || "<div>Iniciando logs...</div>"}
+    </div>
+  </div>
+</body>
+</html>`);
+    return;
+  }
+
   if (req.url === "/qr") {
     res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
     if (latestQrDataUrl) {
