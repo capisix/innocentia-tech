@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles } from "../../lib/icons";
-import Image from "next/image";
 
 export default function AboutUsSection() {
   const [activeTab, setActiveTab] = useState<"manifiesto" | "principios">("manifiesto");
@@ -19,48 +17,70 @@ export default function AboutUsSection() {
 
   const principios = [
     {
+      num: "1",
       title: "La tecnología al servicio de las personas",
-      desc: "Una herramienta tiene valor cuando simplifica una tarea o amplía una capacidad. Si obliga a adaptarse a ella, pierde su propósito.",
-      color: "#FF3B5C",
+      desc: "Una herramienta tiene valor cuando simplifica una tarea o amplia una capacidad. Si obliga a adaptarse a ella, pierde su propósito.",
+      color: "#FF007A",
     },
     {
+      num: "2",
       title: "La imaginación precede a la innovación",
-      desc: "Ningún algoritmo ni lenguaje de programación reemplaza el momento en que una persona observa un problema e imagina una solución diferente.",
-      color: "#00E5FF",
+      desc: "Ningún algoritmo o lenguaje de programación reemplaza el momento en que una persona observa un problema e imagina una solución diferente.",
+      color: "#F59E0B",
     },
     {
+      num: "3",
+      title: "La ingeniería la hace posible",
+      desc: "La imaginación encuentra el rumbo, la ingeniería construye el camino. Transformamos ideas en soluciones funcionales, escalables y con impacto real.",
+      color: "#00F0FF",
+    },
+    {
+      num: "4",
       title: "Escuchar es el primer acto de diseño",
       desc: "Antes de proponer una solución necesitamos comprender el problema. La mejor tecnología no nace de asumir respuestas, sino de hacer las preguntas correctas.",
-      color: "#FF8800",
+      color: "#A855F7",
     },
     {
+      num: "5",
       title: "La simplicidad demuestra comprensión",
-      desc: "Hacer algo complejo es sencillo. Hacerlo simple requiere entender profundamente su funcionamiento. Eliminamos lo innecesario.",
-      color: "#8A2BE2",
-    },
-    {
-      title: "La belleza cumple una función",
-      desc: "Un diseño bien pensado transmite claridad, confianza y armonía. La estética no es un adorno; es una parte esencial de la experiencia.",
+      desc: "Hacer algo complejo es sencillo. Hacerlo simple requiere entender profundamente su funcionamiento. Eliminamos lo innecesario para que la tecnología se sienta natural.",
       color: "#10B981",
     },
     {
-      title: "Ingeniería con responsabilidad",
-      desc: "Programar no consiste únicamente en hacer que algo funcione; consiste en hacerlo sostenible, escalable y preparado para evolucionar.",
+      num: "6",
+      title: "Evolución continua",
+      desc: "La tecnología siempre avanza y nosotros también. Aprendemos, iteramos y mejoramos constantemente para crear soluciones que perduren.",
       color: "#3B82F6",
     },
   ];
 
   return (
-    <section id="nosotros" className="relative py-16 bg-[#040407] overflow-hidden border-t border-white/10">
-      <div className="max-w-[1440px] mx-auto px-8 relative z-10 space-y-8">
+    <section id="nosotros" className="relative py-20 bg-[#030306] overflow-hidden border-t border-white/10">
+      {/* Background ambient radial glows */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#FF007A]/5 blur-[140px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00F0FF]/5 blur-[140px] pointer-events-none rounded-full" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-purple-950/10 blur-[160px] pointer-events-none" />
+
+      {/* SVG Definitions for Gradients */}
+      <svg className="absolute w-0 h-0 pointer-events-none">
+        <defs>
+          <linearGradient id="infinityNeonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#FF007A" />
+            <stop offset="50%" stopColor="#A855F7" />
+            <stop offset="100%" stopColor="#00F0FF" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
         {/* Navigation Tabs Header */}
         <div className="flex justify-center">
-          <div className="inline-flex p-1.5 rounded-full bg-white/[0.04] border border-white/15 backdrop-blur-2xl shadow-xl">
+          <div className="inline-flex p-1.5 rounded-full bg-black/60 border border-white/15 backdrop-blur-2xl shadow-2xl">
             <button
               onClick={() => handleTabChange("manifiesto")}
-              className={`px-8 py-3 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+              className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                 activeTab === "manifiesto"
-                  ? "bg-gradient-to-r from-[#FF3B5C] to-[#FF8800] text-white shadow-[0_0_25px_rgba(255,59,92,0.45)]"
+                  ? "border border-[#FF007A] bg-[#FF007A]/20 text-white shadow-[0_0_25px_rgba(255,0,122,0.5)]"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -68,9 +88,9 @@ export default function AboutUsSection() {
             </button>
             <button
               onClick={() => handleTabChange("principios")}
-              className={`px-8 py-3 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+              className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                 activeTab === "principios"
-                  ? "bg-gradient-to-r from-[#00E5FF] to-[#8A2BE2] text-white shadow-[0_0_25px_rgba(0,229,255,0.45)]"
+                  ? "border border-[#00F0FF] bg-[#00F0FF]/20 text-white shadow-[0_0_25px_rgba(0,240,255,0.5)]"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -79,27 +99,47 @@ export default function AboutUsSection() {
           </div>
         </div>
 
-        {/* Smooth Container with Fixed Min Height to Prevent Layout Shift Below */}
-        <div className="min-h-[440px] flex items-center justify-center transition-all duration-500 ease-in-out">
+        {/* Tab Content Container */}
+        <div className="min-h-[500px] transition-all duration-500 ease-in-out">
           <div
             className={`w-full transition-all duration-300 transform ${
-              isAnimating ? "opacity-0 scale-98" : "opacity-100 scale-100"
+              isAnimating ? "opacity-0 scale-[0.99]" : "opacity-100 scale-100"
             }`}
           >
             {activeTab === "manifiesto" ? (
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-                {/* Left Content Card */}
-                <div className="lg:col-span-7 bg-white/[0.02] border border-white/15 rounded-[32px] p-8 sm:p-10 backdrop-blur-2xl space-y-5 text-left shadow-2xl flex flex-col justify-between">
-                  <div className="space-y-4">
-                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-wide border-b border-white/10 pb-4">
-                      El origen de toda innovación es la imaginación
+                {/* Left Card: El Manifiesto (Exact design from Foto 3) */}
+                <div className="lg:col-span-6 xl:col-span-6 bg-gradient-to-b from-[#130718]/90 via-[#0a0712]/95 to-[#070b16]/95 border border-pink-500/25 rounded-[32px] p-7 sm:p-9 lg:p-10 shadow-[0_0_50px_rgba(255,0,122,0.12)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-2xl">
+                  {/* Ambient corner light */}
+                  <div className="absolute top-0 left-0 w-48 h-48 bg-[#FF007A]/10 blur-[80px] pointer-events-none" />
+
+                  <div className="space-y-5 relative z-10">
+                    {/* Header Overline */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.25em] text-[#FF007A] uppercase">
+                        NUESTRO MANIFIESTO
+                      </span>
+                      <div className="h-[1px] flex-1 bg-gradient-to-r from-[#FF007A]/60 via-[#FF007A]/20 to-transparent" />
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-3xl sm:text-4xl lg:text-[42px] font-black text-white tracking-tight leading-[1.12]">
+                      El origen de toda{" "}
+                      <span className="block">
+                        innovación es la{" "}
+                        <span className="bg-gradient-to-r from-[#FF007A] via-[#D946EF] to-[#00F0FF] bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(255,0,122,0.45)]">
+                          imaginación.
+                        </span>
+                      </span>
                     </h3>
-                    <div className="space-y-3 text-xs sm:text-sm text-gray-300 font-light leading-relaxed">
+
+                    {/* Paragraphs */}
+                    <div className="space-y-4 text-xs sm:text-sm lg:text-[14px] text-gray-300 font-light leading-relaxed">
                       <p>
                         Antes de existir una aplicación, alguien imaginó una mejor forma de conectar a las personas. Antes de existir una inteligencia artificial, alguien se preguntó si era posible construir una herramienta capaz de aprender.
                       </p>
                       <p>
-                        Elegimos llamarnos <strong className="text-white font-semibold">Innocentia</strong> no porque la inocencia represente desconocimiento, sino porque simboliza la capacidad de regresar al estado más puro de la creatividad: ese momento donde todavía no existen prejuicios suficientes para limitar una idea.
+                        Elegimos <strong className="text-white font-semibold">Innocentia</strong> porque la inocencia representa descubrimiento, no por falta de conocimiento, sino porque simboliza la capacidad de regresar al estado más puro de la creatividad: ese momento donde todavía no existen prejuicios suficientes para limitar una idea.
                       </p>
                       <p>
                         Para nosotros, la tecnología nunca ha sido el punto de partida; es la consecuencia. El software, las aplicaciones y la inteligencia artificial son únicamente herramientas capaces de materializar aquello que primero nació en la imaginación.
@@ -107,54 +147,162 @@ export default function AboutUsSection() {
                     </div>
                   </div>
 
-                  <div className="pt-3 flex items-center gap-4 border-t border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[#FF3B5C]" />
-                      <span className="text-xs font-semibold text-white">Sofía (Imagina)</span>
+                  {/* Dual Founder Footer Bar: Sofía + Infinity + Iván */}
+                  <div className="pt-5 border-t border-white/10 relative z-10 flex items-center justify-between gap-2 sm:gap-4">
+                    {/* Sofía */}
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <div className="w-11 sm:w-12 h-11 sm:h-12 rounded-full border-2 border-[#FF007A] bg-[#FF007A]/10 flex items-center justify-center text-[#FF007A] shadow-[0_0_20px_rgba(255,0,122,0.6),inset_0_0_10px_rgba(255,0,122,0.2)] flex-shrink-0">
+                        {/* Calligraphy brush icon */}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <path d="m18 11 3-3-4-4-3 3 4 4Z" />
+                          <path d="m14 7-8.5 8.5a2.12 2.12 0 1 0 3 3L17 10" />
+                          <path d="m3 21 3-1" />
+                        </svg>
+                      </div>
+                      <div>
+                        <span className="text-xs sm:text-sm font-black text-[#FF007A] tracking-wider uppercase block font-mono">
+                          SOFÍA
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-300 tracking-[0.2em] uppercase block font-mono">
+                          IMAGINA
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-gray-600">•</span>
-                    <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[#00E5FF]" />
-                      <span className="text-xs font-semibold text-white">Iván (Construye)</span>
+
+                    {/* Connecting line + Infinity + Connecting line */}
+                    <div className="flex-1 flex items-center gap-2 max-w-[120px] sm:max-w-[180px] lg:max-w-[200px]">
+                      <div className="h-[2px] flex-1 bg-gradient-to-r from-[#FF007A] to-[#A855F7]" />
+                      
+                      <div className="relative flex-shrink-0 flex items-center justify-center">
+                        <svg viewBox="0 0 64 32" className="w-9 sm:w-11 h-4.5 sm:h-5.5 drop-shadow-[0_0_15px_rgba(168,85,247,0.85)]">
+                          <path
+                            d="M18,6 C10,6 4,11 4,16 C4,21 10,26 18,26 C26,26 31,19 32,16 C33,19 38,26 46,26 C54,26 60,21 60,16 C60,11 54,6 46,6 C38,6 33,13 32,16 C31,13 26,6 18,6 Z"
+                            fill="none"
+                            stroke="url(#infinityNeonGrad)"
+                            strokeWidth="3.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+
+                      <div className="h-[2px] flex-1 bg-gradient-to-r from-[#A855F7] to-[#00F0FF]" />
+                    </div>
+
+                    {/* Iván */}
+                    <div className="flex items-center gap-2.5 sm:gap-3">
+                      <div className="w-11 sm:w-12 h-11 sm:h-12 rounded-full border-2 border-[#00F0FF] bg-[#00F0FF]/10 flex items-center justify-center text-[#00F0FF] shadow-[0_0_20px_rgba(0,240,255,0.6),inset_0_0_10px_rgba(0,240,255,0.2)] flex-shrink-0">
+                        {/* Code icon */}
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                          <polyline points="16 18 22 12 16 6" />
+                          <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                      </div>
+                      <div>
+                        <span className="text-xs sm:text-sm font-black text-[#00F0FF] tracking-wider uppercase block font-mono">
+                          IVÁN
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-gray-300 tracking-[0.2em] uppercase block font-mono">
+                          CONSTRUYE
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Right Character Card */}
-                <div className="lg:col-span-5 bg-gradient-to-b from-[#FF3B5C]/15 via-purple-950/25 to-[#00E5FF]/15 border border-white/20 rounded-[32px] p-8 backdrop-blur-2xl flex flex-col items-center justify-center text-center space-y-6 shadow-2xl">
-                  <div className="relative w-full h-56 flex items-center justify-center">
-                    <Image
-                      src="/images/sofia_ivan_chars.png"
-                      alt="Sofía e Iván - Equipo Fundador de Innocentia Tech"
-                      width={340}
-                      height={240}
-                      className="object-contain filter drop-shadow-[0_0_30px_rgba(255,69,0,0.5)] animate-float"
-                    />
+                {/* Right Card: Looping Video (Exact video from Foto 4) */}
+                <div className="lg:col-span-6 xl:col-span-6 relative bg-black/90 border border-cyan-500/25 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col justify-between group min-h-[440px] lg:min-h-[500px]">
+                  {/* Looping Infinity Founders Video */}
+                  <video
+                    src="/videos/Energy_flowing_in_infinity_symbol_20261008100316.mp4"
+                    poster="/videos/energy_infinity_poster.jpg"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover absolute inset-0"
+                  />
+
+                  {/* Top subtle gradient */}
+                  <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+
+                  {/* Bottom Quote Overlay */}
+                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 bg-gradient-to-t from-black via-black/85 to-transparent flex flex-col items-center text-center space-y-1.5 z-10">
+                    <p className="text-xs sm:text-sm lg:text-[15px] font-light text-gray-200 italic max-w-lg leading-relaxed">
+                      “La imaginación marca el rumbo y la ingeniería construye el camino.”
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-300 font-mono">
+                      Dos hemisferios,{" "}
+                      <span className="bg-gradient-to-r from-[#FF007A] to-[#00F0FF] bg-clip-text text-transparent font-bold not-italic">
+                        una intención.
+                      </span>”
+                    </p>
                   </div>
-                  <blockquote className="text-xs font-mono text-gray-200 italic max-w-sm leading-relaxed border-t border-white/10 pt-4">
-                    "La imaginación marca el rumbo y la ingeniería construye el camino. Una sin la otra permanece incompleta."
-                  </blockquote>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {principios.map((p, idx) => (
-                  <div
-                    key={idx}
-                    className="group p-6 rounded-3xl bg-white/[0.02] border border-white/15 hover:border-white/30 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between text-left shadow-xl"
-                  >
-                    <div className="space-y-3">
-                      <div
-                        className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs"
-                        style={{ backgroundColor: `${p.color}22`, color: p.color, border: `1px solid ${p.color}44` }}
-                      >
-                        0{idx + 1}
-                      </div>
-                      <h4 className="text-base font-bold text-white">{p.title}</h4>
-                      <p className="text-xs text-gray-400 font-light leading-relaxed">{p.desc}</p>
+              /* Tab 2: Nuestros Principios (Exact design from Foto 2) */
+              <div className="space-y-8">
+                {/* Header for Nuestros Principios */}
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-white/10 pb-6 text-left">
+                  <div className="space-y-3 max-w-2xl">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.25em] text-[#FF007A] uppercase">
+                        NUESTROS PRINCIPIOS
+                      </span>
+                      <div className="h-[1px] w-24 bg-gradient-to-r from-[#FF007A]/60 to-transparent" />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
+                      Ideas que se convierten en realidades con{" "}
+                      <span className="bg-gradient-to-r from-[#FF007A] via-[#D946EF] to-[#00F0FF] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,0,122,0.4)]">
+                        propósito.
+                      </span>
+                    </h3>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 lg:text-right">
+                    <p className="text-xs sm:text-sm text-gray-400 font-light max-w-md leading-relaxed">
+                      Estos principios guían cada proyecto, cada decisión y cada línea de código. Son la base de cómo trabajamos, cómo innovamos y por qué existimos.
+                    </p>
+                    <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl flex-shrink-0">
+                      <svg viewBox="0 0 64 32" className="w-6 h-3 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">
+                        <path
+                          d="M18,6 C10,6 4,11 4,16 C4,21 10,26 18,26 C26,26 31,19 32,16 C33,19 38,26 46,26 C54,26 60,21 60,16 C60,11 54,6 46,6 C38,6 33,13 32,16 C31,13 26,6 18,6 Z"
+                          fill="none"
+                          stroke="url(#infinityNeonGrad)"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span className="text-[11px] font-mono text-gray-300">
+                        Dos hemisferios, <strong className="text-white">una intención.</strong>
+                      </span>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* 6 Visual Principles Cards Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                  {principios.map((p) => (
+                    <div
+                      key={p.num}
+                      className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 shadow-2xl group cursor-pointer"
+                      style={{
+                        boxShadow: `0 0 25px ${p.color}18`,
+                      }}
+                    >
+                      <img
+                        src={`/images/principios/card_0${p.num}_full.jpg`}
+                        alt={`${p.title} - ${p.desc}`}
+                        className="w-full h-auto object-cover rounded-2xl sm:rounded-3xl transition-transform duration-500 group-hover:scale-[1.02]"
+                      />
+                      <span className="sr-only">
+                        {p.num} - {p.title}: {p.desc}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
