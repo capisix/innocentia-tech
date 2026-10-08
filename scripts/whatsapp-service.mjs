@@ -61,6 +61,7 @@ function addLog(msg) {
 const sessionHistories = new Map();
 let isWhatsAppConnected = false;
 let lastConnectedAt = null;
+let currentSock = null;
 
 const systemInstruction = `Eres el asistente conversacional humano de WhatsApp de Innocentia Tech (estudio boutique de tecnología, branding y desarrollo de software a medida).
 Representas a dos líderes reales:
@@ -249,6 +250,8 @@ async function startWhatsAppBot() {
     browser: ["Innocentia Tech Studio", "Chrome", "1.0.0"],
     syncFullHistory: false,
   });
+
+  currentSock = sock;
 
   sock.ev.on("creds.update", saveCreds);
 
@@ -507,6 +510,29 @@ const server = http.createServer((req, res) => {
 </body>
 </html>`);
     return;
+  }
+
+  if (req.url === "/reset" || req.url === "/logout") {
+    try {
+      if (fs.existsSync(AUTH_DIR)) {
+        fs.rmSync(AUTH_DIR, { recursive: true, force: true });
+        fs.mkdirSync(AUTH_DIR, { recursive: true });
+      }
+      isWhatsAppConnected = false;
+      latestQrDataUrl = "";
+      addLog("🔄 Sesión reseteada a solicitud del usuario. Generando nuevo código QR...");
+      if (currentSock) {
+        try { currentSock.end(); } catch {}
+      }
+      setTimeout(startWhatsAppBot, 1000);
+      res.writeHead(302, { Location: "/qr" });
+      res.end();
+      return;
+    } catch (e) {
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("Error reseteando sesión: " + e.message);
+      return;
+    }
   }
 
   if (req.url === "/qr") {
