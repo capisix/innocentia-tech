@@ -163,6 +163,23 @@ export default function ExecutiveTelemetryDashboard() {
   }[]>([]);
   const [isProspectsModalOpen, setIsProspectsModalOpen] = useState<boolean>(false);
 
+  const getCanonicalClientKey = (clientStr: string = "", companyStr: string = "", idStr: string = "") => {
+    const combined = `${clientStr} ${companyStr} ${idStr}`.toLowerCase();
+    if (
+      combined.includes("corina") ||
+      combined.includes("hotel venezuela") ||
+      combined.includes("hotelvenezuela") ||
+      combined.includes("126708") ||
+      combined.includes("119348")
+    ) {
+      return "corina";
+    }
+    if (combined.includes("axana")) return "axana";
+    if (combined.includes("openhouse") || combined.includes("eduardo") || combined.includes("caceres")) return "openhouse";
+    if (combined.includes("larry") || combined.includes("tacos")) return "larry";
+    return combined.replace(/[^a-z0-9]/g, "").slice(0, 15);
+  };
+
   const syncRealLeads = () => {
     try {
       if (typeof window !== "undefined") {
@@ -184,18 +201,33 @@ export default function ExecutiveTelemetryDashboard() {
             const parsedProjects = JSON.parse(storedProjects);
             if (Array.isArray(parsedProjects)) {
               parsedProjects.forEach((p) => {
-                if (!p || !p.client) return;
-                const key = String(p.client).toLowerCase().replace(/[^a-z0-9]/g, "");
-                uniqueProspects.set(key, {
-                  id: p.id,
-                  name: p.client,
-                  company: p.name || p.company || "Proyecto",
-                  budget: p.budget ? `$${Number(p.budget).toLocaleString()} MXN` : "Por Definir",
-                  status: p.status || "En Desarrollo",
-                  vendorName: p.sellerName || "Jessica Torre",
-                  date: p.targetDate || "Activo",
-                  type: "Cotización / Proyecto",
-                });
+                if (!p) return;
+                const cKey = getCanonicalClientKey(p.client, p.name, p.id);
+                if (cKey === "corina") {
+                  uniqueProspects.set("corina", {
+                    id: "COT-126708",
+                    name: "Sra. Corina",
+                    company: "Hotel Venezuela",
+                    budget: "$86,300 MXN",
+                    status: "En Aprobación",
+                    vendorName: "Jessica Torre (VEN-JESS-101)",
+                    date: "08 Oct 2026",
+                    type: "Cotización Oficial",
+                  });
+                  return;
+                }
+                if (!uniqueProspects.has(cKey)) {
+                  uniqueProspects.set(cKey, {
+                    id: p.id,
+                    name: p.client || p.name,
+                    company: p.name || p.company || "Proyecto",
+                    budget: p.budget ? `$${Number(p.budget).toLocaleString()} MXN` : "Por Definir",
+                    status: p.status || "En Desarrollo",
+                    vendorName: p.sellerName || "Jessica Torre",
+                    date: p.targetDate || "Activo",
+                    type: "Cotización / Proyecto",
+                  });
+                }
               });
             }
           } catch (e) {}
@@ -207,11 +239,30 @@ export default function ExecutiveTelemetryDashboard() {
           try {
             const parsedIncoming = JSON.parse(storedIncoming);
             if (Array.isArray(parsedIncoming)) {
-              parsedIncoming.forEach((l) => {
-                if (!l || !l.clientName) return;
-                const key = String(l.clientName).toLowerCase().replace(/[^a-z0-9]/g, "");
-                if (!uniqueProspects.has(key)) {
-                  uniqueProspects.set(key, {
+              let updatedStorageNeeded = false;
+              parsedIncoming.forEach((l: any) => {
+                if (!l) return;
+                const cKey = getCanonicalClientKey(l.clientName, l.clientCompany || l.projectName, l.id);
+                if (cKey === "corina") {
+                  if (!uniqueProspects.has("corina")) {
+                    uniqueProspects.set("corina", {
+                      id: "COT-126708",
+                      name: "Sra. Corina",
+                      company: "Hotel Venezuela",
+                      budget: "$86,300 MXN",
+                      status: "En Aprobación",
+                      vendorName: "Jessica Torre (VEN-JESS-101)",
+                      date: "08 Oct 2026",
+                      type: "Cotización Oficial",
+                    });
+                  }
+                  if (l.id !== "COT-126708" || l.vendorName !== "Jessica Torre") {
+                    updatedStorageNeeded = true;
+                  }
+                  return;
+                }
+                if (!uniqueProspects.has(cKey)) {
+                  uniqueProspects.set(cKey, {
                     id: l.id,
                     name: l.clientName,
                     company: l.clientCompany || l.projectName || "Prospecto",
@@ -223,42 +274,66 @@ export default function ExecutiveTelemetryDashboard() {
                   });
                 }
               });
+
+              // Self-heal localStorage incoming leads so Corina is never duplicated
+              if (updatedStorageNeeded) {
+                const cleanedIncomingMap = new Map();
+                parsedIncoming.forEach((item: any) => {
+                  if (!item) return;
+                  const key = getCanonicalClientKey(item.clientName, item.clientCompany || item.projectName, item.id);
+                  if (key === "corina") {
+                    if (!cleanedIncomingMap.has("corina")) {
+                      cleanedIncomingMap.set("corina", {
+                        ...item,
+                        id: "COT-126708",
+                        clientName: "Sra. Corina",
+                        clientCompany: "Hotel Venezuela",
+                        vendorCode: "VEN-JESS-101",
+                        vendorName: "Jessica Torre",
+                        assignedVendor: "Jessica Torre",
+                        budgetRange: "$86,300 MXN",
+                        status: "En Aprobación",
+                      });
+                    }
+                  } else if (!cleanedIncomingMap.has(key)) {
+                    cleanedIncomingMap.set(key, item);
+                  }
+                });
+                localStorage.setItem("innocentia_incoming_leads", JSON.stringify(Array.from(cleanedIncomingMap.values())));
+              }
             }
           } catch (e) {}
         }
 
-        // 3. Always guarantee Sra. Corina (Hotel Venezuela) is counted & registered
-        const hasCorina = Array.from(uniqueProspects.keys()).some((k) => k.includes("corina") || k.includes("hotelvenezuela"));
-        if (!hasCorina) {
+        // 3. Always guarantee Sra. Corina exists
+        if (!uniqueProspects.has("corina")) {
           uniqueProspects.set("corina", {
             id: "COT-126708",
             name: "Sra. Corina",
-            company: "Hotel Venezuela (Sistema Web & PWA + Branding)",
+            company: "Hotel Venezuela",
             budget: "$86,300 MXN",
-            status: "Cotización Emitida (11 Módulos)",
+            status: "En Aprobación",
             vendorName: "Jessica Torre (VEN-JESS-101)",
-            date: "08 Oct 2026 (En Aprobación)",
-            type: "Cotización Formal Emitida",
+            date: "08 Oct 2026",
+            type: "Cotización Oficial",
           });
         }
 
         // 4. Always guarantee core clients exist
-        const hasAxana = Array.from(uniqueProspects.keys()).some((k) => k.includes("axana"));
-        if (!hasAxana) {
+        if (!uniqueProspects.has("axana")) {
           uniqueProspects.set("axana", {
             id: "PRJ-AXANA-01",
             name: "Axana",
             company: "Axana E-Commerce & Plataforma",
             budget: "$120,000 MXN",
-            status: "En Cotización",
+            status: "En Revisión",
             vendorName: "Jessica Torre (VEN-JESS-101)",
             date: "14 Sep 2026",
             type: "Lead en Cotización",
           });
         }
 
-        const hasOpenHouse = Array.from(uniqueProspects.keys()).some((k) => k.includes("openhouse") || k.includes("eduardo"));
-        if (!hasOpenHouse) {
+        if (!uniqueProspects.has("openhouse")) {
           uniqueProspects.set("openhouse", {
             id: "PRJ-OPENHOUSE-01",
             name: "Eduardo Cáceres",
@@ -271,8 +346,7 @@ export default function ExecutiveTelemetryDashboard() {
           });
         }
 
-        const hasLarry = Array.from(uniqueProspects.keys()).some((k) => k.includes("larry"));
-        if (!hasLarry) {
+        if (!uniqueProspects.has("larry")) {
           uniqueProspects.set("larry", {
             id: "PRJ-TACOSLARRY-01",
             name: "Taquería Larry",
@@ -545,15 +619,9 @@ export default function ExecutiveTelemetryDashboard() {
             <span className="text-3xl sm:text-4xl font-black text-purple-400 font-mono block">
               {realLeadsCount}
             </span>
-            <div className="flex flex-col gap-0.5 mt-0.5">
-              <span className="text-xs font-mono text-purple-300 font-bold">
-                Prospectos Registrados
-              </span>
-              <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                <span>Incluye Sra. Corina ($86,300)</span>
-              </span>
-            </div>
+            <span className="text-xs font-mono text-purple-300 font-bold">
+              Prospectos Registrados
+            </span>
           </div>
           <div className="text-[10px] font-mono text-gray-400 border-t border-white/10 pt-2 flex items-center justify-between">
             <span>
@@ -1358,7 +1426,9 @@ export default function ExecutiveTelemetryDashboard() {
                         <span className="text-xl">{isCorina ? "🏨" : "💼"}</span>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-bold text-white font-mono">{prospect.name}</h4>
+                            <h4 className="text-sm font-bold text-white font-mono">
+                              {isCorina ? "Sra. Corina" : prospect.name.replace(/\s*\(.*?\)/g, "").trim()}
+                            </h4>
                             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
                               {prospect.id}
                             </span>
@@ -1368,7 +1438,9 @@ export default function ExecutiveTelemetryDashboard() {
                               </span>
                             )}
                           </div>
-                          <p className="text-xs text-gray-400 font-mono">{prospect.company}</p>
+                          <p className="text-xs text-gray-400 font-mono">
+                            {isCorina ? "Hotel Venezuela" : prospect.company}
+                          </p>
                         </div>
                       </div>
 

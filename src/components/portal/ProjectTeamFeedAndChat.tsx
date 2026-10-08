@@ -189,7 +189,45 @@ export default function ProjectTeamFeedAndChat({
             if (Array.isArray(parsed) && parsed.length > 0) {
               setIncomingLeads((prev) => {
                 const map = new Map<string, IncomingLead>();
-                [...parsed, ...prev].forEach((item) => map.set(item.id, item));
+                const getCanonicalLeadKey = (item: IncomingLead) => {
+                  const combined = `${item.clientName || ""} ${item.clientCompany || ""} ${item.projectName || ""} ${item.id || ""}`.toLowerCase();
+                  if (
+                    combined.includes("corina") ||
+                    combined.includes("hotel venezuela") ||
+                    combined.includes("hotelvenezuela") ||
+                    combined.includes("126708") ||
+                    combined.includes("119348")
+                  ) {
+                    return "corina";
+                  }
+                  return item.id;
+                };
+
+                [...parsed, ...prev].forEach((item) => {
+                  const key = getCanonicalLeadKey(item);
+                  if (key === "corina") {
+                    const existing = map.get("corina");
+                    if (!existing || item.id === "COT-126708" || !existing.vendorName) {
+                      map.set("corina", {
+                        ...item,
+                        id: "COT-126708",
+                        clientName: "Sra. Corina",
+                        clientCompany: "Hotel Venezuela",
+                        vendorCode: "VEN-JESS-101",
+                        vendorName: "Jessica Torre",
+                        assignedVendor: "Jessica Torre",
+                        budgetRange: "$86,300 MXN",
+                        status: "Cotización Emitida",
+                        projectName: "Solución Integral para Sra. Corina (Hotel Venezuela)",
+                        description: "Cotización formal emitida de $86,300 MXN con 11 módulos integrales: Identidad de Marca, Naming, Logo, Chatbot WhatsApp, Stripe, Cloud, PWA, Auditoría, Soporte 24/7, Multi-Idioma y Dominio SSL.",
+                      });
+                    }
+                  } else {
+                    if (!map.has(key)) {
+                      map.set(key, item);
+                    }
+                  }
+                });
                 return Array.from(map.values());
               });
             }
