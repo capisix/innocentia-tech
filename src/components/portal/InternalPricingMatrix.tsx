@@ -68,6 +68,12 @@ export default function InternalPricingMatrix({
   const [calcTier, setCalcTier] = useState<"esencial" | "conectada" | "avanzada" | "mvp" | "plataforma" | "movil" | "solo_branding">("mvp");
   const [calcDiseno, setCalcDiseno] = useState<"base" | "personalizado" | "avanzado">("personalizado");
   const [calcClientName, setCalcClientName] = useState("");
+  const [calcClientCompany, setCalcClientCompany] = useState("");
+  const [calcClientEmail, setCalcClientEmail] = useState("");
+  const [calcClientPhone, setCalcClientPhone] = useState("");
+  const [calcLeadId, setCalcLeadId] = useState<string | null>(null);
+  const [calcVendorName, setCalcVendorName] = useState("Jessica Torre");
+  const [calcVendorCode, setCalcVendorCode] = useState("VEN-JESS-101");
   const [copiedQuote, setCopiedQuote] = useState(false);
   const [preloadedLeadNotice, setPreloadedLeadNotice] = useState<string | null>(null);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
@@ -110,26 +116,48 @@ export default function InternalPricingMatrix({
 
   // Auto-load preloaded lead from localStorage if coming from Mesa de Trabajo
   useEffect(() => {
+    const parseLead = (lead: any) => {
+      if (!lead || !lead.clientName) return;
+      const companySuffix = lead.clientCompany ? ` (${lead.clientCompany})` : "";
+      setCalcClientName(`${lead.clientName}${companySuffix}`);
+      if (lead.clientCompany) setCalcClientCompany(lead.clientCompany);
+      if (lead.clientEmail) setCalcClientEmail(lead.clientEmail);
+      if (lead.clientPhone) setCalcClientPhone(lead.clientPhone);
+      if (lead.id || lead.folio) setCalcLeadId(lead.id || lead.folio);
+
+      // Handle assigned seller
+      const vName = lead.vendorName || lead.sellerName || lead.assignedVendor;
+      if (vName && !vName.toLowerCase().includes("sin asesor")) {
+        setCalcVendorName(vName);
+      } else {
+        setCalcVendorName("Jessica Torre");
+      }
+
+      const vCode = lead.vendorCode || lead.sellerId;
+      if (vCode && vCode !== "SIN-ASESOR") {
+        setCalcVendorCode(vCode);
+      } else {
+        setCalcVendorCode("VEN-JESS-101");
+      }
+
+      setActiveTab("calculadora");
+      const pTypeStr = Array.isArray(lead.projectType) ? lead.projectType.join(" ") : String(lead.projectType || "");
+      if (pTypeStr.includes("mobile") || pTypeStr.includes("movil") || pTypeStr.includes("app")) {
+        setCalcTier("movil");
+      } else if (pTypeStr.includes("web") || pTypeStr.includes("plataforma") || pTypeStr.includes("sistema")) {
+        setCalcTier("plataforma");
+      } else {
+        setCalcTier("mvp");
+      }
+      setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} • Asesora: ${lead.vendorName || "Jessica Torre"}.`);
+    };
+
     const loadStoredLead = () => {
       try {
         if (typeof window !== "undefined") {
           const stored = localStorage.getItem("innocentia_calculator_lead");
           if (stored) {
-            const lead = JSON.parse(stored);
-            if (lead && lead.clientName) {
-              const companySuffix = lead.clientCompany ? ` (${lead.clientCompany})` : "";
-              setCalcClientName(`${lead.clientName}${companySuffix}`);
-              setActiveTab("calculadora");
-              const pTypeStr = Array.isArray(lead.projectType) ? lead.projectType.join(" ") : String(lead.projectType || "");
-              if (pTypeStr.includes("mobile") || pTypeStr.includes("movil") || pTypeStr.includes("app")) {
-                setCalcTier("movil");
-              } else if (pTypeStr.includes("web") || pTypeStr.includes("plataforma") || pTypeStr.includes("sistema")) {
-                setCalcTier("plataforma");
-              } else {
-                setCalcTier("mvp");
-              }
-              setPreloadedLeadNotice(`✓ Cotización precargada para ${lead.clientName} (${lead.projectName || "Proyecto Digital"}).`);
-            }
+            parseLead(JSON.parse(stored));
           }
         }
       } catch (err) {
@@ -137,9 +165,13 @@ export default function InternalPricingMatrix({
       }
     };
 
+    const handleLeadEvent = (e: any) => {
+      if (e?.detail) parseLead(e.detail);
+    };
+
     loadStoredLead();
-    window.addEventListener("innocentia-load-calculator-lead", loadStoredLead);
-    return () => window.removeEventListener("innocentia-load-calculator-lead", loadStoredLead);
+    window.addEventListener("innocentia-load-calculator-lead", handleLeadEvent);
+    return () => window.removeEventListener("innocentia-load-calculator-lead", handleLeadEvent);
   }, []);
 
   // Catalog of Branding & Marketing Services (Zona de Branding)
@@ -507,14 +539,61 @@ export default function InternalPricingMatrix({
       addScope(`Módulo a la medida: ${c.name}`);
     });
 
+    // Determine assigned vendor and seller ID
+    const chosenVendorName = customData?.vendorName || calcVendorName || "Jessica Torre";
+    let chosenVendorCode = customData?.vendorCode || calcVendorCode || "VEN-JESS-101";
+    let chosenSellerId = "usr_sales_jessica";
+    const lowerVendor = chosenVendorName.toLowerCase();
+    if (lowerVendor.includes("jess")) {
+      chosenSellerId = "usr_sales_jessica";
+      chosenVendorCode = "VEN-JESS-101";
+    } else if (lowerVendor.includes("ivan")) {
+      chosenSellerId = "usr_ceo_ivan";
+      chosenVendorCode = "VEN-IVAN-001";
+    } else if (lowerVendor.includes("daniel")) {
+      chosenSellerId = "usr_partner_daniel";
+      chosenVendorCode = "SOCIO-DIR-01";
+    } else if (lowerVendor.includes("farid")) {
+      chosenSellerId = "usr_sales_farid";
+      chosenVendorCode = "VEN-FARID-303";
+    } else if (lowerVendor.includes("carlos")) {
+      chosenSellerId = "usr_sales_01";
+      chosenVendorCode = "VEND_CARLOS";
+    }
+
+    // Determine stable folio to prevent creating random duplicate projects on every click
+    let proposalFolio = customData?.folio || calcLeadId;
+    if (!proposalFolio && typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("innocentia_portal_projects");
+        if (saved) {
+          const existing: any[] = JSON.parse(saved);
+          const match = existing.find(p => 
+            p.client && calcClientName && (
+              p.client.toLowerCase().includes(calcClientName.toLowerCase().slice(0, 8)) ||
+              calcClientName.toLowerCase().includes(p.client.toLowerCase().slice(0, 8)) ||
+              (p.client.toLowerCase().includes("corina") && calcClientName.toLowerCase().includes("corina"))
+            )
+          );
+          if (match && match.id) {
+            proposalFolio = match.id;
+          }
+        }
+      } catch (e) {}
+    }
+    if (!proposalFolio) {
+      proposalFolio = `COT-${Math.floor(100000 + Math.random() * 900000)}`;
+      setCalcLeadId(proposalFolio);
+    }
+
     const fullProposal: ProjectPdfData = {
-      folio: customData?.folio || `COT-${Math.floor(100000 + Math.random() * 900000)}`,
+      folio: proposalFolio,
       clientId: customData?.clientId || `CLI-${Math.floor(10000 + Math.random() * 90000)}`,
       date: new Date().toLocaleDateString("es-MX", { day: "2-digit", month: "long", year: "numeric" }),
       clientName: customData?.clientName || calcClientName || "Cliente Prospecto",
-      clientCompany: customData?.clientCompany || (calcClientName ? `Empresa de ${calcClientName}` : "Empresa Prospecto"),
-      clientEmail: customData?.clientEmail || "contacto@cliente.com",
-      clientPhone: customData?.clientPhone || "+52 (WhatsApp)",
+      clientCompany: customData?.clientCompany || calcClientCompany || (calcClientName ? `Empresa de ${calcClientName}` : "Empresa Prospecto"),
+      clientEmail: customData?.clientEmail || calcClientEmail || "contacto@cliente.com",
+      clientPhone: customData?.clientPhone || calcClientPhone || "+52 (WhatsApp)",
       projectName: customData?.projectName || (calcClientName ? `Solución Integral para ${calcClientName}` : "Solución Digital & Branding Innocentia"),
       projectType: calcModalidad === "renta" ? `SaaS / Renta (${calcTier.toUpperCase()})` : `Desarrollo por Proyecto (${calcTier.toUpperCase()})`,
       tier: calcTier,
@@ -530,25 +609,25 @@ export default function InternalPricingMatrix({
       discountPercent: discountPercent > 0 ? discountPercent : undefined,
       discountAmount: discountPercent > 0 ? discountAmount : undefined,
       total: finalTotal,
-      vendorName: customData?.vendorName || userName || "Asesor Comercial Innocentia",
-      vendorCode: customData?.vendorCode || (userRole === "socio" ? "SOCIO-DIR-01" : "VEN-CORP-101"),
+      vendorName: chosenVendorName,
+      vendorCode: chosenVendorCode,
       vendorCommission: comisionVendedor,
     };
 
-    // Auto-create Project in "En Aprobación" status
+    // Auto-create Project in "En Aprobación" status with correct assigned seller
     const newProjectFromQuote = {
       id: fullProposal.folio,
       name: fullProposal.projectName || `${fullProposal.clientCompany} (${fullProposal.tier ? fullProposal.tier.toUpperCase() : "PROYECTO"})`,
       client: fullProposal.clientName,
       clientEmail: fullProposal.clientEmail,
-      sellerId: userRole === "socio" ? "usr_partner_daniel" : "usr_ceo_ivan",
-      sellerName: fullProposal.vendorName,
+      sellerId: chosenSellerId,
+      sellerName: chosenVendorName,
       devLead: "Ing. Rodrigo Pacheco",
       uxLead: "Sofía (Innocentia Design Lead)",
       devopsLead: "Iván Castillo (CEO)",
       status: "En Aprobación" as const,
       progress: 5,
-      currentSprint: `Cotización ${fullProposal.folio} emitida • En espera de aprobación y anticipo`,
+      currentSprint: `Cotización ${fullProposal.folio} emitida por ${chosenVendorName} • En espera de aprobación y anticipo`,
       budget: fullProposal.total || 0,
       paidAmount: 0,
       targetDate: "Por Definir (Kick-off)",
@@ -562,9 +641,29 @@ export default function InternalPricingMatrix({
       try {
         const saved = localStorage.getItem("innocentia_portal_projects");
         const existing: any[] = saved ? JSON.parse(saved) : [];
-        if (!existing.some((p) => p.id === newProjectFromQuote.id)) {
-          localStorage.setItem("innocentia_portal_projects", JSON.stringify([newProjectFromQuote, ...existing]));
+        const isCorina = (newProjectFromQuote.client || "").toLowerCase().includes("corina");
+        const matchIdx = existing.findIndex((p) => {
+          if (p.id === newProjectFromQuote.id) return true;
+          if (p.status === "En Aprobación" || p.status === "Nueva Solicitud") {
+            if (isCorina && (p.client || "").toLowerCase().includes("corina")) return true;
+            if (p.client && newProjectFromQuote.client && p.client.toLowerCase().trim() === newProjectFromQuote.client.toLowerCase().trim()) return true;
+          }
+          return false;
+        });
+
+        let updated: any[];
+        if (matchIdx >= 0) {
+          updated = [...existing];
+          updated[matchIdx] = {
+            ...updated[matchIdx],
+            ...newProjectFromQuote,
+            id: updated[matchIdx].id,
+          };
+          newProjectFromQuote.id = updated[matchIdx].id;
+        } else {
+          updated = [newProjectFromQuote, ...existing];
         }
+        localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
       } catch (e) {}
 
       window.dispatchEvent(
@@ -610,7 +709,7 @@ ${includedBranding.length > 0 ? `• Zona de Branding & Estrategia de Marca:\n${
 *Subtotal:* $${subtotalInvestment.toLocaleString()} MXN
 ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${discountAmount.toLocaleString()} MXN\n` : ""}*INVERSIÓN FINAL:* $${finalTotal.toLocaleString()} MXN${calcModalidad === "renta" ? `\n*Renta Mensual:* $${monthlyPrice.toLocaleString()} MXN/mes` : ""}
 
-*Asesor:* ${userName} (Innocentia Tech)
+*Asesor(a):* ${calcVendorName} (${calcVendorCode})
 *Garantía:* Calidad de nivel internacional, propiedad intelectual 100% y soporte prioritario.`;
 
     navigator.clipboard.writeText(quoteText);
@@ -1027,18 +1126,55 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-1">
             {/* LEFT COLUMN: CONTROLS, PRICE OVERRIDE & EXTRAS BUILDER */}
             <div className="lg:col-span-7 space-y-5">
-              {/* 1. Prospect Info */}
+              {/* 1. Prospect Info & Assigned Salesperson */}
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
-                <label className="block text-xs font-mono text-gray-300 font-bold">
-                  Nombre del Cliente / Empresa Prospecto:
-                </label>
-                <input
-                  type="text"
-                  value={calcClientName}
-                  onChange={(e) => setCalcClientName(e.target.value)}
-                  placeholder="ej: Clínica Médica AI / Dr. Roberto / Grupo Horizon"
-                  className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-mono text-gray-300 font-bold mb-1">
+                      Nombre del Cliente / Empresa Prospecto:
+                    </label>
+                    <input
+                      type="text"
+                      value={calcClientName}
+                      onChange={(e) => setCalcClientName(e.target.value)}
+                      placeholder="ej: Sra. Corina (Hotel Venezuela)"
+                      className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono text-gray-300 font-bold mb-1 flex items-center justify-between">
+                      <span>Asesor(a) Comercial / Vendedor(a):</span>
+                      <span className="text-[10px] text-emerald-400 font-bold">Oficial</span>
+                    </label>
+                    <select
+                      value={calcVendorCode}
+                      onChange={(e) => {
+                        const code = e.target.value;
+                        setCalcVendorCode(code);
+                        if (code === "VEN-JESS-101" || code === "usr_sales_jess") setCalcVendorName("Jessica Torre");
+                        else if (code === "VEN-FARID-303" || code === "usr_sales_farid") setCalcVendorName("Farid Abdul Oziel");
+                        else if (code === "VEND_CARLOS" || code === "usr_sales_01") setCalcVendorName("Carlos Mendoza");
+                        else if (code === "SOCIO-DIR-01" || code === "usr_partner_daniel") setCalcVendorName("Daniel Torre");
+                        else if (code === "CEO-IVAN-01" || code === "usr_ceo_ivan") setCalcVendorName("Iván Castillo");
+                        else setCalcVendorName("Sin Asesor Asignado");
+                      }}
+                      className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:outline-none focus:border-[#00D1FF]"
+                    >
+                      <option value="VEN-JESS-101">Jessica Torre (VEN-JESS-101 • Boldberry)</option>
+                      <option value="CEO-IVAN-01">Iván Castillo (CEO & Software Architect)</option>
+                      <option value="SOCIO-DIR-01">Daniel Torre (Socio / Operaciones)</option>
+                      <option value="VEN-FARID-303">Farid Abdul Oziel (VEN-FARID-303)</option>
+                      <option value="VEND_CARLOS">Carlos Mendoza (VEND_CARLOS)</option>
+                    </select>
+                  </div>
+                </div>
+                {(calcClientCompany || calcClientEmail || calcClientPhone) && (
+                  <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-white/5 text-[10px] font-mono text-gray-400">
+                    {calcClientCompany && <span className="text-[#00D1FF]">🏢 {calcClientCompany}</span>}
+                    {calcClientEmail && <span>✉️ {calcClientEmail}</span>}
+                    {calcClientPhone && <span>📞 {calcClientPhone}</span>}
+                  </div>
+                )}
               </div>
 
               {/* 2. Base Configuration & Direct Price Editing */}
@@ -1758,6 +1894,12 @@ ${discountPercent > 0 ? `*Descuento Comercial (-${discountPercent}%):* -$${disco
                         </strong>
                       </div>
                     )}
+                    <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px] font-mono text-gray-400">
+                      <span>Vendedor(a) asignado(a):</span>
+                      <span className="text-emerald-400 font-bold">
+                        {calcVendorName} ({calcVendorCode})
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

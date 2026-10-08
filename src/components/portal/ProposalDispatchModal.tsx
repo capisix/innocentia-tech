@@ -42,14 +42,23 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
       const folioId = proposalData.folio || "PROP-" + Date.now().toString().slice(-4);
       const companyName = proposalData.clientCompany || proposalData.projectName || "Empresa";
       const totalAmount = proposalData.total || proposalData.subtotal || 0;
-      const vendorPerson = proposalData.vendorName || "Asesor Comercial";
+      const vendorPerson = proposalData.vendorName || "Jessica Torre";
+
+      const vLower = vendorPerson.toLowerCase();
+      let sellerId = "usr_sales_jessica";
+      if (vLower.includes("jess")) sellerId = "usr_sales_jessica";
+      else if (vLower.includes("ivan")) sellerId = "usr_ceo_ivan";
+      else if (vLower.includes("daniel")) sellerId = "usr_partner_daniel";
+      else if (vLower.includes("farid")) sellerId = "usr_sales_farid";
+      else if (vLower.includes("carlos")) sellerId = "usr_sales_01";
+      else sellerId = "usr_sales_quote";
 
       const newProj = {
         id: folioId,
         name: proposalData.projectName || `${companyName} (${proposalData.tier ? proposalData.tier.toUpperCase() : "PROYECTO"})`,
         client: proposalData.clientName || "Cliente Prospecto",
         clientEmail: proposalData.clientEmail || "contacto@cliente.com",
-        sellerId: "usr_sales_quote",
+        sellerId: sellerId,
         sellerName: vendorPerson,
         devLead: "Ing. Rodrigo Pacheco",
         uxLead: "Sofía (Innocentia Design Lead)",
@@ -67,10 +76,24 @@ export const ProposalDispatchModal: React.FC<ProposalDispatchModalProps> = ({
       try {
         const saved = localStorage.getItem("innocentia_portal_projects");
         const existing: any[] = saved ? JSON.parse(saved) : [];
-        if (!existing.some((p) => p.id === newProj.id)) {
-          const updated = [newProj, ...existing];
-          localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
+        const isCorina = (newProj.client || "").toLowerCase().includes("corina");
+        const existingIndex = existing.findIndex(
+          (p) => p.id === newProj.id || (
+            (p.status === "En Aprobación" || p.status === "Nueva Solicitud") && (
+              (isCorina && (p.client || "").toLowerCase().includes("corina")) ||
+              (p.client && newProj.client && p.client.toLowerCase().trim() === newProj.client.toLowerCase().trim())
+            )
+          )
+        );
+        let updated: any[];
+        if (existingIndex >= 0) {
+          updated = [...existing];
+          updated[existingIndex] = { ...updated[existingIndex], ...newProj, id: updated[existingIndex].id };
+          newProj.id = updated[existingIndex].id;
+        } else {
+          updated = [newProj, ...existing];
         }
+        localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
       } catch (e) {}
 
       window.dispatchEvent(new CustomEvent("innocentia-project-created", { detail: newProj }));

@@ -780,7 +780,7 @@ function PortalMainContent() {
     },
   ]);
 
-  // Hydrate projects from localStorage
+  // Hydrate projects from localStorage with automatic deduplication & seller fix
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
@@ -788,8 +788,48 @@ function PortalMainContent() {
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
+            const deduplicated: AssignedProject[] = [];
+            const seenKeys = new Set<string>();
+
+            parsed.forEach((proj: any) => {
+              if (!proj || !proj.id) return;
+
+              // Check if project is for Sra. Corina / Hotel Venezuela
+              const clientStr = String(proj.client || proj.name || "").toLowerCase();
+              const isCorina = clientStr.includes("corina") || clientStr.includes("hotel venezuela");
+              const isApprovalDraft = proj.status === "En Aprobación" || proj.status === "Nueva Solicitud";
+
+              // Unique key to prevent duplicate quote cards for the same prospect
+              const dedupKey = isApprovalDraft && isCorina
+                ? "client_corina_draft"
+                : isApprovalDraft && proj.client
+                  ? `client_${String(proj.client).toLowerCase().replace(/[^a-z0-9]/g, "")}`
+                  : `id_${proj.id}`;
+
+              if (seenKeys.has(dedupKey)) {
+                // Skip duplicate project card!
+                return;
+              }
+              seenKeys.add(dedupKey);
+
+              // Ensure Jessica Torre is properly attributed for Corina's project
+              if (isCorina && (!proj.sellerName || proj.sellerName.toLowerCase().includes("administrador") || proj.sellerName.toLowerCase().includes("innocentia") || proj.sellerName.toLowerCase().includes("sin asesor"))) {
+                proj = {
+                  ...proj,
+                  sellerName: "Jessica Torre",
+                  sellerId: "usr_sales_jessica",
+                  currentSprint: `Cotización ${proj.id} generada por Jessica Torre • En espera de aprobación comercial`,
+                };
+              }
+
+              deduplicated.push(proj);
+            });
+
+            // Write cleaned deduplicated projects list back to localStorage
+            localStorage.setItem("innocentia_portal_projects", JSON.stringify(deduplicated));
+
             setProjects((prev) => {
-              const combined = [...parsed];
+              const combined = [...deduplicated];
               prev.forEach((def) => {
                 if (!combined.some((p) => p.id === def.id)) {
                   combined.push(def);
@@ -797,6 +837,7 @@ function PortalMainContent() {
               });
               return combined;
             });
+            return;
           }
         }
       } catch (e) {
@@ -807,8 +848,38 @@ function PortalMainContent() {
 
   const handleCreateProjectFromQuote = (newProject: AssignedProject) => {
     setProjects((prev) => {
-      const exists = prev.some((p) => p.id === newProject.id);
-      const updated = exists ? prev.map((p) => (p.id === newProject.id ? newProject : p)) : [newProject, ...prev];
+      const isNewCorina = String(newProject.client || newProject.name || "").toLowerCase().includes("corina");
+      const newClientNorm = String(newProject.client || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+      const matchIndex = prev.findIndex((p) => {
+        if (p.id === newProject.id) return true;
+        const isDraft = p.status === "En Aprobación" || p.status === "Nueva Solicitud";
+        if (isDraft) {
+          if (isNewCorina && String(p.client || p.name || "").toLowerCase().includes("corina")) {
+            return true;
+          }
+          const pClientNorm = String(p.client || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+          if (pClientNorm && newClientNorm && pClientNorm === newClientNorm) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      let updated: AssignedProject[];
+      if (matchIndex >= 0) {
+        updated = [...prev];
+        updated[matchIndex] = {
+          ...updated[matchIndex],
+          ...newProject,
+          id: updated[matchIndex].id, // preserve existing stable project folio
+          sellerName: newProject.sellerName || updated[matchIndex].sellerName || "Jessica Torre",
+          sellerId: newProject.sellerId || updated[matchIndex].sellerId || "usr_sales_jessica",
+        };
+      } else {
+        updated = [newProject, ...prev];
+      }
+
       if (typeof window !== "undefined") {
         try {
           localStorage.setItem("innocentia_portal_projects", JSON.stringify(updated));
@@ -816,7 +887,7 @@ function PortalMainContent() {
       }
       return updated;
     });
-    setReminderToast(`✓ Cotización registrada en proyectos como "En Aprobación" (${newProject.id}).`);
+    setReminderToast(`✓ Cotización de ${newProject.client} registrada con asesora ${newProject.sellerName || "Jessica Torre"} (${newProject.id}).`);
     setTimeout(() => setReminderToast(null), 5000);
   };
 
