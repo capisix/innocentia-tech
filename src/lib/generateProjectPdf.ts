@@ -1,3 +1,5 @@
+import QRCode from "qrcode";
+
 export interface ProposalQuoteItem {
   concept: string;
   amount: number;
@@ -51,6 +53,30 @@ export interface ProjectPdfData {
   techFeatures?: string[];
   budgetRange?: string;
   timeline?: string;
+}
+
+function generateRealQrSvg(text: string): string {
+  try {
+    const qr = QRCode.create(text, { errorCorrectionLevel: "M" });
+    const size = qr.modules.size;
+    const margin = 2;
+    const total = size + margin * 2;
+    let path = "";
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (qr.modules.get(r, c)) {
+          path += `M${c + margin},${r + margin}h1v1h-1z `;
+        }
+      }
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${total} ${total}" class="qr-svg" shape-rendering="crispEdges">
+      <rect width="${total}" height="${total}" fill="#FFFFFF" rx="2" />
+      <path d="${path.trim()}" fill="#000000" />
+    </svg>`;
+  } catch (err) {
+    console.error("Error generating QR SVG:", err);
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="qr-svg"><rect width="100" height="100" fill="#FFFFFF" rx="6"/><text x="50" y="55" font-size="12" text-anchor="middle" fill="#000">QR Error</text></svg>`;
+  }
 }
 
 export function generateProjectPdf(data: ProjectPdfData) {
@@ -128,28 +154,9 @@ export function generateProjectPdf(data: ProjectPdfData) {
   ];
   const observationsList = (data.observations && data.observations.length > 0) ? data.observations : defaultObservations;
 
-  // SVG QR Code pointing to online verification
-  const qrCodeSvg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="qr-svg">
-      <rect width="100" height="100" fill="#FFFFFF" rx="6" />
-      <path d="M10,10 h30 v30 h-30 z M15,15 v20 h20 v-20 z M20,20 h10 v10 h-10 z" fill="#000000" />
-      <path d="M60,10 h30 v30 h-30 z M65,15 v20 h20 v-20 z M70,20 h10 v10 h-10 z" fill="#000000" />
-      <path d="M10,60 h30 v30 h-30 z M15,65 v20 h20 v-20 z M20,70 h10 v10 h-10 z" fill="#000000" />
-      <rect x="45" y="10" width="6" height="10" fill="#000000" />
-      <rect x="45" y="25" width="6" height="15" fill="#000000" />
-      <rect x="10" y="45" width="10" height="6" fill="#000000" />
-      <rect x="25" y="45" width="15" height="6" fill="#000000" />
-      <rect x="45" y="45" width="10" height="10" fill="#000000" />
-      <rect x="60" y="45" width="15" height="6" fill="#000000" />
-      <rect x="80" y="45" width="10" height="6" fill="#000000" />
-      <rect x="45" y="60" width="6" height="15" fill="#000000" />
-      <rect x="45" y="80" width="6" height="10" fill="#000000" />
-      <rect x="60" y="60" width="10" height="10" fill="#000000" />
-      <rect x="75" y="60" width="15" height="10" fill="#000000" />
-      <rect x="60" y="75" width="15" height="15" fill="#000000" />
-      <rect x="80" y="75" width="10" height="15" fill="#000000" />
-    </svg>
-  `;
+  // Real Scannable QR Code pointing to innocentia.tech / online proposal
+  const targetQrUrl = data.qrUrl || "https://innocentia.tech";
+  const qrCodeSvg = generateRealQrSvg(targetQrUrl);
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -549,15 +556,19 @@ export function generateProjectPdf(data: ProjectPdfData) {
     }
 
     .footer-right {
-      width: 62px;
-      height: 62px;
+      width: 66px;
+      height: 66px;
       flex-shrink: 0;
+      background: #FFFFFF;
+      padding: 3px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
     }
     .qr-svg {
       width: 100%;
       height: 100%;
       display: block;
-      border-radius: 6px;
+      border-radius: 4px;
     }
 
     /* Print Styles */
@@ -698,10 +709,13 @@ export function generateProjectPdf(data: ProjectPdfData) {
           <div>WhatsApp Business 960 177 1556</div>
         </div>
         <div class="footer-center">
-          <a href="https://innocentia.tech" target="_blank">www.innocentia.tech</a>
+          <a href="${targetQrUrl}" target="_blank">www.innocentia.tech</a>
+          <span style="display:block; font-size:9px; color:#64748B; margin-top:2px;">Escanea para verificar propuesta</span>
         </div>
         <div class="footer-right">
-          ${qrCodeSvg}
+          <a href="${targetQrUrl}" target="_blank" title="Abrir ${targetQrUrl}" style="display:block; width:100%; height:100%;">
+            ${qrCodeSvg}
+          </a>
         </div>
       </div>
     </div>
@@ -788,10 +802,13 @@ export function generateProjectPdf(data: ProjectPdfData) {
           <div>WhatsApp Business 960 177 1556</div>
         </div>
         <div class="footer-center">
-          <a href="https://innocentia.tech" target="_blank">www.innocentia.tech</a>
+          <a href="${targetQrUrl}" target="_blank">www.innocentia.tech</a>
+          <span style="display:block; font-size:9px; color:#64748B; margin-top:2px;">Escanea para verificar propuesta</span>
         </div>
         <div class="footer-right">
-          ${qrCodeSvg}
+          <a href="${targetQrUrl}" target="_blank" title="Abrir ${targetQrUrl}" style="display:block; width:100%; height:100%;">
+            ${qrCodeSvg}
+          </a>
         </div>
       </div>
     </div>
