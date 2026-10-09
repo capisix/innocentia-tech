@@ -55,7 +55,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative bg-[#020204] py-16 border-t border-white/10 text-gray-400 text-xs overflow-hidden">
+    <footer className="relative bg-transparent py-16 border-t border-white/10 text-gray-400 text-xs overflow-hidden">
       {/* Subtle ambient gradient backdrops */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00D1FF]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#FF3858]/5 rounded-full blur-[140px] pointer-events-none" />
@@ -102,7 +102,7 @@ export default function Footer() {
                 rel={c.type === "whatsapp" ? "noopener noreferrer" : undefined}
                 className={`group p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between space-y-4 cursor-pointer relative overflow-hidden backdrop-blur-xl ${
                   c.isLive
-                    ? "bg-gradient-to-b from-emerald-950/30 to-black/80 border-emerald-500/40 hover:border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:-translate-y-1"
+                    ? "bg-gradient-to-b from-emerald-950/40 via-emerald-950/20 to-black/40 border-emerald-500/40 hover:border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:-translate-y-1"
                     : "bg-white/[0.02] hover:bg-white/[0.06] border-white/10 hover:border-white/25 hover:-translate-y-1 shadow-lg"
                 }`}
               >
