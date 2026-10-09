@@ -111,7 +111,7 @@ export default function AboutUsSection({ onOpenProjectModal }: AboutUsSectionPro
             }`}
           >
             {activeTab === "manifiesto" ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
                 {/* Left Card: El Manifiesto (Exact design from Foto 3) */}
                 <div className="lg:col-span-5 xl:col-span-5 bg-gradient-to-b from-[#15081e]/85 via-[#0c0816]/90 to-[#070b16]/90 border border-pink-500/30 rounded-[32px] p-7 sm:p-9 lg:p-10 shadow-[0_0_60px_rgba(255,0,122,0.18)] flex flex-col justify-between space-y-6 text-left relative overflow-hidden backdrop-blur-2xl">
                   {/* Ambient corner light */}
@@ -212,10 +212,10 @@ export default function AboutUsSection({ onOpenProjectModal }: AboutUsSectionPro
                   </div>
                 </div>
 
-                {/* Right Column: Full 16:9 Looping Video + CTA Banner */}
-                <div className="lg:col-span-7 xl:col-span-7 flex flex-col space-y-4 sm:space-y-5">
+                {/* Right Column: Full 16:9 Looping Video + CTA Banner (Flush Bottom Alignment) */}
+                <div className="lg:col-span-7 xl:col-span-7 flex flex-col justify-between h-full space-y-4">
                   {/* Video Container (16:9 Widescreen Complete) */}
-                  <div className="relative w-full aspect-video rounded-[32px] overflow-hidden border border-cyan-500/30 bg-black/40 backdrop-blur-xl shadow-[0_0_60px_rgba(0,240,255,0.2)]">
+                  <div className="relative w-full aspect-video rounded-[32px] overflow-hidden border border-cyan-500/30 bg-black/40 backdrop-blur-xl shadow-[0_0_60px_rgba(0,240,255,0.2)] flex-shrink-0">
                     {/* Looping Infinity Founders Video */}
                     <video
                       src="/videos/Energy_flowing_in_infinity_symbol_20261008100316.mp4"
@@ -232,8 +232,8 @@ export default function AboutUsSection({ onOpenProjectModal }: AboutUsSectionPro
                     <div className="absolute bottom-0 left-0 w-36 h-36 bg-pink-500/10 blur-[60px] pointer-events-none" />
                   </div>
 
-                  {/* High-Converting CTA Banner: "¿Qué idea te gustaría desarrollar?" */}
-                  <div className="relative rounded-[28px] bg-gradient-to-r from-[#FF007A]/10 via-purple-950/20 to-[#00F0FF]/10 border border-white/15 p-5 sm:p-6 backdrop-blur-xl shadow-[0_0_40px_rgba(0,240,255,0.1)] flex flex-col sm:flex-row items-center justify-between gap-4 group hover:border-white/30 transition-all duration-300 text-left">
+                  {/* High-Converting CTA Banner: "¿Qué idea te gustaría desarrollar?" Perfectly aligned to bottom */}
+                  <div className="relative rounded-[28px] bg-gradient-to-r from-[#FF007A]/10 via-purple-950/20 to-[#00F0FF]/10 border border-white/15 p-5 sm:p-6 backdrop-blur-xl shadow-[0_0_40px_rgba(0,240,255,0.1)] flex flex-col sm:flex-row items-center justify-between gap-4 group hover:border-white/30 transition-all duration-300 text-left mt-auto">
                     <div className="space-y-1.5 text-center sm:text-left">
                       <div className="flex items-center justify-center sm:justify-start gap-2">
                         <span className="w-2 h-2 rounded-full bg-[#00F0FF] animate-pulse" />
