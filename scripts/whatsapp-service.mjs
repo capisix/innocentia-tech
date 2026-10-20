@@ -59,9 +59,13 @@ function addLog(msg) {
 
 // Conversation memory per phone number / JID
 const sessionHistories = new Map();
+const processedMsgIds = new Set();
 let isWhatsAppConnected = false;
 let lastConnectedAt = null;
 let currentSock = null;
+let activeSocketId = 0;
+let reconnectTimer = null;
+let isShuttingDown = false;
 
 const systemInstruction = `Eres el asistente conversacional humano de WhatsApp de Innocentia Tech (estudio boutique de tecnología, branding y desarrollo de software a medida).
 Representas a dos líderes reales:
@@ -234,13 +238,44 @@ If the user mentions software, website, platform, POS or e-commerce: respond as 
   return fallback;
 }
 
+function cleanupCurrentSocket() {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+  if (currentSock) {
+    try {
+      currentSock.ev.removeAllListeners("connection.update");
+      currentSock.ev.removeAllListeners("creds.update");
+      currentSock.ev.removeAllListeners("messages.upsert");
+      currentSock.end(undefined);
+    } catch {}
+    currentSock = null;
+  }
+}
+
+function scheduleReconnect(delayMs = 2500) {
+  if (isShuttingDown) return;
+  if (reconnectTimer) clearTimeout(reconnectTimer);
+  reconnectTimer = setTimeout(() => {
+    reconnectTimer = null;
+    startWhatsAppBot();
+  }, delayMs);
+}
+
 async function startWhatsAppBot() {
+  if (isShuttingDown) return;
+  cleanupCurrentSocket();
+  const mySocketId = ++activeSocketId;
+
   console.log("==========================================================");
-  console.log("🚀 INICIANDO BOT DE WHATSAPP INNOCENTIA TECH (DUAL CORE)");
+  console.log(`🚀 INICIANDO BOT DE WHATSAPP INNOCENTIA TECH (SOCKET #${mySocketId})`);
   console.log("==========================================================");
 
   const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
   const { version } = await fetchLatestBaileysVersion();
+
+  if (mySocketId !== activeSocketId || isShuttingDown) return;
 
   const sock = makeWASocket({
     version,
@@ -256,21 +291,16 @@ async function startWhatsAppBot() {
   sock.ev.on("creds.update", saveCreds);
 
   sock.ev.on("connection.update", async (update) => {
+    if (mySocketId !== activeSocketId || isShuttingDown) return;
     const { connection, lastDisconnect, qr } = update;
 
     if (qr) {
       addLog("📲 Nuevo código QR recibido de WhatsApp. Actualizando vista...");
       qrcodeTerminal.generate(qr, { small: true });
 
-      // Also generate a visual HTML file and PNG image for easy scanning
       try {
         const qrPngPath = path.resolve("./public/whatsapp-qr.png");
-        const artifactPngPath = "C:/Users/capys/.gemini/antigravity/brain/86dfde67-36da-4e17-ae2d-4943fb6042d2/whatsapp_qr.png";
         await QRCode.toFile(qrPngPath, qr, { width: 450, margin: 2 });
-        try {
-          fs.copyFileSync(qrPngPath, artifactPngPath);
-        } catch {}
-
         const qrDataUrl = await QRCode.toDataURL(qr, { width: 400, margin: 2 });
         latestQrDataUrl = qrDataUrl;
       } catch (err) {
@@ -285,7 +315,9 @@ async function startWhatsAppBot() {
       addLog(`❌ Conexión cerrada (Código ${statusCode}). Reintentando: ${shouldReconnect}`);
 
       if (shouldReconnect) {
-        setTimeout(startWhatsAppBot, 2500);
+        // If 440 (connectionReplaced), wait 8s to avoid ping-pong during container deploys
+        const delay = statusCode === 440 ? 8000 : 2500;
+        scheduleReconnect(delay);
       } else {
         addLog("⚠️ Sesión cerrada/desvinculada. Limpiando credenciales para nuevo QR...");
         try {
@@ -296,7 +328,7 @@ async function startWhatsAppBot() {
             }
           }
         } catch {}
-        setTimeout(startWhatsAppBot, 2000);
+        scheduleReconnect(2000);
       }
     } else if (connection === "open") {
       isWhatsAppConnected = true;
@@ -308,6 +340,7 @@ async function startWhatsAppBot() {
 
   // Handle incoming messages
   sock.ev.on("messages.upsert", async ({ messages, type }) => {
+    if (mySocketId !== activeSocketId || isShuttingDown) return;
     try {
       for (const msg of messages) {
         const remoteJid = msg.key.remoteJid;
@@ -316,6 +349,10 @@ async function startWhatsAppBot() {
         // Ignore status broadcasts or group chats
         if (remoteJid === "status@broadcast") continue;
         if (remoteJid.endsWith("@g.us")) continue;
+
+        // Deduplicate messages
+        const msgId = msg.key.id;
+        if (msgId && processedMsgIds.has(msgId)) continue;
 
         // Extract message text from all WhatsApp packet variants
         const textMessage =
@@ -341,6 +378,7 @@ async function startWhatsAppBot() {
           cleanText.startsWith("✨ *SOFÍA") ||
           cleanText.startsWith("⚡ *IVÁN") ||
           cleanText.startsWith("🚀 *DUAL") ||
+          cleanText.startsWith("🚀 *INNOCENTIA") ||
           cleanText.startsWith("SOFÍA:") ||
           cleanText.startsWith("IVÁN:")
         ) {
@@ -356,6 +394,14 @@ async function startWhatsAppBot() {
           continue;
         }
 
+        if (msgId) {
+          processedMsgIds.add(msgId);
+          if (processedMsgIds.size > 300) {
+            const firstId = processedMsgIds.values().next().value;
+            processedMsgIds.delete(firstId);
+          }
+        }
+
         addLog(`📩 Mensaje recibido de [${remoteJid}] (fromMe=${msg.key.fromMe}): "${cleanText}"`);
 
         // Get user session history
@@ -364,11 +410,13 @@ async function startWhatsAppBot() {
         }
         const history = sessionHistories.get(remoteJid);
 
-        // Send 'composing' presence indicator
-        await sock.sendPresenceUpdate("composing", remoteJid);
+        // Send 'composing' presence indicator safely
+        try {
+          if (currentSock) await currentSock.sendPresenceUpdate("composing", remoteJid);
+        } catch {}
 
-        // Small realistic human typing delay (1.5s - 2.5s)
-        await new Promise((res) => setTimeout(res, 1800));
+        // Small realistic human typing delay (800ms)
+        await new Promise((res) => setTimeout(res, 800));
 
         // Get AI consultative reply (Groq AI with local engine fallback)
         const reply = await getSmartAIResponse(cleanText, history);
@@ -411,19 +459,34 @@ async function startWhatsAppBot() {
 
         responseText = `${header}\n\n${body}`;
 
-        // Send reply to WhatsApp
-        await sock.sendMessage(remoteJid, { text: responseText });
-        addLog(`📤 Respuesta enviada a [${remoteJid}] (${reply.speaker}): ${reply.text[0].substring(0, 60)}...`);
-
-        // Update history (keep last 8 turns)
-        history.push({ sender: "user", text: cleanText });
-        history.push({ sender: reply.type, text: responseText });
-        if (history.length > 10) {
-          sessionHistories.set(remoteJid, history.slice(-10));
+        // Send reply to WhatsApp with retry in case of momentary socket reconnect
+        let sentOk = false;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const activeSock = currentSock || sock;
+            await activeSock.sendMessage(remoteJid, { text: responseText });
+            sentOk = true;
+            break;
+          } catch (sendErr) {
+            addLog(`⚠️ Intento ${attempt} de envío falló (${sendErr.message}). Reintentando...`);
+            await new Promise((res) => setTimeout(res, 2000));
+          }
         }
 
-        // Send 'available' presence indicator
-        await sock.sendPresenceUpdate("available", remoteJid);
+        if (sentOk) {
+          addLog(`📤 Respuesta enviada a [${remoteJid}] (${reply.speaker}): ${reply.text[0].substring(0, 60)}...`);
+          // Update history (keep last 8 turns)
+          history.push({ sender: "user", text: cleanText });
+          history.push({ sender: reply.type, text: responseText });
+          if (history.length > 10) {
+            sessionHistories.set(remoteJid, history.slice(-10));
+          }
+        }
+
+        // Send 'available' presence indicator safely
+        try {
+          if (currentSock) await currentSock.sendPresenceUpdate("available", remoteJid);
+        } catch {}
       }
     } catch (msgError) {
       addLog(`❌ Error procesando mensaje entrante: ${msgError.message}`);
@@ -472,6 +535,7 @@ const server = http.createServer((req, res) => {
 
   if (req.url === "/reset" || req.url === "/logout") {
     try {
+      cleanupCurrentSocket();
       if (fs.existsSync(AUTH_DIR)) {
         const files = fs.readdirSync(AUTH_DIR);
         for (const file of files) {
@@ -483,10 +547,7 @@ const server = http.createServer((req, res) => {
       isWhatsAppConnected = false;
       latestQrDataUrl = "";
       addLog("🔄 Sesión reseteada a solicitud del usuario. Generando nuevo código QR...");
-      if (currentSock) {
-        try { currentSock.end(); } catch {}
-      }
-      setTimeout(startWhatsAppBot, 1000);
+      scheduleReconnect(800);
       res.writeHead(302, { Location: "/qr" });
       res.end();
       return;
@@ -643,6 +704,19 @@ process.on("uncaughtException", (err) => {
 process.on("unhandledRejection", (reason) => {
   addLog(`⚠️ Unhandled Rejection: ${reason}`);
 });
+
+function gracefulShutdown(signal) {
+  console.log(`🛑 Recibido ${signal}. Cerrando socket anterior limpiamente sin reconectar...`);
+  isShuttingDown = true;
+  cleanupCurrentSocket();
+  server.close(() => {
+    process.exit(0);
+  });
+  setTimeout(() => process.exit(0), 2000);
+}
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`🌐 Servidor HTTP activo en 0.0.0.0:${PORT} (listo para Render/Railway)`);
