@@ -1175,8 +1175,8 @@ export function getIntelligentHumanReply(
       speaker: "IVÁN",
       type: "ivan",
       text: [
-        "Desarrollamos soluciones técnicas a medida utilizando tecnología moderna (Next.js 15, TypeScript, Node.js y bases de datos PostgreSQL): desde páginas web ultrarrápidas y pasarelas de pago hasta aplicaciones móviles y automatizaciones en la nube.",
-        "¿Qué funciones principales o flujos de trabajo te gustaría que tenga tu sistema o plataforma?",
+        "Desarrollamos páginas web rápidas, plataformas de registro, catálogos en línea con carrito de compras y aplicaciones a la medida listas para operar desde celular o computadora.",
+        "¿Te gustaría cotizar el desarrollo completo de tu proyecto en https://innocentia.tech/crear-proyecto o qué funciones principales necesitas que incluya?",
       ],
     };
   }
