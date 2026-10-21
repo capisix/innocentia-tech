@@ -73,43 +73,54 @@ Representas a dos líderes reales:
 - IVÁN: Director de Tecnología & Dev. Desarrollador pragmático, enfocado en cómo el software, las webs y la automatización hacen ganar dinero a un negocio (CERO tecnicismos aburridos).
 
 REGLAS CRÍTICAS DE CONVERSACIÓN HUMANA:
-1. SALUDOS O MENCIÓN DE NOMBRE: Si el usuario solo saluda (ej. "hola", "buenas", "hi", "hello") o escribe el nombre del estudio ("Innocentia Tech", "innocentie", etc.), preséntate de inmediato como el equipo de Sofía (Diseño & UX) e Iván (Tecnología & Software), explica brevemente a qué se dedica el estudio y pregúntale directamente en qué se le puede servir o qué proyecto le gustaría cotizar/desarrollar.
-2. ALCANCE GLOBAL: Atendemos clientes en todo México, EE. UU. y el mundo. NUNCA digas "aquí en Mérida" ni asumas la ubicación del cliente a menos que el cliente pregunte explícitamente "¿dónde están ubicados?".
-3. CERO FRASES ROBÓTICAS: PROHIBIDO usar frases trilladas o repetitivas como "¡Me encanta esa energía!", "¡Excelente! Nos encanta el entusiasmo" o muletillas de bot. Habla de forma natural, ágil y directa como una persona real en WhatsApp.
-4. IDIOMA: Si el cliente escribe en inglés (ej. "Yes", "Hello", "Innocentia tech"), responde en inglés. Si escribe en español, responde en español.
-5. ASIGNACIÓN:
+1. SALUDOS O MENCIÓN DE NOMBRE (SOLO AL INICIO): Si es el primer mensaje y el usuario solo saluda (ej. "hola", "buenas", "hi", "hello") o escribe el nombre del estudio ("Innocentia Tech", "innocentie", etc.), preséntate como el equipo de Sofía (Diseño & UX) e Iván (Tecnología & Software), explica brevemente a qué se dedica el estudio y pregúntale en qué se le puede servir o qué proyecto le gustaría cotizar/desarrollar.
+2. PROHIBIDO REPETIR LA BIENVENIDA: Si ya hay historial de conversación previa, NUNCA vuelvas a presentarte con "¡Hola! Somos Sofía e Iván..." ni repitas respuestas genéricas. Continúa el hilo real de la conversación.
+3. SI PIDEN CÓDIGO SUELTO O TAREAS ESCOLARES (ej. "hazme el código HTML", "es para la escuela", "pásame el código"):
+   - Responde IVÁN ("type": "ivan", "speaker": "IVÁN") con amabilidad y claridad: explica que Innocentia Tech es una agencia profesional de desarrollo de software y branding que construye sistemas completos bajo cotización para negocios y empresas (no somos un bot generador de código HTML suelto por chat ni hacemos tareas escolares).
+   - Añade que si en cambio desean contratar el desarrollo profesional llave en mano de ese sistema o plataforma web, pueden cotizarlo en https://innocentia.tech/crear-proyecto.
+4. ALCANCE GLOBAL: Atendemos clientes en todo México, EE. UU. y el mundo. NUNCA digas "aquí en Mérida" ni asumas la ubicación del cliente a menos que el cliente pregunte explícitamente "¿dónde están ubicados?".
+5. CERO FRASES ROBÓTICAS: PROHIBIDO usar frases trilladas o repetitivas como "¡Me encanta esa energía!" o muletillas de bot. Habla de forma natural, ágil y directa como una persona real en WhatsApp.
+6. IDIOMA: Responde SIEMPRE en español por defecto. Solo responde en inglés si el cliente claramente está hablando en inglés.
+7. ASIGNACIÓN:
    - Si pregunta por logotipos, imagen, marca, rediseño, estilo: Responde SOFÍA ("type": "sofia", "speaker": "SOFÍA").
-   - Si pregunta por sistemas, páginas web, inventarios, cobros, apps, automatización: Responde IVÁN ("type": "ivan", "speaker": "IVÁN").
-   - Si es bienvenida, saludo o consulta general: Responde DUAL ("type": "both", "speaker": "DUAL").
-6. ENLACE A BLUEPRINT: Cuando ya se haya entendido la necesidad del cliente o pregunten cómo cotizar/empezar, comparte el enlace: https://innocentia.tech/crear-proyecto.
-7. Formato de respuesta JSON estricto:
+   - Si pregunta por sistemas, páginas web, formularios, catálogos, inventarios, cobros, apps, automatización: Responde IVÁN ("type": "ivan", "speaker": "IVÁN").
+   - Si es bienvenida inicial o consulta integral: Responde DUAL ("type": "both", "speaker": "DUAL").
+8. ENLACE A BLUEPRINT: Cuando ya se haya entendido la necesidad del cliente o pregunten cómo cotizar/empezar, comparte el enlace: https://innocentia.tech/crear-proyecto.
+9. Formato de respuesta JSON estricto (responde ÚNICAMENTE con el objeto JSON válido, sin texto adicional):
 {
   "type": "sofia" | "ivan" | "both",
   "speaker": "SOFÍA" | "IVÁN" | "DUAL",
-  "text": ["Párrafo de presentación o respuesta concisa...", "¿En qué te podemos servir hoy o qué proyecto te gustaría desarrollar?"]
+  "text": ["Párrafo de respuesta concisa y directa...", "Pregunta de seguimiento o siguiente paso"]
 }`;
 
 function detectLanguage(text, history = []) {
   const clean = text.toLowerCase().trim();
 
+  // If the user explicitly asks for Spanish, always return "es"
+  if (/espa[ñn]ol/i.test(clean)) return "es";
+
+  // Note: Never include ambiguous words shared with Spanish like "no", "me", "a", "he", "in"
   const enWords = [
-    "i", "im", "i'm", "my", "me", "we", "our", "you", "your", "he", "she", "they", "it",
-    "is", "are", "am", "was", "were", "be", "been", "have", "has", "had", "do", "does", "did",
+    "i", "im", "i'm", "my", "we", "our", "you", "your", "she", "they", "it",
+    "is", "are", "am", "was", "were", "been", "have", "has", "had", "does", "did",
     "will", "would", "can", "could", "should", "want", "need", "like", "make", "create",
-    "build", "develop", "promote", "product", "products", "brand", "branding", "logo", "website",
-    "app", "software", "price", "cost", "quote", "how", "what", "when", "where", "why", "which",
-    "who", "hello", "hi", "hey", "yes", "no", "thanks", "thank", "please", "good", "great", "nice"
+    "build", "develop", "promote", "product", "products", "brand", "branding", "website",
+    "software", "price", "cost", "quote", "how", "what", "when", "where", "why", "which",
+    "who", "hello", "hi", "hey", "yes", "thanks", "thank", "please", "good", "great", "nice"
   ];
 
   const esWords = [
-    "hola", "buenos", "buenas", "dias", "tardes", "noches", "quiero", "quisiera", "necesito",
-    "busco", "marca", "diseño", "pagina", "página", "sitio", "cuanto", "cuánto", "precio",
-    "costo", "cotizacion", "cotización", "gracias", "por favor", "ayuda", "hacer", "crear",
-    "desarrollar", "negocio", "empresa", "sistema", "restaurante", "tienda", "venta", "ventas",
-    "si", "sí", "tacos", "comida", "bien"
+    "hola", "buenos", "buenas", "dias", "días", "tardes", "noches", "quiero", "quisiera", "necesito",
+    "busco", "marca", "diseño", "pagina", "página", "sitio", "cuanto", "cuánto", "precio", "precios",
+    "costo", "cotizacion", "cotización", "gracias", "por", "favor", "ayuda", "ayudame", "ayúdame",
+    "hacer", "crear", "creeme", "créeme", "hazme", "desarrollar", "negocio", "empresa", "sistema",
+    "restaurante", "tienda", "venta", "ventas", "si", "sí", "no", "me", "te", "tu", "tú", "mi", "mis",
+    "el", "la", "los", "las", "un", "una", "para", "con", "sin", "que", "qué", "como", "cómo", "todo",
+    "tengo", "tiene", "imagen", "imagenes", "imágenes", "codigo", "código", "formulario", "escuela",
+    "estoy", "esta", "está", "son", "del", "al", "lo", "ya", "pero", "mas", "más"
   ];
 
-  const words = clean.replace(/[^\w\s]/g, " ").split(/\s+/).filter(Boolean);
+  const words = clean.replace(/[^\w\sáéíóúñü]/g, " ").split(/\s+/).filter(Boolean);
   let enCount = 0;
   let esCount = 0;
 
@@ -118,19 +129,11 @@ function detectLanguage(text, history = []) {
     if (esWords.includes(w)) esCount++;
   }
 
-  if (enCount > esCount) return "en";
-  if (esCount > enCount) return "es";
+  if (esCount > 0 && esCount >= enCount) return "es";
+  if (enCount >= esCount + 2) return "en";
 
-  if (/^(yes|yeah|yep|hi|hello|hey|sure|ok|okay|nice|cool)$/i.test(clean)) return "en";
-  if (/^(si|sí|hola|buenas|ola|sip|va|vale|simon|simón)$/i.test(clean)) return "es";
-
-  for (let i = history.length - 1; i >= 0; i--) {
-    if (history[i].sender === "user") {
-      const prev = history[i].text.toLowerCase();
-      if (/\b(product|promote|website|logo|brand|help|need|want|build|yes|hi|hello)\b/i.test(prev)) return "en";
-      if (/\b(hola|marca|diseño|quiero|sistema|pagina|web|cuanto)\b/i.test(prev)) return "es";
-    }
-  }
+  if (/^(yes|yeah|yep|hi|hello|hey|sure)$/i.test(clean)) return "en";
+  if (/^(si|sí|hola|buenas|ola|sip|va|vale|simon|simón|gracias|ok|okay)$/i.test(clean)) return "es";
 
   return "es";
 }
@@ -138,49 +141,75 @@ function detectLanguage(text, history = []) {
 async function getSmartAIResponse(cleanText, history = []) {
   const lang = detectLanguage(cleanText, history);
 
+  // Instant intercept if user is asking for raw HTML/code generation or homework help
+  if (/\b(hazme todo el c[oó]digo|ay[uú]dame con el c[oó]digo|lo quiero para html|p[aá]same el c[oó]digo|^html$)\b/i.test(cleanText.trim())) {
+    return {
+      speaker: "IVÁN",
+      type: "ivan",
+      lang: "es",
+      text: [
+        "Te comento rápidamente: en Innocentia Tech somos un estudio profesional de desarrollo de software y diseño para empresas, por lo que no generamos ni enviamos fragmentos de código HTML sueltos por chat ni realizamos tareas escolares.",
+        "Si lo que buscas es contratar el desarrollo completo de tu plataforma web o sistema de catálogo con registro y carrito llave en mano, con gusto te lo cotizamos formalmente aquí: https://innocentia.tech/crear-proyecto"
+      ]
+    };
+  }
+
   if (groqApiKey) {
-    try {
-      const langDirective = lang === "en"
-        ? `CRITICAL MANDATORY INSTRUCTION: The user is speaking in ENGLISH. You MUST answer 100% in natural, fluent, professional ENGLISH. Do NOT output any Spanish words.
-If the user mentions promoting a product, branding, logo or design: respond as SOFÍA ("type": "sofia", "speaker": "SOFÍA") with warm, insightful advice on visual identity and packaging.
-If the user mentions software, website, platform, POS or e-commerce: respond as IVÁN ("type": "ivan", "speaker": "IVÁN").`
-        : `INSTRUCCIÓN DE IDIOMA: El usuario habla en ESPAÑOL. Responde de forma 100% natural y cercana en español.`;
+    const langDirective = lang === "en"
+      ? `CRITICAL MANDATORY INSTRUCTION: The user is speaking in ENGLISH. You MUST answer 100% in natural, fluent, professional ENGLISH. Do NOT output any Spanish words.`
+      : `INSTRUCCIÓN DE IDIOMA: El usuario habla en ESPAÑOL. Responde 100% en español natural, directo y profesional. NUNCA respondas en inglés.`;
 
-      const groqMessages = [
-        { role: "system", content: `${systemInstruction}\n\n${langDirective}` },
-        ...history.slice(-8).map((m) => ({
-          role: m.sender === "user" ? "user" : "assistant",
-          content: m.text,
-        })),
-        { role: "user", content: cleanText },
-      ];
+    const groqMessages = [
+      { role: "system", content: `${systemInstruction}\n\n${langDirective}` },
+      ...history.slice(-8).map((m) => ({
+        role: m.sender === "user" ? "user" : "assistant",
+        content: m.text,
+      })),
+      { role: "user", content: cleanText },
+    ];
 
-      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${groqApiKey}`,
-        },
-        body: JSON.stringify({
-          model: "qwen/qwen3.8-27b",
-          messages: groqMessages,
-          temperature: 0.6,
-          max_tokens: 600,
-        }),
-      });
+    // Multi-model failover across Groq models so 429 OTPM limits never cause a fallback
+    const groqModels = [
+      { id: "qwen/qwen3.8-27b", maxTokens: 300 },
+      { id: "openai/gpt-oss-120b", maxTokens: 400 },
+      { id: "openai/gpt-oss-20b", maxTokens: 400 },
+    ];
 
-      if (res.ok) {
-        const data = await res.json();
-        const content = (data.choices?.[0]?.message?.content || "").trim();
-        const cleanJson = content.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-        const parsed = JSON.parse(cleanJson);
-        if (parsed.text && Array.isArray(parsed.text) && parsed.text.length > 0) {
-          parsed.lang = lang;
-          return parsed;
+    for (const modelCfg of groqModels) {
+      try {
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${groqApiKey}`,
+          },
+          body: JSON.stringify({
+            model: modelCfg.id,
+            messages: groqMessages,
+            temperature: 0.5,
+            max_tokens: modelCfg.maxTokens,
+          }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const content = (data.choices?.[0]?.message?.content || "").trim();
+          const cleanJson = content.replace(/^```json\s*/i, "").replace(/```$/i, "").trim();
+          const jsonMatch = cleanJson.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            if (parsed.text && Array.isArray(parsed.text) && parsed.text.length > 0) {
+              parsed.lang = lang;
+              return parsed;
+            }
+          }
+        } else {
+          const errTxt = await res.text();
+          addLog(`⚠️ Groq (${modelCfg.id}) status ${res.status}: intentando siguiente modelo...`);
         }
+      } catch (err) {
+        addLog(`⚠️ Error en modelo ${modelCfg.id}: ${err.message}`);
       }
-    } catch (err) {
-      console.error("Groq AI API error, falling back to local engine:", err.message);
     }
   }
 
@@ -197,17 +226,6 @@ If the user mentions software, website, platform, POS or e-commerce: respond as 
         ]
       };
     }
-    if (cleanText.toLowerCase().includes("product") || cleanText.toLowerCase().includes("brand") || cleanText.toLowerCase().includes("logo")) {
-      return {
-        speaker: "SOFÍA",
-        type: "sofia",
-        lang: "en",
-        text: [
-          "Promoting a product is all about impactful visual identity, memorable branding, and sleek packaging that builds trust right away.",
-          "Could you tell me a bit more about what kind of product you are offering so I can guide you on the best creative strategy?"
-        ]
-      };
-    }
     return {
       speaker: "DUAL",
       type: "both",
@@ -219,8 +237,8 @@ If the user mentions software, website, platform, POS or e-commerce: respond as 
     };
   }
 
-  // Spanish greetings / brand mentions
-  if (/^(hola|buen[ao]s\s*(dias|días|tardes|noches)?|innocenti[ae]\s*tech|info|saludos|que tal|qué tal)/i.test(cleanText.toLowerCase().trim())) {
+  // Spanish greetings / brand mentions (only if conversation is starting or explicit greeting)
+  if (/^(hola|buen[ao]s\s*(dias|días|tardes|noches)?|innocenti[ae]\s*tech|info|saludos|que tal|qué tal)$/i.test(cleanText.toLowerCase().trim())) {
     return {
       speaker: "DUAL",
       type: "both",
@@ -229,6 +247,19 @@ If the user mentions software, website, platform, POS or e-commerce: respond as 
         "¡Hola! Qué gusto saludarte. 👋 Somos Sofía (Branding & Diseño) e Iván (Tecnología & Software), fundadores de Innocentia Tech.",
         "Diseñamos marcas de alto impacto y desarrollamos plataformas web, aplicaciones y software a medida para empresas y negocios.",
         "¿En qué te podemos servir hoy o qué proyecto te gustaría cotizar o desarrollar?"
+      ]
+    };
+  }
+
+  // Context-aware Spanish fallback that NEVER repeats the generic welcome mid-conversation
+  if (history.length > 0) {
+    return {
+      speaker: "IVÁN",
+      type: "ivan",
+      lang: "es",
+      text: [
+        "Entiendo los requerimientos que comentas. En Innocentia Tech desarrollamos el sistema o plataforma web completa a medida (diseño visual, base de datos de registros, catálogo e interfaz lista para operar).",
+        "Para darte una cotización formal con tiempos y costos exactos de desarrollo, registra los detalles de tu proyecto en nuestro Blueprint interactivo: https://innocentia.tech/crear-proyecto"
       ]
     };
   }

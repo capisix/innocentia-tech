@@ -176,47 +176,56 @@ REGLAS INFALIBLES DE CONVERSACIÓN (¡OBLIGATORIAS!):
 
     // 3. If Groq API key is configured
     if (groqApiKey) {
-      try {
-        const groqMessages = [
-          { role: "system", content: systemInstruction },
-          ...chatHistory.slice(-8).map((m: ChatMessage) => ({
-            role: m.sender === "user" ? "user" : "assistant",
-            content: formatMsgText(m.text),
-          })),
-          { role: "user", content: userMessage },
-        ];
+      const groqMessages = [
+        { role: "system", content: systemInstruction },
+        ...chatHistory.slice(-8).map((m: ChatMessage) => ({
+          role: m.sender === "user" ? "user" : "assistant",
+          content: formatMsgText(m.text),
+        })),
+        { role: "user", content: userMessage },
+      ];
 
-        const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${groqApiKey}`,
-          },
-          body: JSON.stringify({
-            model: "qwen/qwen3.8-27b",
-            messages: groqMessages,
-            temperature: 0.7,
-            max_tokens: 800,
-          }),
-        });
+      const groqModels = [
+        { id: "qwen/qwen3.8-27b", maxTokens: 320 },
+        { id: "openai/gpt-oss-120b", maxTokens: 400 },
+        { id: "openai/gpt-oss-20b", maxTokens: 400 },
+      ];
 
-        if (groqRes.ok) {
-          const groqData = await groqRes.json();
-          const rawContent = (groqData.choices?.[0]?.message?.content || "").trim();
-          const cleanJson = rawContent.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
-          if (cleanJson) {
-            const parsed = JSON.parse(cleanJson);
-            if (parsed.text && Array.isArray(parsed.text) && parsed.text.length > 0) {
-              return NextResponse.json({
-                success: true,
-                source: "groq",
-                response: parsed,
-              });
+      for (const modelCfg of groqModels) {
+        try {
+          const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${groqApiKey}`,
+            },
+            body: JSON.stringify({
+              model: modelCfg.id,
+              messages: groqMessages,
+              temperature: 0.6,
+              max_tokens: modelCfg.maxTokens,
+            }),
+          });
+
+          if (groqRes.ok) {
+            const groqData = await groqRes.json();
+            const rawContent = (groqData.choices?.[0]?.message?.content || "").trim();
+            const cleanJson = rawContent.replace(/^```json\s*/i, "").replace(/```$/i, "").trim();
+            const jsonMatch = cleanJson.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[0]);
+              if (parsed.text && Array.isArray(parsed.text) && parsed.text.length > 0) {
+                return NextResponse.json({
+                  success: true,
+                  source: "groq",
+                  response: parsed,
+                });
+              }
             }
           }
+        } catch (groqError) {
+          console.error(`Groq API error (${modelCfg.id}):`, groqError);
         }
-      } catch (groqError) {
-        console.error("Groq API error, falling back to local engine:", groqError);
       }
     }
 
