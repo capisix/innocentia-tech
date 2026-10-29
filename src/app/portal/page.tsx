@@ -17,6 +17,8 @@ import OpenHousePropTechDemo from "../../components/portal/OpenHousePropTechDemo
 import OpenHouseMobileAppDemo from "../../components/portal/OpenHouseMobileAppDemo";
 import MultiCommerceOpenHouse360 from "../../components/portal/MultiCommerceOpenHouse360";
 import { generateProjectPdf, ProjectPdfData, ProposalQuoteItem } from "../../lib/generateProjectPdf";
+import { getLocalDateStr, getFormattedDateMX } from "../../lib/dateUtils";
+import { smartMergeEntityList, createLocalSnapshot, repairFinanceRecords } from "../../lib/guardrails";
 import {
   Sparkles,
   ArrowRight,
@@ -545,8 +547,8 @@ function PortalMainContent() {
   const PresetIcon = currentPreset?.icon || Crown;
 
   // Tab States per Role
-  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "telemetria" | "chat">("proyectos");
-  const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "telemetria" | "chat">("finanzas");
+  const [ceoTab, setCeoTab] = useState<"proyectos" | "asignacion" | "finanzas" | "calendario" | "auditoria" | "tabulador" | "telemetria" | "chat" | "whatsapp">("proyectos");
+  const [partnerTab, setPartnerTab] = useState<"finanzas" | "calendario" | "auditoria" | "servidores" | "proyectos" | "tabulador" | "telemetria" | "chat" | "whatsapp">("finanzas");
   const [clientTab, setClientTab] = useState<"proyectos" | "demo" | "finanzas" | "chat" | "solicitudes">("proyectos");
   const [clientDemoView, setClientDemoView] = useState<"app" | "dashboard">("app");
   const [devTab, setDevTab] = useState<"mis_proyectos" | "sprints" | "entregables" | "tabulador" | "chat">("mis_proyectos");
@@ -1372,7 +1374,22 @@ function PortalMainContent() {
   };
 
   // Finance Records (Socio / CEO) - Solo Gastos Operativos y Servicios Reales
-  const [financeRecords, setFinanceRecords] = useState<FinanceRecord[]>([
+  const INITIAL_FINANCE_RECORDS: FinanceRecord[] = [
+    {
+      id: "FIN-00",
+      type: "gasto",
+      section: "gasto_operativo",
+      concept: "correo y sim",
+      category: "Marketing & Chatbots AI",
+      amount: 2400,
+      date: "30 de Septiembre de 2026",
+      status: "recurrente",
+      dueDate: "30 de Cada Mes (Recurrente Mensual)",
+      provider: "correo y sim",
+      sourceAccount: "Caja Chica Efectivo",
+      registeredBy: "Daniel Torre (Socio)",
+      paidBy: "Daniel Torre (Socio)",
+    },
     {
       id: "FIN-01",
       type: "gasto",
@@ -1486,13 +1503,16 @@ function PortalMainContent() {
       category: "Telecomunicaciones",
       amount: 230,
       date: "09 de Septiembre de 2026",
-      status: "pagado",
+      status: "recurrente",
+      dueDate: "09 de Cada Mes (Recurrente Mensual)",
       provider: "Telefonía Móvil",
       sourceAccount: "Caja Chica Efectivo",
       registeredBy: "Daniel Torre (Socio)",
       paidBy: "Daniel Torre (Socio)",
     },
-  ]);
+  ];
+
+  const [financeRecords, setFinanceRecords] = useState<FinanceRecord[]>(INITIAL_FINANCE_RECORDS);
 
   // New Finance Movement Modal State
   const [isFinanceModalOpen, setIsFinanceModalOpen] = useState(false);
@@ -1506,6 +1526,7 @@ function PortalMainContent() {
   const [finProjectRef, setFinProjectRef] = useState("");
   const [finSourceAccount, setFinSourceAccount] = useState("Santander Corporativa (Innocentia Tech)");
   const [finPaidBy, setFinPaidBy] = useState("Daniel Torre (Socio)");
+  const [finStatus, setFinStatus] = useState<"pagado" | "pendiente" | "recurrente">("recurrente");
 
   // Edit Finance Movement Modal State
   const [isEditFinanceModalOpen, setIsEditFinanceModalOpen] = useState(false);
@@ -1521,6 +1542,51 @@ function PortalMainContent() {
   const [editFinSourceAccount, setEditFinSourceAccount] = useState("");
   const [editFinStatus, setEditFinStatus] = useState<"pagado" | "pendiente" | "recurrente">("recurrente");
   const [editFinPaidBy, setEditFinPaidBy] = useState("");
+
+  // Hydrate finance records from API & localStorage (CANDADOS LARRY: Smart Merge & Self-Healing)
+  useEffect(() => {
+    const loadFinances = async () => {
+      try {
+        let loadedRecords: FinanceRecord[] = [];
+        if (typeof window !== "undefined") {
+          const saved = localStorage.getItem("innocentia_portal_finance_records");
+          if (saved) {
+            try {
+              const parsed = JSON.parse(saved);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                loadedRecords = parsed;
+              }
+            } catch (e) {}
+          }
+        }
+
+        try {
+          const res = await fetch("/api/finance");
+          if (res.ok) {
+            const data = await res.json();
+            if (data.records && Array.isArray(data.records) && data.records.length > 0) {
+              // Smart Merge API data with LocalStorage data
+              loadedRecords = smartMergeEntityList(loadedRecords, data.records);
+            }
+          }
+        } catch (apiErr) {}
+
+        // CANDADO 3 & 5: Fusión inteligente inmutable con registros base y auto-curación
+        const merged = smartMergeEntityList(INITIAL_FINANCE_RECORDS, loadedRecords);
+        const healed = repairFinanceRecords(merged);
+
+        if (typeof window !== "undefined") {
+          createLocalSnapshot("innocentia_portal_finance_records", healed, "hydration");
+          localStorage.setItem("innocentia_portal_finance_records", JSON.stringify(healed));
+        }
+
+        setFinanceRecords(healed);
+      } catch (err) {
+        console.error("Error hydrating finance records:", err);
+      }
+    };
+    loadFinances();
+  }, []);
 
   const handleOpenEditFinanceRecord = (rec: FinanceRecord) => {
     setEditingFinanceRecord(rec);
@@ -1557,7 +1623,28 @@ function PortalMainContent() {
       paidBy: editFinPaidBy.trim() || undefined,
     };
 
-    setFinanceRecords((prev) => prev.map((r) => (r.id === editingFinanceRecord.id ? updatedRec : r)));
+    setFinanceRecords((prev) => {
+      // CANDADO 3: Snapshot previo a mutación
+      if (typeof window !== "undefined") {
+        createLocalSnapshot("innocentia_portal_finance_records", prev, "pre_edit");
+      }
+      const updated = prev.map((r) => (r.id === editingFinanceRecord.id ? updatedRec : r));
+      const healed = repairFinanceRecords(updated);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("innocentia_portal_finance_records", JSON.stringify(healed));
+        } catch (e) {}
+      }
+      return healed;
+    });
+
+    try {
+      fetch("/api/finance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedRec),
+      }).catch(() => {});
+    } catch (e) {}
 
     // Push into Audit Log
     const newLog: AuditLogEntry = {
@@ -1584,6 +1671,7 @@ function PortalMainContent() {
     const mappedType: "ingreso" | "gasto" | "servicio" =
       finSection === "ingreso_proyecto" ? "ingreso" : "gasto";
 
+    // CANDADO 1: Fecha local mexicana garantizada
     const newRec: FinanceRecord = {
       id: "FIN-" + Date.now().toString().slice(-4),
       type: mappedType,
@@ -1591,8 +1679,8 @@ function PortalMainContent() {
       concept: finConcept,
       category: finCategory,
       amount: Number(finAmount),
-      date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }),
-      status: finSection === "ingreso_proyecto" ? "pagado" : "recurrente",
+      date: getFormattedDateMX(),
+      status: finStatus,
       dueDate: finDueDate,
       provider: finProvider || undefined,
       beneficiary: finBeneficiary || undefined,
@@ -1602,7 +1690,28 @@ function PortalMainContent() {
       paidBy: finPaidBy.trim() || undefined,
     };
 
-    setFinanceRecords((prev) => [newRec, ...prev]);
+    setFinanceRecords((prev) => {
+      // CANDADO 3: Snapshot previo y fusión inteligente
+      if (typeof window !== "undefined") {
+        createLocalSnapshot("innocentia_portal_finance_records", prev, "pre_add");
+      }
+      const updated = smartMergeEntityList([newRec], prev);
+      const healed = repairFinanceRecords(updated);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("innocentia_portal_finance_records", JSON.stringify(healed));
+        } catch (e) {}
+      }
+      return healed;
+    });
+
+    try {
+      fetch("/api/finance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newRec),
+      }).catch(() => {});
+    } catch (e) {}
 
     // Push into Audit Log
     const newLog: AuditLogEntry = {
@@ -1625,6 +1734,7 @@ function PortalMainContent() {
     setFinProjectRef("");
     setFinAmount(5000);
     setFinPaidBy("Daniel Torre (Socio)");
+    setFinStatus("recurrente");
     setIsFinanceModalOpen(false);
   };
 
@@ -1644,7 +1754,22 @@ function PortalMainContent() {
       };
       setAuditLogs((prev) => [newLog, ...prev]);
     }
-    setFinanceRecords((prev) => prev.filter((r) => r.id !== id));
+    setFinanceRecords((prev) => {
+      if (typeof window !== "undefined") {
+        createLocalSnapshot("innocentia_portal_finance_records", prev, "pre_delete");
+      }
+      const updated = prev.filter((r) => r.id !== id);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("innocentia_portal_finance_records", JSON.stringify(updated));
+        } catch (e) {}
+      }
+      return updated;
+    });
+
+    try {
+      fetch(`/api/finance?id=${encodeURIComponent(id)}`, { method: "DELETE" }).catch(() => {});
+    } catch (e) {}
   };
 
   // Cloud Servers, Hosting & Expiration Monitor State
@@ -2501,6 +2626,20 @@ function PortalMainContent() {
                 </div>
               )}
 
+              {(activeRole === "ceo" || activeRole === "socio") && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (activeRole === "ceo") setCeoTab("whatsapp");
+                    else setPartnerTab("whatsapp");
+                  }}
+                  className="px-4 py-2.5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold text-emerald-300 transition-all flex items-center gap-2 cursor-pointer shadow-sm hover:scale-105"
+                >
+                  <Smartphone className="w-4 h-4 text-emerald-400" />
+                  <span>📲 WhatsApp QR & Logs</span>
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={() => setIsUserProfileModalOpen(true)}
@@ -2628,6 +2767,19 @@ function PortalMainContent() {
                   <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
                   3
                 </span>
+              </button>
+
+              <button
+                onClick={() => setCeoTab("whatsapp")}
+                className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  ceoTab === "whatsapp"
+                    ? "bg-emerald-400 text-black shadow-[0_0_20px_rgba(16,185,129,0.5)]"
+                    : "bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border border-emerald-500/40"
+                }`}
+              >
+                <Smartphone className="w-4 h-4" />
+                <span>📲 WhatsApp Bot & QR</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
               </button>
             </div>
 
@@ -4408,6 +4560,89 @@ function PortalMainContent() {
                 userName={activeUser.name}
                 onOpenCalculator={() => setCeoTab("tabulador")}
               />
+            )}
+
+            {ceoTab === "whatsapp" && (
+              <div className="p-6 sm:p-8 rounded-[32px] bg-[#07070E] border border-emerald-500/30 shadow-2xl space-y-6">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-white/10">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                      <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-bold">
+                        Sincronización Directa • Baileys + Groq Multi-Model IA
+                      </span>
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight mt-1">
+                      📲 Panel de Vinculación QR & Monitor en Vivo de WhatsApp
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Escanea el código QR desde tu celular (WhatsApp &rarr; Dispositivos vinculados &rarr; Vincular un dispositivo) o supervisa las respuestas automáticas en tiempo real.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <a
+                      href="https://innocentia-tech.onrender.com/qr"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 shadow-lg"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Abrir QR en Pestaña Nueva
+                    </a>
+                    <a
+                      href="https://innocentia-tech.onrender.com/reset"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      🔄 Forzar Nuevo QR (Reset)
+                    </a>
+                    <a
+                      href="https://innocentia-tech.onrender.com/logs"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white text-xs font-bold transition-all flex items-center gap-2"
+                    >
+                      <Terminal className="w-4 h-4 text-[#00D1FF]" />
+                      Abrir Logs Completos
+                    </a>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                  <div className="lg:col-span-5 rounded-2xl border border-white/10 bg-black/60 overflow-hidden flex flex-col">
+                    <div className="px-4 py-3 bg-white/[0.03] border-b border-white/10 flex items-center justify-between">
+                      <span className="text-xs font-bold text-white flex items-center gap-2">
+                        <Smartphone className="w-4 h-4 text-emerald-400" />
+                        Código QR / Estado de Vinculación
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-400">Auto-Refresh</span>
+                    </div>
+                    <iframe
+                      src="https://innocentia-tech.onrender.com/qr"
+                      title="WhatsApp QR Sync"
+                      className="w-full h-[520px] border-0 bg-[#07070D]"
+                    />
+                  </div>
+
+                  <div className="lg:col-span-7 rounded-2xl border border-white/10 bg-black/60 overflow-hidden flex flex-col">
+                    <div className="px-4 py-3 bg-white/[0.03] border-b border-white/10 flex items-center justify-between">
+                      <span className="text-xs font-bold text-white flex items-center gap-2">
+                        <Terminal className="w-4 h-4 text-[#00D1FF]" />
+                        Monitor de Mensajes & Eventos en Tiempo Real (/logs)
+                      </span>
+                      <span className="text-[10px] font-mono text-[#00D1FF]">Actualización cada 4s</span>
+                    </div>
+                    <iframe
+                      src="https://innocentia-tech.onrender.com/logs"
+                      title="WhatsApp Bot Live Logs"
+                      className="w-full h-[520px] border-0 bg-[#07070D]"
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         )}
@@ -7909,6 +8144,53 @@ function PortalMainContent() {
                 </div>
               </div>
 
+              {/* Status / Recurrence Selector */}
+              <div>
+                <label className="block text-gray-400 mb-1.5 font-bold uppercase text-[10px]">
+                  🔄 Modalidad de Pago & Frecuencia (¿Es Recurrente Mensual?):
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFinStatus("recurrente");
+                      if (!finDueDate.includes("Cada Mes")) {
+                        setFinDueDate("30 de Cada Mes (Recurrente Mensual)");
+                      }
+                    }}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finStatus === "recurrente"
+                        ? "bg-rose-500/20 text-rose-300 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    🔄 Recurrente Cada Mes
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinStatus("pagado")}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finStatus === "pagado"
+                        ? "bg-emerald-500/20 text-emerald-300 border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    🟢 Pago Único / Liquidado
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFinStatus("pendiente")}
+                    className={`p-2.5 rounded-xl border text-center font-bold text-[11px] transition-all cursor-pointer ${
+                      finStatus === "pendiente"
+                        ? "bg-amber-500/20 text-amber-300 border-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
+                        : "bg-white/5 text-gray-400 border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    🟡 Pendiente por Dispersar
+                  </button>
+                </div>
+              </div>
+
               {/* Paid By / Payer Attribution */}
               <div>
                 <label className="block text-gray-400 mb-1.5 font-bold uppercase text-[10px]">
@@ -7918,9 +8200,10 @@ function PortalMainContent() {
                   {[
                     "Daniel Torre (Socio)",
                     "Iván Castillo (CEO)",
+                    "Caja Chica Efectivo",
+                    "💵 Pago en Efectivo",
                     "Santander Corporativa (Innocentia Tech)",
                     "BBVA Operativa & Nómina",
-                    "Caja Chica Efectivo",
                     "Cliente Registrado",
                   ].map((preset) => (
                     <button
@@ -7948,18 +8231,19 @@ function PortalMainContent() {
 
               {/* Source Account Selector */}
               <div>
-                <label className="block text-gray-400 mb-1">Cuenta Bancaria de Origen / Receptora:</label>
+                <label className="block text-gray-400 mb-1">Cuenta Bancaria de Origen / Receptora (Método de Pago):</label>
                 <select
                   value={finSourceAccount}
                   onChange={(e) => setFinSourceAccount(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold text-xs"
                 >
-                  <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa (Innocentia Tech)</option>
-                  <option value="BBVA Operativa & Nómina">BBVA Operativa & Nómina</option>
-                  <option value="Stripe Gateway / Tarjeta">Stripe Gateway / Tarjeta</option>
-                  <option value="Transferencia SPEI Directa">Transferencia SPEI Directa</option>
-                  <option value="Caja Chica Efectivo">Caja Chica Efectivo (Línea SIM / Menores)</option>
-                  <option value="PayPal Business Internacional">PayPal Business Internacional</option>
+                  <option value="Caja Chica Efectivo">💵 Caja Chica Efectivo (Línea SIM / Menores / Gastos Rápidos)</option>
+                  <option value="Efectivo (Caja / Presencial)">💵 Efectivo (Caja / Presencial)</option>
+                  <option value="Santander Corporativa (Innocentia Tech)">🏦 Santander Corporativa (Innocentia Tech)</option>
+                  <option value="BBVA Operativa & Nómina">💳 BBVA Operativa & Nómina</option>
+                  <option value="Stripe Gateway / Tarjeta">⚡ Stripe Gateway / Tarjeta</option>
+                  <option value="Transferencia SPEI Directa">🌐 Transferencia SPEI Directa</option>
+                  <option value="PayPal Business Internacional">🅿️ PayPal Business Internacional</option>
                 </select>
               </div>
 
@@ -8097,9 +8381,10 @@ function PortalMainContent() {
                   {[
                     "Daniel Torre (Socio)",
                     "Iván Castillo (CEO)",
+                    "Caja Chica Efectivo",
+                    "💵 Pago en Efectivo",
                     "Santander Corporativa (Innocentia Tech)",
                     "BBVA Operativa & Nómina",
-                    "Caja Chica Efectivo",
                     "Cliente Registrado",
                   ].map((preset) => (
                     <button
@@ -8274,12 +8559,13 @@ function PortalMainContent() {
                     onChange={(e) => setEditFinSourceAccount(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white focus:outline-none font-bold text-xs"
                   >
-                    <option value="Santander Corporativa (Innocentia Tech)">Santander Corporativa (Innocentia Tech)</option>
-                    <option value="BBVA Operativa & Nómina">BBVA Operativa & Nómina</option>
-                    <option value="Stripe Gateway / Tarjeta">Stripe Gateway / Tarjeta</option>
-                    <option value="Transferencia SPEI Directa">Transferencia SPEI Directa</option>
-                    <option value="Caja Chica Efectivo">Caja Chica Efectivo (Línea SIM / Menores)</option>
-                    <option value="PayPal Business Internacional">PayPal Business Internacional</option>
+                    <option value="Caja Chica Efectivo">💵 Caja Chica Efectivo (Línea SIM / Menores / Gastos Rápidos)</option>
+                    <option value="Efectivo (Caja / Presencial)">💵 Efectivo (Caja / Presencial)</option>
+                    <option value="Santander Corporativa (Innocentia Tech)">🏦 Santander Corporativa (Innocentia Tech)</option>
+                    <option value="BBVA Operativa & Nómina">💳 BBVA Operativa & Nómina</option>
+                    <option value="Stripe Gateway / Tarjeta">⚡ Stripe Gateway / Tarjeta</option>
+                    <option value="Transferencia SPEI Directa">🌐 Transferencia SPEI Directa</option>
+                    <option value="PayPal Business Internacional">🅿️ PayPal Business Internacional</option>
                   </select>
                 </div>
               </div>
