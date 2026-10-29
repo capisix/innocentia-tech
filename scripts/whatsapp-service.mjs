@@ -82,9 +82,10 @@ REGLAS DE ORO PARA QUE EL CLIENTE ENTIENDA EN 3 SEGUNDOS:
      2️⃣ Diseño de Logo e Imagen de Marca (para que tu negocio se vea profesional y confiable)
      3️⃣ Sistema o App para tu Negocio (punto de venta, inventarios, citas o cotizador)
      4️⃣ Bot de WhatsApp con IA 24/7 (para atender clientes y vender en automático)
-3. SI EL CLIENTE PREGUNTA "¿QUÉ HACEN?", "¿DE QUÉ TRATA?" O "¿QUÉ PROPONES?":
-   - Explica con ejemplos cotidianos: "Por ejemplo: si tienes una tienda, restaurante, clínica o negocio de servicios, te diseñamos tu logotipo, tu página web con catálogo en línea o tu sistema para controlar ventas y pedidos por WhatsApp."
-   - Y hazle UNA sola pregunta fácil: "¿A qué se dedica tu negocio o qué te gustaría impulsar primero?"
+3. SI EL CLIENTE PREGUNTA "¿QUÉ SE PUEDE HACER?", "¿QUÉ HACEN?", "¿DE QUÉ TRATA?" O "¿QUÉ PROPONES?":
+   - Responde UNO SOLO (SOFÍA o IVÁN, nunca los dos al mismo tiempo) con este mensaje claro e inspirador:
+     "Somos una plataforma para el desarrollo de ideas: desde tu logo, páginas web y sistemas automáticos, hasta el diseño de campañas de marketing. Te ayudamos a convertir tus ideas en productos o marcas reales. 🚀"
+   - Y hazle UNA sola pregunta sencilla: "¿Tienes alguna idea en mente o un negocio que quieras impulsar?"
 4. SI EL CLIENTE ELIGE UNA OPCIÓN (1, 2, 3 o 4):
    - Si elige 1, 3 o 4: Responde IVÁN ("type": "ivan", "speaker": "IVÁN") de forma breve y entusiasta, preguntándole a qué se dedica su negocio para recomendarle el paquete ideal.
    - Si elige 2: Responde SOFÍA ("type": "sofia", "speaker": "SOFÍA") preguntándole cómo se llama su negocio o qué giro tiene.
@@ -164,15 +165,15 @@ async function getSmartAIResponse(cleanText, history = []) {
     };
   }
 
-  // 2. Instant response if client asks "Qué es esto / qué hacen / qué propones"
-  if (/qu[eé]\s*(es\s*esto|hace[ns]?|propones|ofrecen|venden)|de\s*qu[eé]\s*trata/i.test(lower)) {
+  // 2. Instant response if client asks "Qué se puede hacer / qué es esto / qué hacen / qué propones"
+  if (/qu[eé]\s*(se\s*puede\s*hacer|es\s*esto|hace[ns]?|propones|ofrecen|venden)|de\s*qu[eé]\s*(se\s*)?trata/i.test(lower)) {
     return {
-      speaker: "DUAL",
-      type: "both",
+      speaker: "SOFÍA",
+      type: "sofia",
       lang: "es",
       text: [
-        "Te explico rápido y sin rodeos: si tienes o vas a abrir un negocio (tienda, restaurante, clínica, inmobiliaria o servicio), nosotros te creamos desde tu *logotipo e imagen*, hasta tu *página web, catálogo en línea o sistema de cobros y pedidos*.",
-        "¿A qué se dedica tu negocio o qué opción te interesa más (1: Página Web, 2: Logo/Marca, 3: Sistema/App, 4: Bot de WhatsApp)?"
+        "¡Con gusto te cuento! ✨ Somos una plataforma para el desarrollo de ideas: desde tu logo, páginas web y sistemas automáticos, hasta el diseño de campañas de marketing. Ayudamos a convertir tus ideas en productos o marcas reales. 🚀",
+        "Cuéntame, ¿tienes alguna idea en mente que quieras lanzar o un negocio que te gustaría impulsar?"
       ]
     };
   }
