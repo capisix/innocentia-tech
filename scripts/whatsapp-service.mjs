@@ -67,30 +67,35 @@ let activeSocketId = 0;
 let reconnectTimer = null;
 let isShuttingDown = false;
 
-const systemInstruction = `Eres el asistente conversacional humano de WhatsApp de Innocentia Tech (estudio boutique de tecnología, branding y desarrollo de software a medida).
-Representas a dos líderes reales:
-- SOFÍA: Directora Creativa & UX. Experta en branding, logotipos, identidad visual y diseño de experiencia. Cálida, estética y orientada a valor.
-- IVÁN: Director de Tecnología & Dev. Desarrollador pragmático, enfocado en cómo el software, las webs y la automatización hacen ganar dinero a un negocio (CERO tecnicismos aburridos).
+const systemInstruction = `Eres el asesor comercial humano por WhatsApp de Innocentia Tech (agencia de páginas web, diseño de logos/marcas y sistemas para negocios).
+Representas a dos especialistas reales, pero SIEMPRE hablas de forma súper corta, directa y sin tecnicismos:
+- SOFÍA: Directora de Diseño & Marca (logos, imagen corporativa, redes y rediseño visual).
+- IVÁN: Director de Tecnología & Web (páginas web, tiendas en línea, puntos de venta, apps y bots de WhatsApp).
 
-REGLAS CRÍTICAS DE CONVERSACIÓN HUMANA:
-1. SALUDOS O MENCIÓN DE NOMBRE (SOLO AL INICIO): Si es el primer mensaje y el usuario solo saluda (ej. "hola", "buenas", "hi", "hello") o escribe el nombre del estudio ("Innocentia Tech", "innocentie", etc.), preséntate como el equipo de Sofía (Diseño & UX) e Iván (Tecnología & Software), explica brevemente a qué se dedica el estudio y pregúntale en qué se le puede servir o qué proyecto le gustaría cotizar/desarrollar.
-2. PROHIBIDO REPETIR LA BIENVENIDA: Si ya hay historial de conversación previa, NUNCA vuelvas a presentarte con "¡Hola! Somos Sofía e Iván..." ni repitas respuestas genéricas. Continúa el hilo real de la conversación.
-3. SI PIDEN CÓDIGO SUELTO O TAREAS ESCOLARES (ej. "hazme el código HTML", "es para la escuela", "pásame el código"):
-   - Responde IVÁN ("type": "ivan", "speaker": "IVÁN") con amabilidad y claridad: explica que Innocentia Tech es una agencia profesional de desarrollo de software y branding que construye sistemas completos bajo cotización para negocios y empresas (no somos un bot generador de código HTML suelto por chat ni hacemos tareas escolares).
-   - Añade que si en cambio desean contratar el desarrollo profesional llave en mano de ese sistema o plataforma web, pueden cotizarlo en https://innocentia.tech/crear-proyecto.
-4. ALCANCE GLOBAL: Atendemos clientes en todo México, EE. UU. y el mundo. NUNCA digas "aquí en Mérida" ni asumas la ubicación del cliente a menos que el cliente pregunte explícitamente "¿dónde están ubicados?".
-5. CERO FRASES ROBÓTICAS: PROHIBIDO usar frases trilladas o repetitivas como "¡Me encanta esa energía!" o muletillas de bot. Habla de forma natural, ágil y directa como una persona real en WhatsApp.
-6. IDIOMA: Responde SIEMPRE en español por defecto. Solo responde en inglés si el cliente claramente está hablando en inglés.
-7. ASIGNACIÓN:
-   - Si pregunta por logotipos, imagen, marca, rediseño, estilo: Responde SOFÍA ("type": "sofia", "speaker": "SOFÍA").
-   - Si pregunta por sistemas, páginas web, formularios, catálogos, inventarios, cobros, apps, automatización: Responde IVÁN ("type": "ivan", "speaker": "IVÁN").
-   - Si es bienvenida inicial o consulta integral: Responde DUAL ("type": "both", "speaker": "DUAL").
-8. ENLACE A BLUEPRINT: Cuando ya se haya entendido la necesidad del cliente o pregunten cómo cotizar/empezar, comparte el enlace: https://innocentia.tech/crear-proyecto.
-9. Formato de respuesta JSON estricto (responde ÚNICAMENTE con el objeto JSON válido, sin texto adicional):
+REGLAS DE ORO PARA QUE EL CLIENTE ENTIENDA EN 3 SEGUNDOS:
+1. PROHIBIDO USAR LENGUAJE ABSTRACTO O TEXTOS LARGOS:
+   - NUNCA digas "estudio boutique", "experiencia de usuario (UX)", "identidad visual integral" ni mandes bloques de 3 párrafos donde hablen Sofía e Iván al mismo tiempo.
+   - Máximo 4 a 5 líneas por respuesta. En WhatsApp la gente lee rápido.
+2. BIENVENIDA CON MENÚ SIMPLE (1, 2, 3, 4):
+   - Cuando el cliente saluda por primera vez (ej. "hola", "quiero más información", "estoy en el sitio web y me gustaría atención personalizada"), dale una bienvenida corta y preséntale estas 4 opciones claras para que elija con un número o cuente su idea:
+     1️⃣ Página Web o Tienda en Línea (para mostrar tus productos/servicios y vender más)
+     2️⃣ Diseño de Logo e Imagen de Marca (para que tu negocio se vea profesional y confiable)
+     3️⃣ Sistema o App para tu Negocio (punto de venta, inventarios, citas o cotizador)
+     4️⃣ Bot de WhatsApp con IA 24/7 (para atender clientes y vender en automático)
+3. SI EL CLIENTE PREGUNTA "¿QUÉ HACEN?", "¿DE QUÉ TRATA?" O "¿QUÉ PROPONES?":
+   - Explica con ejemplos cotidianos: "Por ejemplo: si tienes una tienda, restaurante, clínica o negocio de servicios, te diseñamos tu logotipo, tu página web con catálogo en línea o tu sistema para controlar ventas y pedidos por WhatsApp."
+   - Y hazle UNA sola pregunta fácil: "¿A qué se dedica tu negocio o qué te gustaría impulsar primero?"
+4. SI EL CLIENTE ELIGE UNA OPCIÓN (1, 2, 3 o 4):
+   - Si elige 1, 3 o 4: Responde IVÁN ("type": "ivan", "speaker": "IVÁN") de forma breve y entusiasta, preguntándole a qué se dedica su negocio para recomendarle el paquete ideal.
+   - Si elige 2: Responde SOFÍA ("type": "sofia", "speaker": "SOFÍA") preguntándole cómo se llama su negocio o qué giro tiene.
+5. SI PIDEN CÓDIGO SUELTO O TAREAS ESCOLARES (ej. "hazme el código HTML", "es para la escuela"):
+   - Responde IVÁN aclarando amablemente que en Innocentia Tech desarrollamos plataformas y proyectos completos bajo cotización para empresas (no entregamos fragmentos de código HTML sueltos por chat ni hacemos tareas escolares).
+6. ENLACE PARA COTIZAR: Cuando ya sepamos qué necesita o pregunte precios/cotización, comparte: https://innocentia.tech/crear-proyecto
+7. Formato JSON estricto (responde ÚNICAMENTE con el objeto JSON válido):
 {
   "type": "sofia" | "ivan" | "both",
   "speaker": "SOFÍA" | "IVÁN" | "DUAL",
-  "text": ["Párrafo de respuesta concisa y directa...", "Pregunta de seguimiento o siguiente paso"]
+  "text": ["Párrafo corto y claro...", "Pregunta sencilla de 1 línea"]
 }`;
 
 function detectLanguage(text, history = []) {
@@ -140,9 +145,89 @@ function detectLanguage(text, history = []) {
 
 async function getSmartAIResponse(cleanText, history = []) {
   const lang = detectLanguage(cleanText, history);
+  const trimmed = cleanText.trim();
+  const lower = trimmed.toLowerCase();
 
-  // Instant intercept if user is asking for raw HTML/code generation or homework help
-  if (/\b(hazme todo el c[oó]digo|ay[uú]dame con el c[oó]digo|lo quiero para html|p[aá]same el c[oó]digo|^html$)\b/i.test(cleanText.trim())) {
+  // 1. Instant visual menu on initial greeting or website WhatsApp button click
+  if (
+    lang === "es" &&
+    (/^(hola|buen[ao]s\s*(dias|días|tardes|noches)?|innocenti[ae]\s*tech|info|informaci[oó]n|saludos|que tal|qué tal)[.!?\s]*$/i.test(lower) ||
+      /estoy en el sitio web|quiero m[aá]s informaci[oó]n|atenci[oó]n personalizada/i.test(lower))
+  ) {
+    return {
+      speaker: "DUAL",
+      type: "both",
+      lang: "es",
+      text: [
+        "¡Hola! Qué gusto saludarte 👋 Ayudamos a negocios y emprendedores a *vender más y verse profesionales* en internet.\n\n¿Qué te gustaría hacer para tu negocio? *(Responde con el número o cuéntanos tu idea)*:\n\n1️⃣ *Página Web o Catálogo en Línea* _(para mostrar lo que vendes y captar clientes)_\n2️⃣ *Diseño de Logo e Imagen de Marca* _(para que tu negocio se vea formal y confiable)_\n3️⃣ *Sistema o App a Medida* _(punto de venta, inventarios, citas o pedidos)_\n4️⃣ *Bot de WhatsApp con IA 24/7* _(para atender y vender en automático)_"
+      ]
+    };
+  }
+
+  // 2. Instant response if client asks "Qué es esto / qué hacen / qué propones"
+  if (/qu[eé]\s*(es\s*esto|hace[ns]?|propones|ofrecen|venden)|de\s*qu[eé]\s*trata/i.test(lower)) {
+    return {
+      speaker: "DUAL",
+      type: "both",
+      lang: "es",
+      text: [
+        "Te explico rápido y sin rodeos: si tienes o vas a abrir un negocio (tienda, restaurante, clínica, inmobiliaria o servicio), nosotros te creamos desde tu *logotipo e imagen*, hasta tu *página web, catálogo en línea o sistema de cobros y pedidos*.",
+        "¿A qué se dedica tu negocio o qué opción te interesa más (1: Página Web, 2: Logo/Marca, 3: Sistema/App, 4: Bot de WhatsApp)?"
+      ]
+    };
+  }
+
+  // 3. Instant response when user picks option 1, 2, 3, or 4
+  if (/^1(\D|$)|p[aá]gina web|cat[aá]logo en l[ií]nea/i.test(lower) && trimmed.length < 35) {
+    return {
+      speaker: "IVÁN",
+      type: "ivan",
+      lang: "es",
+      text: [
+        "¡Excelente elección! 💻 Creamos páginas web rápidas y catálogos en línea listos para que tus clientes vean tus productos o servicios desde el celular y te compren o pidan directo por WhatsApp.",
+        "Cuéntame, ¿de qué giro es tu negocio o qué productos/servicios ofreces?"
+      ]
+    };
+  }
+
+  if (/^2(\D|$)|dise[ñn]o de logo|imagen de marca/i.test(lower) && trimmed.length < 35) {
+    return {
+      speaker: "SOFÍA",
+      type: "sofia",
+      lang: "es",
+      text: [
+        "¡Me encanta! 🎨 Diseñamos tu logotipo, paleta de colores y toda la presentación visual para que tu negocio proyecte confianza y profesionalismo desde el primer vistazo.",
+        "¿Cómo se llama tu negocio (o qué giro tiene) y qué te gustaría transmitir?"
+      ]
+    };
+  }
+
+  if (/^3(\D|$)|sistema o app|punto de venta/i.test(lower) && trimmed.length < 35) {
+    return {
+      speaker: "IVÁN",
+      type: "ivan",
+      lang: "es",
+      text: [
+        "¡Perfecto! ⚡ Desarrollamos sistemas a la medida para que controles tu negocio sin complicaciones: ventas, inventarios, citas, sucursales o cotizaciones desde tu celular o computadora.",
+        "¿Qué proceso de tu negocio te gustaría organizar o automatizar primero?"
+      ]
+    };
+  }
+
+  if (/^4(\D|$)|bot de whatsapp/i.test(lower) && trimmed.length < 35) {
+    return {
+      speaker: "IVÁN",
+      type: "ivan",
+      lang: "es",
+      text: [
+        "¡Súper bien! 🤖 Configuramos un asistente inteligente en tu WhatsApp que responde dudas, muestra tu catálogo y atiende prospectos las 24 horas en automático.",
+        "¿Qué tipo de negocio tienes para platicarte cómo funcionaría en tu WhatsApp?"
+      ]
+    };
+  }
+
+  // 4. Instant intercept if user is asking for raw HTML/code generation or homework help
+  if (/\b(hazme todo el c[oó]digo|ay[uú]dame con el c[oó]digo|lo quiero para html|p[aá]same el c[oó]digo|^html$)\b/i.test(trimmed)) {
     return {
       speaker: "IVÁN",
       type: "ivan",

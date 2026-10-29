@@ -17,6 +17,10 @@ import {
   Share2,
   Check,
   Building2,
+  Smartphone,
+  Terminal,
+  RotateCcw,
+  ExternalLink,
 } from "../../lib/icons";
 import { generateProjectPdf, ProjectPdfData } from "../../lib/generateProjectPdf";
 import { ProposalDispatchModal } from "./ProposalDispatchModal";
@@ -138,7 +142,8 @@ export default function ProjectTeamFeedAndChat({
   ];
 
   const [selectedProjectId, setSelectedProjectId] = useState<string>("proj-axana");
-  const [activeTab, setActiveTab] = useState<"leads" | "chat" | "blog">("leads");
+  const [activeTab, setActiveTab] = useState<"leads" | "chat" | "blog" | "whatsapp">("leads");
+  const [waRefreshKey, setWaRefreshKey] = useState<number>(Date.now());
 
   // Incoming Leads State (Axana y Sra. Corina asignados a Jessica Torre)
   const [incomingLeads, setIncomingLeads] = useState<IncomingLead[]>([
@@ -477,6 +482,22 @@ ${pricingText}
           >
             <Layers className="w-3.5 h-3.5" />
             <span>Entregables &amp; Figma</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTab("whatsapp");
+              setWaRefreshKey(Date.now());
+            }}
+            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === "whatsapp"
+                ? "bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.4)]"
+                : "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25"
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span>📲 WhatsApp Bot &amp; QR</span>
           </button>
         </div>
       </div>
@@ -1197,6 +1218,113 @@ ${pricingText}
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* VIEW 4: WHATSAPP BOT 24/7 • SINCRONIZAR QR & MONITOR EN VIVO */}
+      {/* ======================================================== */}
+      {activeTab === "whatsapp" && (
+        <div className="p-6 rounded-[28px] bg-black/85 border border-emerald-500/30 space-y-6 shadow-[0_0_40px_rgba(16,185,129,0.15)] text-left animate-in fade-in duration-200">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                <h3 className="text-lg font-black text-white uppercase font-mono">
+                  📲 Sincronización QR &amp; Monitor en Vivo • WhatsApp 24/7
+                </h3>
+              </div>
+              <p className="text-xs text-gray-400 font-mono">
+                Vincula la línea oficial de Innocentia Tech (+52 960 177 1556) o supervisa las respuestas automáticas en tiempo real.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setWaRefreshKey(Date.now())}
+                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-[#00D1FF]" />
+                <span>Recargar Paneles</span>
+              </button>
+
+              <a
+                href="https://innocentia-tech.onrender.com/qr"
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-mono font-black text-xs flex items-center gap-1.5 transition-all shadow-lg"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Abrir QR en Nueva Pestaña</span>
+              </a>
+
+              <a
+                href="https://innocentia-tech.onrender.com/reset"
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => {
+                  if (!confirm("¿Deseas generar un nuevo código QR limpio para sincronizar tu WhatsApp Business?")) {
+                    e.preventDefault();
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono font-bold text-xs flex items-center gap-1.5 transition-all"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>🔄 Generar Nuevo QR</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Panel 1: QR & Estado */}
+            <div className="rounded-2xl border border-white/15 bg-[#07070D] overflow-hidden flex flex-col">
+              <div className="px-4 py-2.5 bg-white/[0.04] border-b border-white/10 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-[#00D1FF] flex items-center gap-1.5">
+                  <Smartphone className="w-3.5 h-3.5" />
+                  1. Escáner de Código QR / Estado de Conexión
+                </span>
+                <a
+                  href="https://innocentia-tech.onrender.com/qr"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[11px] font-mono text-emerald-400 hover:underline"
+                >
+                  innocentia-tech.onrender.com/qr ↗
+                </a>
+              </div>
+              <iframe
+                key={`qr-${waRefreshKey}`}
+                src="https://innocentia-tech.onrender.com/qr"
+                title="Vincular QR WhatsApp Innocentia Tech"
+                className="w-full h-[520px] bg-[#07070D] border-none"
+              />
+            </div>
+
+            {/* Panel 2: Logs en Vivo */}
+            <div className="rounded-2xl border border-white/15 bg-[#05050A] overflow-hidden flex flex-col">
+              <div className="px-4 py-2.5 bg-white/[0.04] border-b border-white/10 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5">
+                  <Terminal className="w-3.5 h-3.5" />
+                  2. Monitor de Mensajes y Respuestas en Vivo
+                </span>
+                <a
+                  href="https://innocentia-tech.onrender.com/logs"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[11px] font-mono text-[#00D1FF] hover:underline"
+                >
+                  innocentia-tech.onrender.com/logs ↗
+                </a>
+              </div>
+              <iframe
+                key={`logs-${waRefreshKey}`}
+                src="https://innocentia-tech.onrender.com/logs"
+                title="Monitor Live Logs WhatsApp"
+                className="w-full h-[520px] bg-[#05050A] border-none"
+              />
+            </div>
           </div>
         </div>
       )}
