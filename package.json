@@ -2,10 +2,13 @@
   "name": "innocentia-tech",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "node -r ./patch-readlink.cjs ./node_modules/next/dist/bin/next dev",
     "build:css": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./public/tailwind.css",
-    "build": "node -r ./patch-readlink.cjs ./node_modules/next/dist/bin/next build",
+    "build": "node scripts/verify-guardrails.mjs && node -r ./patch-readlink.cjs ./node_modules/next/dist/bin/next build",
     "whatsapp": "node scripts/whatsapp-service.mjs",
     "start": "next start",
     "lint": "next lint"
