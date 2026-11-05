@@ -63,53 +63,13 @@ export default function PhilosophySection() {
             <span className="w-14 sm:w-20 h-[2px] bg-[#FF007A] shadow-[0_0_12px_#FF007A,0_0_24px_#FF007A] rounded-full" />
           </div>
 
-          {/* Main Heading: ¿QUÉ ES / INNOCENTIA? with stylized O */}
+          {/* Main Heading: ¿QUÉ ES / INNOCENTIA? */}
           <h2 className="uppercase leading-none select-none">
             <span className="block text-4xl sm:text-5xl xl:text-[56px] font-black text-white tracking-tight">
               ¿QUÉ ES
             </span>
-            <span className="mt-1.5 inline-flex items-center text-3xl sm:text-4xl xl:text-[44px] font-light text-white tracking-[0.14em]">
-              <span>INN</span>
-              {/* Stylized O with glowing pink horizontal crossbar */}
-              <span
-                className="relative inline-flex items-center justify-center mx-[0.02em] mr-[0.14em]"
-                aria-label="O"
-              >
-                <svg
-                  viewBox="0 0 40 44"
-                  className="w-[0.78em] h-[0.86em] overflow-visible"
-                  fill="none"
-                >
-                  {/* Top arc of O */}
-                  <path
-                    d="M 6 16 C 6 7, 34 7, 34 16"
-                    stroke="white"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  />
-                  {/* Bottom arc of O */}
-                  <path
-                    d="M 6 28 C 6 37, 34 37, 34 28"
-                    stroke="white"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  />
-                  {/* Glowing pink horizontal bar */}
-                  <line
-                    x1="2"
-                    y1="22"
-                    x2="38"
-                    y2="22"
-                    stroke="#FF007A"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                    style={{
-                      filter: "drop-shadow(0 0 8px #FF007A) drop-shadow(0 0 14px #FF007A)",
-                    }}
-                  />
-                </svg>
-              </span>
-              <span>CENTIA?</span>
+            <span className="block mt-1.5 text-3xl sm:text-4xl xl:text-[44px] font-light text-white tracking-[0.14em]">
+              INNOCENTIA?
             </span>
           </h2>
 
