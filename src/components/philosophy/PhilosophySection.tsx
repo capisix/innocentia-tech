@@ -52,10 +52,6 @@ export default function PhilosophySection() {
       id="filosofia"
       className="relative py-16 lg:py-24 bg-transparent overflow-hidden border-t border-b border-white/5"
     >
-      {/* Ambient background radial glows */}
-      <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[500px] h-[350px] bg-[#FF007A]/10 blur-[140px] pointer-events-none rounded-full" />
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[500px] h-[350px] bg-[#00E5FF]/10 blur-[140px] pointer-events-none rounded-full" />
-
       <div className="max-w-[1440px] mx-auto px-6 sm:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-6 items-center">
         {/* Left Column: Title & Text */}
         <div className="lg:col-span-4 space-y-5 text-left relative z-20">
@@ -94,20 +90,10 @@ export default function PhilosophySection() {
           </div>
         </div>
 
-        {/* Right Column: Infinity Background + 4 Cards + Reflective Floor & Tagline */}
+        {/* Right Column: 4 Cards + Reflective Floor & Tagline */}
         <div className="lg:col-span-8 relative flex flex-col items-center">
           {/* Main Stage Container */}
-          <div className="relative w-full pt-8 sm:pt-12 lg:pt-14 px-2 sm:px-6 lg:px-10">
-            {/* Infinity Symbol Backdrop (Extending behind cards and down into the floor reflection) */}
-            <div className="pointer-events-none select-none absolute inset-x-[-4%] sm:inset-x-[-6%] lg:inset-x-[-7%] -top-2 sm:-top-6 lg:-top-10 -bottom-20 sm:-bottom-24 flex items-center justify-center z-0">
-              <img
-                src="/images/filosofia/infinity_symbol.png"
-                alt=""
-                aria-hidden="true"
-                className="w-full h-full object-contain scale-105 sm:scale-110 lg:scale-[1.15] opacity-95 filter drop-shadow-[0_0_35px_rgba(255,0,122,0.25)]"
-              />
-            </div>
-
+          <div className="relative w-full pt-2 sm:pt-4 px-2 sm:px-6 lg:px-10">
             {/* 4 Step Cards Grid */}
             <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
               {steps.map((step) => (
@@ -117,13 +103,13 @@ export default function PhilosophySection() {
                 >
                   {/* Card Frame */}
                   <div
-                    className={`relative w-full aspect-[740/960] rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#06050c]/60 backdrop-blur-[2px] border ${step.borderGlow} transition-all duration-500 group-hover:-translate-y-2`}
+                    className={`relative w-full aspect-[740/960] rounded-[22px] sm:rounded-[28px] overflow-hidden bg-[#06050c] border ${step.borderGlow} transition-all duration-500 group-hover:-translate-y-2`}
                   >
                     {/* Card 3D Pedestal & Icon Artwork */}
                     <img
                       src={step.image}
                       alt={`${step.num} - ${step.title}`}
-                      className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-95 group-hover:scale-[1.03] transition-transform duration-500 select-none pointer-events-none"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 select-none pointer-events-none"
                     />
 
                     {/* Bottom gradient legibility overlay for text */}
