@@ -12,7 +12,8 @@ export default function PhilosophySection() {
       image: "/images/filosofia/card_01_idea.png",
       borderGlow:
         "border-orange-400/50 hover:border-orange-400/90 shadow-[0_10px_35px_rgba(255,120,0,0.25)] hover:shadow-[0_12px_45px_rgba(255,140,0,0.45)]",
-      floorGlow: "from-orange-500/40 via-orange-500/10 to-transparent",
+      ringColor: "rgba(255, 138, 0, 0.85)",
+      reflectionColor: "rgba(255, 115, 0, 0.38)",
     },
     {
       num: "02",
@@ -21,7 +22,8 @@ export default function PhilosophySection() {
       image: "/images/filosofia/card_02_diseno.png",
       borderGlow:
         "border-pink-500/50 hover:border-pink-400/90 shadow-[0_10px_35px_rgba(255,0,122,0.25)] hover:shadow-[0_12px_45px_rgba(255,0,122,0.45)]",
-      floorGlow: "from-pink-500/40 via-pink-500/10 to-transparent",
+      ringColor: "rgba(255, 0, 140, 0.85)",
+      reflectionColor: "rgba(255, 0, 128, 0.38)",
     },
     {
       num: "03",
@@ -30,7 +32,8 @@ export default function PhilosophySection() {
       image: "/images/filosofia/card_03_ingenieria.png",
       borderGlow:
         "border-cyan-400/50 hover:border-cyan-300/90 shadow-[0_10px_35px_rgba(0,229,255,0.25)] hover:shadow-[0_12px_45px_rgba(0,229,255,0.45)]",
-      floorGlow: "from-cyan-400/40 via-cyan-400/10 to-transparent",
+      ringColor: "rgba(0, 229, 255, 0.85)",
+      reflectionColor: "rgba(0, 210, 255, 0.35)",
     },
     {
       num: "04",
@@ -39,7 +42,8 @@ export default function PhilosophySection() {
       image: "/images/filosofia/card_04_escala.png",
       borderGlow:
         "border-sky-400/50 hover:border-sky-300/90 shadow-[0_10px_35px_rgba(56,189,248,0.25)] hover:shadow-[0_12px_45px_rgba(56,189,248,0.45)]",
-      floorGlow: "from-sky-400/40 via-sky-400/10 to-transparent",
+      ringColor: "rgba(56, 189, 248, 0.85)",
+      reflectionColor: "rgba(30, 160, 255, 0.38)",
     },
   ];
 
@@ -90,17 +94,17 @@ export default function PhilosophySection() {
           </div>
         </div>
 
-        {/* Right Column: Infinity Background + 4 Cards + Bottom Tagline */}
+        {/* Right Column: Infinity Background + 4 Cards + Reflective Floor & Tagline */}
         <div className="lg:col-span-8 relative flex flex-col items-center">
-          {/* Glowing Infinity Background Behind Cards */}
-          <div className="relative w-full pt-8 sm:pt-12 lg:pt-14 pb-4 px-2 sm:px-6 lg:px-10">
-            {/* Infinity Symbol Backdrop */}
-            <div className="pointer-events-none select-none absolute inset-x-[-4%] sm:inset-x-[-6%] lg:inset-x-[-7%] -top-2 sm:-top-6 lg:-top-10 -bottom-6 flex items-center justify-center z-0">
+          {/* Main Stage Container */}
+          <div className="relative w-full pt-8 sm:pt-12 lg:pt-14 px-2 sm:px-6 lg:px-10">
+            {/* Infinity Symbol Backdrop (Extending behind cards and down into the floor reflection) */}
+            <div className="pointer-events-none select-none absolute inset-x-[-4%] sm:inset-x-[-6%] lg:inset-x-[-7%] -top-2 sm:-top-6 lg:-top-10 -bottom-20 sm:-bottom-24 flex items-center justify-center z-0">
               <img
                 src="/images/filosofia/infinity_symbol.png"
                 alt=""
                 aria-hidden="true"
-                className="w-full h-full object-contain scale-105 sm:scale-110 lg:scale-[1.16] opacity-95 filter drop-shadow-[0_0_35px_rgba(255,0,122,0.25)]"
+                className="w-full h-full object-contain scale-105 sm:scale-110 lg:scale-[1.15] opacity-95 filter drop-shadow-[0_0_35px_rgba(255,0,122,0.25)]"
               />
             </div>
 
@@ -140,67 +144,119 @@ export default function PhilosophySection() {
                       </p>
                     </div>
                   </div>
-
-                  {/* Subtle floor reflection line under each card */}
-                  <div
-                    className={`w-4/5 h-[2px] mt-2 rounded-full bg-gradient-to-r ${step.floorGlow} opacity-80 group-hover:opacity-100 transition-opacity`}
-                  />
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Bottom Infinity Emblem & Tagline: IDEA • DISEÑO • DESARROLLO • EVOLUCIÓN */}
-          <div className="relative z-20 mt-2 sm:mt-3 flex flex-col items-center w-full space-y-2">
-            {/* Neon Pink Infinity Symbol */}
-            <div className="flex items-center justify-center">
-              <svg
-                viewBox="0 0 64 32"
-                className="w-12 sm:w-14 h-6 sm:h-7 overflow-visible"
-                fill="none"
-              >
-                <defs>
-                  <linearGradient
-                    id="philoBottomInfinityGrad"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
+            {/* Reflective Floor Stage Beneath the 4 Cards */}
+            <div className="relative z-20 w-full pt-2 sm:pt-3 pb-2">
+              {/* 4 Perspective Elliptical Neon Rings & Vertical Wet-Floor Glows */}
+              <div className="pointer-events-none select-none absolute inset-x-0 top-0 h-24 sm:h-28 grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
+                {steps.map((step) => (
+                  <div
+                    key={`floor-${step.num}`}
+                    className="relative flex flex-col items-center"
                   >
-                    <stop offset="0%" stopColor="#FF007A" />
-                    <stop offset="50%" stopColor="#FF4DA6" />
-                    <stop offset="100%" stopColor="#E879F9" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M18,6 C10,6 4,11 4,16 C4,21 10,26 18,26 C26,26 31,19 32,16 C33,19 38,26 46,26 C54,26 60,21 60,16 C60,11 54,6 46,6 C38,6 33,13 32,16 C31,13 26,6 18,6 Z"
-                  stroke="url(#philoBottomInfinityGrad)"
-                  strokeWidth="4.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{
-                    filter:
-                      "drop-shadow(0 0 10px rgba(255,0,122,0.9)) drop-shadow(0 0 20px rgba(255,0,122,0.5))",
-                  }}
-                />
-              </svg>
-            </div>
-
-            {/* Tagline with glowing side lines */}
-            <div className="flex items-center justify-center gap-3 sm:gap-5 w-full max-w-2xl px-2">
-              <div className="h-[2px] flex-1 max-w-[70px] sm:max-w-[110px] bg-gradient-to-r from-transparent via-[#FF007A]/80 to-[#FF007A] shadow-[0_0_10px_#FF007A] rounded-full" />
-
-              <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-3 text-[10px] sm:text-xs lg:text-[13px] font-medium text-gray-200 uppercase tracking-[0.22em] sm:tracking-[0.28em] text-center">
-                <span>IDEA</span>
-                <span className="text-[#FF007A] font-black">•</span>
-                <span>DISEÑO</span>
-                <span className="text-[#FF007A] font-black">•</span>
-                <span>DESARROLLO</span>
-                <span className="text-[#00E5FF] font-black">•</span>
-                <span>EVOLUCIÓN</span>
+                    {/* Elliptical perspective ring on floor */}
+                    <div
+                      className="w-[108%] h-3.5 sm:h-4 rounded-[100%] border opacity-85"
+                      style={{
+                        borderColor: step.ringColor,
+                        boxShadow: `0 0 14px ${step.ringColor}, inset 0 0 8px ${step.ringColor}`,
+                      }}
+                    />
+                    {/* Vertical wet floor reflection pillar */}
+                    <div
+                      className="w-4/5 h-16 sm:h-20 -mt-2 rounded-full blur-xl opacity-80"
+                      style={{
+                        background: `radial-gradient(ellipse at top, ${step.reflectionColor} 0%, transparent 75%)`,
+                      }}
+                    />
+                  </div>
+                ))}
               </div>
 
-              <div className="h-[2px] flex-1 max-w-[70px] sm:max-w-[110px] bg-gradient-to-l from-transparent via-[#FF007A]/80 to-[#FF007A] shadow-[0_0_10px_#FF007A] rounded-full" />
+              {/* Center Neon Infinity Emblem + IDEA • DISEÑO • DESARROLLO • EVOLUCIÓN */}
+              <div className="relative z-30 flex flex-col items-center justify-center pt-1 sm:pt-1.5">
+                {/* Glowing Neon Pink/Violet Infinity Symbol */}
+                <div className="relative flex items-center justify-center mb-2 sm:mb-2.5">
+                  <div className="absolute w-16 h-8 bg-[#FF007A]/35 blur-xl rounded-full pointer-events-none" />
+                  <svg
+                    viewBox="0 0 80 38"
+                    className="w-14 sm:w-16 lg:w-[68px] h-7 sm:h-8 overflow-visible"
+                    fill="none"
+                  >
+                    <defs>
+                      <linearGradient
+                        id="philoFloorInfinityOuter"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#FF2E93" />
+                        <stop offset="50%" stopColor="#FF66C4" />
+                        <stop offset="100%" stopColor="#E855F7" />
+                      </linearGradient>
+                      <linearGradient
+                        id="philoFloorInfinityCore"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stopColor="#FFB3D9" />
+                        <stop offset="50%" stopColor="#FFFFFF" />
+                        <stop offset="100%" stopColor="#F5B8FF" />
+                      </linearGradient>
+                    </defs>
+                    {/* Outer neon glow stroke */}
+                    <path
+                      d="M22,7 C11,7 5,12.5 5,19 C5,25.5 11,31 22,31 C31.5,31 37.5,23 40,19 C42.5,23 48.5,31 58,31 C69,31 75,25.5 75,19 C75,12.5 69,7 58,7 C48.5,7 42.5,15 40,19 C37.5,15 31.5,7 22,7 Z"
+                      stroke="url(#philoFloorInfinityOuter)"
+                      strokeWidth="5.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{
+                        filter:
+                          "drop-shadow(0 0 8px rgba(255,46,147,0.95)) drop-shadow(0 0 18px rgba(232,85,247,0.75))",
+                      }}
+                    />
+                    {/* Inner bright core stroke */}
+                    <path
+                      d="M22,7 C11,7 5,12.5 5,19 C5,25.5 11,31 22,31 C31.5,31 37.5,23 40,19 C42.5,23 48.5,31 58,31 C69,31 75,25.5 75,19 C75,12.5 69,7 58,7 C48.5,7 42.5,15 40,19 C37.5,15 31.5,7 22,7 Z"
+                      stroke="url(#philoFloorInfinityCore)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+
+                {/* Tagline Row: [Pink Laser Line] IDEA • DISEÑO • DESARROLLO • EVOLUCIÓN [Pink Laser Line] */}
+                <div className="flex items-center justify-center gap-3 sm:gap-5 w-full max-w-3xl px-2">
+                  {/* Left tapering neon pink laser line */}
+                  <div className="relative h-[2px] flex-1 max-w-[65px] sm:max-w-[120px] flex items-center">
+                    <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-[#FF007A] to-[#FF66C4] rounded-full shadow-[0_0_12px_#FF007A,0_0_20px_#FF007A]" />
+                  </div>
+
+                  {/* Spaced uppercase words with crisp white dots */}
+                  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3.5 text-[10px] sm:text-xs lg:text-[13px] font-normal text-white/95 uppercase tracking-[0.22em] sm:tracking-[0.28em] text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                    <span>IDEA</span>
+                    <span className="text-white/80 text-[9px] sm:text-[10px]">•</span>
+                    <span>DISEÑO</span>
+                    <span className="text-white/80 text-[9px] sm:text-[10px]">•</span>
+                    <span>DESARROLLO</span>
+                    <span className="text-white/80 text-[9px] sm:text-[10px]">•</span>
+                    <span>EVOLUCIÓN</span>
+                  </div>
+
+                  {/* Right tapering neon pink laser line */}
+                  <div className="relative h-[2px] flex-1 max-w-[65px] sm:max-w-[120px] flex items-center">
+                    <div className="w-full h-[2px] bg-gradient-to-l from-transparent via-[#FF007A] to-[#FF66C4] rounded-full shadow-[0_0_12px_#FF007A,0_0_20px_#FF007A]" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
