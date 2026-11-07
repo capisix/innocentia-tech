@@ -66,7 +66,7 @@ export const PROJECTS_DATA: ProjectCaseStudy[] = [
       "Ecosistema dual integrado para Giovanna Monterrubio: Sitio Web Editorial de lujo (historia, símbolo interactivo, programas, eventos, blog con comentarios y equipamiento) conectado en tiempo real con su WebApp Privada independiente para seguimiento de alumnas, clases en vivo, videoteca on-demand, reservas y pagos.",
     headline:
       "GIOPRANA — The Art of Being Alive: Sitio Web Editorial + WebApp Privada de Práctica y Seguimiento en Tiempo Real",
-    image: "/images/apps/app_gioprana.jpg",
+    image: "/images/apps/gioprana_webapp_live.png",
     tag: "WEB PÚBLICA + WEBAPP PRIVADA INTEGRADA",
     stats: "Web + App en Vivo",
     category: "Wellness, Fitness, Streaming & SaaS Educativo",

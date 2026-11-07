@@ -53,108 +53,220 @@ export default function ProyectosIndexPage() {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {PROJECTS_DATA.map((p) => (
-            <article
-              key={p.slug}
-              className="p-6 sm:p-7 rounded-[32px] bg-gradient-to-b from-white/[0.05] via-black/80 to-black/95 border border-white/10 hover:border-[#00D1FF]/50 transition-all duration-300 shadow-2xl flex flex-col justify-between space-y-6 group hover:-translate-y-1 relative backdrop-blur-xl"
-            >
-              {/* Image Preview Container */}
-              <Link
-                href={`/proyectos/${p.slug}`}
-                className="block relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-black/90 border border-white/15 group-hover:border-[#00D1FF]/50 transition-all duration-500 shadow-2xl group/img"
+          {PROJECTS_DATA.map((p) => {
+            const isDualFlagship = Boolean(p.dualArchitecture);
+            return (
+              <article
+                key={p.slug}
+                className={`p-6 sm:p-8 rounded-[32px] bg-gradient-to-b from-white/[0.05] via-black/80 to-black/95 border transition-all duration-300 shadow-2xl flex flex-col justify-between space-y-6 group hover:-translate-y-1 relative backdrop-blur-xl ${
+                  isDualFlagship
+                    ? "lg:col-span-2 border-[#D5B77B]/45 hover:border-[#D5B77B] shadow-[0_25px_80px_rgba(213,183,123,0.12)]"
+                    : "border-white/10 hover:border-[#00D1FF]/50"
+                }`}
               >
-                <Image
-                  src={p.image}
-                  alt={p.title}
-                  fill
-                  className="object-cover object-top group-hover/img:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/30 pointer-events-none" />
+                {isDualFlagship && p.dualArchitecture ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-center">
+                    {/* Left: Dual Visual Showcase */}
+                    <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Web Editorial Card */}
+                      <Link
+                        href={`/proyectos/${p.slug}`}
+                        className="relative h-64 sm:h-72 rounded-2xl overflow-hidden bg-black/90 border border-[#D5B77B]/40 group/img shadow-2xl block"
+                      >
+                        <Image
+                          src={p.dualArchitecture.webPart.image}
+                          alt={p.dualArchitecture.webPart.title}
+                          fill
+                          className="object-cover object-center group-hover/img:scale-105 transition-transform duration-700"
+                          sizes="(max-width: 768px) 100vw, 35vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-black/85 border border-[#D5B77B]/60 text-[#D5B77B] font-bold uppercase tracking-wider">
+                            🌐 1. SITIO WEB EDITORIAL
+                          </span>
+                        </div>
+                        <div className="absolute bottom-3 left-3 right-3 z-10 space-y-1">
+                          <p className="text-xs font-bold text-white">Front-Stage Público de Marca</p>
+                          <p className="text-[11px] text-gray-300 line-clamp-2">
+                            Historia, Símbolo Interactivo SVG, 5 Pilares, Programas, Eventos, Blog y Equipamiento Oficial.
+                          </p>
+                        </div>
+                      </Link>
 
-                {/* Badges on Image */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span
-                    className="text-[10px] font-mono px-3 py-1 rounded-full border font-bold uppercase tracking-wider bg-black/80 backdrop-blur-md shadow-lg"
-                    style={{ color: p.primaryColor, borderColor: `${p.primaryColor}88` }}
-                  >
-                    {p.tag}
-                  </span>
-                </div>
-
-                <div className="absolute top-3 right-3 z-10">
-                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-black/80 border border-white/20 text-gray-300 font-bold backdrop-blur-md shadow-lg flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>{p.stats}</span>
-                  </span>
-                </div>
-
-                <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between text-xs font-mono">
-                  <span className="text-[11px] text-gray-200 font-semibold truncate max-w-[65%]">{p.category}</span>
-                  <span className="text-[10px] text-gray-400">{p.location}</span>
-                </div>
-              </Link>
-
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  {p.dualArchitecture && (
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 text-[10px] font-mono font-bold text-amber-300 uppercase">
-                      <span>🌐 Sitio Web Público + 📱 WebApp Privada que se Integran</span>
+                      {/* WebApp Privada Card */}
+                      <Link
+                        href={p.interactiveDemoRoute || `/proyectos/${p.slug}`}
+                        className="relative h-64 sm:h-72 rounded-2xl overflow-hidden bg-black/90 border border-[#9C75AF]/50 group/img shadow-2xl block"
+                      >
+                        <Image
+                          src={p.dualArchitecture.appPart.image}
+                          alt={p.dualArchitecture.appPart.title}
+                          fill
+                          className="object-cover object-center group-hover/img:scale-105 transition-transform duration-700"
+                          sizes="(max-width: 768px) 100vw, 35vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-black/85 border border-[#C3A2D6]/60 text-[#C3A2D6] font-bold uppercase tracking-wider">
+                            📱 2. WEBAPP PRIVADA
+                          </span>
+                        </div>
+                        <div className="absolute top-3 right-3 z-10">
+                          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/90 border border-emerald-400/40 text-emerald-300 font-bold flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Rol Alumna + Coach
+                          </span>
+                        </div>
+                        <div className="absolute bottom-3 left-3 right-3 z-10 space-y-1">
+                          <p className="text-xs font-bold text-white">Back-Stage Operativo Conectado</p>
+                          <p className="text-[11px] text-gray-300 line-clamp-2">
+                            Expediente individual, Sala en Vivo HD, Videoteca On-Demand, Reservas y Pagos SPEI/Tarjeta.
+                          </p>
+                        </div>
+                      </Link>
                     </div>
-                  )}
-                  <h2 className="text-2xl sm:text-3xl font-black text-white group-hover:text-[#00D1FF] transition-colors">
-                    <Link href={`/proyectos/${p.slug}`}>
-                      {p.title}
-                    </Link>
-                  </h2>
-                  <p className="text-sm text-gray-300 leading-relaxed font-light line-clamp-3">
-                    {p.subtitle}
-                  </p>
-                </div>
 
-                {/* Key Metrics Badges */}
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10 text-center">
-                  {p.costSavings.map((c, idx) => (
-                    <div key={idx} className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1 shadow-inner">
-                      <span className="text-base sm:text-xl font-black text-white block" style={{ color: p.primaryColor }}>
-                        {c.stat}
-                      </span>
-                      <span className="text-[10px] text-gray-400 font-mono block leading-tight font-medium">{c.label}</span>
+                    {/* Right: Sales Pillar Details */}
+                    <div className="lg:col-span-5 space-y-4">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-3 py-1 rounded-full bg-[#D5B77B]/20 border border-[#D5B77B]/50 text-[#D5B77B] text-[10px] font-mono font-bold uppercase tracking-wider">
+                          ★ CASO INSIGNIA • PILAR DE VENTAS
+                        </span>
+                        <span className="px-3 py-1 rounded-full bg-[#9C75AF]/20 border border-[#9C75AF]/40 text-[#C3A2D6] text-[10px] font-mono font-bold uppercase tracking-wider">
+                          WEB + WEBAPP INTEGRADA
+                        </span>
+                      </div>
+
+                      <h2 className="text-2xl sm:text-4xl font-black text-white group-hover:text-[#D5B77B] transition-colors">
+                        <Link href={`/proyectos/${p.slug}`}>{p.title}</Link>
+                      </h2>
+
+                      <p className="text-sm text-gray-300 leading-relaxed font-light">
+                        {p.subtitle}
+                      </p>
+
+                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10 text-center">
+                        {p.costSavings.map((c, idx) => (
+                          <div key={idx} className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+                            <span className="text-base sm:text-xl font-black block" style={{ color: p.primaryColor }}>
+                              {c.stat}
+                            </span>
+                            <span className="text-[10px] text-gray-400 font-mono block leading-tight font-medium">
+                              {c.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap gap-1.5 text-[10px] font-mono text-gray-400">
-                  {p.techStack.slice(0, 3).map((tech, i) => (
-                    <span key={i} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  {p.interactiveDemoRoute && (
+                  </div>
+                ) : (
+                  <>
+                    {/* Standard Image Preview Container */}
                     <Link
-                      href={p.interactiveDemoRoute}
-                      className="px-3.5 py-2 rounded-full bg-amber-500/20 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-400/50 inline-flex items-center gap-1.5 text-xs font-mono font-bold transition-all"
+                      href={`/proyectos/${p.slug}`}
+                      className="block relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-black/90 border border-white/15 group-hover:border-[#00D1FF]/50 transition-all duration-500 shadow-2xl group/img"
                     >
-                      <span>Web + WebApp Demo</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <Image
+                        src={p.image}
+                        alt={p.title}
+                        fill
+                        className="object-cover object-top group-hover/img:scale-105 transition-transform duration-700"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/30 pointer-events-none" />
+
+                      {/* Badges on Image */}
+                      <div className="absolute top-3 left-3 z-10">
+                        <span
+                          className="text-[10px] font-mono px-3 py-1 rounded-full border font-bold uppercase tracking-wider bg-black/80 backdrop-blur-md shadow-lg"
+                          style={{ color: p.primaryColor, borderColor: `${p.primaryColor}88` }}
+                        >
+                          {p.tag}
+                        </span>
+                      </div>
+
+                      <div className="absolute top-3 right-3 z-10">
+                        <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-black/80 border border-white/20 text-gray-300 font-bold backdrop-blur-md shadow-lg flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>{p.stats}</span>
+                        </span>
+                      </div>
+
+                      <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between text-xs font-mono">
+                        <span className="text-[11px] text-gray-200 font-semibold truncate max-w-[65%]">{p.category}</span>
+                        <span className="text-[10px] text-gray-400">{p.location}</span>
+                      </div>
                     </Link>
-                  )}
-                  <Link
-                    href={`/proyectos/${p.slug}`}
-                    className="btn-glass-cyan px-4 py-2 rounded-full inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#00D1FF] transition-all"
-                  >
-                    <span>Ver caso de estudio</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h2 className="text-2xl sm:text-3xl font-black text-white group-hover:text-[#00D1FF] transition-colors">
+                          <Link href={`/proyectos/${p.slug}`}>
+                            {p.title}
+                          </Link>
+                        </h2>
+                        <p className="text-sm text-gray-300 leading-relaxed font-light line-clamp-3">
+                          {p.subtitle}
+                        </p>
+                      </div>
+
+                      {/* Key Metrics Badges */}
+                      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10 text-center">
+                        {p.costSavings.map((c, idx) => (
+                          <div key={idx} className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1 shadow-inner">
+                            <span className="text-base sm:text-xl font-black text-white block" style={{ color: p.primaryColor }}>
+                              {c.stat}
+                            </span>
+                            <span className="text-[10px] text-gray-400 font-mono block leading-tight font-medium">{c.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap gap-1.5 text-[10px] font-mono text-gray-400">
+                    {p.techStack.slice(0, isDualFlagship ? 5 : 3).map((tech, i) => (
+                      <span key={i} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    {p.interactiveDemoRoute && (
+                      <Link
+                        href={p.interactiveDemoRoute}
+                        className="px-4 py-2.5 rounded-full bg-gradient-to-r from-[#D5B77B] to-[#E5C992] text-[#111416] hover:brightness-110 inline-flex items-center gap-1.5 text-xs font-mono font-black transition-all shadow-lg"
+                      >
+                        <span>Explorar Demo Web + WebApp</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    )}
+                    {p.demoUrl && isDualFlagship && (
+                      <a
+                        href={p.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 text-xs font-mono font-bold text-white transition-all"
+                      >
+                        Abrir Sitio Real ↗
+                      </a>
+                    )}
+                    <Link
+                      href={`/proyectos/${p.slug}`}
+                      className="btn-glass-cyan px-4 py-2.5 rounded-full inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#00D1FF] transition-all"
+                    >
+                      <span>Ver caso de estudio</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
 
         {/* Bottom CTA Card */}
