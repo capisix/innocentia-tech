@@ -125,6 +125,78 @@ interface BrandShowcaseItem {
 
 const BRAND_SHOWCASE: BrandShowcaseItem[] = [
   {
+    id: "gioprana-3d-sign",
+    title: "Escultura Mural 3D Oro & Esmalte Botánico",
+    brand: "GIOPRANA",
+    category: "logos",
+    categoryLabel: "Logotipos & 3D",
+    image: "/images/branding/gioprana_logo_3d_estudio.png",
+    description:
+      "Modelado tridimensional en bronce dorado (#D5B77B) con pétalos esmaltados en Violeta Raíz (#594362) y Verde Bosque (#284E40) sobre muro de piedra carbón para estudio de entrenamiento consciente.",
+    badge: "3D Luxury Sign",
+    deliverables: ["Render 3D Estudio", "Símbolo Vectorial", "6 Versiones Logo"],
+  },
+  {
+    id: "gioprana-kit-web",
+    title: "Kit Visual Web + WebApp & Design System",
+    brand: "GIOPRANA",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/gioprana_kit_visual_web.jpg",
+    description:
+      "Sistema de diseño integral para Sitio Web Editorial y WebApp Privada: 4 fondos atmosféricos, paleta calibrada, 5 íconos dorados de los pilares, estados de botones y tarjetas UI.",
+    badge: "Web + WebApp UI Kit",
+    deliverables: ["4 Fondos Editoriales", "5 Íconos Pilares", "UI Design System"],
+  },
+  {
+    id: "gioprana-card-ivory",
+    title: "Tarjeta Editorial Marfil & Hot Stamping Dorado",
+    brand: "GIOPRANA",
+    category: "identidad",
+    categoryLabel: "Identidad & Sellos",
+    image: "/images/branding/gioprana_app_9.png",
+    description:
+      "Papelería corporativa y pases de membresía en papel algodón Marfil (#F4F0E7) con folia dorada en relieve y frase institucional 'The Art of Being Alive.'",
+    badge: "Editorial Stationery",
+    deliverables: ["Papelería Marfil", "Hot Stamping Oro", "Manual de Marca"],
+  },
+  {
+    id: "gioprana-bottle",
+    title: "Botella Térmica Acero Verde Bosque & Oro",
+    brand: "GIOPRANA",
+    category: "merch",
+    categoryLabel: "Merchandising & Textil",
+    image: "/images/branding/gioprana_botella_bosque.png",
+    description:
+      "Termo de acero inoxidable de 750 ml con recubrimiento mate en Verde Bosque (#284E40) y grabado láser en dorado del símbolo ascendente de GIOPRANA.",
+    badge: "Wellness Merch",
+    deliverables: ["Mockup Producto 3D", "Grabado Láser", "Ficha Técnica"],
+  },
+  {
+    id: "gioprana-mat",
+    title: "Tapete de Práctica Grabado en Bajo Relieve",
+    brand: "GIOPRANA",
+    category: "merch",
+    categoryLabel: "Merchandising & Textil",
+    image: "/images/branding/gioprana_tapete_bosque.png",
+    description:
+      "Equipamiento oficial de estudio en caucho natural de 5 mm con guías de alineación y el símbolo de GIOPRANA grabado en el centro.",
+    badge: "Studio Equipment",
+    deliverables: ["Diseño de Equipamiento", "Grabado en Caucho", "Catálogo Web"],
+  },
+  {
+    id: "gioprana-apparel",
+    title: "Indumentaria Técnica Carbón & Violeta Raíz",
+    brand: "GIOPRANA",
+    category: "merch",
+    categoryLabel: "Merchandising & Textil",
+    image: "/images/branding/gioprana_camiseta_carbon.png",
+    description:
+      "Línea textil de entrenamiento consciente en tejido respirable Carbón (#111416) con costuras planas y emblema dorado.",
+    badge: "Activewear Line",
+    deliverables: ["Línea Deportiva", "Guía de Costuras", "E-Commerce Ready"],
+  },
+  {
     id: "ikal-3d",
     title: "Isotipo Escultórico Ancestral Maya 3D",
     brand: "Ikal Chukum",
@@ -358,6 +430,16 @@ interface ColorHarmonyCard {
 }
 
 const COLOR_HARMONIES: ColorHarmonyCard[] = [
+  {
+    id: "gioprana-sacred-lotus",
+    name: "Gioprana Sacred Lotus",
+    tags: "Conscious · Botanical · Gold Editorial",
+    category: "misticas",
+    gradientBg: "from-[#111416] via-[#594362] to-[#284E40]",
+    colors: ["#111416", "#284E40", "#594362", "#D5B77B", "#F4F0E7"],
+    description:
+      "Armonía oficial de GIOPRANA: Carbón profundo, Verde Bosque, Violeta Raíz, Dorado cálido y Marfil editorial para plataformas de bienestar y entrenamiento consciente.",
+  },
   {
     id: "nocturne-bloom",
     name: "Nocturne Bloom",

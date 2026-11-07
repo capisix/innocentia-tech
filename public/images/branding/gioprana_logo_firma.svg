@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="4400" height="3400" viewBox="0 0 1100 850" role="img" aria-label="GIOPRANA — The Art of Being Alive."><title>GIOPRANA — The Art of Being Alive.</title><desc>Recreación vectorial de flor violeta y verde, figura y arco dorados. Fondo transparente. Sin símbolo de registro.</desc><defs>
+<linearGradient id="gold" x1="0" y1="0" x2=".8" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#fff1bb"/><stop offset=".18" stop-color="#b77520"/><stop offset=".37" stop-color="#ffe6a0"/><stop offset=".53" stop-color="#d89b3d"/><stop offset=".73" stop-color="#fff4ce"/><stop offset="1" stop-color="#a76517"/></linearGradient>
+<linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dc9de6"/><stop offset=".22" stop-color="#a34cba"/><stop offset=".52" stop-color="#641d79"/><stop offset=".8" stop-color="#8b315f"/><stop offset="1" stop-color="#f4ce7e"/></linearGradient>
+<linearGradient id="green" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#c1cf8a"/><stop offset=".25" stop-color="#718b42"/><stop offset=".53" stop-color="#244a2c"/><stop offset=".8" stop-color="#69802a"/><stop offset="1" stop-color="#f4ce7e"/></linearGradient>
+<linearGradient id="frontV" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#61235e"/><stop offset=".5" stop-color="#983d78"/><stop offset="1" stop-color="#ffe0a0"/></linearGradient>
+<linearGradient id="frontG" x1="1" y1="0" x2="0" y2="1"><stop stop-color="#274724"/><stop offset=".5" stop-color="#7f8f37"/><stop offset="1" stop-color="#ffe0a0"/></linearGradient>
+<radialGradient id="orb" cx=".32" cy=".23" r=".8"><stop stop-color="#fffbe8"/><stop offset=".23" stop-color="#ffe5a2"/><stop offset=".6" stop-color="#d18b24"/><stop offset=".82" stop-color="#9f5914"/><stop offset="1" stop-color="#f6c467"/></radialGradient>
+</defs>
+<g stroke="url(#gold)" stroke-width="2" stroke-linejoin="round">
+<path fill="url(#gold)" d="M510 123 C300 145 217 367 338 505 C232 327 328 172 510 123 Z"/>
+<path fill="url(#gold)" d="M590 123 C800 145 883 367 762 505 C868 327 772 172 590 123 Z"/>
+<path fill="url(#violet)" d="M550 640 C436 592 331 687 224 575 C172 524 174 465 120 454 C242 409 378 541 550 640 Z"/>
+<path fill="url(#green)" d="M550 640 C664 592 769 687 876 575 C928 524 926 465 980 454 C858 409 722 541 550 640 Z"/>
+<path fill="url(#violet)" d="M550 640 C427 605 296 527 340 336 C374 400 541 386 550 640 Z"/>
+<path fill="url(#green)" d="M550 640 C673 605 804 527 760 336 C726 400 559 386 550 640 Z"/>
+<path fill="url(#gold)" d="M547 151 C547 221 465 243 459 312 C450 391 525 417 537 481 L550 640 L550 455 C540 401 482 376 479 319 C475 250 546 231 547 151 Z"/>
+<path fill="url(#gold)" d="M553 151 C553 221 635 243 641 312 C650 391 575 417 563 481 L550 640 L550 455 C560 401 618 376 621 319 C625 250 554 231 553 151 Z"/>
+<circle cx="550" cy="317" r="31" fill="url(#orb)"/>
+<circle cx="550" cy="112" r="14" fill="url(#orb)"/>
+<circle cx="550" cy="65" r="7" fill="url(#orb)"/>
+<circle cx="550" cy="32" r="3.5" fill="url(#orb)"/>
+<path fill="url(#frontV)" d="M550 640 C442 608 358 594 349 479 C398 517 478 495 550 640 Z"/>
+<path fill="url(#frontG)" d="M550 640 C658 608 742 594 751 479 C702 517 622 495 550 640 Z"/>
+</g>
+<g fill="none" stroke="#f4d992" stroke-width="1.5" opacity=".65">
+<path d="M550 640 Q282 592 120 454 M550 640 Q818 592 980 454 M550 640 Q387 504 340 336 M550 640 Q713 504 760 336 M550 640 Q411 562 349 479 M550 640 Q689 562 751 479"/>
+<path d="M279 550 Q218 540 193 509 M330 577 Q277 577 250 554 M396 595 Q347 614 311 601 M821 550 Q882 540 907 509 M770 577 Q823 577 850 554 M704 595 Q753 614 789 601 M439 519 Q393 479 386 434 M465 554 Q409 532 393 501 M661 519 Q707 479 714 434 M635 554 Q691 532 707 501"/>
+</g><g transform="translate(35 683) scale(1.1356119073869901 .98)" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter"><path d="M95 12 C70 -7 5 -6 5 40 C5 88 75 91 98 70 L98 46 L63 46" transform="translate(0 0)"/><rect x="143" y="0" width="6" height="80" fill="url(#gold)" stroke="none"/><path d="M50 0 C-14 0 -14 80 50 80 C114 80 114 0 50 0 Z" transform="translate(192 0)"/><path d="M5 80 L5 0 L45 0 C87 0 87 41 45 41 L5 41" transform="translate(323 0)"/><path d="M5 80 L5 0 L45 0 C87 0 87 41 45 41 L5 41 M43 41 L86 80" transform="translate(437 0)"/><path d="M0 80 L47 0 L94 80" transform="translate(558 0)"/><circle cx="605" cy="56" r="5" fill="url(#gold)" stroke-width="2"/><path d="M5 80 L5 0 L94 80 L94 0" transform="translate(683 0)"/><path d="M0 80 L47 0 L94 80" transform="translate(813 0)"/><circle cx="860" cy="56" r="5" fill="url(#gold)" stroke-width="2"/></g><text x="550" y="821" text-anchor="middle" fill="url(#gold)" font-family="Century Gothic, Arial, sans-serif" font-size="30" letter-spacing="5">The Art of Being Alive.</text></svg>

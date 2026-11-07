@@ -28,6 +28,17 @@ export interface ProjectDetail {
   image: string;
   badgeColor: string;
   primaryColor: string;
+  demoUrl?: string;
+  interactiveDemoRoute?: string;
+  dualArchitecture?: {
+    webTitle: string;
+    webDesc: string;
+    webItems: string[];
+    appTitle: string;
+    appDesc: string;
+    appItems: string[];
+    integrationNote: string;
+  };
   clientProblem: string;
   solutionOverview: string;
   keyFeatures: string[];
@@ -113,7 +124,7 @@ export default function ProjectCaseStudyModal({
               {project.subtitle}
             </p>
 
-            {/* Quick Badges */}
+            {/* Quick Badges & Live Demo Links */}
             <div className="flex flex-wrap gap-1.5 pt-2">
               {project.techStack.slice(0, 4).map((tech, idx) => (
                 <span
@@ -124,6 +135,31 @@ export default function ProjectCaseStudyModal({
                 </span>
               ))}
             </div>
+
+            {(project.demoUrl || project.interactiveDemoRoute) && (
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                {project.interactiveDemoRoute && (
+                  <a
+                    href={project.interactiveDemoRoute}
+                    className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-400/50 text-xs font-mono font-bold transition-all inline-flex items-center gap-1.5"
+                  >
+                    <Smartphone className="w-3.5 h-3.5" />
+                    <span>Ver Web + WebApp Conectadas →</span>
+                  </a>
+                )}
+                {project.demoUrl && (
+                  <a
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 rounded-xl bg-[#00D1FF]/20 hover:bg-[#00D1FF] text-[#00D1FF] hover:text-black border border-[#00D1FF]/50 text-xs font-mono font-bold transition-all inline-flex items-center gap-1.5"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>Abrir Sitio en Vivo ↗</span>
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="md:col-span-6">
@@ -169,6 +205,57 @@ export default function ProjectCaseStudyModal({
         {/* Tab 1: Visión General */}
         {activeTab === "general" && (
           <div className="space-y-4 relative z-10 animate-in fade-in duration-200">
+            {project.dualArchitecture && (
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-emerald-500/10 border border-amber-400/40 space-y-3">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-[10px] font-mono font-bold text-amber-300 uppercase">
+                    ⚡ ARQUITECTURA DUAL: SITIO WEB + WEBAPP SEPARADOS QUE SE INTEGRAN
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-300">
+                    Sincronización en Tiempo Real
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-3 rounded-xl bg-black/60 border border-amber-400/30 space-y-1.5">
+                    <span className="text-[10px] font-mono font-bold text-amber-300 block">
+                      🌐 {project.dualArchitecture.webTitle}
+                    </span>
+                    <p className="text-[11px] text-gray-300 leading-snug">
+                      {project.dualArchitecture.webDesc}
+                    </p>
+                    <ul className="space-y-1 pt-1">
+                      {project.dualArchitecture.webItems.map((it, i) => (
+                        <li key={i} className="text-[11px] text-gray-200 flex items-start gap-1.5">
+                          <span className="text-amber-400">•</span>
+                          <span>{it}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-black/60 border border-purple-400/30 space-y-1.5">
+                    <span className="text-[10px] font-mono font-bold text-purple-300 block">
+                      📱 {project.dualArchitecture.appTitle}
+                    </span>
+                    <p className="text-[11px] text-gray-300 leading-snug">
+                      {project.dualArchitecture.appDesc}
+                    </p>
+                    <ul className="space-y-1 pt-1">
+                      {project.dualArchitecture.appItems.map((it, i) => (
+                        <li key={i} className="text-[11px] text-gray-200 flex items-start gap-1.5">
+                          <span className="text-purple-400">•</span>
+                          <span>{it}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <p className="text-[11px] text-emerald-300 font-mono bg-black/40 px-3 py-2 rounded-xl border border-emerald-500/30">
+                  🔗 {project.dualArchitecture.integrationNote}
+                </p>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 space-y-2">
                 <span className="text-[10px] font-mono text-[#FF3858] font-bold uppercase block">

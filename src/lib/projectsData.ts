@@ -1,3 +1,27 @@
+export interface DualArchitectureSpec {
+  badge: string;
+  summary: string;
+  webPart: {
+    title: string;
+    subtitle: string;
+    url: string;
+    image: string;
+    highlights: string[];
+  };
+  appPart: {
+    title: string;
+    subtitle: string;
+    url: string;
+    image: string;
+    roles: string[];
+    highlights: string[];
+  };
+  integrationBridges: {
+    title: string;
+    description: string;
+  }[];
+}
+
 export interface ProjectCaseStudy {
   slug: string;
   id: string;
@@ -13,6 +37,8 @@ export interface ProjectCaseStudy {
   badgeColor: string;
   isFlagship?: boolean;
   demoUrl?: string;
+  interactiveDemoRoute?: string;
+  dualArchitecture?: DualArchitectureSpec;
   clientProblem: string;
   solutionOverview: string;
   keyFeatures: string[];
@@ -32,6 +58,140 @@ export interface ProjectCaseStudy {
 }
 
 export const PROJECTS_DATA: ProjectCaseStudy[] = [
+  {
+    slug: "gioprana",
+    id: "gioprana",
+    title: "GIOPRANA • Web & WebApp",
+    subtitle:
+      "Ecosistema dual integrado para Giovanna Monterrubio: Sitio Web Editorial de lujo (historia, símbolo interactivo, programas, eventos, blog con comentarios y equipamiento) conectado en tiempo real con su WebApp Privada independiente para seguimiento de alumnas, clases en vivo, videoteca on-demand, reservas y pagos.",
+    headline:
+      "GIOPRANA — The Art of Being Alive: Sitio Web Editorial + WebApp Privada de Práctica y Seguimiento en Tiempo Real",
+    image: "/images/apps/app_gioprana.jpg",
+    tag: "WEB PÚBLICA + WEBAPP PRIVADA INTEGRADA",
+    stats: "Web + App en Vivo",
+    category: "Wellness, Fitness, Streaming & SaaS Educativo",
+    location: "Mérida, Yucatán & Comunidad Online",
+    primaryColor: "#D5B77B",
+    badgeColor: "#9C75AF",
+    isFlagship: true,
+    demoUrl: "https://gleeful-quokka-88fea3.netlify.app/",
+    interactiveDemoRoute: "/demo/gioprana",
+    dualArchitecture: {
+      badge: "ARQUITECTURA DUAL • SITIO WEB + WEBAPP SEPARADOS QUE SE INTEGRAN",
+      summary:
+        "Diseñamos dos plataformas con responsabilidades claras pero conectadas por un mismo núcleo de datos: una Página Web Editorial pública orientada a inspirar, contar la historia de la marca y captar inscripciones, y una WebApp Privada independiente donde cada alumna entrena en vivo, consulta su videoteca y lleva su expediente personal junto con su coach Giovanna.",
+      webPart: {
+        title: "1. Sitio Web Informativo & Editorial (Front-Stage Público)",
+        subtitle: "Captación, Storytelling, Programas, Eventos, Blog Interactivo & Tienda de Equipamiento",
+        url: "https://gleeful-quokka-88fea3.netlify.app/#inicio",
+        image: "/images/apps/app_gioprana.jpg",
+        highlights: [
+          "Dirección de arte en 4 atmósferas (Carbón #111416, Marfil Editorial #F4F0E7, Verde Bosque #284E40 y Dorado #D5B77B).",
+          "Explorador interactivo en SVG del Símbolo de GIOPRANA con las 6 claves conceptuales de la marca.",
+          "Sección de los 5 Pilares (Movimiento, Nutrición, Meditación, Música y Comunidad) con iconografía dorada a medida.",
+          "Cartelera de Programas Híbridos, Eventos presenciales/online y Blog editorial con sistema de comentarios en vivo.",
+          "Catálogo de Equipamiento Oficial (tapetes grabados, botellas térmicas, indumentaria técnica) y Kit Visual de Marca.",
+        ],
+      },
+      appPart: {
+        title: "2. WebApp Privada de Práctica & Gestión (Back-Stage Alumna / Coach)",
+        subtitle: "Plataforma Aplicativa Independiente con Doble Rol: Vista Alumna & Vista Giovanna (Coach)",
+        url: "https://gleeful-quokka-88fea3.netlify.app/",
+        image: "/images/apps/gioprana_webapp_live.png",
+        roles: [
+          "Rol Alumna (Valeria R.): Mi Práctica, Reservas, Sala En Vivo, Videoteca, Pagos y Herramientas de los 5 Pilares",
+          "Rol Coach / Admin (Giovanna Monterrubio): Selector de Alumnas, Expedientes Clínico-Deportivos, Bitácora y Transmisión con Cámara",
+        ],
+        highlights: [
+          "01 · Seguimiento & Expediente Individual: Evolución porcentual en los 5 pilares, notas de cuidado articular y bitácora bidireccional.",
+          "02 · Sala En Vivo & Videoteca On-Demand: Streaming HD con cámara en vivo, chat del círculo en tiempo real y archivo de clases grabadas.",
+          "03 · Motor de Reservas Semanal: Agenda para Estudio Presencial (tapete incluido) o Streaming Online con control de cupos.",
+          "04 · Pasarela de Pagos & Estado de Cuenta: Cobro con tarjeta, transferencia SPEI o pago en recepción con historial de recibos.",
+          "05 · Instrumentos Interactivos de los 5 Pilares: Esfera guiada de respiración (4·4·6, 5·2·5, 4·6·8), audio generativo 432 Hz, checklist de hábitos y mural de la comunidad.",
+        ],
+      },
+      integrationBridges: [
+        {
+          title: "Reserva en Web → Agenda & Expediente en WebApp",
+          description:
+            "Cuando una visitante hace clic en 'Reserva tu espacio' desde cualquier sección de la página web, el sistema abre el flujo de la WebApp sincronizando el horario elegido directamente con su agenda y expediente.",
+        },
+        {
+          title: "Inscripción de Programas & Eventos → Pasarela & Membresía Activa",
+          description:
+            "Al elegir la Membresía Integral ($1,850 MXN), el Programa 'Volver a Empezar' ($3,900 MXN) o un evento desde la Web pública, se pre-carga automáticamente el concepto en el checkout de la WebApp y activa los accesos de la alumna.",
+        },
+        {
+          title: "Videoteca & Clases En Vivo → Progreso Automático para la Coach",
+          description:
+            "Cada vez que una alumna marca una clase grabada o transmisión en vivo como completada en su WebApp, se actualizan al instante sus minutos entrenados y KPIs en el panel de seguimiento de Giovanna.",
+        },
+      ],
+    },
+    clientProblem:
+      "Giovanna Monterrubio necesitaba mucho más que una página informativa tradicional: requería transmitir la profundidad estética y humana de GIOPRANA ('Fuerza con Consciencia') en una web pública de alto nivel editorial, pero al mismo tiempo contar con una WebApp privada donde pudiera transmitir clases en vivo, resguardar videos anteriores, gestionar pagos y llevar un expediente detallado del progreso y cuidado físico de cada alumna.",
+    solutionOverview:
+      "Innocentia Tech diseñó y construyó una arquitectura dual integrada: por fuera, un Sitio Web Editorial de lujo con explorador interactivo del símbolo, blog con comentarios, programas y tienda de equipamiento; por dentro, una WebApp Privada con doble rol (Alumna y Coach) que integra streaming en vivo, videoteca on-demand, reservas presenciales/online, pasarela de pagos y herramientas diarias para practicar los 5 pilares.",
+    keyFeatures: [
+      "Arquitectura Dual Conectada: Sitio Web Editorial Público + WebApp Privada independiente sincronizados en tiempo real.",
+      "Doble Rol en WebApp: Vista Alumna (práctica, reservas, videos y pagos) y Vista Coach Giovanna (expediente individual por clienta).",
+      "Sala de Transmisión En Vivo (con soporte de cámara en directo y chat grupal) + Videoteca On-Demand filtrable por pilar.",
+      "Sistema de Reservas híbrido (Estudio Presencial y Streaming Online) y Pasarela de Pagos (Tarjeta, SPEI y Estudio).",
+      "Herramientas interactivas de bienestar: esfera animada de respiración (4·4·6), frecuencias sonoras 432 Hz, hábitos y mural comunitario.",
+    ],
+    costSavings: [
+      {
+        stat: "2 en 1",
+        label: "Web Pública + WebApp",
+        description: "Sitio editorial de captación y plataforma privada de alumnas integrados sin pagar múltiples SaaS.",
+      },
+      {
+        stat: "100%",
+        label: "Seguimiento por Alumna",
+        description: "Expediente individual con evolución en los 5 pilares, bitácora y clases completadas.",
+      },
+      {
+        stat: "0%",
+        label: "Fricción en Reservas",
+        description: "Paso directo desde los programas de la web pública hacia la reserva y pago en la WebApp.",
+      },
+    ],
+    processAutomation: [
+      "Sincronización instantánea entre los botones de programas/eventos de la Web pública y la pasarela de pago de la WebApp.",
+      "Actualización automática del expediente de la alumna (minutos entrenados y sesiones vistas) al concluir cada video.",
+      "Cambio de rol en 1 clic entre Vista Alumna y Vista Coach para supervisión inmediata de las alumnas en seguimiento.",
+    ],
+    designAdvantages: [
+      "Sistema visual completo con 4 fondos atmosféricos (Carbón, Marfil Editorial, Oscuro Intermedio y Amanecer Violeta-Dorado).",
+      "Explorador vectorial interactivo que explica las 6 claves del símbolo de GIOPRANA al pasar el cursor.",
+      "Modo de superficie adaptable en la WebApp y microinteracciones suaves pensadas para transmitir calma, fuerza y presencia.",
+    ],
+    techStack: [
+      "Web + WebApp Dual Engine",
+      "Live Streaming & Video On-Demand",
+      "Web Audio API (432 Hz)",
+      "Interactive SVG Engine",
+      "Role-Based State (Alumna / Coach)",
+      "Netlify Edge CDN",
+    ],
+    metaTitle: "GIOPRANA • Sitio Web Editorial + WebApp Privada Integrada | Innocentia Tech",
+    metaDescription:
+      "Caso de estudio GIOPRANA (The Art of Being Alive): arquitectura dual con sitio web editorial público y WebApp privada integrada para clases en vivo, videoteca, reservas, pagos y seguimiento de alumnas.",
+    keywords: [
+      "desarrollo web y webapp integrada",
+      "plataforma de clases en vivo y reservas",
+      "software para estudios de wellness y fitness",
+      "gioprana innocentia tech",
+    ],
+    clientIndustry: "Wellness, Entrenamiento Consciente, Streaming & Comunidad",
+    deliverables: [
+      "Sitio Web Editorial Público",
+      "WebApp Privada Multi-Rol (Alumna / Coach)",
+      "Sala En Vivo & Videoteca On-Demand",
+      "Motor de Reservas & Pasarela de Pagos",
+      "Manual & Kit Visual de Marca Completo",
+    ],
+  },
   {
     slug: "experience-safely",
     id: "safely",

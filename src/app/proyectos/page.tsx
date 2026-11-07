@@ -97,6 +97,11 @@ export default function ProyectosIndexPage() {
 
               <div className="space-y-4">
                 <div className="space-y-2">
+                  {p.dualArchitecture && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 text-[10px] font-mono font-bold text-amber-300 uppercase">
+                      <span>🌐 Sitio Web Público + 📱 WebApp Privada que se Integran</span>
+                    </div>
+                  )}
                   <h2 className="text-2xl sm:text-3xl font-black text-white group-hover:text-[#00D1FF] transition-colors">
                     <Link href={`/proyectos/${p.slug}`}>
                       {p.title}
@@ -129,13 +134,24 @@ export default function ProyectosIndexPage() {
                   ))}
                 </div>
 
-                <Link
-                  href={`/proyectos/${p.slug}`}
-                  className="btn-glass-cyan px-4 py-2 rounded-full inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#00D1FF] transition-all"
-                >
-                  <span>Ver caso de estudio</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                <div className="flex flex-wrap items-center gap-2">
+                  {p.interactiveDemoRoute && (
+                    <Link
+                      href={p.interactiveDemoRoute}
+                      className="px-3.5 py-2 rounded-full bg-amber-500/20 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-400/50 inline-flex items-center gap-1.5 text-xs font-mono font-bold transition-all"
+                    >
+                      <span>Web + WebApp Demo</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  )}
+                  <Link
+                    href={`/proyectos/${p.slug}`}
+                    className="btn-glass-cyan px-4 py-2 rounded-full inline-flex items-center gap-2 text-xs font-mono font-bold text-white hover:text-[#00D1FF] transition-all"
+                  >
+                    <span>Ver caso de estudio</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

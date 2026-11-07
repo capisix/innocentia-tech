@@ -722,8 +722,27 @@ function PortalMainContent() {
   // SHARED DATABASE MOCK STATE
   // ==========================================
 
-  // Projects State - Proyectos Activos (Axana & Open House Yucatán con Jessica Torre)
+  // Projects State - Proyectos Activos (GIOPRANA, Axana, Open House Yucatán & Taquería Larry)
   const [projects, setProjects] = useState<AssignedProject[]>([
+    {
+      id: "PRJ-GIOPRANA-01",
+      name: "GIOPRANA — Sitio Web Editorial & WebApp Privada Integrada (En Vivos, Videoteca, Reservas, Pagos y Seguimiento)",
+      client: "Giovanna Monterrubio (GIOPRANA)",
+      clientEmail: "valeria@gioprana.com",
+      sellerId: "usr_ceo_ivan",
+      sellerName: "Iván Castillo (CEO) • Innocentia Core",
+      devLead: "Ing. Rodrigo Pacheco",
+      uxLead: "Sofía (Innocentia Design Lead)",
+      devopsLead: "Iván Castillo (CEO)",
+      status: "En Producción",
+      progress: 100,
+      currentSprint: "Arquitectura Dual Activa: Sitio Web Editorial Público + WebApp Privada (Rol Alumna & Rol Coach Giovanna) sincronizados",
+      budget: 135000,
+      paidAmount: 135000,
+      targetDate: "En Operación",
+      unreadAlerts: 0,
+      demoUrl: "https://gleeful-quokka-88fea3.netlify.app/",
+    },
     {
       id: "PRJ-OPENHOUSE-01",
       name: "Open House Yucatán - App PropTech de Venta de Terrenos & Calendario de Citas",
@@ -6612,8 +6631,17 @@ function PortalMainContent() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                     {[
+                      {
+                        id: "demo_gioprana",
+                        title: "GIOPRANA (Web + App)",
+                        category: "Web + WebApp Conectadas",
+                        url: "https://gleeful-quokka-88fea3.netlify.app/",
+                        badge: "🧘🏻‍♀️ Web + WebApp Dual",
+                        desc: "Sitio web editorial público + WebApp privada independiente (seguimiento por alumna, clases en vivo, videoteca, reservas y pagos).",
+                        color: "#D5B77B",
+                      },
                       {
                         id: "demo_tacoslarry",
                         title: "Taquería Larry",

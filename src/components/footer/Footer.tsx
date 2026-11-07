@@ -161,6 +161,11 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-gray-400">
               <li>
+                <Link href="/proyectos/gioprana" className="hover:text-[#D5B77B] text-[#D5B77B] font-bold transition-colors">
+                  ★ GIOPRANA • Web + WebApp Integrada
+                </Link>
+              </li>
+              <li>
                 <Link href="/proyectos/experience-safely" className="hover:text-emerald-400 text-emerald-300 font-bold transition-colors">
                   ★ Experience Safely • Motor de Reservas
                 </Link>

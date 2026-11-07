@@ -41,6 +41,86 @@ export default function CaseStudiesSection({
     accentBtn: string;
   })[] = [
     {
+      id: "gioprana",
+      title: "GIOPRANA • WEB + WEBAPP",
+      subtitle:
+        "Sitio Web Editorial público (historia, símbolo interactivo, 5 pilares, programas, eventos y blog) + WebApp Privada separada que se integran en tiempo real (clases en vivo, videoteca, reservas, pagos y seguimiento de alumnas).",
+      image: "/images/apps/app_gioprana.jpg",
+      tag: "WEB PÚBLICA + WEBAPP INTEGRADA",
+      stats: "Web + App en Vivo",
+      primaryColor: "#D5B77B",
+      badgeColor: "#D5B77B",
+      demoUrl: "https://gleeful-quokka-88fea3.netlify.app/",
+      interactiveDemoRoute: "/demo/gioprana",
+      cardBg: "from-[#D5B77B]/25 via-[#594362]/15 to-black/90",
+      borderColor: "border-[#D5B77B]/60 hover:border-[#D5B77B]",
+      glowColor:
+        "shadow-[0_20px_50px_rgba(213,183,123,0.22)] hover:shadow-[0_25px_70px_rgba(213,183,123,0.42)]",
+      auraColor: "bg-[#D5B77B]/30",
+      tagBadge: "bg-[#D5B77B]/20 text-[#D5B77B] border-[#D5B77B]/50 font-bold",
+      accentBtn: "text-[#D5B77B] hover:text-white",
+      dualArchitecture: {
+        webTitle: "1. Página Web Editorial Pública",
+        webDesc:
+          "Sitio de marca con 4 atmósferas editoriales, explorador SVG del símbolo, programas, eventos, blog con comentarios y equipamiento.",
+        webItems: [
+          "Explorador interactivo del símbolo en SVG (6 partes)",
+          "Programas híbridos, calendario de eventos y blog con comentarios",
+          "Catálogo de equipamiento oficial y Kit Visual de Marca",
+        ],
+        appTitle: "2. WebApp Privada (Alumna / Coach)",
+        webAppUrl: "https://gleeful-quokka-88fea3.netlify.app/",
+        appDesc:
+          "Aplicación privada independiente con doble rol (Alumna Valeria R. y Coach Giovanna Monterrubio) conectada con la web.",
+        appItems: [
+          "Expediente individual por alumna y evolución en los 5 pilares",
+          "Sala de clases En Vivo con cámara/chat + Videoteca On-Demand",
+          "Reservas presenciales/online, pagos (Tarjeta/SPEI) y esfera 4·4·6",
+        ],
+        integrationNote:
+          "Las reservas, compras de membresías y sesiones vistas desde la Web o la WebApp actualizan en tiempo real el expediente que supervisa Giovanna.",
+      } as any,
+      clientProblem:
+        "Se requería una presencia web editorial de alta gama para presentar la filosofía de GIOPRANA ('Fuerza con Consciencia') y captar inscripciones, pero separada de una WebApp privada donde las alumnas entrenan en vivo, consultan clases grabadas, reservan y llevan su bitácora personal con su coach.",
+      solutionOverview:
+        "Diseñamos una arquitectura dual integrada: un Sitio Web Editorial público de 4 atmósferas conectado con una WebApp Privada multi-rol (Alumna y Coach Giovanna) con streaming en vivo, videoteca, reservas, pagos y seguimiento por clienta.",
+      keyFeatures: [
+        "Sitio Web Público + WebApp Privada separados pero sincronizados en tiempo real.",
+        "Doble Rol en WebApp: Vista Alumna (práctica, reservas y pagos) y Vista Coach Giovanna (expedientes y seguimiento).",
+        "Sala de Transmisión En Vivo con chat interactivo + Videoteca de sesiones anteriores filtrable por pilar.",
+        "Motor de reservas (Estudio Presencial y Online) y pasarela de pago (Tarjeta, SPEI y Estudio).",
+        "Instrumentos interactivos: esfera de respiración 4·4·6, audio generativo 432 Hz, checklist de hábitos y mural.",
+      ],
+      costSavings: [
+        {
+          stat: "2 en 1",
+          label: "Web + WebApp Conectadas",
+          description: "Sitio público de captación y plataforma privada de alumnas en un mismo ecosistema.",
+        },
+        {
+          stat: "100%",
+          label: "Trazabilidad por Alumna",
+          description: "Control de sesiones asistidas, videos vistos, pagos y evolución en los 5 pilares.",
+        },
+        {
+          stat: "0%",
+          label: "Fricción en Reservas",
+          description: "Paso directo desde la web informativa hacia la reserva y pago en la WebApp.",
+        },
+      ],
+      processAutomation: [
+        "Sincronización directa entre los botones de reserva/programas de la Web pública y la agenda/checkout de la WebApp.",
+        "Suma automática de minutos entrenados y sesiones completadas al expediente de la alumna al terminar un video.",
+        "Cambio instantáneo entre Vista Alumna y Vista Coach para revisar bitácoras y acuerdos de entrenamiento.",
+      ],
+      designAdvantages: [
+        "Paleta editorial Carbón (#111416), Marfil (#F4F0E7), Dorado (#D5B77B), Violeta Raíz (#594362) y Verde Bosque (#284E40).",
+        "Símbolo vectorial interactivo que ilumina y explica cada elemento al pasar el cursor.",
+        "Selector de superficie en la WebApp y diseño enfocado en calma, claridad y presencia.",
+      ],
+      techStack: ["Web + WebApp Dual Engine", "Live Streaming & Videoteca", "Interactive SVG", "Web Audio 432Hz", "Netlify Edge"],
+    },
+    {
       id: "safely",
       title: "EXPERIENCE SAFELY",
       subtitle:
@@ -311,10 +391,11 @@ export default function CaseStudiesSection({
             </div>
           </div>
 
-          {/* 4 Cards Grid with Rich Visual Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+          {/* Cards Grid with Rich Visual Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 items-stretch">
             {projects.map((project) => {
               const slugMap: Record<string, string> = {
+                gioprana: "gioprana",
                 safely: "experience-safely",
                 ikal: "ikal-chukum",
                 axana: "axana",
@@ -386,13 +467,24 @@ export default function CaseStudiesSection({
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </button>
 
-                    <Link
-                      href={`/proyectos/${projectSlug}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-[10px] font-mono text-gray-400 hover:text-white uppercase transition-colors px-2 py-1 rounded-md bg-white/5 border border-white/10"
-                    >
-                      Página →
-                    </Link>
+                    <div className="flex items-center gap-1.5">
+                      {project.interactiveDemoRoute && (
+                        <Link
+                          href={project.interactiveDemoRoute}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] font-mono text-[#D5B77B] hover:text-black hover:bg-[#D5B77B] uppercase transition-colors px-2 py-1 rounded-md bg-[#D5B77B]/15 border border-[#D5B77B]/40 font-bold"
+                        >
+                          Web + App →
+                        </Link>
+                      )}
+                      <Link
+                        href={`/proyectos/${projectSlug}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[10px] font-mono text-gray-400 hover:text-white uppercase transition-colors px-2 py-1 rounded-md bg-white/5 border border-white/10"
+                      >
+                        Página →
+                      </Link>
+                    </div>
                   </div>
                 </div>
               );
