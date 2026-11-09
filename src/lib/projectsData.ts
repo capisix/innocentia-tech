@@ -311,7 +311,7 @@ export const PROJECTS_DATA: ProjectCaseStudy[] = [
     title: "AXANA NEXT 360",
     subtitle: "Ecosistema Nacional de Salud Empresarial, Salud Ocupacional, Botiquines Industriales NOM-005, DEAs, Normativa NOM-035, Customer Intelligence Matrix y asistente médico con Inteligencia Artificial.",
     headline: "Plataforma Integral de Salud Ocupacional, Botiquines Industriales & E-Commerce B2B",
-    image: "/images/apps/app_multisistema.png",
+    image: "/images/apps/app_axana.png",
     tag: "ECOSISTEMA DE SALUD EMPRESARIAL",
     stats: "DEMO OFICIAL EN VIVO",
     category: "Salud Empresarial & Suministros Médicos",

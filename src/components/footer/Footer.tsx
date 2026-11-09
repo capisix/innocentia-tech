@@ -177,7 +177,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/proyectos/axana" className="hover:text-white transition-colors">
-                  Axana • Tienda Digital & Catálogo
+                  Axana • Salud Empresarial & NOM-035
                 </Link>
               </li>
               <li>

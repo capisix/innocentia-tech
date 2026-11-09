@@ -365,8 +365,10 @@ export default function FloatingChatWidget({
     const handleOpenChatEvent = (e: Event) => {
       const customEvent = e as CustomEvent<{ prompt?: string; autoSend?: boolean; maximize?: boolean }>;
       setIsOpen(true);
-      if (customEvent.detail?.maximize !== false) {
-        setIsMaximized(true);
+      if (customEvent.detail?.maximize !== undefined) {
+        setIsMaximized(customEvent.detail.maximize);
+      } else {
+        setIsMaximized(false);
       }
       if (customEvent.detail?.prompt) {
         if (customEvent.detail.autoSend) {

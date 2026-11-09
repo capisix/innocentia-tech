@@ -19,6 +19,7 @@ import CommunitySection from "../components/community/CommunitySection";
 import PromptCTASection from "../components/cta/PromptCTASection";
 import Footer from "../components/footer/Footer";
 import PublicTelemetryHUD from "../components/common/PublicTelemetryHUD";
+import { openAdvisorChat } from "../lib/formAdvisors";
 
 function HomeContent() {
   const [showIntro, setShowIntro] = useState(false);
@@ -40,14 +41,12 @@ function HomeContent() {
   const openProjectModal = () => setIsProjectModalOpen(true);
   const closeProjectModal = () => setIsProjectModalOpen(false);
 
-  const openChat = () => {
-    setIsChatOpen(true);
-    setIsChatMaximized(false);
+  const openChat = (prompt?: string) => {
+    openAdvisorChat(prompt || "", Boolean(prompt), false);
   };
 
-  const openMaximizedChat = () => {
-    setIsChatOpen(true);
-    setIsChatMaximized(true);
+  const openMaximizedChat = (prompt?: string) => {
+    openAdvisorChat(prompt || "", Boolean(prompt), true);
   };
 
   const closeChat = () => {
@@ -95,14 +94,20 @@ function HomeContent() {
       {/* 09 Casos de Éxito */}
       <CaseStudiesSection
         onOpenProjectModal={openProjectModal}
-        onOpenChatModal={openChat}
-        onAskSofia={() => {
-          setIsChatOpen(true);
-          setIsChatMaximized(false);
+        onOpenChatModal={() => openChat()}
+        onAskSofia={(projectName) => {
+          openAdvisorChat(
+            `Hola Sofía, tengo una duda sobre el diseño y la experiencia de usuario del proyecto "${projectName}". ¿Cómo conceptualizaron su interfaz y branding?`,
+            true,
+            false
+          );
         }}
-        onAskIvan={() => {
-          setIsChatOpen(true);
-          setIsChatMaximized(false);
+        onAskIvan={(projectName) => {
+          openAdvisorChat(
+            `Hola Iván, tengo una duda técnica sobre el proyecto "${projectName}". ¿Qué arquitectura, tecnologías y stack de software utilizaron?`,
+            true,
+            false
+          );
         }}
       />
 

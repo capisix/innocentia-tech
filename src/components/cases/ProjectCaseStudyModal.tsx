@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { openAdvisorChat } from "../../lib/formAdvisors";
 import {
   X,
   Sparkles,
@@ -405,7 +406,15 @@ export default function ProjectCaseStudyModal({
             <button
               onClick={() => {
                 onClose();
-                onAskSofia?.(project.title);
+                if (onAskSofia) {
+                  onAskSofia(project.title);
+                } else {
+                  openAdvisorChat(
+                    `Hola Sofía, tengo una duda sobre el diseño de "${project.title}". ¿Cómo conceptualizaron su interfaz y branding?`,
+                    true,
+                    false
+                  );
+                }
               }}
               className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-full bg-[#FF3858]/15 hover:bg-[#FF3858]/25 border border-[#FF3858]/40 text-[#FF3858] hover:text-white font-bold text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
@@ -419,7 +428,15 @@ export default function ProjectCaseStudyModal({
             <button
               onClick={() => {
                 onClose();
-                onAskIvan?.(project.title);
+                if (onAskIvan) {
+                  onAskIvan(project.title);
+                } else {
+                  openAdvisorChat(
+                    `Hola Iván, tengo una duda técnica sobre el proyecto "${project.title}". ¿Qué arquitectura y stack de software utilizaron?`,
+                    true,
+                    false
+                  );
+                }
               }}
               className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-full bg-[#00D1FF]/15 hover:bg-[#00D1FF]/25 border border-[#00D1FF]/40 text-[#00D1FF] hover:text-white font-bold text-xs font-mono flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
